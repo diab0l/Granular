@@ -1,0 +1,16 @@
+﻿<ResourceDictionary
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="/Granular.Presentation.Generic;component/Styles/Button.xaml"/>
+        <ResourceDictionary Source="/Granular.Presentation.Generic;component/Styles/ButtonChrome.xaml"/>
+        <ResourceDictionary Source="/Granular.Presentation.Generic;component/Styles/ContentControl.xaml"/>
+        <ResourceDictionary Source="/Granular.Presentation.Generic;component/Styles/Focus.xaml"/>
+        <ResourceDictionary Source="/Granular.Presentation.Generic;component/Styles/ItemsControl.xaml"/>
+        <ResourceDictionary Source="/Granular.Presentation.Generic;component/Styles/ScrollBar.xaml"/>
+        <ResourceDictionary Source="/Granular.Presentation.Generic;component/Styles/ScrollViewer.xaml"/>
+        <ResourceDictionary Source="/Granular.Presentation.Generic;component/Styles/TextBox.xaml"/>
+        <ResourceDictionary Source="/Granular.Presentation.Generic;component/Styles/Thumb.xaml"/>
+        <ResourceDictionary Source="/Granular.Presentation.Generic;component/Styles/Window.xaml"/>
+    </ResourceDictionary.MergedDictionaries>
+</ResourceDictionary>

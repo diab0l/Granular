@@ -1,0 +1,49 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+  <ItemGroup>
+    <AvailableItemName Include="GranularPage" />
+    <AvailableItemName Include="GranularApplicationDefinition" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="@(GranularPage)" />
+    <EmbeddedResource Include="@(GranularApplicationDefinition)" />
+  </ItemGroup>
+
+  <UsingTask TaskName="Granular.BuildTasks.CompileXaml" AssemblyFile="Granular.BuildTasks.dll" />
+
+  <PropertyGroup>
+    <CoreCompileDependsOn>
+      XamlCompilation;
+      $(CoreCompileDependsOn)
+    </CoreCompileDependsOn>
+  </PropertyGroup>
+
+  <Target Name="XamlCompilation" Condition="'@(GranularPage)' != '' Or '@(GranularApplicationDefinition)' != '' " >
+
+    <CompileXaml
+      TargetName="$(TargetName)"
+      ProjectPath="$(ProjectPath)"
+      Language="$(Language)"
+      LanguageSourceExtension="$(DefaultLanguageSourceExtension)"
+      OutputPath="$(OutputPath)"
+      IntermediateOutputPath="$(IntermediateOutputPath)"
+      RootNamespace="$(RootNamespace)"
+      XamlApplications="@(GranularApplicationDefinition)"
+      XamlPages="@(GranularPage)"
+      ReferenceAssemblies ="@(ReferencePath)">
+
+      <Output ItemName="FileWrites" TaskParameter="GeneratedCodeFiles" />
+      <Output ItemName="GranularXamlGeneratedCodeFiles" TaskParameter="GeneratedCodeFiles" />
+
+    </CompileXaml>
+
+    <Message Text="GranularXamlGeneratedCodeFiles: @(GranularXamlGeneratedCodeFiles)" Importance="High"/>
+
+    <ItemGroup>
+      <Compile Include="@(GranularXamlGeneratedCodeFiles)"/>
+    </ItemGroup>
+
+  </Target>
+
+</Project>

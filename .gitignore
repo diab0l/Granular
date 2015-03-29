@@ -1,0 +1,10 @@
+# files
+*.suo
+*.csproj.*
+
+# folders
+bin/
+obj/
+/TestResults/
+/packages/
+/Output*/

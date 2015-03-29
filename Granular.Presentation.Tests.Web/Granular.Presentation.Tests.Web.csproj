@@ -1,0 +1,307 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{7B927F5A-4A9E-41C9-BAC3-619691D06B56}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Granular.Presentation.Tests</RootNamespace>
+    <AssemblyName>Granular.Presentation.Tests</AssemblyName>
+    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
+    <FileAlignment>512</FileAlignment>
+    <NoStdLib>True</NoStdLib>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <NoStdLib>true</NoStdLib>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <CodeAnalysisLogFile>bin\Debug\Granular.Presentation.Tests.exe.CodeAnalysisLog.xml</CodeAnalysisLogFile>
+    <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
+    <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSetDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\\Rule Sets</CodeAnalysisRuleSetDirectories>
+    <CodeAnalysisIgnoreBuiltInRuleSets>false</CodeAnalysisIgnoreBuiltInRuleSets>
+    <CodeAnalysisRuleDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\FxCop\\Rules</CodeAnalysisRuleDirectories>
+    <CodeAnalysisIgnoreBuiltInRules>false</CodeAnalysisIgnoreBuiltInRules>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <NoStdLib>true</NoStdLib>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <CodeAnalysisLogFile>bin\Release\Granular.Presentation.Tests.exe.CodeAnalysisLog.xml</CodeAnalysisLogFile>
+    <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
+    <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSetDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\\Rule Sets</CodeAnalysisRuleSetDirectories>
+    <CodeAnalysisIgnoreBuiltInRuleSets>true</CodeAnalysisIgnoreBuiltInRuleSets>
+    <CodeAnalysisRuleDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\FxCop\\Rules</CodeAnalysisRuleDirectories>
+    <CodeAnalysisIgnoreBuiltInRules>true</CodeAnalysisIgnoreBuiltInRules>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="..\Granular.Presentation.Tests\Collections\ObservableCollectionTest.cs">
+      <Link>Collections\ObservableCollectionTest.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation.Tests\Collections\PriorityQueueTest.cs">
+      <Link>Collections\PriorityQueueTest.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation.Tests\Controls\BorderTest.cs">
+      <Link>Controls\BorderTest.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation.Tests\Controls\CanvasTest.cs">
+      <Link>Controls\CanvasTest.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation.Tests\Controls\ContentPresenterTest.cs">
+      <Link>Controls\ContentPresenterTest.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation.Tests\Controls\DockPanelTest.cs">
+      <Link>Controls\DockPanelTest.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation.Tests\Controls\GridTest.cs">
+      <Link>Controls\GridTest.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation.Tests\Controls\ItemCollectionTest.cs">
+      <Link>Controls\ItemCollectionTest.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation.Tests\Controls\ItemContainerGeneratorTest.cs">
+      <Link>Controls\ItemContainerGeneratorTest.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation.Tests\Controls\ItemsControlTest.cs">
+      <Link>Controls\ItemsControlTest.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation.Tests\Controls\PlacementTest.cs">
+      <Link>Controls\PlacementTest.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation.Tests\Controls\ScrollContentPresenterTest.cs">
+      <Link>Controls\ScrollContentPresenterTest.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation.Tests\Controls\ScrollViewerTest.cs">
+      <Link>Controls\ScrollViewerTest.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation.Tests\Controls\StackPanelTest.cs">
+      <Link>Controls\StackPanelTest.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation.Tests\Controls\TextBoxTest.cs">
+      <Link>TextBoxTest.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation.Tests\Controls\WrapPanelTest.cs">
+      <Link>Controls\WrapPanelTest.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation.Tests\Data\BindingExpressionTest.cs">
+      <Link>Data\BindingExpressionTest.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation.Tests\Data\BindingExtensionTest.cs">
+      <Link>Data\BindingExtensionTest.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation.Tests\Data\CollectionViewTest.cs">
+      <Link>Data\CollectionViewTest.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation.Tests\Data\ObservableExpressionTest.cs">
+      <Link>Data\ObservableExpressionTest.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation.Tests\Data\ObservableValueTest.cs">
+      <Link>Data\ObservableValueTest.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation.Tests\Data\TemplateBindingExtensionTest.cs">
+      <Link>Data\TemplateBindingExtensionTest.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation.Tests\DependencyObjectTest.cs">
+      <Link>DependencyObjectTest.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation.Tests\DependencyPropertyTest.cs">
+      <Link>DependencyPropertyTest.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation.Tests\DependencyPropertyValueTest.cs">
+      <Link>DependencyPropertyValueTest.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation.Tests\FrameworkElementTest.cs">
+      <Link>FrameworkElementTest.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation.Tests\FrameworkTemplateTest.cs">
+      <Link>FrameworkTemplateTest.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation.Tests\FreezableTest.cs">
+      <Link>FreezableTest.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation.Tests\HitTestTest.cs">
+      <Link>HitTestTest.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation.Tests\Input\KeyboardDeviceTest.cs">
+      <Link>Input\KeyboardDeviceTest.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation.Tests\Input\MouseDeviceTest.cs">
+      <Link>Input\MouseDeviceTest.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation.Tests\Input\TestPresentationSource.cs">
+      <Link>Input\TestPresentationSource.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation.Tests\Markup\DynamicResourceExtensionTest.cs">
+      <Link>Markup\DynamicResourceExtensionTest.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation.Tests\Markup\LexerTest.cs">
+      <Link>Markup\LexerTest.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation.Tests\Markup\MarkupExtensionParserTest.cs">
+      <Link>Markup\MarkupExtensionParserTest.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation.Tests\Markup\StaticResourceExtensionTest.cs">
+      <Link>Markup\StaticResourceExtensionTest.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation.Tests\Markup\TypeParserTest.cs">
+      <Link>Markup\TypeParserTest.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation.Tests\Markup\XamlLoaderTest.cs">
+      <Link>Markup\XamlLoaderTest.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation.Tests\Markup\XamlParserTest.cs">
+      <Link>Markup\XamlParserTest.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation.Tests\Media\Animation\AnimatableRootClockTest.cs">
+      <Link>Media\Animation\AnimatableRootClockTest.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation.Tests\Media\Animation\AnimationExpressionTest.cs">
+      <Link>Media\Animation\AnimationExpressionTest.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation.Tests\Media\Animation\ColorAnimationTest.cs">
+      <Link>Media\Animation\ColorAnimationTest.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation.Tests\Media\Animation\DoubleAnimationTest.cs">
+      <Link>Media\Animation\DoubleAnimationTest.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation.Tests\Media\Animation\DurationClockTest.cs">
+      <Link>Media\Animation\DurationClockTest.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation.Tests\Media\Animation\EasingFunctionTest.cs">
+      <Link>Media\Animation\EasingFunctionTest.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation.Tests\Media\Animation\ParallelTimelineClockTest.cs">
+      <Link>Media\Animation\ParallelTimelineClockTest.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation.Tests\Media\Animation\RepeatClockTest.cs">
+      <Link>Media\Animation\RepeatClockTest.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation.Tests\Media\Animation\ReverseClockTest.cs">
+      <Link>Media\Animation\ReverseClockTest.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation.Tests\Media\Animation\SequentialClockTest.cs">
+      <Link>Media\Animation\SequentialClockTest.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation.Tests\Media\Animation\StoryboardTest.cs">
+      <Link>Media\Animation\StoryboardTest.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation.Tests\Media\Animation\TestClock.cs">
+      <Link>Media\Animation\TestClock.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation.Tests\Media\Animation\TestRootClock.cs">
+      <Link>Media\Animation\TestRootClock.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation.Tests\Media\Animation\TimelineClockTest.cs">
+      <Link>Media\Animation\TimelineClockTest.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation.Tests\Media\MatrixTest.cs">
+      <Link>Media\MatrixTest.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation.Tests\Media\TestRenderElement.cs">
+      <Link>Media\TestRenderElement.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation.Tests\PropertyPathTest.cs">
+      <Link>PropertyPathTest.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation.Tests\ResourceDictionaryTest.cs">
+      <Link>ResourceDictionaryTest.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation.Tests\ResourceReferenceExpressionTest.cs">
+      <Link>ResourceReferenceExpressionTest.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation.Tests\RoutedEventTest.cs">
+      <Link>RoutedEventTest.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation.Tests\SizeTest.cs">
+      <Link>SizeTest.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation.Tests\StyleTest.cs">
+      <Link>StyleTest.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation.Tests\TestApplicationHost.cs">
+      <Link>TestApplicationHost.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation.Tests\Threading\DispatcherOperationTest.cs">
+      <Link>Threading\DispatcherOperationTest.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation.Tests\Threading\DispatcherTimerTest.cs">
+      <Link>Threading\DispatcherTimerTest.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation.Tests\Threading\TestSchedulerTest.cs">
+      <Link>Threading\TestSchedulerTest.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation.Tests\Threading\TestTaskScheduler.cs">
+      <Link>Threading\TestTaskScheduler.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation.Tests\UIElementTest.cs">
+      <Link>UIElementTest.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation.Tests\VisualStateTest.cs">
+      <Link>VisualStateTest.cs</Link>
+    </Compile>
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Granular.Common.Web\Granular.Common.Web.csproj">
+      <Project>{F79EE440-E0C4-43A9-8DDC-33D9ED53E570}</Project>
+      <Name>Granular.Common.Web</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Granular.Presentation.Web\Granular.Presentation.Web.csproj">
+      <Project>{DD58EC80-2C0D-45F3-9CC9-5B1783193306}</Project>
+      <Name>Granular.Presentation.Web</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Granular.UnitTesting.Web\Granular.UnitTesting.Web.csproj">
+      <Project>{840FD85D-3D22-4DBB-85E0-BD7861646442}</Project>
+      <Name>Granular.UnitTesting.Web</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="mscorlib">
+      <HintPath>$(SolutionDir)packages\Saltarelle.Runtime.2.6.2\tools\Assemblies\mscorlib.dll</HintPath>
+    </Reference>
+    <Reference Include="Saltarelle.Linq, Version=2.0.0.0, Culture=neutral, PublicKeyToken=a4048e8fcc593f14, processorArchitecture=MSIL">
+      <HintPath>..\packages\Saltarelle.Linq.2.4.0\lib\Saltarelle.Linq.dll</HintPath>
+    </Reference>
+    <Reference Include="Saltarelle.Web">
+      <HintPath>..\packages\Saltarelle.Web.3.1.0\lib\Saltarelle.Web.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.html" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" Condition="!Exists('$(SolutionDir)packages\Saltarelle.Compiler.2.6.2\tools\Saltarelle.Compiler.targets')" />
+  <Import Project="$(SolutionDir)packages\Saltarelle.Compiler.2.6.2\tools\Saltarelle.Compiler.targets" Condition="Exists('$(SolutionDir)packages\Saltarelle.Compiler.2.6.2\tools\Saltarelle.Compiler.targets')" />
+  <PropertyGroup>
+    <PostBuildEvent>xcopy /Y "$(TargetDir)$(TargetName).js" "$(SolutionDir)Output.Web\"
+xcopy /Y "$(TargetDir)$(TargetName).dll" "$(SolutionDir)Output.Web\"
+copy /Y "$(ProjectDir)App.html" "$(SolutionDir)Output.Web\$(TargetName).html"</PostBuildEvent>
+  </PropertyGroup>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

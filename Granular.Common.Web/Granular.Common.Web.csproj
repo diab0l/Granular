@@ -1,0 +1,163 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{F79EE440-E0C4-43A9-8DDC-33D9ED53E570}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Granular</RootNamespace>
+    <AssemblyName>Granular.Common</AssemblyName>
+    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <NoStdLib>True</NoStdLib>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="..\Granular.Common\Collections\CacheDictionary.cs">
+      <Link>Collections\CacheDictionary.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Common\Collections\ListDictionary.cs">
+      <Link>Collections\ListDictionary.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Common\Collections\NotifyCollectionChanged.cs">
+      <Link>Collections\NotifyCollectionChanged.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Common\Collections\ObservableCollection.cs">
+      <Link>Collections\ObservableCollection.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Common\Collections\PriorityQueue.cs">
+      <Link>Collections\PriorityQueue.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Common\Collections\ReadOnlyStack.cs">
+      <Link>Collections\ReadOnlyStack.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Common\Exception.cs">
+      <Link>Exception.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Common\Extensions\AssemblyExtensions.cs">
+      <Link>Extensions\AssemblyExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Common\Extensions\CollectionExtensions.cs">
+      <Link>Extensions\CollectionExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Common\Extensions\DoubleExtensions.cs">
+      <Link>Extensions\DoubleExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Common\Extensions\EventHandlerExtensions.cs">
+      <Link>Extensions\EventHandlerExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Common\Extensions\IntExtensions.cs">
+      <Link>Extensions\IntExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Common\Extensions\ListExtensions.cs">
+      <Link>Extensions\ListExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Common\Extensions\StringExtensions.cs">
+      <Link>Extensions\StringExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Common\Extensions\TimeSpanExtensions.cs">
+      <Link>Extensions\TimeSpanExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Common\Extensions\TypeExtensions.cs">
+      <Link>Extensions\TypeExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Common\Xaml\Lexer.cs">
+      <Link>Xaml\Lexer.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Common\Xaml\MarkupExtensionParser.cs">
+      <Link>Xaml\MarkupExtensionParser.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Common\Xaml\XamlAttribute.cs">
+      <Link>Xaml\XamlAttribute.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Common\Xaml\XamlElement.cs">
+      <Link>Xaml\XamlElement.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Common\Xaml\XamlLanguage.cs">
+      <Link>Xaml\XamlLanguage.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Common\Xaml\XamlName.cs">
+      <Link>Xaml\XamlName.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Common\Xaml\XamlNamespaces.cs">
+      <Link>Xaml\XamlNamespaces.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Common\Xaml\XamlNode.cs">
+      <Link>Xaml\XamlNode.cs</Link>
+    </Compile>
+    <Compile Include="Compatibility\Array.cs" />
+    <Compile Include="Compatibility\AssemblyExtensions.cs" />
+    <Compile Include="Compatibility\BindingFlags.cs" />
+    <Compile Include="Compatibility\Collection.cs" />
+    <Compile Include="Compatibility\Comparer.cs" />
+    <Compile Include="Compatibility\Convert.cs" />
+    <Compile Include="Compatibility\DebuggerNonUserCodeAttribute.cs" />
+    <Compile Include="Compatibility\Dictionary.cs" />
+    <Compile Include="Compatibility\DictionaryExtensions.cs" />
+    <Compile Include="Compatibility\Double.cs" />
+    <Compile Include="Compatibility\EnumerableExtensions.cs" />
+    <Compile Include="Compatibility\EqualityComparer.cs" />
+    <Compile Include="Compatibility\EventInfoExtensions.cs" />
+    <Compile Include="Compatibility\HashSet.cs" />
+    <Compile Include="Compatibility\NotifyPropertyChanged.cs" />
+    <Compile Include="Compatibility\PropertyInfoExtensions.cs" />
+    <Compile Include="Compatibility\RegexExtensions.cs" />
+    <Compile Include="Compatibility\RuntimeHelpers.cs" />
+    <Compile Include="Compatibility\SortedList.cs" />
+    <Compile Include="Compatibility\STAThreadAttribute.cs" />
+    <Compile Include="Compatibility\String.cs" />
+    <Compile Include="Compatibility\TimeSpan.cs" />
+    <Compile Include="Compatibility\Type.cs" />
+    <Compile Include="Compatibility\TypeExtensions.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Xaml\XamlParser.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="mscorlib">
+      <HintPath>$(SolutionDir)packages\Saltarelle.Runtime.2.6.2\tools\Assemblies\mscorlib.dll</HintPath>
+    </Reference>
+    <Reference Include="Saltarelle.Linq">
+      <HintPath>..\packages\Saltarelle.Linq.2.4.0\lib\Saltarelle.Linq.dll</HintPath>
+    </Reference>
+    <Reference Include="Saltarelle.Web">
+      <HintPath>..\packages\Saltarelle.Web.3.1.0\lib\Saltarelle.Web.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" Condition="!Exists('$(SolutionDir)packages\Saltarelle.Compiler.2.6.2\tools\Saltarelle.Compiler.targets')" />
+  <Import Project="$(SolutionDir)packages\Saltarelle.Compiler.2.6.2\tools\Saltarelle.Compiler.targets" Condition="Exists('$(SolutionDir)packages\Saltarelle.Compiler.2.6.2\tools\Saltarelle.Compiler.targets')" />
+  <PropertyGroup>
+    <PostBuildEvent>xcopy /Y "$(TargetDir)$(TargetName).js" "$(SolutionDir)Output.Web\"
+xcopy /Y "$(TargetDir)$(TargetName).dll" "$(SolutionDir)Output.Web\"</PostBuildEvent>
+  </PropertyGroup>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

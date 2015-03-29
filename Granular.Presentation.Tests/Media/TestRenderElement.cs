@@ -1,0 +1,157 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Windows.Controls;
+
+namespace System.Windows.Media
+{
+    public class TestVisualRenderElement : IVisualRenderElement
+    {
+        public Brush Background { get; set; }
+        public Rect Bounds { get; set; }
+        public bool ClipToBounds { get; set; }
+        public bool IsHitTestVisible { get; set; }
+        public bool IsVisible { get; set; }
+        public double Opacity { get; set; }
+        public Transform Transform { get; set; }
+
+        private List<object> children;
+        public IEnumerable<object> Children { get { return children; } }
+
+        public TestVisualRenderElement()
+        {
+            children = new List<object>();
+        }
+
+        public void InsertChild(int index, object child)
+        {
+            children.Insert(index, child);
+        }
+
+        public void RemoveChild(object child)
+        {
+            children.Remove(child);
+        }
+    }
+
+    public class TestDrawingRenderElement : IDrawingRenderElement
+    {
+        public void DrawLine(Point from, Point to)
+        {
+            //
+        }
+    }
+
+    public class TestTextBoxRenderElement : ITextBoxRenderElement
+    {
+        public event EventHandler TextChanged { add { } remove { } }
+        public event EventHandler CaretIndexChanged { add { } remove { } }
+        public event EventHandler SelectionStartChanged { add { } remove { } }
+        public event EventHandler SelectionLengthChanged { add { } remove { } }
+
+        public int CaretIndex { get; set; }
+        public int SelectionLength { get; set; }
+        public int SelectionStart { get; set; }
+
+        public string Text { get; set; }
+        public Rect Bounds { get; set; }
+        public bool AcceptsReturn { get; set; }
+        public bool AcceptsTab { get; set; }
+        public bool IsReadOnly { get; set; }
+        public bool SpellCheck { get; set; }
+
+        public Brush Foreground { get; set; }
+        public double FontSize { get; set; }
+        public FontFamily FontFamily { get; set; }
+        public FontStretch FontStretch { get; set; }
+        public FontStyle FontStyle { get; set; }
+        public FontWeight FontWeight { get; set; }
+        public bool IsHitTestVisible { get; set; }
+        public TextWrapping TextWrapping { get; set; }
+        public TextAlignment TextAlignment { get; set; }
+
+        public ScrollBarVisibility HorizontalScrollBarVisibility { get; set; }
+        public ScrollBarVisibility VerticalScrollBarVisibility { get; set; }
+
+        public Rect GetCharacterRect(int index)
+        {
+            return Rect.Empty;
+        }
+
+        public void Focus()
+        {
+            //
+        }
+
+        public void ClearFocus()
+        {
+            //
+        }
+    }
+
+    public class TestTextBlockRenderElement : ITextBlockRenderElement
+    {
+        public Rect Bounds { get; set; }
+        public FontFamily FontFamily { get; set; }
+        public Brush Foreground { get; set; }
+        public double FontSize { get; set; }
+        public FontStyle FontStyle { get; set; }
+        public FontStretch FontStretch { get; set; }
+        public FontWeight FontWeight { get; set; }
+        public string Text { get; set; }
+        public TextAlignment TextAlignment { get; set; }
+        public TextTrimming TextTrimming { get; set; }
+        public TextWrapping TextWrapping { get; set; }
+
+        public Size Measure(double maxWidth)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+    public class TestBorderRenderElement : IBorderRenderElement
+    {
+        public Brush Background { get; set; }
+        public Thickness BorderThickness { get; set; }
+        public Brush BorderBrush { get; set; }
+        public Rect Bounds { get; set; }
+        public CornerRadius CornerRadius { get; set; }
+        public bool IsHitTestVisible { get; set; }
+    }
+
+    public class TestRenderElementFactory : IRenderElementFactory
+    {
+        public static readonly TestRenderElementFactory Default = new TestRenderElementFactory();
+
+        private TestRenderElementFactory()
+        {
+            //
+        }
+
+        public IVisualRenderElement CreateVisualRenderElement(object owner)
+        {
+            return new TestVisualRenderElement();
+        }
+
+        public IDrawingRenderElement CreateDrawingRenderElement(object owner)
+        {
+            return new TestDrawingRenderElement();
+        }
+
+        public ITextBoxRenderElement CreateTextBoxRenderElement(object owner)
+        {
+            return new TestTextBoxRenderElement();
+        }
+
+        public ITextBlockRenderElement CreateTextBlockRenderElement(object owner)
+        {
+            return new TestTextBlockRenderElement();
+        }
+
+        public IBorderRenderElement CreateBorderRenderElement(object owner)
+        {
+            return new TestBorderRenderElement();
+        }
+    }
+}

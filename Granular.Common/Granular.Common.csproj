@@ -1,0 +1,100 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{87F1FD58-E233-4183-830A-E9E54BA17D68}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Granular</RootNamespace>
+    <AssemblyName>Granular.Common</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Collections\CacheDictionary.cs" />
+    <Compile Include="Collections\ListDictionary.cs" />
+    <Compile Include="Collections\NotifyCollectionChanged.cs" />
+    <Compile Include="Collections\ObservableCollection.cs" />
+    <Compile Include="Collections\PriorityQueue.cs" />
+    <Compile Include="Collections\ReadOnlyStack.cs" />
+    <Compile Include="Compatibility\Array.cs" />
+    <Compile Include="Compatibility\AssemblyExtensions.cs" />
+    <Compile Include="Compatibility\BindingFlags.cs" />
+    <Compile Include="Compatibility\Collection.cs" />
+    <Compile Include="Compatibility\Comparer.cs" />
+    <Compile Include="Compatibility\Convert.cs" />
+    <Compile Include="Compatibility\Dictionary.cs" />
+    <Compile Include="Compatibility\DictionaryExtensions.cs" />
+    <Compile Include="Compatibility\Double.cs" />
+    <Compile Include="Compatibility\EqualityComparer.cs" />
+    <Compile Include="Compatibility\EventInfoExtensions.cs" />
+    <Compile Include="Compatibility\PropertyInfoExtensions.cs" />
+    <Compile Include="Compatibility\ReflectableAttribute.cs" />
+    <Compile Include="Compatibility\RuntimeHelpers.cs" />
+    <Compile Include="Compatibility\String.cs" />
+    <Compile Include="Compatibility\TimeSpan.cs" />
+    <Compile Include="Compatibility\Type.cs" />
+    <Compile Include="Compatibility\TypeExtensions.cs" />
+    <Compile Include="Extensions\AssemblyExtensions.cs" />
+    <Compile Include="Extensions\CollectionExtensions.cs" />
+    <Compile Include="Extensions\DoubleExtensions.cs" />
+    <Compile Include="Extensions\EventHandlerExtensions.cs" />
+    <Compile Include="Extensions\IntExtensions.cs" />
+    <Compile Include="Extensions\ListExtensions.cs" />
+    <Compile Include="Extensions\StringExtensions.cs" />
+    <Compile Include="Extensions\TimeSpanExtensions.cs" />
+    <Compile Include="Extensions\TypeExtensions.cs" />
+    <Compile Include="Exception.cs" />
+    <Compile Include="Xaml\Lexer.cs" />
+    <Compile Include="Xaml\MarkupExtensionParser.cs" />
+    <Compile Include="Xaml\XamlNamespaces.cs" />
+    <Compile Include="Xaml\XamlName.cs" />
+    <Compile Include="Xaml\XamlAttribute.cs" />
+    <Compile Include="Xaml\XamlElement.cs" />
+    <Compile Include="Xaml\XamlLanguage.cs" />
+    <Compile Include="Xaml\XamlNode.cs" />
+    <Compile Include="Xaml\XamlParser.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>xcopy /Y "$(TargetDir)$(TargetName).dll" "$(SolutionDir)Output\"</PostBuildEvent>
+  </PropertyGroup>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

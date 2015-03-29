@@ -1,0 +1,659 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{DD58EC80-2C0D-45F3-9CC9-5B1783193306}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Granular.Presentation</RootNamespace>
+    <AssemblyName>Granular.Presentation</AssemblyName>
+    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <NoStdLib>True</NoStdLib>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="..\Granular.Presentation\Application.cs">
+      <Link>Application.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\ApplicationHost.cs">
+      <Link>ApplicationHost.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\Controls\Adorner.cs">
+      <Link>Controls\Adorner.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\Controls\AdornerLayer.cs">
+      <Link>Controls\AdornerLayer.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\Controls\Border.cs">
+      <Link>Controls\Border.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\Controls\Button.cs">
+      <Link>Controls\Button.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\Controls\Canvas.cs">
+      <Link>Controls\Canvas.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\Controls\CheckBox.cs">
+      <Link>Controls\CheckBox.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\Controls\ContentControl.cs">
+      <Link>Controls\ContentControl.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\Controls\ContentPresenter.cs">
+      <Link>Controls\ContentPresenter.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\Controls\Control.cs">
+      <Link>Controls\Control.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\Controls\ControlPropertyMetadata.cs">
+      <Link>Controls\ControlPropertyMetadata.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\Controls\ControlTemplate.cs">
+      <Link>Controls\ControlTemplate.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\Controls\DataTemplateSelector.cs">
+      <Link>Controls\DataTemplateSelector.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\Controls\Decorator.cs">
+      <Link>Controls\Decorator.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\Controls\DefinitionBase.cs">
+      <Link>Controls\DefinitionBase.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\Controls\DockPanel.cs">
+      <Link>Controls\DockPanel.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\Controls\FlowDirection.cs">
+      <Link>Controls\FlowDirection.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\Controls\Grid.cs">
+      <Link>Controls\Grid.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\Controls\GridLength.cs">
+      <Link>Controls\GridLength.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\Controls\ItemCollection.cs">
+      <Link>Controls\ItemCollection.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\Controls\ItemContainerGenerator.cs">
+      <Link>Controls\ItemContainerGenerator.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\Controls\ItemsControl.cs">
+      <Link>Controls\ItemsControl.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\Controls\ItemsPanelTemplate.cs">
+      <Link>Controls\ItemsPanelTemplate.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\Controls\ItemsPresenter.cs">
+      <Link>Controls\ItemsPresenter.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\Controls\MeasureCache.cs">
+      <Link>Controls\MeasureCache.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\Controls\Panel.cs">
+      <Link>Controls\Panel.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\Controls\PopupLayer.cs">
+      <Link>Controls\PopupLayer.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\Controls\Primitives\ButtonBase.cs">
+      <Link>Controls\Primitives\ButtonBase.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\Controls\Primitives\DragEventArgs.cs">
+      <Link>Controls\Primitives\DragEventArgs.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\Controls\Primitives\Placement.cs">
+      <Link>Controls\Primitives\Placement.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\Controls\Primitives\Popup.cs">
+      <Link>Controls\Primitives\Popup.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\Controls\Primitives\RangeBase.cs">
+      <Link>Controls\Primitives\RangeBase.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\Controls\Primitives\RepeatButton.cs">
+      <Link>Controls\Primitives\RepeatButton.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\Controls\Primitives\ScrollBar.cs">
+      <Link>Controls\Primitives\ScrollBar.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\Controls\Primitives\ScrollInfo.cs">
+      <Link>Controls\Primitives\ScrollInfo.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\Controls\Primitives\TextBoxBase.cs">
+      <Link>Controls\Primitives\TextBoxBase.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\Controls\Primitives\Thumb.cs">
+      <Link>Controls\Primitives\Thumb.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\Controls\Primitives\ToggleButton.cs">
+      <Link>Controls\Primitives\ToggleButton.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\Controls\Primitives\Track.cs">
+      <Link>Controls\Primitives\Track.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\Controls\ScrollChangedEventArgs.cs">
+      <Link>Controls\ScrollChangedEventArgs.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\Controls\ScrollContentPresenter.cs">
+      <Link>Controls\ScrollContentPresenter.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\Controls\ScrollEventArgs.cs">
+      <Link>Controls\ScrollEventArgs.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\Controls\ScrollViewer.cs">
+      <Link>Controls\ScrollViewer.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\Controls\SpellCheck.cs">
+      <Link>Controls\SpellCheck.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\Controls\StackPanel.cs">
+      <Link>Controls\StackPanel.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\Controls\StyleSelector.cs">
+      <Link>Controls\StyleSelector.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\Controls\TextBlock.cs">
+      <Link>Controls\TextBlock.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\Controls\TextBox.cs">
+      <Link>Controls\TextBox.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\Controls\TextBoxView.cs">
+      <Link>Controls\TextBoxView.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\Controls\TextChangedEventArgs.cs">
+      <Link>Controls\TextChangedEventArgs.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\Controls\UIElementCollection.cs">
+      <Link>Controls\UIElementCollection.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\Controls\UserControl.cs">
+      <Link>Controls\UserControl.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\Controls\WrapPanel.cs">
+      <Link>Controls\WrapPanel.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\CornerRadius.cs">
+      <Link>CornerRadius.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\DataTemplate.cs">
+      <Link>DataTemplate.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\DataTrigger.cs">
+      <Link>DataTrigger.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\Data\Binding.cs">
+      <Link>Data\Binding.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\Data\BindingExpression.cs">
+      <Link>Data\BindingExpression.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\Data\CollectionView.cs">
+      <Link>Data\CollectionView.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\Data\InnerCollectionView.cs">
+      <Link>Data\InnerCollectionView.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\Data\ObservableExpression.cs">
+      <Link>Data\ObservableExpression.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\Data\ObservableValue.cs">
+      <Link>Data\ObservableValue.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\Data\PropertyObserver.cs">
+      <Link>Data\PropertyObserver.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\Data\RelativeSource.cs">
+      <Link>Data\RelativeSource.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\Data\TemplateBindingExtension.cs">
+      <Link>Data\TemplateBindingExtension.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\Data\ValueConverter.cs">
+      <Link>Data\ValueConverter.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\DependencyObject.cs">
+      <Link>DependencyObject.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\DependencyProperty.cs">
+      <Link>DependencyProperty.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\DependencyPropertyChangedEventArgs.cs">
+      <Link>DependencyPropertyChangedEventArgs.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\DependencyPropertyValueEntry.cs">
+      <Link>DependencyPropertyValueEntry.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\Disposable.cs">
+      <Link>Disposable.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\Duration.cs">
+      <Link>Duration.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\DynamicResourceExtension.cs">
+      <Link>DynamicResourceExtension.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\EmbeddedResourceLoader.cs">
+      <Link>EmbeddedResourceLoader.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\EventManager.cs">
+      <Link>EventManager.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\EventRoute.cs">
+      <Link>EventRoute.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\EventSetter.cs">
+      <Link>EventSetter.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\EventTrigger.cs">
+      <Link>EventTrigger.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\Expression.cs">
+      <Link>Expression.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\Font.cs">
+      <Link>Font.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\FrameworkElement.cs">
+      <Link>FrameworkElement.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\FrameworkElementFactory.cs">
+      <Link>FrameworkElementFactory.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\FrameworkPropertyMetadata.cs">
+      <Link>FrameworkPropertyMetadata.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\FrameworkTemplate.cs">
+      <Link>FrameworkTemplate.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\Freezable.cs">
+      <Link>Freezable.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\FreezableCollection.cs">
+      <Link>FreezableCollection.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\InputElement.cs">
+      <Link>InputElement.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\Input\FocusManager.cs">
+      <Link>Input\FocusManager.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\Input\InputDevice.cs">
+      <Link>Input\InputDevice.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\Input\InputEventArgs.cs">
+      <Link>Input\InputEventArgs.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\Input\Keyboard.cs">
+      <Link>Input\Keyboard.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\Input\KeyboardDevice.cs">
+      <Link>Input\KeyboardDevice.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\Input\KeyboardEventArgs.cs">
+      <Link>Input\KeyboardEventArgs.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\Input\Mouse.cs">
+      <Link>Input\Mouse.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\Input\MouseDevice.cs">
+      <Link>Input\MouseDevice.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\Input\MouseEventArgs.cs">
+      <Link>Input\MouseEventArgs.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\Markup\ElementFactory.cs">
+      <Link>Markup\ElementFactory.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\Markup\ElementInitializer.cs">
+      <Link>Markup\ElementInitializer.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\Markup\EventAdapter.cs">
+      <Link>Markup\EventAdapter.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\Markup\InitializeContext.cs">
+      <Link>Markup\InitializeContext.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\Markup\KnownTypes.cs">
+      <Link>Markup\KnownTypes.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\Markup\MarkupExtension.cs">
+      <Link>Markup\MarkupExtension.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\Markup\NameScope.cs">
+      <Link>Markup\NameScope.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\Markup\PropertyAdapter.cs">
+      <Link>Markup\PropertyAdapter.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\Markup\PropertyAttribute.cs">
+      <Link>Markup\PropertyAttribute.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\Markup\PropertyPathParser.cs">
+      <Link>Markup\PropertyPathParser.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\Markup\TypeConverter.cs">
+      <Link>Markup\TypeConverter.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\Markup\TypeParser.cs">
+      <Link>Markup\TypeParser.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\Markup\ValueProvider.cs">
+      <Link>Markup\ValueProvider.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\Markup\XamlLoader.cs">
+      <Link>Markup\XamlLoader.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\Markup\XamlTypes.cs">
+      <Link>Markup\XamlTypes.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\Markup\XmlnsDefinition.cs">
+      <Link>Markup\XmlnsDefinition.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\Media\Animation\Animatable.cs">
+      <Link>Media\Animation\Animatable.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\Media\Animation\AnimatableRootClock.cs">
+      <Link>Media\Animation\AnimatableRootClock.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\Media\Animation\AnimationClock.cs">
+      <Link>Media\Animation\AnimationClock.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\Media\Animation\AnimationExpression.cs">
+      <Link>Media\Animation\AnimationExpression.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\Media\Animation\AnimationLayer.cs">
+      <Link>Media\Animation\AnimationLayer.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\Media\Animation\AnimationLayerCollection.cs">
+      <Link>Media\Animation\AnimationLayerCollection.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\Media\Animation\AnimationTimeline.cs">
+      <Link>Media\Animation\AnimationTimeline.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\Media\Animation\AnimationTimelineClock.cs">
+      <Link>Media\Animation\AnimationTimelineClock.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\Media\Animation\Clock.cs">
+      <Link>Media\Animation\Clock.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\Media\Animation\DurationClock.cs">
+      <Link>Media\Animation\DurationClock.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\Media\Animation\EasingFunction.cs">
+      <Link>Media\Animation\EasingFunction.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\Media\Animation\KeyTime.cs">
+      <Link>Media\Animation\KeyTime.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\Media\Animation\OffsetClock.cs">
+      <Link>Media\Animation\OffsetClock.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\Media\Animation\ParallelClock.cs">
+      <Link>Media\Animation\ParallelClock.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\Media\Animation\ParallelTimeline.cs">
+      <Link>Media\Animation\ParallelTimeline.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\Media\Animation\ParallelTimelineClock.cs">
+      <Link>Media\Animation\ParallelTimelineClock.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\Media\Animation\RepeatBehavior.cs">
+      <Link>Media\Animation\RepeatBehavior.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\Media\Animation\RepeatClock.cs">
+      <Link>Media\Animation\RepeatClock.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\Media\Animation\ReverseClock.cs">
+      <Link>Media\Animation\ReverseClock.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\Media\Animation\RootClock.cs">
+      <Link>Media\Animation\RootClock.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\Media\Animation\SequentialClock.cs">
+      <Link>Media\Animation\SequentialClock.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\Media\Animation\SequentialTimeline.cs">
+      <Link>Media\Animation\SequentialTimeline.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\Media\Animation\SequentialTimelineClock.cs">
+      <Link>Media\Animation\SequentialTimelineClock.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\Media\Animation\Storyboard.cs">
+      <Link>Media\Animation\Storyboard.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\Media\Animation\StoryboardAction.cs">
+      <Link>Media\Animation\StoryboardAction.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\Media\Animation\Timeline.cs">
+      <Link>Media\Animation\Timeline.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\Media\Animation\TimelineClock.cs">
+      <Link>Media\Animation\TimelineClock.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\Media\Animation\TimelineGroup.cs">
+      <Link>Media\Animation\TimelineGroup.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\Media\Animation\TimelineGroupClock.cs">
+      <Link>Media\Animation\TimelineGroupClock.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\Media\Animation\TransitionAnimationTimeline.cs">
+      <Link>Media\Animation\TransitionAnimationTimeline.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\Media\Brush.cs">
+      <Link>Media\Brush.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\Media\Brushes.cs">
+      <Link>Media\Brushes.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\Media\Color.cs">
+      <Link>Media\Color.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\Media\Colors.cs">
+      <Link>Media\Colors.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\Media\GradientBrush.cs">
+      <Link>Media\GradientBrush.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\Media\ImageBrush.cs">
+      <Link>Media\ImageBrush.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\Media\LinearGradientBrush.cs">
+      <Link>Media\LinearGradientBrush.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\Media\Matrix.cs">
+      <Link>Media\Matrix.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\Media\RadialGradientBrush.cs">
+      <Link>Media\RadialGradientBrush.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\Media\RenderElement.cs">
+      <Link>Media\RenderElement.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\Media\RotateTransform.cs">
+      <Link>Media\RotateTransform.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\Media\ScaleTransform.cs">
+      <Link>Media\ScaleTransform.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\Media\SkewTransform.cs">
+      <Link>Media\SkewTransform.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\Media\SolidColorBrush.cs">
+      <Link>Media\SolidColorBrush.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\Media\TileBrush.cs">
+      <Link>Media\TileBrush.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\Media\Transform.cs">
+      <Link>Media\Transform.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\Media\Typeface.cs">
+      <Link>Media\Typeface.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\Media\Visual.cs">
+      <Link>Media\Visual.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\Point.cs">
+      <Link>Point.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\PresentationSource.cs">
+      <Link>PresentationSource.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\PropertyMetadata.cs">
+      <Link>PropertyMetadata.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\PropertyPath.cs">
+      <Link>PropertyPath.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\Rect.cs">
+      <Link>Rect.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\ResourceContainer.cs">
+      <Link>ResourceContainer.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\ResourceDictionary.cs">
+      <Link>ResourceDictionary.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\ResourceKey.cs">
+      <Link>ResourceKey.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\ResourceReferenceExpression.cs">
+      <Link>ResourceReferenceExpression.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\ResourcesChangedEventArgs.cs">
+      <Link>ResourcesChangedEventArgs.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\RoutedEvent.cs">
+      <Link>RoutedEvent.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\RoutedPropertyChangedEventArgs.cs">
+      <Link>RoutedPropertyChangedEventArgs.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\Setter.cs">
+      <Link>Setter.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\Size.cs">
+      <Link>Size.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\StartupEventArgs.cs">
+      <Link>StartupEventArgs.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\StaticResourceExtension.cs">
+      <Link>StaticResourceExtension.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\Style.cs">
+      <Link>Style.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\SystemResources.cs">
+      <Link>SystemResources.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\TemplatePartAttribute.cs">
+      <Link>TemplatePartAttribute.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\TemplateVisualStateAttribute.cs">
+      <Link>TemplateVisualStateAttribute.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\Thickness.cs">
+      <Link>Thickness.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\Threading\Dispatcher.cs">
+      <Link>Threading\Dispatcher.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\Threading\DispatcherOperation.cs">
+      <Link>Threading\DispatcherOperation.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\Threading\DispatcherTimer.cs">
+      <Link>Threading\DispatcherTimer.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\Threading\TaskScheduler.cs">
+      <Link>Threading\TaskScheduler.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\Trigger.cs">
+      <Link>Trigger.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\UIElement.cs">
+      <Link>UIElement.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\UIElement.Input.cs">
+      <Link>UIElement.Input.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\VisualState.cs">
+      <Link>VisualState.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\VisualStateGroup.cs">
+      <Link>VisualStateGroup.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\VisualStateManager.cs">
+      <Link>VisualStateManager.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\VisualStates.cs">
+      <Link>VisualStates.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\VisualTransition.cs">
+      <Link>VisualTransition.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\Window.cs">
+      <Link>Window.cs</Link>
+    </Compile>
+    <Compile Include="Media\Animation\ColorAnimation.cs" />
+    <Compile Include="Media\Animation\DoubleAnimation.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="mscorlib">
+      <HintPath>$(SolutionDir)packages\Saltarelle.Runtime.2.6.2\tools\Assemblies\mscorlib.dll</HintPath>
+    </Reference>
+    <Reference Include="Saltarelle.Linq, Version=2.0.0.0, Culture=neutral, PublicKeyToken=a4048e8fcc593f14, processorArchitecture=MSIL">
+      <HintPath>..\packages\Saltarelle.Linq.2.4.0\lib\Saltarelle.Linq.dll</HintPath>
+    </Reference>
+    <Reference Include="Saltarelle.Web, Version=2.0.0.0, Culture=neutral, PublicKeyToken=a4048e8fcc593f14, processorArchitecture=MSIL">
+      <HintPath>..\packages\Saltarelle.Web.3.1.0\lib\Saltarelle.Web.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Granular.Common.Web\Granular.Common.Web.csproj">
+      <Project>{F79EE440-E0C4-43A9-8DDC-33D9ED53E570}</Project>
+      <Name>Granular.Common.Web</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" Condition="!Exists('$(SolutionDir)packages\Saltarelle.Compiler.2.6.2\tools\Saltarelle.Compiler.targets')" />
+  <Import Project="$(SolutionDir)packages\Saltarelle.Compiler.2.6.2\tools\Saltarelle.Compiler.targets" Condition="Exists('$(SolutionDir)packages\Saltarelle.Compiler.2.6.2\tools\Saltarelle.Compiler.targets')" />
+  <PropertyGroup>
+    <PostBuildEvent>xcopy /Y "$(TargetDir)$(TargetName).js" "$(SolutionDir)Output.Web\"
+xcopy /Y "$(TargetDir)$(TargetName).dll" "$(SolutionDir)Output.Web\"</PostBuildEvent>
+  </PropertyGroup>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

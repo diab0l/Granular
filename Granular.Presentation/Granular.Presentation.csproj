@@ -1,0 +1,264 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{14EC400C-E6B9-499B-9970-57B34AF24A4B}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>System.Windows</RootNamespace>
+    <AssemblyName>Granular.Presentation</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Controls\Adorner.cs" />
+    <Compile Include="Controls\AdornerLayer.cs" />
+    <Compile Include="Controls\Primitives\TextBoxBase.cs" />
+    <Compile Include="Controls\SpellCheck.cs" />
+    <Compile Include="Controls\TextBoxView.cs" />
+    <Compile Include="Controls\TextChangedEventArgs.cs" />
+    <Compile Include="EmbeddedResourceLoader.cs" />
+    <Compile Include="Markup\ElementFactory.cs" />
+    <Compile Include="Markup\ElementInitializer.cs" />
+    <Compile Include="FrameworkElementFactory.cs" />
+    <Compile Include="Markup\XamlLoader.cs" />
+    <Compile Include="Markup\EventAdapter.cs" />
+    <Compile Include="Markup\MarkupExtension.cs" />
+    <Compile Include="Markup\XamlTypes.cs" />
+    <Compile Include="Media\Animation\Animatable.cs" />
+    <Compile Include="Media\Animation\AnimatableRootClock.cs" />
+    <Compile Include="Media\Animation\AnimationClock.cs" />
+    <Compile Include="Media\Animation\AnimationExpression.cs" />
+    <Compile Include="Media\Animation\AnimationTimelineClock.cs" />
+    <Compile Include="Media\Animation\AnimationLayer.cs" />
+    <Compile Include="Media\Animation\AnimationLayerCollection.cs" />
+    <Compile Include="Media\Animation\AnimationTimeline.cs" />
+    <Compile Include="Media\Animation\ColorAnimation.cs" />
+    <Compile Include="Media\Animation\KeyFrame.cs" />
+    <Compile Include="Media\Animation\KeyFramesAnimationTimeline.cs" />
+    <Compile Include="Media\Animation\KeyTime.cs" />
+    <Compile Include="Media\Animation\RootClock.cs" />
+    <Compile Include="Media\Animation\StoryboardAction.cs" />
+    <Compile Include="Media\Animation\TransitionAnimationTimeline.cs" />
+    <Compile Include="Media\Animation\DurationClock.cs" />
+    <Compile Include="Media\Animation\OffsetClock.cs" />
+    <Compile Include="Media\Animation\ParallelClock.cs" />
+    <Compile Include="Media\Animation\ParallelTimelineClock.cs" />
+    <Compile Include="Media\Animation\RepeatClock.cs" />
+    <Compile Include="Media\Animation\ReverseClock.cs" />
+    <Compile Include="Media\Animation\SequentialClock.cs" />
+    <Compile Include="Media\Animation\SequentialTimeline.cs" />
+    <Compile Include="Media\Animation\SequentialTimelineClock.cs" />
+    <Compile Include="Media\Animation\TimelineClock.cs" />
+    <Compile Include="Media\Animation\TimelineGroupClock.cs" />
+    <Compile Include="Media\Animation\DoubleAnimation.cs" />
+    <Compile Include="Media\Animation\EasingFunction.cs" />
+    <Compile Include="Media\Animation\Clock.cs" />
+    <Compile Include="Media\Animation\ParallelTimeline.cs" />
+    <Compile Include="Media\Animation\RepeatBehavior.cs" />
+    <Compile Include="Media\Animation\Timeline.cs" />
+    <Compile Include="Media\Animation\TimelineGroup.cs" />
+    <Compile Include="Application.cs" />
+    <Compile Include="ApplicationHost.cs" />
+    <Compile Include="Controls\Border.cs" />
+    <Compile Include="Controls\Button.cs" />
+    <Compile Include="Controls\Primitives\ButtonBase.cs" />
+    <Compile Include="Controls\CheckBox.cs" />
+    <Compile Include="Controls\Decorator.cs" />
+    <Compile Include="Controls\Primitives\DragEventArgs.cs" />
+    <Compile Include="Controls\ItemCollection.cs" />
+    <Compile Include="Controls\ItemsControl.cs" />
+    <Compile Include="Controls\ItemsPanelTemplate.cs" />
+    <Compile Include="Controls\ItemsPresenter.cs" />
+    <Compile Include="Controls\MeasureCache.cs" />
+    <Compile Include="Controls\Primitives\Placement.cs" />
+    <Compile Include="Controls\PopupLayer.cs" />
+    <Compile Include="Controls\Primitives\RangeBase.cs" />
+    <Compile Include="Controls\Primitives\RepeatButton.cs" />
+    <Compile Include="Controls\Primitives\ScrollBar.cs" />
+    <Compile Include="Controls\ScrollChangedEventArgs.cs" />
+    <Compile Include="Controls\ScrollContentPresenter.cs" />
+    <Compile Include="Controls\ScrollEventArgs.cs" />
+    <Compile Include="Controls\Primitives\ScrollInfo.cs" />
+    <Compile Include="Controls\ScrollViewer.cs" />
+    <Compile Include="Controls\StyleSelector.cs" />
+    <Compile Include="Controls\TextBox.cs" />
+    <Compile Include="Controls\Primitives\Thumb.cs" />
+    <Compile Include="Controls\Primitives\ToggleButton.cs" />
+    <Compile Include="Controls\ControlPropertyMetadata.cs" />
+    <Compile Include="Controls\Primitives\Track.cs" />
+    <Compile Include="Controls\UserControl.cs" />
+    <Compile Include="CornerRadius.cs" />
+    <Compile Include="Data\InnerCollectionView.cs" />
+    <Compile Include="Data\CollectionView.cs" />
+    <Compile Include="Controls\ContentControl.cs" />
+    <Compile Include="Controls\ContentPresenter.cs" />
+    <Compile Include="Controls\DataTemplateSelector.cs" />
+    <Compile Include="DataTemplate.cs" />
+    <Compile Include="Controls\ItemContainerGenerator.cs" />
+    <Compile Include="Controls\TextBlock.cs" />
+    <Compile Include="DataTrigger.cs" />
+    <Compile Include="Data\BindingExpression.cs" />
+    <Compile Include="Disposable.cs" />
+    <Compile Include="Controls\Canvas.cs" />
+    <Compile Include="Controls\Control.cs" />
+    <Compile Include="Controls\DockPanel.cs" />
+    <Compile Include="Controls\FlowDirection.cs" />
+    <Compile Include="Controls\Grid.cs" />
+    <Compile Include="Controls\DefinitionBase.cs" />
+    <Compile Include="Controls\GridLength.cs" />
+    <Compile Include="Controls\Panel.cs" />
+    <Compile Include="Controls\StackPanel.cs" />
+    <Compile Include="Controls\UIElementCollection.cs" />
+    <Compile Include="Controls\WrapPanel.cs" />
+    <Compile Include="Controls\ControlTemplate.cs" />
+    <Compile Include="Data\Binding.cs" />
+    <Compile Include="Data\PropertyObserver.cs" />
+    <Compile Include="Data\TemplateBindingExtension.cs" />
+    <Compile Include="Data\ValueConverter.cs" />
+    <Compile Include="Data\RelativeSource.cs" />
+    <Compile Include="Controls\Primitives\Popup.cs" />
+    <Compile Include="Duration.cs" />
+    <Compile Include="DynamicResourceExtension.cs" />
+    <Compile Include="EventSetter.cs" />
+    <Compile Include="EventTrigger.cs" />
+    <Compile Include="Media\Brushes.cs" />
+    <Compile Include="Media\Colors.cs" />
+    <Compile Include="Media\Typeface.cs" />
+    <Compile Include="ResourceKey.cs" />
+    <Compile Include="StartupEventArgs.cs" />
+    <Compile Include="StaticResourceExtension.cs" />
+    <Compile Include="Markup\ValueProvider.cs" />
+    <Compile Include="RoutedPropertyChangedEventArgs.cs" />
+    <Compile Include="Font.cs" />
+    <Compile Include="FrameworkElement.cs" />
+    <Compile Include="FrameworkTemplate.cs" />
+    <Compile Include="Freezable.cs" />
+    <Compile Include="FreezableCollection.cs" />
+    <Compile Include="Input\FocusManager.cs" />
+    <Compile Include="Input\InputDevice.cs" />
+    <Compile Include="InputElement.cs" />
+    <Compile Include="Input\InputEventArgs.cs" />
+    <Compile Include="Input\Keyboard.cs" />
+    <Compile Include="Input\KeyboardDevice.cs" />
+    <Compile Include="Input\KeyboardEventArgs.cs" />
+    <Compile Include="Input\Mouse.cs" />
+    <Compile Include="Input\MouseDevice.cs" />
+    <Compile Include="Input\MouseEventArgs.cs" />
+    <Compile Include="Markup\PropertyPathParser.cs" />
+    <Compile Include="PropertyPath.cs" />
+    <Compile Include="Markup\KnownTypes.cs" />
+    <Compile Include="Markup\PropertyAttribute.cs" />
+    <Compile Include="Markup\TypeConverter.cs" />
+    <Compile Include="Markup\XmlnsDefinition.cs" />
+    <Compile Include="Media\Brush.cs" />
+    <Compile Include="Media\Color.cs" />
+    <Compile Include="Media\GradientBrush.cs" />
+    <Compile Include="Media\ImageBrush.cs" />
+    <Compile Include="Media\LinearGradientBrush.cs" />
+    <Compile Include="Media\RadialGradientBrush.cs" />
+    <Compile Include="Media\SkewTransform.cs" />
+    <Compile Include="Media\Matrix.cs" />
+    <Compile Include="Media\RotateTransform.cs" />
+    <Compile Include="Media\ScaleTransform.cs" />
+    <Compile Include="Media\SolidColorBrush.cs" />
+    <Compile Include="Media\TileBrush.cs" />
+    <Compile Include="Media\Transform.cs" />
+    <Compile Include="Media\RenderElement.cs" />
+    <Compile Include="Point.cs" />
+    <Compile Include="PresentationSource.cs" />
+    <Compile Include="Rect.cs" />
+    <Compile Include="ResourceContainer.cs" />
+    <Compile Include="ResourceDictionary.cs" />
+    <Compile Include="ResourceReferenceExpression.cs" />
+    <Compile Include="ResourcesChangedEventArgs.cs" />
+    <Compile Include="Setter.cs" />
+    <Compile Include="Size.cs" />
+    <Compile Include="Media\Animation\Storyboard.cs" />
+    <Compile Include="Style.cs" />
+    <Compile Include="SystemResources.cs" />
+    <Compile Include="TemplatePartAttribute.cs" />
+    <Compile Include="TemplateVisualStateAttribute.cs" />
+    <Compile Include="Thickness.cs" />
+    <Compile Include="Threading\Dispatcher.cs" />
+    <Compile Include="EventManager.cs" />
+    <Compile Include="EventRoute.cs" />
+    <Compile Include="Data\ObservableExpression.cs" />
+    <Compile Include="DependencyObject.cs" />
+    <Compile Include="DependencyProperty.cs" />
+    <Compile Include="DependencyPropertyChangedEventArgs.cs" />
+    <Compile Include="DependencyPropertyValueEntry.cs" />
+    <Compile Include="Expression.cs" />
+    <Compile Include="FrameworkPropertyMetadata.cs" />
+    <Compile Include="Markup\TypeParser.cs" />
+    <Compile Include="Markup\NameScope.cs" />
+    <Compile Include="Markup\PropertyAdapter.cs" />
+    <Compile Include="Markup\InitializeContext.cs" />
+    <Compile Include="Data\ObservableValue.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="PropertyMetadata.cs" />
+    <Compile Include="RoutedEvent.cs" />
+    <Compile Include="Threading\DispatcherOperation.cs" />
+    <Compile Include="Threading\DispatcherTimer.cs" />
+    <Compile Include="Threading\TaskScheduler.cs" />
+    <Compile Include="Trigger.cs" />
+    <Compile Include="UIElement.cs" />
+    <Compile Include="Media\Visual.cs" />
+    <Compile Include="VisualState.cs" />
+    <Compile Include="VisualStateGroup.cs" />
+    <Compile Include="VisualStateManager.cs" />
+    <Compile Include="VisualStates.cs" />
+    <Compile Include="VisualTransition.cs" />
+    <Compile Include="Window.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="UIElement.Input.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Granular.Common\Granular.Common.csproj">
+      <Project>{87F1FD58-E233-4183-830A-E9E54BA17D68}</Project>
+      <Name>Granular.Common</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>xcopy /Y "$(TargetDir)$(TargetName).dll" "$(SolutionDir)Output\"</PostBuildEvent>
+  </PropertyGroup>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
