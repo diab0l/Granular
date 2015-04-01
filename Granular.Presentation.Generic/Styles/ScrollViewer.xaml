@@ -16,7 +16,7 @@
                         <DockPanel DockPanel.Dock="Right">
                             <Border DockPanel.Dock="Bottom"
                                     Background="{StaticResource BackgroundBrush}"
-                                    Height="{Binding ElementName=PART_HorizontalScrollBar, Path=ActualHeight}"
+                                    Height="20"
                                     Visibility="{TemplateBinding ComputedScrollBarsVisibility}"/>
                             <ScrollBar x:Name="PART_VerticalScrollBar"
                                        Orientation="Vertical"
