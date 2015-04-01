@@ -16,7 +16,7 @@ How does it work?
 -----------------
 
 Granular can be separated into two parts:
-* **Presentation** - Maintains a visual tree (with dependency properties, routed events, animations and so on) which is completely separated from its host, exactly the same way as WPF do.
+* **Presentation** - Maintains a visual tree (with dependency properties, routed events, animations and so on) which is completely separated from its host, exactly the same way as WPF does.
 * **Host** - Contains a minimal rendering engine and a raw events source, the Presentation part interacts with the Host the same way as WPF interacts with MilCore (DirectX adapter) and WndProc messages.
 
 
@@ -28,3 +28,8 @@ Granular is portable and can be hosted in many environments, at the moment it ca
 Creating a Granular application is as easy as creating any other WPF application - you can fully run, test and debug it with Visual Studio (and even inspect it to some extent with [Snoop](http://snoopwpf.codeplex.com)), while you can simultaneously compile it to JavaScript and run it in the browser (and inspect the DOM).
 
 [See a complete guide here](https://github.com/yuvaltz/Granular/wiki/Creating-a-new-Granular-application)
+
+
+Supported features
+------------------
+A list of the currently supported features [can be found here](https://github.com/yuvaltz/Granular/wiki/Supported-features)
