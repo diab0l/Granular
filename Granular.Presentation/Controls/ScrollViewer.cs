@@ -191,29 +191,6 @@ namespace System.Windows.Controls
         }
 
         private ScrollContentPresenter scrollContentPresenter;
-        private ScrollContentPresenter ScrollContentPresenter
-        {
-            get { return scrollContentPresenter; }
-            set
-            {
-                if (scrollContentPresenter == value)
-                {
-                    return;
-                }
-
-                if (scrollContentPresenter != null)
-                {
-                    scrollContentPresenter.LayoutUpdated -= OnScrollContentLayoutUpdated;
-                }
-
-                scrollContentPresenter = value;
-
-                if (scrollContentPresenter != null)
-                {
-                    scrollContentPresenter.LayoutUpdated += OnScrollContentLayoutUpdated;
-                }
-            }
-        }
 
         protected override void OnApplyTemplate()
         {
@@ -221,19 +198,19 @@ namespace System.Windows.Controls
 
             if (Template != null)
             {
-                ScrollContentPresenter = Template.FindName("PART_ScrollContentPresenter", this) as ScrollContentPresenter;
+                scrollContentPresenter = Template.FindName("PART_ScrollContentPresenter", this) as ScrollContentPresenter;
                 HorizontalScrollBar = Template.FindName("PART_HorizontalScrollBar", this) as ScrollBar;
                 VerticalScrollBar = Template.FindName("PART_VerticalScrollBar", this) as ScrollBar;
             }
             else
             {
-                ScrollContentPresenter = null;
+                scrollContentPresenter = null;
                 HorizontalScrollBar = null;
                 VerticalScrollBar = null;
             }
 
             SetContentCanScroll();
-            GetScrollInfoSizes();
+            SetScrollInfoSizes();
         }
 
         private void OnScrollBarValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
@@ -242,14 +219,9 @@ namespace System.Windows.Controls
             VerticalOffset = VerticalScrollBar.Value;
         }
 
-        private void OnScrollContentLayoutUpdated(object sender, EventArgs e)
-        {
-            GetScrollInfoSizes();
-        }
-
         protected override void OnMouseWheel(MouseWheelEventArgs e)
         {
-            if (ScrollContentPresenter != null)
+            if (scrollContentPresenter != null)
             {
                 VerticalOffset = (VerticalOffset - Math.Sign(e.Delta) * ScrollInfoExtensions.MouseWheelDelta).Bounds(0, ScrollableHeight);
                 e.Handled = true;
@@ -258,9 +230,9 @@ namespace System.Windows.Controls
 
         private void SetOffsets()
         {
-            if (ScrollContentPresenter != null)
+            if (scrollContentPresenter != null)
             {
-                ScrollContentPresenter.Offset = new Point(HorizontalOffset, VerticalOffset);
+                scrollContentPresenter.Offset = new Point(HorizontalOffset, VerticalOffset);
             }
 
             if (HorizontalScrollBar != null)
@@ -276,21 +248,21 @@ namespace System.Windows.Controls
 
         private void SetContentCanScroll()
         {
-            if (ScrollContentPresenter != null)
+            if (scrollContentPresenter != null)
             {
-                ScrollContentPresenter.CanHorizontallyScroll = HorizontalScrollBarVisibility != ScrollBarVisibility.Disabled;
-                ScrollContentPresenter.CanVerticallyScroll = VerticalScrollBarVisibility != ScrollBarVisibility.Disabled;
+                scrollContentPresenter.CanHorizontallyScroll = HorizontalScrollBarVisibility != ScrollBarVisibility.Disabled;
+                scrollContentPresenter.CanVerticallyScroll = VerticalScrollBarVisibility != ScrollBarVisibility.Disabled;
             }
         }
 
-        private void GetScrollInfoSizes()
+        private void SetScrollInfoSizes()
         {
-            if (ScrollContentPresenter != null)
+            if (scrollContentPresenter != null)
             {
-                ExtentWidth = ScrollContentPresenter.ExtentSize.Width;
-                ExtentHeight = ScrollContentPresenter.ExtentSize.Height;
-                ViewportWidth = ScrollContentPresenter.ViewportSize.Width;
-                ViewportHeight = ScrollContentPresenter.ViewportSize.Height;
+                ExtentWidth = scrollContentPresenter.ExtentSize.Width;
+                ExtentHeight = scrollContentPresenter.ExtentSize.Height;
+                ViewportWidth = scrollContentPresenter.ViewportSize.Width;
+                ViewportHeight = scrollContentPresenter.ViewportSize.Height;
             }
             else
             {
@@ -339,15 +311,10 @@ namespace System.Windows.Controls
                     ComputedScrollBarsVisibility = ComputedHorizontalScrollBarVisibility == Visibility.Visible && ComputedVerticalScrollBarVisibility == Visibility.Visible ? Visibility.Visible : Visibility.Collapsed;
                 }
 
+                SetScrollInfoSizes();
+
                 return TemplateChild.DesiredSize;
             }
-        }
-
-        protected override Size ArrangeOverride(Size finalSize)
-        {
-            Size arrangedSize = base.ArrangeOverride(finalSize);
-            GetScrollInfoSizes();
-            return arrangedSize;
         }
 
         private static Visibility GetScrollBarVisibility(ScrollBarVisibility scrollBarVisibility, bool isOverflowed)
