@@ -14,14 +14,14 @@ namespace System.Windows.Controls.Primitives
             set { SetValue(OrientationProperty, value); }
         }
 
-        public static readonly DependencyProperty MinimumProperty = DependencyProperty.Register("Minimum", typeof(double), typeof(Track), new FrameworkPropertyMetadata(affectsMeasure: true));
+        public static readonly DependencyProperty MinimumProperty = DependencyProperty.Register("Minimum", typeof(double), typeof(Track), new FrameworkPropertyMetadata(affectsArrange: true));
         public double Minimum
         {
             get { return (double)GetValue(MinimumProperty); }
             set { SetValue(MinimumProperty, value); }
         }
 
-        public static readonly DependencyProperty MaximumProperty = DependencyProperty.Register("Maximum", typeof(double), typeof(Track), new FrameworkPropertyMetadata(1.0, affectsMeasure: true));
+        public static readonly DependencyProperty MaximumProperty = DependencyProperty.Register("Maximum", typeof(double), typeof(Track), new FrameworkPropertyMetadata(1.0, affectsArrange: true));
         public double Maximum
         {
             get { return (double)GetValue(MaximumProperty); }
@@ -35,7 +35,7 @@ namespace System.Windows.Controls.Primitives
             set { SetValue(ValueProperty, value); }
         }
 
-        public static readonly DependencyProperty ViewportSizeProperty = DependencyProperty.Register("ViewportSize", typeof(double), typeof(Track), new FrameworkPropertyMetadata(Double.NaN, affectsMeasure: true));
+        public static readonly DependencyProperty ViewportSizeProperty = DependencyProperty.Register("ViewportSize", typeof(double), typeof(Track), new FrameworkPropertyMetadata(Double.NaN, affectsArrange: true));
         public double ViewportSize
         {
             get { return (double)GetValue(ViewportSizeProperty); }
