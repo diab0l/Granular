@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Windows.Media;
 using Granular.Extensions;
@@ -105,6 +106,23 @@ namespace System.Windows
         public static bool IsNullOrEmpty(Rect rect)
         {
             return rect == null || rect.IsEmpty;
+        }
+
+        public static Rect Parse(string value)
+        {
+            double[] values = value.Split(',').Select(v => Double.Parse(v)).ToArray();
+
+            if (values.Length == 2)
+            {
+                return new Rect(values[0], values[1]);
+            }
+
+            if (values.Length == 4)
+            {
+                return new Rect(values[0], values[1], values[2], values[3]);
+            }
+
+            throw new Granular.Exception("Can't parse Rect value \"{0}\"", value);
         }
     }
 
