@@ -128,9 +128,14 @@ namespace System.Windows
 
     public static class RectExtensions
     {
+        public static bool IsNullOrEmpty(this Rect rect)
+        {
+            return rect == null || rect.IsEmpty;
+        }
+
         public static Rect DefaultIfNullOrEmpty(this Rect rect, Rect defaultValue = null)
         {
-            return Rect.IsNullOrEmpty(rect) ? (defaultValue ?? Rect.Zero) : rect;
+            return rect.IsNullOrEmpty() ? (defaultValue ?? Rect.Zero) : rect;
         }
 
         public static bool IsClose(this Rect @this, Rect rect)
