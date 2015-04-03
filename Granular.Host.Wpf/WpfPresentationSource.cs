@@ -93,7 +93,7 @@ namespace Granular.Host.Wpf
         private void UpdateLayout()
         {
             RootElement.Measure(new Size(container.ActualWidth, container.ActualHeight));
-            RootElement.Arrange(new Rect(0, 0, container.ActualWidth, container.ActualHeight));
+            RootElement.Arrange(new Rect(container.ActualWidth, container.ActualHeight));
         }
 
         private void OnContainerMouseDown(object sender, wpf::System.Windows.Input.MouseButtonEventArgs e)

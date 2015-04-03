@@ -34,7 +34,7 @@ namespace Granular.Presentation.Tests.Controls
 
             border.GetRenderElement(factory);
 
-            Assert.AreEqual(new Rect(0, 0, 240, 160), border.GetRenderElement(factory).Bounds);
+            Assert.AreEqual(new Rect(240, 160), border.GetRenderElement(factory).Bounds);
 
             Assert.AreEqual(2, border.GetRenderElement(factory).Children.Count());
 
@@ -43,7 +43,7 @@ namespace Granular.Presentation.Tests.Controls
             Assert.AreEqual(backgroundBrush, borderRenderElement.Background);
             Assert.AreEqual(borderBrush, borderRenderElement.BorderBrush);
             Assert.AreEqual(borderThickness, borderRenderElement.BorderThickness);
-            Assert.AreEqual(new Rect(0, 0, 240, 160), borderRenderElement.Bounds);
+            Assert.AreEqual(new Rect(240, 160), borderRenderElement.Bounds);
 
             IVisualRenderElement visualRenderElement = border.GetRenderElement(factory).Children.ElementAt(1) as IVisualRenderElement;
             Assert.IsNotNull(visualRenderElement);

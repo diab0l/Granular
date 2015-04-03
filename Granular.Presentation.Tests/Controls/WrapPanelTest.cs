@@ -34,7 +34,7 @@ namespace Granular.Presentation.Tests.Controls
 
             Assert.AreEqual(new Size(1000, 100), panel.DesiredSize);
 
-            panel.Arrange(new Rect(0, 0, 1000, 100));
+            panel.Arrange(new Rect(1000, 100));
 
             Assert.AreEqual(new Size(1000, 100), panel.RenderSize);
 
@@ -48,7 +48,7 @@ namespace Granular.Presentation.Tests.Controls
 
             Assert.AreEqual(new Size(400, 240), panel.DesiredSize);
 
-            panel.Arrange(new Rect(0, 0, 500, 240));
+            panel.Arrange(new Rect(500, 240));
 
             Assert.AreEqual(new Point(0, 0), child1.VisualOffset);
             Assert.AreEqual(new Point(200, 0), child2.VisualOffset);
@@ -76,7 +76,7 @@ namespace Granular.Presentation.Tests.Controls
 
             Assert.AreEqual(new Size(1000, 100), panel.DesiredSize);
 
-            panel.Arrange(new Rect(0, 0, 1000, 100));
+            panel.Arrange(new Rect(1000, 100));
 
             Assert.AreEqual(new Size(1000, 100), panel.RenderSize);
 
@@ -90,7 +90,7 @@ namespace Granular.Presentation.Tests.Controls
 
             Assert.AreEqual(new Size(400, 240), panel.DesiredSize);
 
-            panel.Arrange(new Rect(0, 0, 500, 240));
+            panel.Arrange(new Rect(500, 240));
 
             Assert.AreEqual(new Point(0, 0), panel.Children[0].VisualOffset);
             Assert.AreEqual(new Point(200, 0), panel.Children[1].VisualOffset);

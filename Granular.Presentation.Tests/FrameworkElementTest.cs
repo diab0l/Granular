@@ -72,7 +72,7 @@ namespace Granular.Presentation.Tests
         {
             LayoutTestElement element = new LayoutTestElement { MeasureSize = new Size(200, 100) };
 
-            element.Arrange(new Rect(0, 0, 100, 50));
+            element.Arrange(new Rect(100, 50));
             Assert.AreEqual(new Size(100, 50), element.LastAvailableSize);
             Assert.AreEqual(new Size(100, 50), element.VisualSize);
             Assert.AreEqual(new Point(0, 0), element.VisualOffset);
@@ -81,7 +81,7 @@ namespace Granular.Presentation.Tests
 
             element.Width = 200;
             element.Height = 100;
-            element.Arrange(new Rect(0, 0, 100, 50));
+            element.Arrange(new Rect(100, 50));
             Assert.AreEqual(new Size(200, 100), element.LastAvailableSize);
             Assert.AreEqual(new Size(200, 100), element.VisualSize);
             Assert.AreEqual(new Point(-50, -25), element.VisualOffset);
@@ -90,7 +90,7 @@ namespace Granular.Presentation.Tests
 
             element.Width = Double.NaN;
             element.Height = Double.NaN;
-            element.Arrange(new Rect(0, 0, 200, 100));
+            element.Arrange(new Rect(200, 100));
             Assert.AreEqual(new Size(200, 100), element.LastAvailableSize);
             Assert.AreEqual(new Size(200, 100), element.VisualSize);
             Assert.AreEqual(new Point(0, 0), element.VisualOffset);
@@ -99,7 +99,7 @@ namespace Granular.Presentation.Tests
 
             element.HorizontalAlignment = HorizontalAlignment.Left;
             element.VerticalAlignment = VerticalAlignment.Top;
-            element.Arrange(new Rect(0, 0, 300, 200));
+            element.Arrange(new Rect(300, 200));
             Assert.AreEqual(new Size(300, 200), element.LastAvailableSize);
             Assert.AreEqual(new Size(200, 100), element.VisualSize);
             Assert.AreEqual(new Point(0, 0), element.VisualOffset);
@@ -108,7 +108,7 @@ namespace Granular.Presentation.Tests
 
             element.HorizontalAlignment = HorizontalAlignment.Center;
             element.VerticalAlignment = VerticalAlignment.Bottom;
-            element.Arrange(new Rect(0, 0, 300, 200));
+            element.Arrange(new Rect(300, 200));
             Assert.AreEqual(new Size(300, 200), element.LastAvailableSize);
             Assert.AreEqual(new Size(200, 100), element.VisualSize);
             Assert.AreEqual(new Point(50, 100), element.VisualOffset);
@@ -117,7 +117,7 @@ namespace Granular.Presentation.Tests
 
             element.HorizontalAlignment = HorizontalAlignment.Right;
             element.VerticalAlignment = VerticalAlignment.Center;
-            element.Arrange(new Rect(0, 0, 300, 200));
+            element.Arrange(new Rect(300, 200));
             Assert.AreEqual(new Size(300, 200), element.LastAvailableSize);
             Assert.AreEqual(new Size(200, 100), element.VisualSize);
             Assert.AreEqual(new Point(100, 50), element.VisualOffset);
@@ -126,7 +126,7 @@ namespace Granular.Presentation.Tests
 
             element.HorizontalAlignment = HorizontalAlignment.Stretch;
             element.VerticalAlignment = VerticalAlignment.Stretch;
-            element.Arrange(new Rect(0, 0, 300, 200));
+            element.Arrange(new Rect(300, 200));
             Assert.AreEqual(new Size(300, 200), element.LastAvailableSize);
             Assert.AreEqual(new Size(300, 200), element.VisualSize);
             Assert.AreEqual(new Point(0, 0), element.VisualOffset);
@@ -138,7 +138,7 @@ namespace Granular.Presentation.Tests
 
             element.HorizontalAlignment = HorizontalAlignment.Stretch;
             element.VerticalAlignment = VerticalAlignment.Stretch;
-            element.Arrange(new Rect(0, 0, 300, 200));
+            element.Arrange(new Rect(300, 200));
             Assert.AreEqual(new Size(300, 200), element.LastAvailableSize);
             Assert.AreEqual(new Size(200, 100), element.VisualSize);
             Assert.AreEqual(new Point(50, 50), element.VisualOffset);
@@ -151,7 +151,7 @@ namespace Granular.Presentation.Tests
         {
             LayoutTestElement element = new LayoutTestElement { MeasureSize = new Size(200, 100), Margin = new Thickness(10, 20, 30, 40) };
 
-            element.Arrange(new Rect(0, 0, 200, 100));
+            element.Arrange(new Rect(200, 100));
             Assert.AreEqual(new Size(160, 40), element.LastAvailableSize);
             Assert.AreEqual(new Size(160, 40), element.VisualSize);
             Assert.AreEqual(new Point(10, 20), element.VisualOffset);
@@ -161,7 +161,7 @@ namespace Granular.Presentation.Tests
             element.Width = 200;
             element.Height = 100;
             element.InvalidateArrange();
-            element.Arrange(new Rect(0, 0, 200, 100));
+            element.Arrange(new Rect(200, 100));
             Assert.AreEqual(new Size(200, 100), element.LastAvailableSize);
             Assert.AreEqual(new Size(200, 100), element.VisualSize);
             Assert.AreEqual(new Point(-10, -10), element.VisualOffset);
@@ -170,7 +170,7 @@ namespace Granular.Presentation.Tests
 
             element.Width = Double.NaN;
             element.Height = Double.NaN;
-            element.Arrange(new Rect(0, 0, 240, 160));
+            element.Arrange(new Rect(240, 160));
             Assert.AreEqual(new Size(200, 100), element.LastAvailableSize);
             Assert.AreEqual(new Size(200, 100), element.VisualSize);
             Assert.AreEqual(new Point(10, 20), element.VisualOffset);
@@ -179,7 +179,7 @@ namespace Granular.Presentation.Tests
 
             element.HorizontalAlignment = HorizontalAlignment.Left;
             element.VerticalAlignment = VerticalAlignment.Top;
-            element.Arrange(new Rect(0, 0, 340, 260));
+            element.Arrange(new Rect(340, 260));
             Assert.AreEqual(new Size(300, 200), element.LastAvailableSize);
             Assert.AreEqual(new Size(200, 100), element.VisualSize);
             Assert.AreEqual(new Point(10, 20), element.VisualOffset);
@@ -188,7 +188,7 @@ namespace Granular.Presentation.Tests
 
             element.HorizontalAlignment = HorizontalAlignment.Center;
             element.VerticalAlignment = VerticalAlignment.Bottom;
-            element.Arrange(new Rect(0, 0, 340, 260));
+            element.Arrange(new Rect(340, 260));
             Assert.AreEqual(new Size(300, 200), element.LastAvailableSize);
             Assert.AreEqual(new Size(200, 100), element.VisualSize);
             Assert.AreEqual(new Point(60, 120), element.VisualOffset);
@@ -197,7 +197,7 @@ namespace Granular.Presentation.Tests
 
             element.HorizontalAlignment = HorizontalAlignment.Right;
             element.VerticalAlignment = VerticalAlignment.Center;
-            element.Arrange(new Rect(0, 0, 340, 260));
+            element.Arrange(new Rect(340, 260));
             Assert.AreEqual(new Size(300, 200), element.LastAvailableSize);
             Assert.AreEqual(new Size(200, 100), element.VisualSize);
             Assert.AreEqual(new Point(110, 70), element.VisualOffset);
@@ -206,7 +206,7 @@ namespace Granular.Presentation.Tests
 
             element.HorizontalAlignment = HorizontalAlignment.Stretch;
             element.VerticalAlignment = VerticalAlignment.Stretch;
-            element.Arrange(new Rect(0, 0, 340, 260));
+            element.Arrange(new Rect(340, 260));
             Assert.AreEqual(new Size(300, 200), element.LastAvailableSize);
             Assert.AreEqual(new Size(300, 200), element.VisualSize);
             Assert.AreEqual(new Point(10, 20), element.VisualOffset);
@@ -218,7 +218,7 @@ namespace Granular.Presentation.Tests
 
             element.HorizontalAlignment = HorizontalAlignment.Stretch;
             element.VerticalAlignment = VerticalAlignment.Stretch;
-            element.Arrange(new Rect(0, 0, 340, 260));
+            element.Arrange(new Rect(340, 260));
             Assert.AreEqual(new Size(300, 200), element.LastAvailableSize);
             Assert.AreEqual(new Size(200, 100), element.VisualSize);
             Assert.AreEqual(new Point(60, 70), element.VisualOffset);

@@ -58,7 +58,7 @@ namespace Granular.Presentation.Tests.Controls
 
             Assert.AreEqual(new Size(0, 300), panel.DesiredSize);
 
-            panel.Arrange(new Rect(0, 0, 600, 300));
+            panel.Arrange(new Rect(600, 300));
 
             Assert.AreEqual(new Size(600, 300), panel.VisualSize);
 
@@ -104,7 +104,7 @@ namespace Granular.Presentation.Tests.Controls
 
             Assert.AreEqual(new Size(0, 300), panel.DesiredSize);
 
-            panel.Arrange(new Rect(0, 0, 600, 300));
+            panel.Arrange(new Rect(600, 300));
 
             Assert.AreEqual(new Size(600, 300), panel.VisualSize);
 
@@ -133,25 +133,25 @@ namespace Granular.Presentation.Tests.Controls
 
             panel.RowDefinitions.Add(new RowDefinition());
 
-            panel.Arrange(new Rect(0, 0, 60, 10));
+            panel.Arrange(new Rect(60, 10));
             Assert.IsTrue(panel.ColumnDefinitions[0].ActualWidth.IsClose(10));
             Assert.IsTrue(panel.ColumnDefinitions[1].ActualWidth.IsClose(20));
             Assert.IsTrue(panel.ColumnDefinitions[2].ActualWidth.IsClose(30));
             Assert.IsTrue(panel.ColumnDefinitions.Sum(column => column.ActualWidth).IsClose(60));
 
-            panel.Arrange(new Rect(0, 0, 200, 10));
+            panel.Arrange(new Rect(200, 10));
             Assert.IsTrue(panel.ColumnDefinitions[0].ActualWidth.IsClose(200.0 / 6));
             Assert.IsTrue(panel.ColumnDefinitions[1].ActualWidth.IsClose(200.0 / 3));
             Assert.IsTrue(panel.ColumnDefinitions[2].ActualWidth.IsClose(100));
             Assert.IsTrue(panel.ColumnDefinitions.Sum(column => column.ActualWidth).IsClose(200));
 
-            panel.Arrange(new Rect(0, 0, 400, 10));
+            panel.Arrange(new Rect(400, 10));
             Assert.IsTrue(panel.ColumnDefinitions[0].ActualWidth.IsClose(100));
             Assert.IsTrue(panel.ColumnDefinitions[1].ActualWidth.IsClose(200));
             Assert.IsTrue(panel.ColumnDefinitions[2].ActualWidth.IsClose(100));
             Assert.IsTrue(panel.ColumnDefinitions.Sum(column => column.ActualWidth).IsClose(400));
 
-            panel.Arrange(new Rect(0, 0, 600, 10));
+            panel.Arrange(new Rect(600, 10));
             Assert.IsTrue(panel.ColumnDefinitions[0].ActualWidth.IsClose(300));
             Assert.IsTrue(panel.ColumnDefinitions[1].ActualWidth.IsClose(200));
             Assert.IsTrue(panel.ColumnDefinitions[2].ActualWidth.IsClose(100));

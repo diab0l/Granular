@@ -13,7 +13,7 @@ namespace Granular.Presentation.Tests.Controls
     {
         private static readonly Rect PlacementTargetRect = new Rect(200, 100, 600, 400);
         private static readonly Rect PlacementRectangle = new Rect(200, 100, 600, 400);
-        private static readonly Rect ContainerBounds = new Rect(0, 0, 1000, 800);
+        private static readonly Rect ContainerBounds = new Rect(1000, 800);
         private static readonly Size PopupSize = new Size(200, 100);
 
         [TestMethod]

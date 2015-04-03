@@ -23,14 +23,20 @@ namespace System.Windows
 
         public bool IsEmpty { get; private set; }
 
-        public Rect(Size size) :
-            this(Point.Zero, size)
+        public Rect(double width, double height) :
+            this(Point.Zero, new Size(width, height))
         {
             //
         }
 
         public Rect(double left, double top, double width, double height) :
             this(new Point(left, top), new Size(width, height))
+        {
+            //
+        }
+
+        public Rect(Size size) :
+            this(Point.Zero, size)
         {
             //
         }

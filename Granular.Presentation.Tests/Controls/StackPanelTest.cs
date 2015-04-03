@@ -30,7 +30,7 @@ namespace Granular.Presentation.Tests.Controls
 
             Assert.AreEqual(new Size(0, 300), panel.DesiredSize);
 
-            panel.Arrange(new Rect(0, 0, 1000, 300));
+            panel.Arrange(new Rect(1000, 300));
 
             Assert.AreEqual(new Size(1000, 300), panel.VisualSize);
 
@@ -60,7 +60,7 @@ namespace Granular.Presentation.Tests.Controls
 
             Assert.AreEqual(new Size(300, 60), panel.DesiredSize);
 
-            panel.Arrange(new Rect(0, 0, 300, 1000));
+            panel.Arrange(new Rect(300, 1000));
 
             Assert.AreEqual(new Size(300, 1000), panel.VisualSize);
 
@@ -90,7 +90,7 @@ namespace Granular.Presentation.Tests.Controls
 
             Assert.AreEqual(new Size(0, 300), panel.DesiredSize);
 
-            panel.Arrange(new Rect(0, 0, 1000, 300));
+            panel.Arrange(new Rect(1000, 300));
 
             Assert.AreEqual(new Size(1000, 300), panel.VisualSize);
 
