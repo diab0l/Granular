@@ -14,5 +14,10 @@ namespace Granular.Compatibility
         {
             return StringWhitespaceFormat.Exec(value) != null;
         }
+
+        public static string FromByteArray(byte[] data)
+        {
+            return System.String.DecodeUriComponent(System.String.Escape(new System.String(Granular.Compatibility.Array.ImplicitCast<char>(data))));
+        }
     }
 }

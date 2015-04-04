@@ -77,7 +77,7 @@ namespace System.Windows
                 return;
             }
 
-            XamlElement rootElement = XamlParser.Parse(EmbeddedResourceLoader.LoadResourceString(StartupUri));
+            XamlElement rootElement = XamlParser.Parse(Granular.Compatibility.String.FromByteArray(EmbeddedResourceLoader.LoadResourceData(StartupUri)));
             XamlAttribute classAttribute = rootElement.Attributes.FirstOrDefault(attribute => attribute.Name == XamlLanguage.ClassDirective);
 
             Window window = Activator.CreateInstance(Type.GetType(String.Format("{0}, {1}", classAttribute.Value, GetType().Assembly.GetName().Name))) as Window;
@@ -126,7 +126,7 @@ namespace System.Windows
 
         public static void LoadComponent(object target, string resourceUri)
         {
-            XamlLoader.Load(target, XamlParser.Parse(EmbeddedResourceLoader.LoadResourceString(resourceUri)));
+            XamlLoader.Load(target, XamlParser.Parse(Granular.Compatibility.String.FromByteArray(EmbeddedResourceLoader.LoadResourceData(resourceUri))));
         }
     }
 }

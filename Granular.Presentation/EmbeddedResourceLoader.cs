@@ -43,24 +43,24 @@ namespace System.Windows
         private const int ResourceUriAssemblyNameGroupIndex = 1;
         private const int ResourceUriPathGroupIndex = 2;
 
-        private static readonly CacheDictionary<EmbeddedResourceKey, string> resourceStringCache = new CacheDictionary<EmbeddedResourceKey, string>(ResolveResourceString);
+        private static readonly CacheDictionary<EmbeddedResourceKey, byte[]> resourceDataCache = new CacheDictionary<EmbeddedResourceKey, byte[]>(ResolveResourceData);
         private static readonly CacheDictionary<EmbeddedResourceKey, object> resourceElementCache = new CacheDictionary<EmbeddedResourceKey, object>(ResolveResourceElement);
 
-        public static string LoadResourceString(string resourceUri)
+        public static byte[] LoadResourceData(string resourceUri)
         {
             string assemblyName;
             string resourcePath;
             ParseResourceUri(resourceUri, out assemblyName, out resourcePath);
 
-            return resourceStringCache.GetValue(new EmbeddedResourceKey(assemblyName, resourcePath));
+            return resourceDataCache.GetValue(new EmbeddedResourceKey(assemblyName, resourcePath));
         }
 
-        public static string LoadResourceString(string assemblyName, string resourcePath)
+        public static byte[] LoadResourceData(string assemblyName, string resourcePath)
         {
-            return resourceStringCache.GetValue(new EmbeddedResourceKey(assemblyName, resourcePath));
+            return resourceDataCache.GetValue(new EmbeddedResourceKey(assemblyName, resourcePath));
         }
 
-        private static string ResolveResourceString(EmbeddedResourceKey key)
+        private static byte[] ResolveResourceData(EmbeddedResourceKey key)
         {
             Assembly assembly = AppDomain.CurrentDomain.GetAssemblies().Where(a => a.GetName().Name == key.AssemblyName).FirstOrDefault();
 
@@ -71,14 +71,14 @@ namespace System.Windows
 
             string resourceName = String.Format("{0}.{1}", key.AssemblyName, key.ResourcePath.TrimStart('/').Replace('/', '.'));
 
-            string resourceString = assembly != null ? assembly.GetEmbeddedResourceString(resourceName) : null;
+            byte[] resourceData = assembly != null ? assembly.GetManifestResourceData(resourceName) : null;
 
-            if (resourceString.IsNullOrEmpty())
+            if (resourceData == null)
             {
                 throw new Granular.Exception("Resource \"{0}\" was not found", resourceName);
             }
 
-            return resourceString;
+            return resourceData;
         }
 
         public static object LoadResourceElement(string resourceUri)
@@ -97,7 +97,8 @@ namespace System.Windows
 
         private static object ResolveResourceElement(EmbeddedResourceKey key)
         {
-            return XamlLoader.Load(XamlParser.Parse(resourceStringCache.GetValue(key)));
+            string resourceString = Granular.Compatibility.String.FromByteArray(resourceDataCache.GetValue(key));
+            return XamlLoader.Load(XamlParser.Parse(resourceString));
         }
 
         [System.Runtime.CompilerServices.Reflectable(false)]

@@ -21,17 +21,5 @@ namespace System
         {
             return new AssemblyName(assembly.FullName);
         }
-
-        public static string GetEmbeddedResourceString(this Assembly assembly, string resourceName)
-        {
-            byte[] resourceStream = assembly.GetManifestResourceData(resourceName);
-
-            if (resourceStream == null)
-            {
-                return String.Empty;
-            }
-
-            return String.DecodeUriComponent(String.Escape(new String(Granular.Compatibility.Array.ImplicitCast<char>(resourceStream))));
-        }
     }
 }

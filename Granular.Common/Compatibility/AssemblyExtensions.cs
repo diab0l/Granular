@@ -9,17 +9,16 @@ namespace System
 {
     public static class AssemblyExtensions
     {
-        public static string GetEmbeddedResourceString(this Assembly assembly, string resourceName)
+        public static byte[] GetManifestResourceData(this Assembly assembly, string resourceName)
         {
-            Stream resourceStream = assembly.GetManifestResourceStream(resourceName);
-
-            if (resourceStream == null)
+            using (Stream resourceStream = assembly.GetManifestResourceStream(resourceName))
             {
-                return System.String.Empty;
+                using (MemoryStream memoryStream = new MemoryStream())
+                {
+                    resourceStream.CopyTo(memoryStream);
+                    return memoryStream.ToArray();
+                }
             }
-
-            StreamReader streamReader = new StreamReader(resourceStream);
-            return streamReader.ReadToEnd();
         }
     }
 }
