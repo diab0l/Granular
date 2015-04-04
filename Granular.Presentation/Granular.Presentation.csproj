@@ -155,6 +155,7 @@
     <Compile Include="EventTrigger.cs" />
     <Compile Include="Media\Brushes.cs" />
     <Compile Include="Media\Colors.cs" />
+    <Compile Include="Media\RenderImageSource.cs" />
     <Compile Include="Media\Typeface.cs" />
     <Compile Include="ResourceKey.cs" />
     <Compile Include="StartupEventArgs.cs" />

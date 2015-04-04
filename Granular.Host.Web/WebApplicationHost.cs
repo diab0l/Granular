@@ -15,6 +15,8 @@ namespace Granular.Host
 
         public ITextMeasurementService TextMeasurementService { get { return Host.TextMeasurementService.Default; } }
 
+        public IRenderImageSourceFactory RenderImageSourceFactory { get { return Host.RenderImageSourceFactory.Default; } }
+
         public WebApplicationHost()
         {
             //

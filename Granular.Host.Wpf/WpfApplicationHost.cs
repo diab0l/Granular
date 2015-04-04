@@ -16,6 +16,8 @@ namespace Granular.Host.Wpf
 
         public ITextMeasurementService TextMeasurementService { get { return WpfTextMeasurementService.Default; } }
 
+        public IRenderImageSourceFactory RenderImageSourceFactory { get { return WpfRenderImageSourceFactory.Default; } }
+
         public WpfApplicationHost()
         {
             wpf::System.Windows.Application application = new wpf::System.Windows.Application();

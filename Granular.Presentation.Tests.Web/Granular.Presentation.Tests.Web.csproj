@@ -217,6 +217,9 @@
     <Compile Include="..\Granular.Presentation.Tests\Media\TestRenderElement.cs">
       <Link>Media\TestRenderElement.cs</Link>
     </Compile>
+    <Compile Include="..\Granular.Presentation.Tests\Media\TestRenderImageSource.cs">
+      <Link>Media\TestRenderImageSource.cs</Link>
+    </Compile>
     <Compile Include="..\Granular.Presentation.Tests\PropertyPathTest.cs">
       <Link>PropertyPathTest.cs</Link>
     </Compile>

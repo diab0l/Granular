@@ -39,6 +39,7 @@ namespace Granular.Host
         string ToWhiteSpaceString(TextWrapping textWrapping);
         string ToFontFamilyNamesString(FontFamily fontFamily);
         string ToBooleanString(bool value);
+        string ToMimeTypeString(RenderImageType renderImageType);
 
         MouseButton ConvertBackMouseButton(short buttonIndex);
         Key ConvertBackKey(int keyCode, int location);
@@ -307,6 +308,20 @@ namespace Granular.Host
         public string ToBooleanString(bool value)
         {
             return value ? "true" : "false";
+        }
+
+        public string ToMimeTypeString(RenderImageType renderImageType)
+        {
+            switch (renderImageType)
+            {
+                case RenderImageType.Unknown: return String.Empty;
+                case RenderImageType.Gif: return "image/gif";
+                case RenderImageType.Jpeg: return "image/jpeg";
+                case RenderImageType.Png: return "image/png";
+                case RenderImageType.Svg: return "image/svg+xml";
+            }
+
+            throw new Granular.Exception("Unexpected RenderImageType \"{0}\"", renderImageType);
         }
 
         public MouseButton ConvertBackMouseButton(short buttonIndex)
