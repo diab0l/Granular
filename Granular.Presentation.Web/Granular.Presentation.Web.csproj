@@ -484,6 +484,9 @@
     <Compile Include="..\Granular.Presentation\Media\ImageBrush.cs">
       <Link>Media\ImageBrush.cs</Link>
     </Compile>
+    <Compile Include="..\Granular.Presentation\Media\ImageSource.cs">
+      <Link>Media\ImageSource.cs</Link>
+    </Compile>
     <Compile Include="..\Granular.Presentation\Media\LinearGradientBrush.cs">
       <Link>Media\LinearGradientBrush.cs</Link>
     </Compile>
