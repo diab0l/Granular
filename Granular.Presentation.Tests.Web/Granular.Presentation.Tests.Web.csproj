@@ -73,6 +73,9 @@
     <Compile Include="..\Granular.Presentation.Tests\Controls\GridTest.cs">
       <Link>Controls\GridTest.cs</Link>
     </Compile>
+    <Compile Include="..\Granular.Presentation.Tests\Controls\ImageTest.cs">
+      <Link>Controls\ImageTest.cs</Link>
+    </Compile>
     <Compile Include="..\Granular.Presentation.Tests\Controls\ItemCollectionTest.cs">
       <Link>Controls\ItemCollectionTest.cs</Link>
     </Compile>

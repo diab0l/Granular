@@ -51,6 +51,7 @@
     </CodeAnalysisDependentAssemblyPaths>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controls\ImageTest.cs" />
     <Compile Include="Controls\ScrollContentPresenterTest.cs" />
     <Compile Include="Controls\ScrollViewerTest.cs" />
     <Compile Include="Controls\TextBoxTest.cs" />
