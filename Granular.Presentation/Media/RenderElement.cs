@@ -87,6 +87,12 @@ namespace System.Windows.Media
         bool IsHitTestVisible { get; set; }
     }
 
+    public interface IImageRenderElement
+    {
+        Rect Bounds { get; set; }
+        ImageSource Source { get; set; }
+    }
+
     public interface IRenderElementFactory
     {
         IVisualRenderElement CreateVisualRenderElement(object owner);
@@ -94,5 +100,6 @@ namespace System.Windows.Media
         ITextBoxRenderElement CreateTextBoxRenderElement(object owner);
         ITextBlockRenderElement CreateTextBlockRenderElement(object owner);
         IBorderRenderElement CreateBorderRenderElement(object owner);
+        IImageRenderElement CreateImageRenderElement(object owner);
     }
 }

@@ -61,6 +61,7 @@ namespace Granular.Host
             "html",
             "i",
             "iframe",
+            "image",
             "img",
             "input",
             "ins",

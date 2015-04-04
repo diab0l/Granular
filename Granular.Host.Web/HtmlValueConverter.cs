@@ -18,10 +18,11 @@ namespace Granular.Host
         string ToImplicitValueString(double value);
         string ToPixelString(Point point);
         string ToPercentString(Point point);
+        string ToPixelString(Size size);
         string ToColorString(Color color);
         string ToPixelString(Thickness thickness);
         string ToImplicitValueString(Thickness thickness);
-        string ToUrlString(string imageSource);
+        string ToUrlString(string url);
         string ToLinearGradientString(LinearGradientBrush brush);
         string ToRadialGradientString(RadialGradientBrush brush);
         string ToColorStopsString(IEnumerable<GradientStop> gradientStops);
@@ -122,6 +123,11 @@ namespace Granular.Host
             return String.Format("{0} {1}", ToPercentString(point.X), ToPercentString(point.Y));
         }
 
+        public string ToPixelString(Size size)
+        {
+            return String.Format("{0} {1}", ToPixelString(size.Width), ToPixelString(size.Height));
+        }
+
         public string ToColorString(Color color)
         {
             return color.A == 255 ? String.Format("#{0:x2}{1:x2}{2:x2}", color.R, color.G, color.B) :
@@ -139,9 +145,9 @@ namespace Granular.Host
             return String.Format("{0} {1} {2} {3}", ToImplicitValueString(thickness.Top), ToImplicitValueString(thickness.Right), ToImplicitValueString(thickness.Bottom), ToImplicitValueString(thickness.Left));
         }
 
-        public string ToUrlString(string imageSource)
+        public string ToUrlString(string url)
         {
-            return String.Format("url({0})", imageSource);
+            return String.Format("url({0})", url);
         }
 
         public string ToLinearGradientString(LinearGradientBrush brush)

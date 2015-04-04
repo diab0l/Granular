@@ -39,5 +39,10 @@ namespace Granular.Host.Wpf.Render
         {
             return new WpfBorderRenderElement(WpfValueConverter.Default);
         }
+
+        public IImageRenderElement CreateImageRenderElement(object owner)
+        {
+            return new WpfImageRenderElement(WpfValueConverter.Default);
+        }
     }
 }

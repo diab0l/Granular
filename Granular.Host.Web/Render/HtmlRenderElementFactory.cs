@@ -39,5 +39,10 @@ namespace Granular.Host.Render
         {
             return new HtmlBorderRenderElement(RenderQueue.Default, HtmlValueConverter.Default);
         }
+
+        public IImageRenderElement CreateImageRenderElement(object owner)
+        {
+            return new HtmlImageRenderElement(RenderQueue.Default, HtmlValueConverter.Default);
+        }
     }
 }

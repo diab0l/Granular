@@ -8,6 +8,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using Granular.Extensions;
+using System.Windows.Media.Imaging;
 
 namespace Granular.Host.Wpf.Render
 {
@@ -29,6 +30,7 @@ namespace Granular.Host.Wpf.Render
         wpf::System.Windows.TextTrimming Convert(TextTrimming textTrimming);
         wpf::System.Windows.TextWrapping Convert(TextWrapping textWrapping);
         wpf::System.Windows.Controls.ScrollBarVisibility Convert(ScrollBarVisibility scrollBarVisibility);
+        wpf::System.Windows.Media.ImageSource Convert(ImageSource source);
 
         MouseButton ConvertBack(wpf::System.Windows.Input.MouseButton mouseButton);
         MouseButtonState ConvertBack(wpf::System.Windows.Input.MouseButtonState mouseButtonState);
@@ -243,6 +245,11 @@ namespace Granular.Host.Wpf.Render
             }
 
             throw new Granular.Exception("Unexpected ScrollBarVisibility value \"{0}\"", scrollBarVisibility);
+        }
+
+        public wpf::System.Windows.Media.ImageSource Convert(ImageSource source)
+        {
+            return ((WpfRenderImageSource)source.RenderImageSource).BitmapImage;
         }
 
         public MouseButton ConvertBack(wpf::System.Windows.Input.MouseButton mouseButton)

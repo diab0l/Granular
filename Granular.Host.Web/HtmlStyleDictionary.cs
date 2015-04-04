@@ -60,6 +60,36 @@ namespace Granular.Host
             }
         }
 
+        public static void SetBackgroundLocation(this HtmlStyleDictionary style, Point location, IHtmlValueConverter converter)
+        {
+            if (Point.IsNullOrEmpty(location))
+            {
+                style.ClearValue("background-position");
+            }
+            else
+            {
+                style.SetValue("background-position", converter.ToPixelString(location));
+            }
+        }
+
+        public static void SetBackgroundSize(this HtmlStyleDictionary style, Size size, IHtmlValueConverter converter)
+        {
+            if (Size.IsNullOrEmpty(size))
+            {
+                style.ClearValue("background-size");
+            }
+            else
+            {
+                style.SetValue("background-size", converter.ToPixelString(size));
+            }
+        }
+
+        public static void SetBackgroundBounds(this HtmlStyleDictionary style, Rect bounds, IHtmlValueConverter converter)
+        {
+            style.SetBackgroundLocation(bounds.Location, converter);
+            style.SetBackgroundSize(bounds.Size, converter);
+        }
+
         public static void SetBorderThickness(this HtmlStyleDictionary style, Thickness borderThickness, IHtmlValueConverter converter)
         {
             if (borderThickness == Thickness.Zero)
@@ -301,6 +331,18 @@ namespace Granular.Host
         public static void SetVerticalScrollBarVisibility(this HtmlStyleDictionary style, ScrollBarVisibility scrollBarVisibility, IHtmlValueConverter converter)
         {
             style.SetValue("overflow-y", converter.ToOverflowString(scrollBarVisibility));
+        }
+
+        public static void SetBackgroundImage(this HtmlStyleDictionary style, ImageSource imageSource, IHtmlValueConverter converter)
+        {
+            if (imageSource == null)
+            {
+                style.ClearValue("background-image");
+            }
+            else
+            {
+                style.SetValue("background-image", converter.ToUrlString(((RenderImageSource)imageSource.RenderImageSource).Url));
+            }
         }
     }
 }

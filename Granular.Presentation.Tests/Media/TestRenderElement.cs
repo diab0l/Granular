@@ -120,6 +120,12 @@ namespace System.Windows.Media
         public bool IsHitTestVisible { get; set; }
     }
 
+    public class TestImageRenderElement : IImageRenderElement
+    {
+        public Rect Bounds { get; set; }
+        public ImageSource Source { get; set; }
+    }
+
     public class TestRenderElementFactory : IRenderElementFactory
     {
         public static readonly TestRenderElementFactory Default = new TestRenderElementFactory();
@@ -152,6 +158,11 @@ namespace System.Windows.Media
         public IBorderRenderElement CreateBorderRenderElement(object owner)
         {
             return new TestBorderRenderElement();
+        }
+
+        public IImageRenderElement CreateImageRenderElement(object owner)
+        {
+            return new TestImageRenderElement();
         }
     }
 }
