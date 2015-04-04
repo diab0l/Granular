@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -54,6 +55,11 @@ namespace System.Windows.Markup
                 throw new Granular.Exception("Can't initialize element of type \"{0}\" as it's not a subclass of \"{1}\"", element.GetType().Name, elementType.Name);
             }
 
+            if (element is ISupportInitialize)
+            {
+                ((ISupportInitialize)element).BeginInit();
+            }
+
             if (element == context.Root && element is DependencyObject)
             {
                 NameScope.SetNameScope((DependencyObject)element, context.NameScope);
@@ -93,6 +99,11 @@ namespace System.Windows.Markup
                 {
                     SetFieldValue(element, pair.Key, pair.Value);
                 }
+            }
+
+            if (element is ISupportInitialize)
+            {
+                ((ISupportInitialize)element).EndInit();
             }
         }
 

@@ -51,6 +51,7 @@
     <Compile Include="Markup\ElementFactory.cs" />
     <Compile Include="Markup\ElementInitializer.cs" />
     <Compile Include="FrameworkElementFactory.cs" />
+    <Compile Include="Markup\SupportInitialize.cs" />
     <Compile Include="Markup\XamlLoader.cs" />
     <Compile Include="Markup\EventAdapter.cs" />
     <Compile Include="Markup\MarkupExtension.cs" />

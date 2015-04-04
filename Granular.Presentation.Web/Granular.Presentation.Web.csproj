@@ -355,6 +355,9 @@
     <Compile Include="..\Granular.Presentation\Markup\PropertyPathParser.cs">
       <Link>Markup\PropertyPathParser.cs</Link>
     </Compile>
+    <Compile Include="..\Granular.Presentation\Markup\SupportInitialize.cs">
+      <Link>Markup\SupportInitialize.cs</Link>
+    </Compile>
     <Compile Include="..\Granular.Presentation\Markup\TypeConverter.cs">
       <Link>Markup\TypeConverter.cs</Link>
     </Compile>
