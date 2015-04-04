@@ -13,14 +13,6 @@ namespace System.Windows.Media
         Tile
     }
 
-    public enum Stretch
-    {
-        None,
-        Fill,
-        Uniform,
-        UniformToFill
-    }
-
     public enum BrushMappingMode
     {
         Absolute,

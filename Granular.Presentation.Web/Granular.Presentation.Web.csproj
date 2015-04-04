@@ -487,6 +487,12 @@
     <Compile Include="..\Granular.Presentation\Media\ImageSource.cs">
       <Link>Media\ImageSource.cs</Link>
     </Compile>
+    <Compile Include="..\Granular.Presentation\Media\Imaging\BitmapImage.cs">
+      <Link>Media\Imaging\BitmapImage.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\Media\Imaging\BitmapSource.cs">
+      <Link>Media\Imaging\BitmapSource.cs</Link>
+    </Compile>
     <Compile Include="..\Granular.Presentation\Media\LinearGradientBrush.cs">
       <Link>Media\LinearGradientBrush.cs</Link>
     </Compile>
@@ -513,6 +519,9 @@
     </Compile>
     <Compile Include="..\Granular.Presentation\Media\SolidColorBrush.cs">
       <Link>Media\SolidColorBrush.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\Media\Stretch.cs">
+      <Link>Media\Stretch.cs</Link>
     </Compile>
     <Compile Include="..\Granular.Presentation\Media\TileBrush.cs">
       <Link>Media\TileBrush.cs</Link>

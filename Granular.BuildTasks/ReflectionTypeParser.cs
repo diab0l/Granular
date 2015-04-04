@@ -35,7 +35,8 @@ namespace Granular.BuildTasks
             new LocalXmlnsDefinitionAttribute("http://schemas.microsoft.com/winfx/2006/xaml/presentation", "System.Windows.Data", "Granular.Presentation"),
             new LocalXmlnsDefinitionAttribute("http://schemas.microsoft.com/winfx/2006/xaml/presentation", "System.Windows.Input", "Granular.Presentation"),
             new LocalXmlnsDefinitionAttribute("http://schemas.microsoft.com/winfx/2006/xaml/presentation", "System.Windows.Media", "Granular.Presentation"),
-            new LocalXmlnsDefinitionAttribute("http://schemas.microsoft.com/winfx/2006/xaml/presentation", "System.Windows.Media.Animation", "Granular.Presentation")
+            new LocalXmlnsDefinitionAttribute("http://schemas.microsoft.com/winfx/2006/xaml/presentation", "System.Windows.Media.Animation", "Granular.Presentation"),
+            new LocalXmlnsDefinitionAttribute("http://schemas.microsoft.com/winfx/2006/xaml/presentation", "System.Windows.Media.Imaging", "Granular.Presentation"),
         };
 
         private enum XamlItemType { XamlPage, XamlApplicationDefinition };
