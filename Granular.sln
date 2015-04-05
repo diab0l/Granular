@@ -10,7 +10,10 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{9B88B295-4071-43DC-9EE8-53DB2BAD0C88}"
 	ProjectSection(SolutionItems) = preProject
 		Granular.vsmdi = Granular.vsmdi
+		History.md = History.md
+		License.txt = License.txt
 		Local.testsettings = Local.testsettings
+		Readme.md = Readme.md
 		SharedAssemblyInfo.cs = SharedAssemblyInfo.cs
 	EndProjectSection
 EndProject
