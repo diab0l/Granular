@@ -105,6 +105,9 @@
     <Compile Include="Media\TestRenderElement.cs" />
     <Compile Include="Media\TestRenderImageSource.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="..\SharedAssemblyInfo.cs">
+      <Link>Properties\SharedAssemblyInfo.cs</Link>
+    </Compile>
     <Compile Include="Markup\XamlLoaderTest.cs" />
     <Compile Include="PropertyPathTest.cs" />
     <Compile Include="ResourceDictionaryTest.cs" />

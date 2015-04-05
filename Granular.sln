@@ -11,6 +11,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 	ProjectSection(SolutionItems) = preProject
 		Granular.vsmdi = Granular.vsmdi
 		Local.testsettings = Local.testsettings
+		SharedAssemblyInfo.cs = SharedAssemblyInfo.cs
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Granular.Host.Wpf", "Granular.Host.Wpf\Granular.Host.Wpf.csproj", "{ED2AE8A5-DEC3-4829-93A8-834A8833EC26}"
