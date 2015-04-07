@@ -63,6 +63,7 @@
     <Compile Include="Media\Animation\ReverseClockTest.cs" />
     <Compile Include="Media\Animation\RepeatClockTest.cs" />
     <Compile Include="Media\Animation\SequentialClockTest.cs" />
+    <Compile Include="Media\Animation\SequentialTimelineClockTest.cs" />
     <Compile Include="Media\Animation\StoryboardTest.cs" />
     <Compile Include="Media\Animation\TestRootClock.cs" />
     <Compile Include="Media\Animation\TimelineClockTest.cs" />

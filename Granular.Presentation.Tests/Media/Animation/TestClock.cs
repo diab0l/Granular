@@ -13,12 +13,7 @@ namespace Granular.Presentation.Media.Animation.Tests
         public TimeSpan LastTick { get; private set; }
         public TimeSpan Duration { get; private set; }
 
-        public TimeSpan PreviousTick { get; private set; }
-        public TimeSpan NextTick { get; private set; }
-
-        public ClockProgressState State { get; private set; }
-        public double Progress { get; private set; }
-        public double Iteration { get { return 0; } }
+        public ClockState CurrentState { get; private set; }
 
         public TestClock(TimeSpan duration) :
             this(duration, TimeSpan.Zero, duration)
@@ -43,15 +38,18 @@ namespace Granular.Presentation.Media.Animation.Tests
         {
             if (time < FirstTick)
             {
-                return new ClockState(ClockProgressState.BeforeStarted, 0, 0, Granular.Compatibility.TimeSpan.MinValue, FirstTick);
+                CurrentState = new ClockState(ClockProgressState.BeforeStarted, 0, 0, Granular.Compatibility.TimeSpan.MinValue, FirstTick);
             }
-
-            if (time < LastTick)
+            else if (time < LastTick)
             {
-                return new ClockState(ClockProgressState.Active, (time - FirstTick).Divide(LastTick - FirstTick), 0, time, time);
+                CurrentState = new ClockState(ClockProgressState.Active, (time - FirstTick).Divide(LastTick - FirstTick), 0, time, time);
+            }
+            else
+            {
+                CurrentState = new ClockState(ClockProgressState.AfterEnded, 1, 0, LastTick, Granular.Compatibility.TimeSpan.MaxValue);
             }
 
-            return new ClockState(ClockProgressState.AfterEnded, 1, 0, LastTick, Granular.Compatibility.TimeSpan.MaxValue);
+            return CurrentState;
         }
     }
 }

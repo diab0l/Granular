@@ -11,7 +11,7 @@ namespace Granular.Presentation.Media.Animation.Tests
     public class SequentialClockTest
     {
         [TestMethod]
-        public void SequentialClockBasicTest()
+        public void SequentialClockTicksTest()
         {
             IClock clock = new SequentialClock(new [] {
                 new TestClock(TimeSpan.FromSeconds(10), TimeSpan.FromSeconds(2), TimeSpan.FromSeconds(6)),
@@ -37,6 +37,56 @@ namespace Granular.Presentation.Media.Animation.Tests
             state = clock.Tick(TimeSpan.FromSeconds(28));
             Assert.AreEqual(TimeSpan.FromSeconds(28), state.PreviousTick);
             Assert.AreEqual(Granular.Compatibility.TimeSpan.MaxValue, state.NextTick);
+        }
+
+        [TestMethod]
+        public void SequentialClockProgressTest()
+        {
+            TestClock clock1 = new TestClock(TimeSpan.FromSeconds(1));
+            TestClock clock2 = new TestClock(TimeSpan.FromSeconds(0));
+            TestClock clock3 = new TestClock(TimeSpan.FromSeconds(2));
+
+            IClock clock = new SequentialClock(new[] { clock1, clock2, clock3 });
+
+            Assert.AreEqual(TimeSpan.FromSeconds(0), clock.FirstTick);
+            Assert.AreEqual(TimeSpan.FromSeconds(3), clock.LastTick);
+            Assert.AreEqual(TimeSpan.FromSeconds(3), clock.Duration);
+
+            clock.Tick(TimeSpan.FromSeconds(-1));
+
+            Assert.AreEqual(ClockProgressState.BeforeStarted, clock1.CurrentState.ProgressState);
+            Assert.AreEqual(ClockProgressState.BeforeStarted, clock2.CurrentState.ProgressState);
+            Assert.AreEqual(ClockProgressState.BeforeStarted, clock3.CurrentState.ProgressState);
+            Assert.AreEqual(0, clock1.CurrentState.Progress);
+            Assert.AreEqual(0, clock2.CurrentState.Progress);
+            Assert.AreEqual(0, clock3.CurrentState.Progress);
+
+            clock.Tick(TimeSpan.FromSeconds(0));
+
+            Assert.AreEqual(ClockProgressState.Active, clock1.CurrentState.ProgressState);
+            Assert.AreEqual(ClockProgressState.BeforeStarted, clock2.CurrentState.ProgressState);
+            Assert.AreEqual(ClockProgressState.BeforeStarted, clock3.CurrentState.ProgressState);
+            Assert.AreEqual(0, clock1.CurrentState.Progress);
+            Assert.AreEqual(0, clock2.CurrentState.Progress);
+            Assert.AreEqual(0, clock3.CurrentState.Progress);
+
+            clock.Tick(TimeSpan.FromSeconds(1));
+
+            Assert.AreEqual(ClockProgressState.AfterEnded, clock1.CurrentState.ProgressState);
+            Assert.AreEqual(ClockProgressState.AfterEnded, clock2.CurrentState.ProgressState);
+            Assert.AreEqual(ClockProgressState.Active, clock3.CurrentState.ProgressState);
+            Assert.AreEqual(1, clock1.CurrentState.Progress);
+            Assert.AreEqual(1, clock2.CurrentState.Progress);
+            Assert.AreEqual(0, clock3.CurrentState.Progress);
+
+            clock.Tick(TimeSpan.FromSeconds(3));
+
+            Assert.AreEqual(ClockProgressState.AfterEnded, clock1.CurrentState.ProgressState);
+            Assert.AreEqual(ClockProgressState.AfterEnded, clock2.CurrentState.ProgressState);
+            Assert.AreEqual(ClockProgressState.AfterEnded, clock3.CurrentState.ProgressState);
+            Assert.AreEqual(1, clock1.CurrentState.Progress);
+            Assert.AreEqual(1, clock2.CurrentState.Progress);
+            Assert.AreEqual(1, clock3.CurrentState.Progress);
         }
     }
 }
