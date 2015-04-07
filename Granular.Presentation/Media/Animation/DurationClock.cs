@@ -38,31 +38,27 @@ namespace System.Windows.Media.Animation
 
         public ClockState Tick(TimeSpan time)
         {
-            ClockProgressState progressState = ClockProgressState.Active;
-
             if (time < TimeSpan.Zero)
             {
-                time = TimeSpan.Zero;
-                progressState = ClockProgressState.BeforeStarted;
+                ClockState state = clock.Tick(TimeSpan.Zero);
+
+                TimeSpan previousTick = Granular.Compatibility.TimeSpan.MinValue;
+                TimeSpan nextTick = TimeSpan.Zero;
+
+                return new ClockState(ClockProgressState.BeforeStarted, state.Progress, state.Iteration, previousTick, nextTick);
             }
 
             if (time >= Duration)
             {
-                time = Duration;
-                progressState = ClockProgressState.AfterEnded;
+                ClockState state = clock.Tick(Duration);
+
+                TimeSpan previousTick = Duration;
+                TimeSpan nextTick = Granular.Compatibility.TimeSpan.MaxValue;
+
+                return new ClockState(ClockProgressState.AfterEnded, state.Progress, state.Iteration, previousTick, nextTick);
             }
 
-            ClockState state = clock.Tick(time);
-
-            TimeSpan previousTick = state.PreviousTick > TimeSpan.Zero ? state.PreviousTick : Granular.Compatibility.TimeSpan.MinValue;
-            TimeSpan nextTick = state.NextTick < Duration ? state.NextTick : Granular.Compatibility.TimeSpan.MaxValue;
-
-            if (progressState == ClockProgressState.Active)
-            {
-                progressState = state.ProgressState;
-            }
-
-            return new ClockState(progressState, state.Progress, state.Iteration, previousTick, nextTick);
+            return clock.Tick(time);
         }
     }
 }
