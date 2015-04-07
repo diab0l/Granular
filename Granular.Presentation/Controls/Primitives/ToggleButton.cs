@@ -55,11 +55,16 @@ namespace System.Windows.Controls.Primitives
         {
             if (CheckOnClick)
             {
-                IsChecked = GetToggledState(IsChecked, IsThreeState);
+                ToggleState();
             }
         }
 
-        private void OnIsCheckedChanged(DependencyPropertyChangedEventArgs e)
+        protected virtual void ToggleState()
+        {
+            IsChecked = GetToggledState(IsChecked, IsThreeState);
+        }
+
+        protected virtual void OnIsCheckedChanged(DependencyPropertyChangedEventArgs e)
         {
             if (IsChecked.HasValue && IsChecked.Value)
             {
