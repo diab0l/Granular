@@ -30,6 +30,14 @@ namespace System.Windows.Controls
             set { SetValue(ContentTemplateSelectorProperty, value); }
         }
 
+        private static readonly DependencyPropertyKey HasContentPropertyKey = DependencyProperty.RegisterReadOnly("HasContent", typeof(bool), typeof(ContentControl), new FrameworkPropertyMetadata());
+        public static readonly DependencyProperty HasContentProperty = HasContentPropertyKey.DependencyProperty;
+        public bool HasContent
+        {
+            get { return (bool)GetValue(HasContentPropertyKey); }
+            private set { SetValue(HasContentPropertyKey, value); }
+        }
+
         private bool isContainerTemplate;
 
         public ContentControl()
@@ -39,6 +47,7 @@ namespace System.Windows.Controls
 
         private void OnContentChanged(DependencyPropertyChangedEventArgs e)
         {
+            HasContent = Content != null;
             RemoveLogicalChild(e.OldValue);
             AddLogicalChild(e.NewValue);
         }
