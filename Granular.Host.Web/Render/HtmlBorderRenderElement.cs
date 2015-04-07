@@ -36,7 +36,7 @@ namespace Granular.Host.Render
             }
         }
 
-        private Thickness borderThickness = Thickness.Zero;
+        private Thickness borderThickness;
         public Thickness BorderThickness
         {
             get { return borderThickness; }
@@ -50,6 +50,7 @@ namespace Granular.Host.Render
                 borderThickness = value;
                 Style.SetBorderThickness(borderThickness, converter);
                 Style.SetBounds(new Rect(Bounds.Location, Bounds.Size - BorderThickness.Size), converter);
+                SetCornerRadius();
             }
         }
 
@@ -107,7 +108,7 @@ namespace Granular.Host.Render
                 }
 
                 cornerRadius = value;
-                Style.SetCornerRadius(cornerRadius, converter);
+                SetCornerRadius();
             }
         }
 
@@ -145,6 +146,18 @@ namespace Granular.Host.Render
             Style.SetBorderBrush(BorderBrush, converter);
             Style.SetCornerRadius(cornerRadius, converter);
             Style.SetIsHitTestVisible(IsHitTestVisible && Background != null);
+        }
+
+        private void SetCornerRadius()
+        {
+            // CornerRadius is relative to the center of the border line, interpolate the outline radius
+            CornerRadius borderOutlineCornerRadius = new CornerRadius(
+                CornerRadius.TopLeft + (BorderThickness.Top + BorderThickness.Left) / 4,
+                CornerRadius.TopRight + (BorderThickness.Top + BorderThickness.Right) / 4,
+                CornerRadius.BottomRight + (BorderThickness.Bottom + BorderThickness.Right) / 4,
+                CornerRadius.BottomLeft + (BorderThickness.Bottom + BorderThickness.Left) / 4);
+
+            Style.SetCornerRadius(borderOutlineCornerRadius, converter);
         }
 
         private void OnBackgroundChanged(object sender, EventArgs e)

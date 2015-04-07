@@ -34,7 +34,7 @@ namespace Granular.Host.Tests.Web.Render
             Assert.AreEqual("2px 3px 4px 1px", element.HtmlElement.Style["border-width"]);
             Assert.AreEqual("solid", element.HtmlElement.Style["border-style"]);
             Assert.AreEqual("rgb(255, 0, 0)", element.HtmlElement.Style["border-color"]);
-            Assert.AreEqual("10px 20px 30px 40px", element.HtmlElement.Style["border-radius"]);
+            Assert.AreEqual("10.75px 21.25px 31.75px 41.25px", element.HtmlElement.Style["border-radius"]);
             Assert.AreEqual("0px", element.HtmlElement.Style["left"]);
             Assert.AreEqual("0px", element.HtmlElement.Style["top"]);
             Assert.AreEqual("196px", element.HtmlElement.Style["width"]);
