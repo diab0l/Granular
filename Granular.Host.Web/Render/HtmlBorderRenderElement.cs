@@ -138,6 +138,7 @@ namespace Granular.Host.Render
             borderThickness = Thickness.Zero;
             cornerRadius = CornerRadius.Zero;
 
+            Style.SetValue("background-clip", "content-box");
             Style.SetBackground(Background, converter);
             Style.SetBorderThickness(BorderThickness, converter);
             Style.SetBounds(new Rect(Bounds.Location, Bounds.Size - BorderThickness.Size), converter);
