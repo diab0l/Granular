@@ -33,6 +33,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="..\Granular.Presentation.Generic\BulletChrome.cs">
+      <Link>BulletChrome.cs</Link>
+    </Compile>
     <Compile Include="..\Granular.Presentation.Generic\ButtonChrome.cs">
       <Link>ButtonChrome.cs</Link>
     </Compile>
@@ -125,6 +128,12 @@
       <Name>Granular.Presentation.Web</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="..\Granular.Presentation.Generic\Styles\BulletChrome.xaml">
+      <Link>Styles\BulletChrome.xaml</Link>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" Condition="!Exists('$(SolutionDir)packages\Saltarelle.Compiler.2.6.2\tools\Saltarelle.Compiler.targets')" />
   <Import Project="$(SolutionDir)packages\Saltarelle.Compiler.2.6.2\tools\Saltarelle.Compiler.targets" Condition="Exists('$(SolutionDir)packages\Saltarelle.Compiler.2.6.2\tools\Saltarelle.Compiler.targets')" />
   <Import Project="..\Granular.BuildTasks\Resources.targets" />

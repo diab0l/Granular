@@ -4,7 +4,6 @@
         xmlns:theme="clr-namespace:Granular.Presentation.Generic">
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="/Granular.Presentation.Generic;component/Styles/Colors.xaml"/>
-        <ResourceDictionary Source="/Granular.Presentation.Generic;component/Styles/Focus.xaml"/>
     </ResourceDictionary.MergedDictionaries>
 
     <LinearGradientBrush x:Key="DropShadowBrush" StartPoint="0,0" EndPoint="0,1">
