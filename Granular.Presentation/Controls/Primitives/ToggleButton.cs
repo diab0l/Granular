@@ -94,24 +94,21 @@ namespace System.Windows.Controls.Primitives
             return VisualStates.IndeterminateState;
         }
 
-        private static bool? GetToggledState(bool? currentState, bool isThreeState)
+        public static bool? GetToggledState(bool? currentState, bool isThreeState)
         {
-            if (!isThreeState)
-            {
-                return !currentState;
-            }
+            // false -> true [-> null] -> false
 
             if (currentState == false)
             {
                 return true;
             }
 
-            if (currentState == true)
+            if (currentState == null || !isThreeState)
             {
-                return null;
+                return false;
             }
 
-            return false;
+            return null;
         }
     }
 }
