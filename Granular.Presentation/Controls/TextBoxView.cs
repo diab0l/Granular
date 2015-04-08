@@ -196,6 +196,26 @@ namespace System.Windows.Controls
             }
         }
 
+        private bool isPassword;
+        public bool IsPassword
+        {
+            get { return isPassword; }
+            set
+            {
+                if (isPassword == value)
+                {
+                    return;
+                }
+
+                if (textBoxRenderElements.Count > 0)
+                {
+                    throw new Granular.Exception("Can't set TextBoxView.IsPassword after render elements have been created");
+                }
+
+                isPassword = value;
+            }
+        }
+
         private Dictionary<IRenderElementFactory, ITextBoxRenderElement> textBoxRenderElements;
         double measuredFontSize;
         FontFamily measuredFontFamily;
@@ -246,6 +266,7 @@ namespace System.Windows.Controls
             textBoxRenderElement.Bounds = new Rect(this.VisualSize);
             textBoxRenderElement.AcceptsReturn = this.AcceptsReturn;
             textBoxRenderElement.AcceptsTab = this.AcceptsTab;
+            textBoxRenderElement.IsPassword = isPassword;
             textBoxRenderElement.IsReadOnly = this.IsReadOnly;
             textBoxRenderElement.SpellCheck = this.spellCheck;
             textBoxRenderElement.HorizontalScrollBarVisibility = this.HorizontalScrollBarVisibility;

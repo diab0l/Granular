@@ -127,6 +127,22 @@ namespace Granular.Host.Render
             }
         }
 
+        private bool isPassword;
+        public bool IsPassword
+        {
+            get { return isPassword; }
+            set
+            {
+                if (isPassword == value)
+                {
+                    return;
+                }
+
+                isPassword = value;
+                SetContentElement();
+            }
+        }
+
         private bool isReadOnly;
         public bool IsReadOnly
         {
@@ -419,14 +435,14 @@ namespace Granular.Host.Render
 
         private void SetContentElement()
         {
-            if (AcceptsReturn)
+            if (IsPassword || !AcceptsReturn)
             {
-                ContentElement = new HtmlRenderElement("textarea", renderQueue);
+                ContentElement = new HtmlRenderElement("input", renderQueue);
+                ContentElement.HtmlElement.SetAttribute("type", IsPassword ? "password" : "text");
             }
             else
             {
-                ContentElement = new HtmlRenderElement("input", renderQueue);
-                ContentElement.HtmlElement.SetAttribute("type", "text");
+                ContentElement = new HtmlRenderElement("textarea", renderQueue);
             }
 
             SetContentElementText();

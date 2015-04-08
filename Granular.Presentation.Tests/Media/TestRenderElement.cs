@@ -59,6 +59,7 @@ namespace System.Windows.Media
         public Rect Bounds { get; set; }
         public bool AcceptsReturn { get; set; }
         public bool AcceptsTab { get; set; }
+        public bool IsPassword { get; set; }
         public bool IsReadOnly { get; set; }
         public bool SpellCheck { get; set; }
 
