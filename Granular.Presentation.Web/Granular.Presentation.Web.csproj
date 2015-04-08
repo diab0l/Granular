@@ -169,6 +169,9 @@
     <Compile Include="..\Granular.Presentation\Controls\ScrollViewer.cs">
       <Link>Controls\ScrollViewer.cs</Link>
     </Compile>
+    <Compile Include="..\Granular.Presentation\Controls\SelectionGroup.cs">
+      <Link>Controls\SelectionGroup.cs</Link>
+    </Compile>
     <Compile Include="..\Granular.Presentation\Controls\SpellCheck.cs">
       <Link>Controls\SpellCheck.cs</Link>
     </Compile>

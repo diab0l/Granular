@@ -45,6 +45,7 @@
     <Compile Include="Controls\AdornerLayer.cs" />
     <Compile Include="Controls\Image.cs" />
     <Compile Include="Controls\Primitives\TextBoxBase.cs" />
+    <Compile Include="Controls\SelectionGroup.cs" />
     <Compile Include="Controls\SpellCheck.cs" />
     <Compile Include="Controls\TextBoxView.cs" />
     <Compile Include="Controls\TextChangedEventArgs.cs" />
