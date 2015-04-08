@@ -57,6 +57,22 @@ namespace Granular.Host.Render
             }
         }
 
+        private int maxLength;
+        public int MaxLength
+        {
+            get { return maxLength; }
+            set
+            {
+                if (maxLength == value)
+                {
+                    return;
+                }
+
+                maxLength = value;
+                SetContentElementMaxLength();
+            }
+        }
+
         public event EventHandler CaretIndexChanged;
         private int caretIndex;
         public int CaretIndex
@@ -414,6 +430,7 @@ namespace Granular.Host.Render
             }
 
             SetContentElementText();
+            SetContentElementMaxLength();
             SetContentElementSelectionStart();
             SetContentElementSelectionLength();
             SetContentElementIsReadOnly();
@@ -526,6 +543,18 @@ namespace Granular.Host.Render
             if (ContentElement.HtmlElement.GetValue() != Text.DefaultIfNullOrEmpty())
             {
                 ContentElement.HtmlElement.SetValue(Text);
+            }
+        }
+
+        private void SetContentElementMaxLength()
+        {
+            if (maxLength > 0)
+            {
+                ContentElement.HtmlElement.SetAttribute("maxLength", maxLength.ToString());
+            }
+            else
+            {
+                ContentElement.HtmlElement.RemoveAttribute("maxLength");
             }
         }
 

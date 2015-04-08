@@ -47,11 +47,20 @@ namespace Granular.Host.Wpf.Render
 
                 text = value;
 
-                textBox.Text = text;
-                textBox.UpdateLayout();
+                if (textBox.Text != text)
+                {
+                    textBox.Text = text;
+                    textBox.UpdateLayout();
+                }
 
                 TextChanged.Raise(this);
             }
+        }
+
+        public int MaxLength
+        {
+            get { return textBox.MaxLength; }
+            set { textBox.MaxLength = value; }
         }
 
         public event EventHandler CaretIndexChanged;

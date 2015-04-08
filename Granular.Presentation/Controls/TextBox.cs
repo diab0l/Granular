@@ -48,7 +48,7 @@ namespace System.Windows.Controls
             set { SetValue(SelectionLengthProperty, value); }
         }
 
-        public static readonly DependencyProperty MaxLengthProperty = DependencyProperty.Register("MaxLength", typeof(int), typeof(TextBox), new FrameworkPropertyMetadata());
+        public static readonly DependencyProperty MaxLengthProperty = DependencyProperty.Register("MaxLength", typeof(int), typeof(TextBox), new FrameworkPropertyMetadata(propertyChangedCallback: (sender, e) => ((TextBox)sender).textBoxView.MaxLength = (int)e.NewValue));
         public int MaxLength
         {
             get { return (int)GetValue(MaxLengthProperty); }

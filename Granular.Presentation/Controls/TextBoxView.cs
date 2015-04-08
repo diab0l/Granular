@@ -30,6 +30,22 @@ namespace System.Windows.Controls
             }
         }
 
+        private int maxLength;
+        public int MaxLength
+        {
+            get { return maxLength; }
+            set
+            {
+                if (maxLength == value)
+                {
+                    return;
+                }
+
+                maxLength = value;
+                SetRenderElementsProperty(renderElement => renderElement.MaxLength = maxLength);
+            }
+        }
+
         public event EventHandler CaretIndexChanged;
         private int caretIndex;
         public int CaretIndex
@@ -226,6 +242,7 @@ namespace System.Windows.Controls
             textBoxRenderElement.SelectionLength = this.SelectionLength;
             textBoxRenderElement.SelectionStart = this.SelectionStart;
             textBoxRenderElement.Text = this.Text;
+            textBoxRenderElement.MaxLength = this.MaxLength;
             textBoxRenderElement.Bounds = new Rect(this.VisualSize);
             textBoxRenderElement.AcceptsReturn = this.AcceptsReturn;
             textBoxRenderElement.AcceptsTab = this.AcceptsTab;

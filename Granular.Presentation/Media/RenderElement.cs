@@ -29,6 +29,7 @@ namespace System.Windows.Media
     {
         event EventHandler TextChanged;
         string Text { get; set; }
+        int MaxLength { get; set; }
 
         event EventHandler CaretIndexChanged;
         int CaretIndex { get; set; }

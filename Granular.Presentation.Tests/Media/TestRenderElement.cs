@@ -55,6 +55,7 @@ namespace System.Windows.Media
         public int SelectionStart { get; set; }
 
         public string Text { get; set; }
+        public int MaxLength { get; set; }
         public Rect Bounds { get; set; }
         public bool AcceptsReturn { get; set; }
         public bool AcceptsTab { get; set; }
