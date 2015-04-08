@@ -12,6 +12,7 @@
         <ResourceDictionary Source="/Granular.Presentation.Generic;component/Styles/ScrollViewer.xaml"/>
         <ResourceDictionary Source="/Granular.Presentation.Generic;component/Styles/TextBox.xaml"/>
         <ResourceDictionary Source="/Granular.Presentation.Generic;component/Styles/Thumb.xaml"/>
+        <ResourceDictionary Source="/Granular.Presentation.Generic;component/Styles/ToggleButton.xaml"/>
         <ResourceDictionary Source="/Granular.Presentation.Generic;component/Styles/Window.xaml"/>
     </ResourceDictionary.MergedDictionaries>
 </ResourceDictionary>

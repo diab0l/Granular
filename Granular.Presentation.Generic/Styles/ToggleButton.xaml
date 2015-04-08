@@ -1,0 +1,57 @@
+﻿<ResourceDictionary
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:theme="clr-namespace:Granular.Presentation.Generic">
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="/Granular.Presentation.Generic;component/Styles/Colors.xaml"/>
+        <ResourceDictionary Source="/Granular.Presentation.Generic;component/Styles/BulletChrome.xaml"/>
+        <ResourceDictionary Source="/Granular.Presentation.Generic;component/Styles/Focus.xaml"/>
+    </ResourceDictionary.MergedDictionaries>
+
+    <LinearGradientBrush x:Key="BackgroundBrush" StartPoint="0,0" EndPoint="0,1">
+        <GradientBrush.GradientStops>
+            <GradientStop Color="#FFFCFCFC" Offset="0"/>
+            <GradientStop Color="#FFF8F8F8" Offset="1"/>
+        </GradientBrush.GradientStops>
+    </LinearGradientBrush>
+    <SolidColorBrush x:Key="BorderBrush" Color="#FFD3D3D3"/>
+
+    <Style x:Key="ToggleButtonBulletStyle" TargetType="{x:Type ToggleButton}">
+        <Setter Property="Control.Background" Value="Transparent"/>
+        <Setter Property="Control.Foreground" Value="{StaticResource ForegroundBrush}"/>
+        <Setter Property="Control.BorderBrush" Value="{StaticResource BorderBrush}"/>
+        <Setter Property="FrameworkElement.FocusVisualStyle" Value="{StaticResource BulletDefaultFocusVisualStyle}"/>
+        <Setter Property="Control.Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type ToggleButton}">
+                    <DockPanel Background="{TemplateBinding Control.Background}" Margin="0,2">
+                        <theme:BulletChrome x:Name="bulletChrome" DockPanel.Dock="Left"
+                                            Background="{StaticResource BackgroundBrush}"
+                                            BorderBrush="{TemplateBinding Control.BorderBrush}"
+                                            RenderEnabled="{TemplateBinding UIElement.IsEnabled}"
+                                            RenderMouseOver="{TemplateBinding UIElement.IsMouseOver}"
+                                            RenderPressed="{TemplateBinding ButtonBase.IsPressed}"
+                                            RenderChecked="{TemplateBinding ToggleButton.IsChecked}"
+                                            IsThreeState="{TemplateBinding ToggleButton.IsThreeState}"
+                                            RenderRound="{TemplateBinding theme:BulletChrome.RenderRound}"
+                                            BulletTemplate="{TemplateBinding theme:BulletChrome.BulletTemplate}"
+                                            IndeterminateBulletTemplate="{TemplateBinding theme:BulletChrome.IndeterminateBulletTemplate}"
+                                            Margin="2,0">
+                        </theme:BulletChrome>
+                        <ContentPresenter Margin="{TemplateBinding Control.Padding}" HorizontalAlignment="{TemplateBinding Control.HorizontalContentAlignment}" VerticalAlignment="{TemplateBinding Control.VerticalContentAlignment}"
+                                          Content="{TemplateBinding ContentControl.Content}" ContentTemplate="{TemplateBinding ContentControl.ContentTemplate}" ContentTemplateSelector="{TemplateBinding ContentControl.ContentTemplateSelector}"/>
+                    </DockPanel>
+
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="ContentControl.HasContent" Value="True">
+                            <Setter Value="{StaticResource BulletContentFocusVisualStyle}" Property="FrameworkElement.FocusVisualStyle"/>
+                        </Trigger>
+                        <Trigger Property="UIElement.IsEnabled" Value="False">
+                            <Setter Property="Control.Foreground" Value="#FFADADAD"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+</ResourceDictionary>
