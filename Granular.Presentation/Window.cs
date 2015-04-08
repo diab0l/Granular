@@ -7,7 +7,7 @@ using System.Windows.Input;
 
 namespace System.Windows
 {
-    public class Window : ContentControl, IPopupLayerHost, IAdornerLayerHost
+    public class Window : ContentControl, IPopupLayerHost, IAdornerLayerHost, IRadioButtonGroupScope
     {
         public static readonly DependencyProperty TitleProperty = DependencyProperty.Register("Title", typeof(string), typeof(Window), new FrameworkPropertyMetadata(String.Empty, (sender, e) => ((Window)sender).OnTitleChanged(e)));
         public string Title
@@ -20,6 +20,7 @@ namespace System.Windows
         public PopupLayer PopupLayer { get; private set; }
 
         private IPresentationSource presentationSource;
+        private ISelectionGroupScope<RadioButton> radioButtonGroupScope;
 
         static Window()
         {
@@ -35,6 +36,8 @@ namespace System.Windows
 
             PopupLayer = new PopupLayer();
             AddVisualChild(PopupLayer);
+
+            radioButtonGroupScope = new SelectionGroupScope<RadioButton>();
         }
 
         protected override void OnTemplateChildChanged()
@@ -57,6 +60,11 @@ namespace System.Windows
 
             presentationSource = ApplicationHost.Current.PresentationSourceFactory.CreatePresentationSource(this);
             presentationSource.Title = this.Title;
+        }
+
+        public ISelectionGroup<RadioButton> GetRadioButtonGroup(string groupName)
+        {
+            return radioButtonGroupScope.GetSelectionGroup(groupName);
         }
 
         protected override Size MeasureOverride(Size availableSize)

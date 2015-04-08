@@ -157,6 +157,9 @@
     <Compile Include="..\Granular.Presentation\Controls\Primitives\Track.cs">
       <Link>Controls\Primitives\Track.cs</Link>
     </Compile>
+    <Compile Include="..\Granular.Presentation\Controls\RadioButton.cs">
+      <Link>Controls\RadioButton.cs</Link>
+    </Compile>
     <Compile Include="..\Granular.Presentation\Controls\ScrollChangedEventArgs.cs">
       <Link>Controls\ScrollChangedEventArgs.cs</Link>
     </Compile>
