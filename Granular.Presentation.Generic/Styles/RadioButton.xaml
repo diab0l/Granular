@@ -1,0 +1,34 @@
+﻿<ResourceDictionary
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:theme="clr-namespace:Granular.Presentation.Generic">
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="/Granular.Presentation.Generic;component/Styles/ToggleButton.xaml"/>
+    </ResourceDictionary.MergedDictionaries>
+
+    <RadialGradientBrush x:Key="BulletBackgroundBrush" GradientOrigin="0.25,0.25" Center="0.25,0.25">
+        <GradientStop Color="#FFFFFFFF" Offset="0.1"/>
+        <GradientStop Color="#FF74FFFF" Offset="0.35"/>
+        <GradientStop Color="#FF0DA0F3" Offset="1"/>
+    </RadialGradientBrush>
+
+    <SolidColorBrush x:Key="BulletBorderBrush" Color="#FF193B55"/>
+
+    <Style TargetType="{x:Type RadioButton}" BasedOn="{StaticResource ToggleButtonBulletStyle}">
+        <Setter Property="theme:BulletChrome.RenderRound" Value="True"/>
+        <Setter Property="theme:BulletChrome.BulletTemplate">
+            <Setter.Value>
+                <ControlTemplate>
+                    <Border Width="6" Height="6" BorderThickness="1" CornerRadius="2.5" BorderBrush="{StaticResource BulletBorderBrush}" Background="{StaticResource BulletBackgroundBrush}"/>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="theme:BulletChrome.IndeterminateBulletTemplate">
+            <Setter.Value>
+                <ControlTemplate>
+                    <Border Width="8" Height="2" CornerRadius="1" Background="{StaticResource BulletBorderBrush}"/>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+</ResourceDictionary>
