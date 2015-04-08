@@ -1,0 +1,28 @@
+﻿<ResourceDictionary
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:theme="clr-namespace:Granular.Presentation.Generic">
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="/Granular.Presentation.Generic;component/Styles/ToggleButton.xaml"/>
+    </ResourceDictionary.MergedDictionaries>
+
+    <SolidColorBrush x:Key="BulletBackgroundBrush" Color="#FF193B55"/>
+
+    <Style TargetType="{x:Type CheckBox}" BasedOn="{StaticResource ToggleButtonBulletStyle}">
+        <Setter Property="theme:BulletChrome.RenderRound" Value="False"/>
+        <Setter Property="theme:BulletChrome.BulletTemplate">
+            <Setter.Value>
+                <ControlTemplate>
+                    <TextBlock Text="✓" Foreground="{StaticResource BulletBackgroundBrush}" FontFamily="" FontSize="10" FontStyle="Normal" FontWeight="Bold" TextAlignment="Center"/>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="theme:BulletChrome.IndeterminateBulletTemplate">
+            <Setter.Value>
+                <ControlTemplate>
+                    <Border Width="8" Height="2" CornerRadius="1" Background="{StaticResource BulletBackgroundBrush}"/>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+</ResourceDictionary>
