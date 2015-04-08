@@ -118,6 +118,9 @@
     <Compile Include="..\Granular.Presentation\Controls\Panel.cs">
       <Link>Controls\Panel.cs</Link>
     </Compile>
+    <Compile Include="..\Granular.Presentation\Controls\PasswordBox.cs">
+      <Link>Controls\PasswordBox.cs</Link>
+    </Compile>
     <Compile Include="..\Granular.Presentation\Controls\PopupLayer.cs">
       <Link>Controls\PopupLayer.cs</Link>
     </Compile>
