@@ -144,7 +144,7 @@ namespace System.Windows.Controls
                 }
 
                 isReadOnly = value;
-                SetRenderElementsProperty(renderElement => renderElement.IsReadOnly = isReadOnly);
+                SetRenderElementsIsReadOnly();
             }
         }
 
@@ -223,13 +223,14 @@ namespace System.Windows.Controls
 
         static TextBoxView()
         {
+            UIElement.IsHitTestVisibleProperty.OverrideMetadata(typeof(TextBoxView), new FrameworkPropertyMetadata(inherits: true, propertyChangedCallback: (sender, e) => ((TextBoxView)sender).SetRenderElementsIsHitTestVisible()));
+            UIElement.IsEnabledProperty.OverrideMetadata(typeof(TextBoxView), new FrameworkPropertyMetadata(inherits: true, propertyChangedCallback: (sender, e) => ((TextBoxView)sender).OnIsEnabledChanged()));
             Control.ForegroundProperty.OverrideMetadata(typeof(TextBoxView), new FrameworkPropertyMetadata(inherits: true, propertyChangedCallback: (sender, e) => ((TextBoxView)sender).SetRenderElementsProperty(renderElement => renderElement.Foreground = (Brush)e.NewValue)));
             Control.FontFamilyProperty.OverrideMetadata(typeof(TextBoxView), new FrameworkPropertyMetadata(inherits: true, propertyChangedCallback: (sender, e) => ((TextBoxView)sender).SetRenderElementsProperty(renderElement => renderElement.FontFamily = (FontFamily)e.NewValue)));
             Control.FontSizeProperty.OverrideMetadata(typeof(TextBoxView), new FrameworkPropertyMetadata(inherits: true, propertyChangedCallback: (sender, e) => ((TextBoxView)sender).SetRenderElementsProperty(renderElement => renderElement.FontSize = (double)e.NewValue)));
             Control.FontStyleProperty.OverrideMetadata(typeof(TextBoxView), new FrameworkPropertyMetadata(inherits: true, propertyChangedCallback: (sender, e) => ((TextBoxView)sender).SetRenderElementsProperty(renderElement => renderElement.FontStyle = (FontStyle)e.NewValue)));
             Control.FontStretchProperty.OverrideMetadata(typeof(TextBoxView), new FrameworkPropertyMetadata(inherits: true, propertyChangedCallback: (sender, e) => ((TextBoxView)sender).SetRenderElementsProperty(renderElement => renderElement.FontStretch = (FontStretch)e.NewValue)));
             Control.FontWeightProperty.OverrideMetadata(typeof(TextBoxView), new FrameworkPropertyMetadata(inherits: true, propertyChangedCallback: (sender, e) => ((TextBoxView)sender).SetRenderElementsProperty(renderElement => renderElement.FontWeight = (FontWeight)e.NewValue)));
-            UIElement.IsHitTestVisibleProperty.OverrideMetadata(typeof(TextBoxView), new FrameworkPropertyMetadata(inherits: true, propertyChangedCallback: (sender, e) => ((TextBoxView)sender).SetRenderElementsProperty(renderElement => renderElement.IsHitTestVisible = (bool)e.NewValue)));
             TextBox.TextAlignmentProperty.OverrideMetadata(typeof(TextBoxView), new FrameworkPropertyMetadata(inherits: true, propertyChangedCallback: (sender, e) => ((TextBoxView)sender).SetRenderElementsProperty(renderElement => renderElement.TextAlignment = (TextAlignment)e.NewValue)));
             TextBox.TextWrappingProperty.OverrideMetadata(typeof(TextBoxView), new FrameworkPropertyMetadata(inherits: true, propertyChangedCallback: (sender, e) => ((TextBoxView)sender).SetRenderElementsProperty(renderElement => renderElement.TextWrapping = (TextWrapping)e.NewValue)));
         }
@@ -267,7 +268,8 @@ namespace System.Windows.Controls
             textBoxRenderElement.AcceptsReturn = this.AcceptsReturn;
             textBoxRenderElement.AcceptsTab = this.AcceptsTab;
             textBoxRenderElement.IsPassword = isPassword;
-            textBoxRenderElement.IsReadOnly = this.IsReadOnly;
+            textBoxRenderElement.IsReadOnly = this.IsReadOnly || !this.IsEnabled;
+            textBoxRenderElement.IsHitTestVisible = this.IsHitTestVisible && this.IsEnabled;
             textBoxRenderElement.SpellCheck = this.spellCheck;
             textBoxRenderElement.HorizontalScrollBarVisibility = this.HorizontalScrollBarVisibility;
             textBoxRenderElement.VerticalScrollBarVisibility = this.VerticalScrollBarVisibility;
@@ -278,7 +280,6 @@ namespace System.Windows.Controls
             textBoxRenderElement.FontStretch = (FontStretch)GetValue(Control.FontStretchProperty);
             textBoxRenderElement.FontStyle = (FontStyle)GetValue(Control.FontStyleProperty);
             textBoxRenderElement.FontWeight = (FontWeight)GetValue(Control.FontWeightProperty);
-            textBoxRenderElement.IsHitTestVisible = IsHitTestVisible;
             textBoxRenderElement.TextAlignment = (TextAlignment)GetValue(TextBox.TextAlignmentProperty);
             textBoxRenderElement.TextWrapping = (TextWrapping)GetValue(TextBox.TextWrappingProperty);
 
@@ -321,6 +322,22 @@ namespace System.Windows.Controls
             {
                 textBoxRenderElement.ClearFocus();
             }
+        }
+
+        private void OnIsEnabledChanged()
+        {
+            SetRenderElementsIsHitTestVisible();
+            SetRenderElementsIsReadOnly();
+        }
+
+        private void SetRenderElementsIsHitTestVisible()
+        {
+            SetRenderElementsProperty(renderElement => renderElement.IsHitTestVisible = IsHitTestVisible && IsEnabled);
+        }
+
+        private void SetRenderElementsIsReadOnly()
+        {
+            SetRenderElementsProperty(renderElement => renderElement.IsReadOnly = IsReadOnly || !IsEnabled);
         }
 
         private double GetLineHeight()

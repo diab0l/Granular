@@ -92,8 +92,7 @@ namespace System.Windows.Controls
         {
             TextBoxBase.AcceptsReturnProperty.OverrideMetadata(typeof(TextBox), new FrameworkPropertyMetadata(propertyChangedCallback: (sender, e) => ((TextBox)sender).textBoxView.AcceptsReturn = (bool)e.NewValue));
             TextBoxBase.AcceptsTabProperty.OverrideMetadata(typeof(TextBox), new FrameworkPropertyMetadata(propertyChangedCallback: (sender, e) => ((TextBox)sender).textBoxView.AcceptsTab = (bool)e.NewValue));
-            TextBoxBase.IsReadOnlyProperty.OverrideMetadata(typeof(TextBox), new FrameworkPropertyMetadata(propertyChangedCallback: (sender, e) => ((TextBox)sender).textBoxView.IsReadOnly = ((TextBox)sender).IsReadOnly || !((TextBox)sender).IsEnabled));
-            UIElement.IsEnabledProperty.OverrideMetadata(typeof(TextBox), new FrameworkPropertyMetadata(inherits: true, propertyChangedCallback: (sender, e) => ((TextBox)sender).textBoxView.IsReadOnly = ((TextBox)sender).IsReadOnly || !((TextBox)sender).IsEnabled));
+            TextBoxBase.IsReadOnlyProperty.OverrideMetadata(typeof(TextBox), new FrameworkPropertyMetadata(propertyChangedCallback: (sender, e) => ((TextBox)sender).textBoxView.IsReadOnly = ((TextBox)sender).IsReadOnly));
             SpellCheck.IsEnabledProperty.OverrideMetadata(typeof(TextBox), new FrameworkPropertyMetadata(propertyChangedCallback: (sender, e) => ((TextBox)sender).textBoxView.SpellCheck = (bool)e.NewValue));
             FrameworkElement.CursorProperty.OverrideMetadata(typeof(TextBox), new FrameworkPropertyMetadata(Cursors.IBeam));
         }
