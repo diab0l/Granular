@@ -52,6 +52,7 @@
     <Compile Include="Controls\TextBoxView.cs" />
     <Compile Include="Controls\TextChangedEventArgs.cs" />
     <Compile Include="EmbeddedResourceLoader.cs" />
+    <Compile Include="Input\Cursor.cs" />
     <Compile Include="Markup\ElementFactory.cs" />
     <Compile Include="Markup\ElementInitializer.cs" />
     <Compile Include="FrameworkElementFactory.cs" />

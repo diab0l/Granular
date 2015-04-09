@@ -310,6 +310,9 @@
     <Compile Include="..\Granular.Presentation\InputElement.cs">
       <Link>InputElement.cs</Link>
     </Compile>
+    <Compile Include="..\Granular.Presentation\Input\Cursor.cs">
+      <Link>Input\Cursor.cs</Link>
+    </Compile>
     <Compile Include="..\Granular.Presentation\Input\FocusManager.cs">
       <Link>Input\FocusManager.cs</Link>
     </Compile>
