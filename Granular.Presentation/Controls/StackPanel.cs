@@ -60,7 +60,7 @@ namespace System.Windows.Controls
                 childrenMainLength += childMainLength;
             }
 
-            return CreateSize(childrenMainLength, panelCrossLength);
+            return CreateSize(GetMainLength(finalSize), panelCrossLength);
         }
 
 
