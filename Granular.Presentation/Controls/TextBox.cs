@@ -95,6 +95,7 @@ namespace System.Windows.Controls
             TextBoxBase.IsReadOnlyProperty.OverrideMetadata(typeof(TextBox), new FrameworkPropertyMetadata(propertyChangedCallback: (sender, e) => ((TextBox)sender).textBoxView.IsReadOnly = ((TextBox)sender).IsReadOnly || !((TextBox)sender).IsEnabled));
             UIElement.IsEnabledProperty.OverrideMetadata(typeof(TextBox), new FrameworkPropertyMetadata(inherits: true, propertyChangedCallback: (sender, e) => ((TextBox)sender).textBoxView.IsReadOnly = ((TextBox)sender).IsReadOnly || !((TextBox)sender).IsEnabled));
             SpellCheck.IsEnabledProperty.OverrideMetadata(typeof(TextBox), new FrameworkPropertyMetadata(propertyChangedCallback: (sender, e) => ((TextBox)sender).textBoxView.SpellCheck = (bool)e.NewValue));
+            FrameworkElement.CursorProperty.OverrideMetadata(typeof(TextBox), new FrameworkPropertyMetadata(Cursors.IBeam));
         }
 
         public TextBox()

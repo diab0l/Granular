@@ -510,6 +510,11 @@ namespace Granular.Host.Wpf.Render
             contentAdapter.CaretIndexChanged += (sender, e) => this.CaretIndex = contentAdapter.CaretIndex;
             contentAdapter.SelectionStartChanged += (sender, e) => this.SelectionStart = contentAdapter.SelectionStart;
             contentAdapter.SelectionLengthChanged += (sender, e) => this.SelectionLength = contentAdapter.SelectionLength;
+            contentAdapter.Control.AddHandler(wpf::System.Windows.Input.Mouse.QueryCursorEvent, (wpf::System.Windows.Input.QueryCursorEventHandler)((sender, e) =>
+            {
+                e.Cursor = wpf::System.Windows.Input.Cursors.Arrow;
+                e.Handled = false;
+            }), true);
 
             SetContentBounds();
             contentAdapter.Text = Text;

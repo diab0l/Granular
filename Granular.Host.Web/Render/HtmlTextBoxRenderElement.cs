@@ -458,6 +458,7 @@ namespace Granular.Host.Render
             ContentElement.Style.SetValue("padding", "0px");
             ContentElement.Style.SetValue("border", "0px solid transparent");
             ContentElement.Style.SetValue("outline", "1px solid transparent");
+            ContentElement.Style.SetValue("cursor", "inherit");
             ContentElement.Style.SetBackground(Brushes.Transparent, converter);
             ContentElement.Style.SetLocation(Point.Zero, converter);
 
