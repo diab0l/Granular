@@ -11,5 +11,10 @@ namespace Granular
         {
             //
         }
+
+        public override string ToString()
+        {
+            return Message;
+        }
     }
 }
