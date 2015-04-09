@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Granular.Extensions;
 
 namespace System.Windows.Input
 {
@@ -104,6 +105,23 @@ namespace System.Windows.Input
 
         public Point Position { get; private set; }
 
+        public event EventHandler CursorChanged;
+        private Cursor cursor;
+        public Cursor Cursor
+        {
+            get { return cursor; }
+            private set
+            {
+                if (cursor == value)
+                {
+                    return;
+                }
+
+                cursor = value;
+                CursorChanged.Raise(this);
+            }
+        }
+
         private IPresentationSource presentationSource;
         private HashSet<MouseButton> pressedButtons;
 
@@ -114,6 +132,8 @@ namespace System.Windows.Input
 
             pressedButtons = new HashSet<MouseButton>();
             Position = Point.Zero;
+
+            Cursor = Cursors.Arrow;
         }
 
         public void Dispose()
@@ -249,6 +269,27 @@ namespace System.Windows.Input
             {
                 newTargetPath[i].RaiseEvent(new MouseEventArgs(Mouse.MouseEnterEvent, newTargetPath[i], this, timestamp, Position));
             }
+
+            Cursor = QueryCursor(timestamp);
+        }
+
+        public void UpdateCursor()
+        {
+            Cursor = QueryCursor(presentationSource.GetTimestamp());
+        }
+
+        private Cursor QueryCursor(int timestamp)
+        {
+            if (Target == null)
+            {
+                return Cursors.Arrow;
+            }
+
+            QueryCursorEventArgs e = new QueryCursorEventArgs(Mouse.QueryCursorEvent, Target, this, timestamp, Position);
+            e.Cursor = Cursors.Arrow;
+            Target.RaiseEvent(e);
+
+            return e.Handled ? e.Cursor : Cursors.Arrow;
         }
     }
 }

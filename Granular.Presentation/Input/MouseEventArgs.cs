@@ -7,6 +7,7 @@ namespace System.Windows.Input
     public delegate void MouseEventHandler(object sender, MouseEventArgs e);
     public delegate void MouseButtonEventHandler(object sender, MouseButtonEventArgs e);
     public delegate void MouseWheelEventHandler(object sender, MouseWheelEventArgs e);
+    public delegate void QueryCursorEventHandler(object sender, QueryCursorEventArgs e);
 
     public enum MouseButtonState
     {
@@ -107,6 +108,29 @@ namespace System.Windows.Input
             if (handler is MouseWheelEventHandler)
             {
                 ((MouseWheelEventHandler)handler)(target, this);
+            }
+            else
+            {
+                base.InvokeEventHandler(handler, target);
+            }
+        }
+    }
+
+    public class QueryCursorEventArgs : MouseEventArgs
+    {
+        public Cursor Cursor { get; set; }
+
+        public QueryCursorEventArgs(RoutedEvent routedEvent, object originalSource, MouseDevice mouseDevice, int timestamp, Point absolutePosition) :
+            base(routedEvent, originalSource, mouseDevice, timestamp, absolutePosition)
+        {
+            //
+        }
+
+        public override void InvokeEventHandler(Delegate handler, object target)
+        {
+            if (handler is QueryCursorEventHandler)
+            {
+                ((QueryCursorEventHandler)handler)(target, this);
             }
             else
             {

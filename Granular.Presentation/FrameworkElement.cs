@@ -6,6 +6,7 @@ using System.Windows.Markup;
 using System.Windows.Media;
 using Granular.Collections;
 using Granular.Extensions;
+using System.Windows.Input;
 
 namespace System.Windows
 {
@@ -229,6 +230,20 @@ namespace System.Windows
         {
             get { return (object)GetValue(DataContextProperty); }
             set { SetValue(DataContextProperty, value); }
+        }
+
+        public static readonly DependencyProperty CursorProperty = DependencyProperty.Register("Cursor", typeof(Cursor), typeof(FrameworkElement), new FrameworkPropertyMetadata(propertyChangedCallback: (sender, e) => ((FrameworkElement)sender).UpdateCursor()));
+        public Cursor Cursor
+        {
+            get { return (Cursor)GetValue(CursorProperty); }
+            set { SetValue(CursorProperty, value); }
+        }
+
+        public static readonly DependencyProperty ForceCursorProperty = DependencyProperty.Register("ForceCursor", typeof(bool), typeof(FrameworkElement), new FrameworkPropertyMetadata(propertyChangedCallback: (sender, e) => ((FrameworkElement)sender).UpdateCursor()));
+        public bool ForceCursor
+        {
+            get { return (bool)GetValue(ForceCursorProperty); }
+            set { SetValue(ForceCursorProperty, value); }
         }
 
         public ObservableCollection<ITrigger> Triggers { get; private set; }
@@ -512,6 +527,23 @@ namespace System.Windows
         private void OnDataContextChanged(DependencyPropertyChangedEventArgs e)
         {
             DataContextChanged.Raise(this, e);
+        }
+
+        private void UpdateCursor()
+        {
+            if (IsMouseOver)
+            {
+                ApplicationHost.Current.GetMouseDeviceFromElement(this).UpdateCursor();
+            }
+        }
+
+        protected override void OnQueryCursor(QueryCursorEventArgs e)
+        {
+            if (Cursor != null && (ForceCursor || !e.Handled))
+            {
+                e.Cursor = Cursor;
+                e.Handled = true;
+            }
         }
 
         private static Point GetAlignmentOffset(Rect container, Size alignedRectSize, HorizontalAlignment horizontalAlignment, VerticalAlignment verticalAlignment)

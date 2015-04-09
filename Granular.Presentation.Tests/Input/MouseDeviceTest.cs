@@ -184,5 +184,47 @@ namespace Granular.Presentation.Tests.Input
             Assert.AreEqual(null, mouseDevice.CaptureTarget);
             Assert.AreEqual(child1, mouseDevice.Target);
         }
+
+        [TestMethod]
+        public void MouseDeviceQueryCursorTest()
+        {
+            Border child1 = new Border { Background = Brushes.Transparent, Width = 100, Height = 100 };
+            Border child2 = new Border { Background = Brushes.Transparent, Width = 100, Height = 100 };
+
+            StackPanel panel = new StackPanel { IsRootElement = true };
+            panel.Children.Add(child1);
+            panel.Children.Add(child2);
+
+            TestPresentationSource presentationSource = new TestPresentationSource();
+            presentationSource.RootElement = panel;
+
+            ((TestApplicationHost)ApplicationHost.Current).PresentationSourceFactory = new TestPresentationSourceFactory(presentationSource);
+
+            panel.Measure(Size.Infinity);
+            panel.Arrange(new Rect(panel.DesiredSize));
+
+            child1.Cursor = Cursors.Help;
+            child2.Cursor = Cursors.Pen;
+
+            presentationSource.MouseDevice.Activate();
+            Assert.AreEqual(Cursors.Arrow, presentationSource.MouseDevice.Cursor);
+
+            presentationSource.MouseDevice.ProcessRawEvent(new RawMouseEventArgs(new Point(50, 50), 0));
+            Assert.AreEqual(Cursors.Help, presentationSource.MouseDevice.Cursor);
+
+            presentationSource.MouseDevice.ProcessRawEvent(new RawMouseEventArgs(new Point(50, 150), 0));
+            Assert.AreEqual(Cursors.Pen, presentationSource.MouseDevice.Cursor);
+
+            child2.Cursor = Cursors.Hand;
+            Assert.AreEqual(Cursors.Hand, presentationSource.MouseDevice.Cursor);
+
+            panel.Cursor = Cursors.Arrow;
+            Assert.AreEqual(Cursors.Hand, presentationSource.MouseDevice.Cursor);
+
+            panel.ForceCursor = true;
+            Assert.AreEqual(Cursors.Arrow, presentationSource.MouseDevice.Cursor);
+
+            ((TestApplicationHost)ApplicationHost.Current).PresentationSourceFactory = null;
+        }
     }
 }

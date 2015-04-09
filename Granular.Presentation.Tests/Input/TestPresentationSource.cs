@@ -21,7 +21,8 @@ namespace Granular.Presentation.Tests.Input
 
         public TestPresentationSource()
         {
-            //
+            MouseDevice = new MouseDevice(this);
+            KeyboardDevice = new KeyboardDevice(this);
         }
 
         public IInputElement HitTest(Point position)

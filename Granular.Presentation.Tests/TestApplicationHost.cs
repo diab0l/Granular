@@ -63,4 +63,24 @@ namespace Granular.Presentation.Tests
             return new TestRenderImageSource() { State = RenderImageState.DownloadProgress };
         }
     }
+
+    public class TestPresentationSourceFactory : IPresentationSourceFactory
+    {
+        private IPresentationSource presentationSource;
+
+        public TestPresentationSourceFactory(IPresentationSource presentationSource)
+        {
+            this.presentationSource = presentationSource;
+        }
+
+        public IPresentationSource CreatePresentationSource(UIElement rootElement)
+        {
+            return presentationSource;
+        }
+
+        public IPresentationSource GetPresentationSourceFromElement(UIElement element)
+        {
+            return presentationSource;
+        }
+    }
 }

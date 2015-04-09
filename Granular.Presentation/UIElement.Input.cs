@@ -79,6 +79,13 @@ namespace System.Windows
             remove { RemoveHandler(Mouse.MouseLeaveEvent, value); }
         }
 
+        public static readonly RoutedEvent QueryCursorEvent = Mouse.QueryCursorEvent.AddOwner(typeof(UIElement));
+        public event QueryCursorEventHandler QueryCursor
+        {
+            add { AddHandler(Mouse.QueryCursorEvent, value, false); }
+            remove { RemoveHandler(Mouse.QueryCursorEvent, value); }
+        }
+
         private static void OnMouseEnter(object sender, MouseEventArgs e)
         {
             ((UIElement)sender).IsMouseOver = true;
@@ -97,6 +104,11 @@ namespace System.Windows
         }
 
         protected virtual void OnMouseLeave(MouseEventArgs e)
+        {
+            //
+        }
+
+        protected virtual void OnQueryCursor(QueryCursorEventArgs e)
         {
             //
         }
@@ -292,6 +304,7 @@ namespace System.Windows
         {
             EventManager.RegisterClassHandler(typeof(UIElement), Mouse.MouseEnterEvent, (MouseEventHandler)OnMouseEnter, false);
             EventManager.RegisterClassHandler(typeof(UIElement), Mouse.MouseLeaveEvent, (MouseEventHandler)OnMouseLeave, false);
+            EventManager.RegisterClassHandler(typeof(UIElement), Mouse.QueryCursorEvent, (QueryCursorEventHandler)((sender, e) => ((UIElement)sender).OnQueryCursor(e)), true);
 
             EventManager.RegisterClassHandler(typeof(UIElement), Mouse.PreviewMouseMoveEvent, (MouseEventHandler)((sender, e) => ((UIElement)sender).OnPreviewMouseMove(e)), false);
             EventManager.RegisterClassHandler(typeof(UIElement), Mouse.PreviewMouseDownEvent, (MouseButtonEventHandler)((sender, e) => ((UIElement)sender).OnPreviewMouseDown(e)), false);
