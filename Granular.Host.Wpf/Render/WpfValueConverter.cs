@@ -31,6 +31,7 @@ namespace Granular.Host.Wpf.Render
         wpf::System.Windows.TextWrapping Convert(TextWrapping textWrapping);
         wpf::System.Windows.Controls.ScrollBarVisibility Convert(ScrollBarVisibility scrollBarVisibility);
         wpf::System.Windows.Media.ImageSource Convert(ImageSource source);
+        wpf::System.Windows.Input.Cursor Convert(Cursor cursor);
 
         MouseButton ConvertBack(wpf::System.Windows.Input.MouseButton mouseButton);
         MouseButtonState ConvertBack(wpf::System.Windows.Input.MouseButtonState mouseButtonState);
@@ -250,6 +251,53 @@ namespace Granular.Host.Wpf.Render
         public wpf::System.Windows.Media.ImageSource Convert(ImageSource source)
         {
             return ((WpfRenderImageSource)source.RenderImageSource).BitmapImage;
+        }
+
+        public wpf::System.Windows.Input.Cursor Convert(Cursor cursor)
+        {
+            if (cursor == null)
+            {
+                return null;
+            }
+
+            if (cursor.ImageSource != null)
+            {
+                throw new Granular.Exception("Conversion is not implemented");
+            }
+
+            switch (cursor.CursorType)
+            {
+                case CursorType.None: return wpf::System.Windows.Input.Cursors.None;
+                case CursorType.No: return wpf::System.Windows.Input.Cursors.No;
+                case CursorType.Arrow: return wpf::System.Windows.Input.Cursors.Arrow;
+                case CursorType.AppStarting: return wpf::System.Windows.Input.Cursors.AppStarting;
+                case CursorType.Cross: return wpf::System.Windows.Input.Cursors.Cross;
+                case CursorType.Help: return wpf::System.Windows.Input.Cursors.Help;
+                case CursorType.IBeam: return wpf::System.Windows.Input.Cursors.IBeam;
+                case CursorType.SizeAll: return wpf::System.Windows.Input.Cursors.SizeAll;
+                case CursorType.SizeNESW: return wpf::System.Windows.Input.Cursors.SizeNESW;
+                case CursorType.SizeNS: return wpf::System.Windows.Input.Cursors.SizeNS;
+                case CursorType.SizeNWSE: return wpf::System.Windows.Input.Cursors.SizeNWSE;
+                case CursorType.SizeWE: return wpf::System.Windows.Input.Cursors.SizeWE;
+                case CursorType.UpArrow: return wpf::System.Windows.Input.Cursors.UpArrow;
+                case CursorType.Wait: return wpf::System.Windows.Input.Cursors.Wait;
+                case CursorType.Hand: return wpf::System.Windows.Input.Cursors.Hand;
+                case CursorType.Pen: return wpf::System.Windows.Input.Cursors.Pen;
+                case CursorType.ScrollNS: return wpf::System.Windows.Input.Cursors.ScrollNS;
+                case CursorType.ScrollWE: return wpf::System.Windows.Input.Cursors.ScrollWE;
+                case CursorType.ScrollAll: return wpf::System.Windows.Input.Cursors.ScrollAll;
+                case CursorType.ScrollN: return wpf::System.Windows.Input.Cursors.ScrollN;
+                case CursorType.ScrollS: return wpf::System.Windows.Input.Cursors.ScrollS;
+                case CursorType.ScrollW: return wpf::System.Windows.Input.Cursors.ScrollW;
+                case CursorType.ScrollE: return wpf::System.Windows.Input.Cursors.ScrollE;
+                case CursorType.ScrollNW: return wpf::System.Windows.Input.Cursors.ScrollNW;
+                case CursorType.ScrollNE: return wpf::System.Windows.Input.Cursors.ScrollNE;
+                case CursorType.ScrollSW: return wpf::System.Windows.Input.Cursors.ScrollSW;
+                case CursorType.ScrollSE: return wpf::System.Windows.Input.Cursors.ScrollSE;
+                case CursorType.ArrowCD: return wpf::System.Windows.Input.Cursors.ArrowCD;
+            }
+
+            throw new Granular.Exception("Unexpected CursorType \"{0}\"", cursor.CursorType);
         }
 
         public MouseButton ConvertBack(wpf::System.Windows.Input.MouseButton mouseButton)

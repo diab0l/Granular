@@ -77,6 +77,9 @@ namespace Granular.Host
 
             window = System.Html.Window.Instance;
 
+            MouseDevice.CursorChanged += (sender, e) => System.Html.Window.Document.Body.Style.Cursor = converter.ToCursorString(MouseDevice.Cursor);
+            System.Html.Window.Document.Body.Style.Cursor = converter.ToCursorString(MouseDevice.Cursor);
+
             System.Html.Window.OnKeydown = OnKeyDown;
             System.Html.Window.OnKeyup = OnKeyUp;
             System.Html.Window.OnKeypress = PreventKeyboardHandled;

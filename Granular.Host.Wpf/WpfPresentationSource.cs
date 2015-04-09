@@ -75,6 +75,9 @@ namespace Granular.Host.Wpf
             container.PreviewMouseUp += OnContainerMouseUp;
             container.PreviewMouseWheel += (sender, e) => e.Handled = MouseDevice.ProcessRawEvent(new RawMouseWheelEventArgs(e.Delta, converter.ConvertBack(e.GetPosition(container)), GetTimestamp()));
 
+            MouseDevice.CursorChanged += (sender, e) => container.Cursor = converter.Convert(MouseDevice.Cursor);
+            container.Cursor = converter.Convert(MouseDevice.Cursor);
+
             window = new wpf::System.Windows.Window { UseLayoutRounding = true, Content = container };
             window.Activated += (sender, e) => MouseDevice.Activate();
             window.Deactivated += (sender, e) => MouseDevice.Deactivate();

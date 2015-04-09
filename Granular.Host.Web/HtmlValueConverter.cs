@@ -18,6 +18,7 @@ namespace Granular.Host
         string ToImplicitValueString(double value);
         string ToPixelString(Point point);
         string ToPercentString(Point point);
+        string ToImplicitValueString(Point point);
         string ToPixelString(Size size);
         string ToColorString(Color color);
         string ToPixelString(Thickness thickness);
@@ -41,6 +42,7 @@ namespace Granular.Host
         string ToFontFamilyNamesString(FontFamily fontFamily);
         string ToBooleanString(bool value);
         string ToMimeTypeString(RenderImageType renderImageType);
+        string ToCursorString(Cursor cursor);
 
         MouseButton ConvertBackMouseButton(short buttonIndex);
         Key ConvertBackKey(int keyCode, int location);
@@ -121,6 +123,11 @@ namespace Granular.Host
         public string ToPercentString(Point point)
         {
             return String.Format("{0} {1}", ToPercentString(point.X), ToPercentString(point.Y));
+        }
+
+        public string ToImplicitValueString(Point point)
+        {
+            return String.Format("{0} {1}", ToImplicitValueString(point.X), ToImplicitValueString(point.Y));
         }
 
         public string ToPixelString(Size size)
@@ -328,6 +335,59 @@ namespace Granular.Host
             }
 
             throw new Granular.Exception("Unexpected RenderImageType \"{0}\"", renderImageType);
+        }
+
+        public string ToCursorString(Cursor cursor)
+        {
+            if (cursor == null)
+            {
+                return "default";
+            }
+
+            if (cursor.ImageSource != null)
+            {
+                string urlString = ToUrlString(((RenderImageSource)cursor.ImageSource.RenderImageSource).Url);
+
+                return !Point.IsNullOrEmpty(cursor.Hotspot) ?
+                    String.Format("{0} {1}, default", urlString, ToImplicitValueString(cursor.Hotspot)) :
+                    String.Format("{0}, default", urlString);
+            }
+
+            switch (cursor.CursorType)
+            {
+                case CursorType.None: return "none";
+                case CursorType.No: return "not-allowed";
+                case CursorType.Arrow: return "default";
+                case CursorType.AppStarting: return "progress";
+                case CursorType.Cross: return "crosshair";
+                case CursorType.Help: return "help";
+                case CursorType.IBeam: return "text";
+                case CursorType.SizeAll: return "move";
+                case CursorType.SizeNESW: return "nesw-resize";
+                case CursorType.SizeNS: return "ns-resize";
+                case CursorType.SizeNWSE: return "nwse-resize";
+                case CursorType.SizeWE: return "ew-resize";
+                case CursorType.Wait: return "wait";
+                case CursorType.Hand: return "pointer";
+
+                case CursorType.UpArrow:
+                case CursorType.Pen:
+                case CursorType.ScrollNS:
+                case CursorType.ScrollWE:
+                case CursorType.ScrollAll:
+                case CursorType.ScrollN:
+                case CursorType.ScrollS:
+                case CursorType.ScrollW:
+                case CursorType.ScrollE:
+                case CursorType.ScrollNW:
+                case CursorType.ScrollNE:
+                case CursorType.ScrollSW:
+                case CursorType.ScrollSE:
+                case CursorType.ArrowCD:
+                    return "default";
+            }
+
+            throw new Granular.Exception("Unexpected CursorType \"{0}\"", cursor.CursorType);
         }
 
         public MouseButton ConvertBackMouseButton(short buttonIndex)
