@@ -44,6 +44,7 @@
     <Compile Include="Controls\Adorner.cs" />
     <Compile Include="Controls\AdornerLayer.cs" />
     <Compile Include="Controls\PasswordBox.cs" />
+    <Compile Include="Controls\ProgressBar.cs" />
     <Compile Include="Controls\RadioButton.cs" />
     <Compile Include="Controls\Image.cs" />
     <Compile Include="Controls\Primitives\TextBoxBase.cs" />

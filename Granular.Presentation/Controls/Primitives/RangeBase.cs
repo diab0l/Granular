@@ -26,14 +26,14 @@ namespace System.Windows.Controls.Primitives
             set { SetValue(ValueProperty, value); }
         }
 
-        public static readonly DependencyProperty MinimumProperty = DependencyProperty.Register("Minimum", typeof(double), typeof(RangeBase), new FrameworkPropertyMetadata());
+        public static readonly DependencyProperty MinimumProperty = DependencyProperty.Register("Minimum", typeof(double), typeof(RangeBase), new FrameworkPropertyMetadata(propertyChangedCallback: (sender, e) => ((RangeBase)sender).OnMinimumChanged(e)));
         public double Minimum
         {
             get { return (double)GetValue(MinimumProperty); }
             set { SetValue(MinimumProperty, value); }
         }
 
-        public static readonly DependencyProperty MaximumProperty = DependencyProperty.Register("Maximum", typeof(double), typeof(RangeBase), new FrameworkPropertyMetadata());
+        public static readonly DependencyProperty MaximumProperty = DependencyProperty.Register("Maximum", typeof(double), typeof(RangeBase), new FrameworkPropertyMetadata(propertyChangedCallback: (sender, e) => ((RangeBase)sender).OnMaximumChanged(e)));
         public double Maximum
         {
             get { return (double)GetValue(MaximumProperty); }
@@ -65,9 +65,19 @@ namespace System.Windows.Controls.Primitives
             VisualStateManager.GoToState(this, GetFocusState(), useTransitions);
         }
 
-        private void OnValueChanged(DependencyPropertyChangedEventArgs e)
+        protected virtual void OnValueChanged(DependencyPropertyChangedEventArgs e)
         {
             RaiseEvent(new RoutedPropertyChangedEventArgs<double>(ValueChangedEvent, this, (double)e.OldValue, (double)e.NewValue));
+        }
+
+        protected virtual void OnMinimumChanged(DependencyPropertyChangedEventArgs e)
+        {
+            //
+        }
+
+        protected virtual void OnMaximumChanged(DependencyPropertyChangedEventArgs e)
+        {
+            //
         }
 
         private string GetCommonState()
