@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Windows;
 
 namespace Granular.Host
 {
@@ -14,9 +15,10 @@ namespace Granular.Host
             //
         }
 
-        public void ScheduleTask(TimeSpan timeSpan, Action action)
+        public IDisposable ScheduleTask(TimeSpan timeSpan, Action action)
         {
-            System.Html.Window.SetTimeout(action, (int)timeSpan.TotalMilliseconds);
+            int token = System.Html.Window.SetTimeout(action, (int)timeSpan.TotalMilliseconds);
+            return new Disposable(() => System.Html.Window.ClearTimeout(token));
         }
     }
 }

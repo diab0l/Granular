@@ -6,14 +6,14 @@ namespace System.Windows.Threading
 {
     public interface ITaskScheduler
     {
-        void ScheduleTask(TimeSpan timeSpan, Action action);
+        IDisposable ScheduleTask(TimeSpan timeSpan, Action action);
     }
 
     public static class TaskSchedulerExtensions
     {
-        public static void ScheduleTask(this ITaskScheduler taskScheduler, Action action)
+        public static IDisposable ScheduleTask(this ITaskScheduler taskScheduler, Action action)
         {
-            taskScheduler.ScheduleTask(TimeSpan.Zero, action);
+            return taskScheduler.ScheduleTask(TimeSpan.Zero, action);
         }
     }
 }

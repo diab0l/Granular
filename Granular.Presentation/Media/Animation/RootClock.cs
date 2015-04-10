@@ -20,6 +20,10 @@ namespace System.Windows.Media.Animation
 
         private List<IClock> clocks;
         private DateTime startTime;
+        private IDisposable scheduledTick;
+
+        private int ticks;
+        private TimeSpan lastReport;
 
         private RootClock()
         {
@@ -49,12 +53,25 @@ namespace System.Windows.Media.Animation
         {
             TimeSpan tickTime = Time;
 
-            IEnumerable<ClockState> states = clocks.Select(clock => clock.Tick(tickTime)).ToArray();
+            IEnumerable<ClockState> states = clocks.ToArray().Select(clock => clock.Tick(tickTime)).ToArray();
             TimeSpan nextTick = states.Select(state => state.NextTick).DefaultIfEmpty(Granular.Compatibility.TimeSpan.MaxValue).Min();
 
-            if (nextTick < Granular.Compatibility.TimeSpan.MaxValue)
+            if (scheduledTick != null)
             {
-                ApplicationHost.Current.TaskScheduler.ScheduleTask(TimeSpan.FromMilliseconds(Math.Max((nextTick - Time).TotalMilliseconds, 25)), Tick);
+                scheduledTick.Dispose();
+                scheduledTick = null;
+            }
+
+            if (tickTime < Granular.Compatibility.TimeSpan.MaxValue)
+            {
+                scheduledTick = ApplicationHost.Current.TaskScheduler.ScheduleTask(TimeSpan.FromMilliseconds(Math.Max((nextTick - Time).TotalMilliseconds, 25)), Tick);
+            }
+
+            ticks++;
+            if (tickTime - lastReport >= TimeSpan.FromSeconds(1))
+            {
+                lastReport = tickTime;
+                Console.WriteLine(String.Format("Total ticks: {0}, rate: {1} ticks/sec", ticks, Math.Round(ticks / tickTime.TotalSeconds, 2)));
             }
 
             CleanClocks();

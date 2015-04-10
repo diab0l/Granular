@@ -53,18 +53,18 @@ namespace System.Windows.Threading
                 isEnabled = value;
                 if (isEnabled)
                 {
-                    ScheduleOperation();
+                    ScheduleTask();
                 }
                 else
                 {
-                    AbortOperation();
+                    CancelTask();
                 }
             }
         }
 
         private Dispatcher dispatcher;
         private ITaskScheduler scheduler;
-        private DispatcherOperation scheduledOperation;
+        private IDisposable scheduledTask;
 
         public DispatcherTimer() :
             this(Dispatcher.CurrentDispatcher, ApplicationHost.Current.TaskScheduler, TimeSpan.FromSeconds(1), DispatcherPriority.Normal)
@@ -90,32 +90,26 @@ namespace System.Windows.Threading
             IsEnabled = false;
         }
 
-        private void ScheduleOperation()
+        private void ScheduleTask()
         {
             if (!IsEnabled)
             {
                 return;
             }
 
-            DispatcherOperation operation = new DispatcherOperation(Priority, () => Tick.Raise(this));
-
-            scheduler.ScheduleTask(Interval, () =>
+            scheduledTask = scheduler.ScheduleTask(Interval, () =>
             {
-                if (operation.Status == DispatcherOperationStatus.Pending)
-                {
-                    dispatcher.BeginInvoke(operation);
-                    ScheduleOperation();
-                }
+                dispatcher.BeginInvoke(Priority, () => Tick.Raise(this));
+                ScheduleTask();
             });
-
-            scheduledOperation = operation;
         }
 
-        private void AbortOperation()
+        private void CancelTask()
         {
-            if (scheduledOperation != null && scheduledOperation.Status == DispatcherOperationStatus.Pending)
+            if (scheduledTask != null)
             {
-                scheduledOperation.Abort();
+                scheduledTask.Dispose();
+                scheduledTask = null;
             }
         }
     }

@@ -75,12 +75,22 @@ namespace System.Windows.Threading
 
             while (disableProcessingRequests == 0 && queue.TryDequeue(out operation))
             {
-                if (operation.Status == DispatcherOperationStatus.Pending)
+                if (operation.Status != DispatcherOperationStatus.Pending)
+                {
+                    continue;
+                }
+
+                IDisposable token = ApplicationHost.Current.TaskScheduler.ScheduleTask(operation.Invoke);
+
+                if (operation.Status == DispatcherOperationStatus.Pending) // "send" schedulers may invoke the operation immediately
                 {
                     operation.Completed += (sender, e) => ProcessQueue();
-                    operation.Aborted += (sender, e) => ProcessQueue();
+                    operation.Aborted += (sender, e) =>
+                    {
+                        token.Dispose();
+                        ProcessQueue();
+                    };
 
-                    ApplicationHost.Current.TaskScheduler.ScheduleTask(operation.Invoke);
                     return;
                 }
             }

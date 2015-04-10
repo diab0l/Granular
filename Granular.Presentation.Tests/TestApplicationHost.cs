@@ -32,7 +32,7 @@ namespace Granular.Presentation.Tests
 
     public class SendTaskScheduler : ITaskScheduler
     {
-        public void ScheduleTask(TimeSpan timeSpan, Action action)
+        public IDisposable ScheduleTask(TimeSpan timeSpan, Action action)
         {
             if (timeSpan > TimeSpan.Zero)
             {
@@ -40,6 +40,7 @@ namespace Granular.Presentation.Tests
             }
 
             action();
+            return Disposable.Empty;
         }
     }
 

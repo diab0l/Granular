@@ -6,6 +6,16 @@ namespace System.Windows
 {
     public class Disposable : IDisposable
     {
+        private class EmptyDisposable : IDisposable
+        {
+            public void Dispose()
+            {
+                //
+            }
+        }
+
+        public static readonly IDisposable Empty = new EmptyDisposable();
+
         private Action dispose;
 
         public Disposable(Action dispose)
