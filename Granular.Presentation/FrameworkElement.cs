@@ -118,10 +118,11 @@ namespace System.Windows
             private set { SetValue(ActualHeightPropertyKey, value); }
         }
 
+        public Size ActualSize { get; private set; }
+
         public Size Size { get { return new Size(Width, Height); } }
         public Size MinSize { get { return new Size(MinWidth, MinHeight); } }
         public Size MaxSize { get { return new Size(MaxWidth, MaxHeight); } }
-        public Size ActualSize { get { return new Size(ActualWidth, ActualHeight); } }
 
         public bool IsInitialized { get; private set; }
 
@@ -260,6 +261,7 @@ namespace System.Windows
             Triggers.CollectionChanged += OnTriggersCollectionChanged;
 
             resourcesCache = new CacheDictionary<object, object>(TryResolveResource);
+            ActualSize = Size.Empty;
         }
 
         public override string ToString()
@@ -339,8 +341,10 @@ namespace System.Windows
             Point visualOffset = alignedOffset + Margin.Location;
 
             VisualBounds = new Rect(visualOffset, arrangedSize);
+
             ActualWidth = arrangedSize.Width;
             ActualHeight = arrangedSize.Height;
+            ActualSize = arrangedSize;
         }
 
         protected virtual Size ArrangeOverride(Size finalSize)
