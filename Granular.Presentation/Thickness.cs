@@ -86,6 +86,16 @@ namespace System.Windows
             return thickness1 + (-thickness2);
         }
 
+        public static Thickness operator *(Thickness thickness, double scalar)
+        {
+            return new Thickness(thickness.Left * scalar, thickness.Top * scalar, thickness.Right * scalar, thickness.Bottom * scalar);
+        }
+
+        public static Thickness operator *(double scalar, Thickness thickness)
+        {
+            return thickness * scalar;
+        }
+
         public static implicit operator Thickness(double uniformLength)
         {
             return new Thickness(uniformLength);

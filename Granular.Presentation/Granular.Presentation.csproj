@@ -70,6 +70,7 @@
     <Compile Include="Media\Animation\AnimationLayerCollection.cs" />
     <Compile Include="Media\Animation\AnimationTimeline.cs" />
     <Compile Include="Media\Animation\ColorAnimation.cs" />
+    <Compile Include="Media\Animation\ThicknessAnimation.cs" />
     <Compile Include="Media\Animation\KeyFrame.cs" />
     <Compile Include="Media\Animation\KeyFramesAnimationTimeline.cs" />
     <Compile Include="Media\Animation\KeyTime.cs" />
