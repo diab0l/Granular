@@ -6,6 +6,7 @@ using System.Windows.Media;
 using System.Windows.Media.Animation;
 using Granular.Extensions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Windows;
 
 namespace Granular.Presentation.Media.Animation.Tests
 {
@@ -52,6 +53,40 @@ namespace Granular.Presentation.Media.Animation.Tests
             animation.KeyFrames.Add(new LinearColorKeyFrame { KeyTime = KeyTime.FromPercent(0.8), Value = Color.FromUInt32(60) });
 
             ColorAnimationBasicTest(animation, Color.FromUInt32(50), Color.FromUInt32(150), Color.FromUInt32(50), Color.FromUInt32(50), Color.FromUInt32(60));
+        }
+
+        [TestMethod]
+        public void ColorAnimationKeyFrameRepeatTest()
+        {
+            ColorAnimationUsingKeyFrames animation;
+
+            animation = new ColorAnimationUsingKeyFrames();
+            animation.KeyFrames.Add(new LinearColorKeyFrame { KeyTime = KeyTime.FromTimeSpan(TimeSpan.FromSeconds(0)), Value = Color.FromUInt32(0) });
+            animation.KeyFrames.Add(new LinearColorKeyFrame { KeyTime = KeyTime.FromTimeSpan(TimeSpan.FromSeconds(1)), Value = Color.FromUInt32(100) });
+            animation.Duration = Duration.FromTimeSpan(TimeSpan.FromSeconds(2));
+            animation.RepeatBehavior = RepeatBehavior.Forever;
+
+            TestRootClock rootClock = new TestRootClock();
+            AnimationTimelineClock clock = (AnimationTimelineClock)animation.CreateClock();
+            clock.Begin(rootClock);
+
+            rootClock.Tick(TimeSpan.FromSeconds(0.1));
+            Assert.AreEqual(Color.FromUInt32(10), (Color)animation.GetCurrentValue(0.0, 0.0, clock));
+
+            rootClock.Tick(TimeSpan.FromSeconds(0.9));
+            Assert.AreEqual(Color.FromUInt32(90), (Color)animation.GetCurrentValue(0.0, 0.0, clock));
+
+            rootClock.Tick(TimeSpan.FromSeconds(1));
+            Assert.AreEqual(Color.FromUInt32(100), (Color)animation.GetCurrentValue(0.0, 0.0, clock));
+
+            rootClock.Tick(TimeSpan.FromSeconds(1.9));
+            Assert.AreEqual(Color.FromUInt32(100), (Color)animation.GetCurrentValue(0.0, 0.0, clock));
+
+            rootClock.Tick(TimeSpan.FromSeconds(2.1));
+            Assert.AreEqual(Color.FromUInt32(10), (Color)animation.GetCurrentValue(0.0, 0.0, clock));
+
+            rootClock.Tick(TimeSpan.FromSeconds(2.9));
+            Assert.AreEqual(Color.FromUInt32(90), (Color)animation.GetCurrentValue(0.0, 0.0, clock));
         }
 
         private void ColorAnimationBasicTest(AnimationTimeline animation, Color defaultOriginValue, Color defaultDestinationValue, Color expectedStartValue, Color expectedMiddleValue, Color expectedEndValue)

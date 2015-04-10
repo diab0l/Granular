@@ -33,7 +33,7 @@ namespace System.Windows.Media.Animation
 
             TimeSpan duration = Duration.HasTimeSpan ? Duration.TimeSpan : GetKeyFramesDuration();
 
-            TimeSpan time = animationClock.Duration.Scale(animationClock.CurrentState.Progress);
+            TimeSpan time = duration.Scale(animationClock.CurrentState.Progress);
 
             int index = GetKeyFrameIndexAtTime(time, duration);
 
