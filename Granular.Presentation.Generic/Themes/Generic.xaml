@@ -10,6 +10,7 @@
         <ResourceDictionary Source="/Granular.Presentation.Generic;component/Styles/Focus.xaml"/>
         <ResourceDictionary Source="/Granular.Presentation.Generic;component/Styles/ItemsControl.xaml"/>
         <ResourceDictionary Source="/Granular.Presentation.Generic;component/Styles/PasswordBox.xaml"/>
+        <ResourceDictionary Source="/Granular.Presentation.Generic;component/Styles/ProgressBar.xaml"/>
         <ResourceDictionary Source="/Granular.Presentation.Generic;component/Styles/RadioButton.xaml"/>
         <ResourceDictionary Source="/Granular.Presentation.Generic;component/Styles/ScrollBar.xaml"/>
         <ResourceDictionary Source="/Granular.Presentation.Generic;component/Styles/ScrollViewer.xaml"/>

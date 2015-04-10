@@ -6,8 +6,6 @@
         <ResourceDictionary Source="/Granular.Presentation.Generic;component/Styles/Colors.xaml"/>
     </ResourceDictionary.MergedDictionaries>
 
-    <SolidColorBrush x:Key="InnerBorderBrush" Color="#FFFFFFFF"/>
-
     <LinearGradientBrush x:Key="BackgroundBrush" StartPoint="0,0" EndPoint="0,1">
         <GradientBrush.GradientStops>
             <GradientStop Color="#FFF8F8F8" Offset="0"/>

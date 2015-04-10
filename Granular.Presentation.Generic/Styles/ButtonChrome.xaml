@@ -13,8 +13,6 @@
         </GradientBrush.GradientStops>
     </LinearGradientBrush>
 
-    <SolidColorBrush x:Key="InnerBorderBrush" Color="#FFFFFFFF"/>
-
     <Style TargetType="{x:Type theme:ButtonChrome}">
         <Setter Property="Background" Value="{StaticResource BackgroundBrush}"/>
         <Setter Property="BorderBrush" Value="{StaticResource BorderBrush}"/>
