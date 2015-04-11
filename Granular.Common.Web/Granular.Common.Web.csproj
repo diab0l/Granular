@@ -51,6 +51,9 @@
     <Compile Include="..\Granular.Common\Collections\ReadOnlyStack.cs">
       <Link>Collections\ReadOnlyStack.cs</Link>
     </Compile>
+    <Compile Include="..\Granular.Common\Diagnostics\HitCounter.cs">
+      <Link>Diagnostics\HitCounter.cs</Link>
+    </Compile>
     <Compile Include="..\Granular.Common\Exception.cs">
       <Link>Exception.cs</Link>
     </Compile>

@@ -65,6 +65,7 @@
     <Compile Include="Compatibility\TimeSpan.cs" />
     <Compile Include="Compatibility\Type.cs" />
     <Compile Include="Compatibility\TypeExtensions.cs" />
+    <Compile Include="Diagnostics\HitCounter.cs" />
     <Compile Include="Extensions\AssemblyExtensions.cs" />
     <Compile Include="Extensions\CollectionExtensions.cs" />
     <Compile Include="Extensions\DoubleExtensions.cs" />
