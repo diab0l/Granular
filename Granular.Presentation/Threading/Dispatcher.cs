@@ -73,8 +73,10 @@ namespace System.Windows.Threading
         {
             DispatcherOperation operation;
 
-            while (disableProcessingRequests == 0 && queue.TryDequeue(out operation))
+            while (disableProcessingRequests == 0 && queue.TryPeek(out operation) && operation.Priority != DispatcherPriority.Inactive)
             {
+                queue.Dequeue();
+
                 if (operation.Status != DispatcherOperationStatus.Pending)
                 {
                     continue;

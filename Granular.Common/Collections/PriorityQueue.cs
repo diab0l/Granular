@@ -71,9 +71,8 @@ namespace Granular.Collections
         [System.Runtime.CompilerServices.Reflectable(false)]
         public bool TryDequeue(out TValue value)
         {
-            if (list.Count > 0)
+            if (TryPeek(out value))
             {
-                value = list.GetValues().First();
                 list.RemoveAt(0);
                 return true;
             }
@@ -84,12 +83,26 @@ namespace Granular.Collections
 
         public TValue Peek()
         {
-            if (list.Count > 0)
+            TValue value;
+            if (TryPeek(out value))
             {
-                return list.GetValues().First();
+                return value;
             }
 
             throw new InvalidOperationException("Queue is empty");
+        }
+
+        [System.Runtime.CompilerServices.Reflectable(false)]
+        public bool TryPeek(out TValue value)
+        {
+            if (list.Count > 0)
+            {
+                value = list.GetValues().First();
+                return true;
+            }
+
+            value = default(TValue);
+            return false;
         }
 
         public IEnumerator<KeyValuePair<TKey, TValue>> GetEnumerator()
