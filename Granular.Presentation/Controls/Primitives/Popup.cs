@@ -41,7 +41,6 @@ namespace System.Windows.Controls.Primitives
                     }
 
                     InvalidateMeasure();
-                    InvalidateArrange();
                 }
             }
 

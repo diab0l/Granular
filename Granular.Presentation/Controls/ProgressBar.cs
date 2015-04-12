@@ -153,7 +153,6 @@ namespace System.Windows.Controls
             if (!Indicator.Width.IsClose(width))
             {
                 Indicator.Width = width;
-                Indicator.UpdateLayout();
             }
         }
 

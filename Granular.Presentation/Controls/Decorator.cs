@@ -35,7 +35,6 @@ namespace System.Windows.Controls
                 }
 
                 InvalidateMeasure();
-                InvalidateArrange();
             }
         }
 

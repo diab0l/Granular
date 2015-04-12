@@ -120,13 +120,11 @@ namespace System.Windows.Controls
             BitmapSource = Source as BitmapSource;
 
             InvalidateMeasure();
-            InvalidateArrange();
         }
 
         private void OnBitmapSourceDownloadCompleted(object sender, EventArgs e)
         {
             InvalidateMeasure();
-            InvalidateArrange();
         }
 
         private void OnBitmapSourceDownloadFailed(object sender, EventArgs e)

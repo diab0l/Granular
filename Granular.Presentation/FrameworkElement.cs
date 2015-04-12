@@ -152,7 +152,6 @@ namespace System.Windows
                 }
 
                 InvalidateMeasure();
-                InvalidateArrange();
 
                 OnTemplateChildChanged();
             }
@@ -282,7 +281,6 @@ namespace System.Windows
                 if (metadata.AffectsMeasure)
                 {
                     InvalidateMeasure();
-                    InvalidateArrange();
                 }
 
                 if (metadata.AffectsArrange)

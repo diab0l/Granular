@@ -84,7 +84,6 @@ namespace System.Windows.Controls
             BringToFront(child);
 
             InvalidateMeasure();
-            InvalidateArrange();
         }
 
         public void RemoveChild(Visual child)
@@ -92,7 +91,6 @@ namespace System.Windows.Controls
             RemoveVisualChild(child);
 
             InvalidateMeasure();
-            InvalidateArrange();
         }
 
         protected override void OnMouseDown(MouseButtonEventArgs e)

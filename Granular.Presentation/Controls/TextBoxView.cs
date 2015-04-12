@@ -25,7 +25,6 @@ namespace System.Windows.Controls
                 text = value;
                 SetRenderElementsProperty(renderElement => renderElement.Text = text);
                 InvalidateMeasure();
-                InvalidateArrange();
                 TextChanged.Raise(this);
             }
         }
@@ -291,7 +290,6 @@ namespace System.Windows.Controls
             textBoxRenderElements.Add(factory, textBoxRenderElement);
 
             InvalidateMeasure();
-            InvalidateArrange();
 
             return textBoxRenderElement;
         }
