@@ -286,34 +286,49 @@ namespace System.Windows.Controls
                 return Size.Zero;
             }
 
-            using (DisableMeasureInvalidation())
+            ComputedHorizontalScrollBarVisibility = GetScrollBarVisibility(HorizontalScrollBarVisibility, false);
+            ComputedVerticalScrollBarVisibility = GetScrollBarVisibility(VerticalScrollBarVisibility, false);
+            ComputedScrollBarsVisibility = ComputedHorizontalScrollBarVisibility == Visibility.Visible && ComputedVerticalScrollBarVisibility == Visibility.Visible ? Visibility.Visible : Visibility.Collapsed;
+
+            // 3 passes, each pass can cause an overflow (and add a scrollbar which invalidates the measure), starting with no overlaps
+            for (int measurePass = 0; measurePass < 3; measurePass++)
             {
-                ComputedHorizontalScrollBarVisibility = GetScrollBarVisibility(HorizontalScrollBarVisibility, false);
-                ComputedVerticalScrollBarVisibility = GetScrollBarVisibility(VerticalScrollBarVisibility, false);
-                ComputedScrollBarsVisibility = ComputedHorizontalScrollBarVisibility == Visibility.Visible && ComputedVerticalScrollBarVisibility == Visibility.Visible ? Visibility.Visible : Visibility.Collapsed;
+                // computed visibilities can invalidate the ScrollBars measure, invalidate their path so they will be re-measured through TemplateChild
+                InvalidateElementMeasurePath(this, HorizontalScrollBar);
+                InvalidateElementMeasurePath(this, VerticalScrollBar);
 
-                // 3 passes, each pass can cause an overflow (and add a scrollbar which invalidates the measure), starting with no overlaps
-                for (int measurePass = 0; measurePass < 3; measurePass++)
+                TemplateChild.Measure(availableSize);
+
+                Visibility measuredHorizontalScrollBarVisibility = GetScrollBarVisibility(HorizontalScrollBarVisibility, scrollContentPresenter != null && scrollContentPresenter.ViewportSize.Width < scrollContentPresenter.ExtentSize.Width);
+                Visibility measuredVerticalScrollBarVisibility = GetScrollBarVisibility(VerticalScrollBarVisibility, scrollContentPresenter != null && scrollContentPresenter.ViewportSize.Height < scrollContentPresenter.ExtentSize.Height);
+
+                if (ComputedHorizontalScrollBarVisibility == measuredHorizontalScrollBarVisibility &&
+                    ComputedVerticalScrollBarVisibility == measuredVerticalScrollBarVisibility)
                 {
-                    TemplateChild.Measure(availableSize);
-
-                    Visibility measuredHorizontalScrollBarVisibility = GetScrollBarVisibility(HorizontalScrollBarVisibility, scrollContentPresenter != null && scrollContentPresenter.ViewportSize.Width < scrollContentPresenter.ExtentSize.Width);
-                    Visibility measuredVerticalScrollBarVisibility = GetScrollBarVisibility(VerticalScrollBarVisibility, scrollContentPresenter != null && scrollContentPresenter.ViewportSize.Height < scrollContentPresenter.ExtentSize.Height);
-
-                    if (ComputedHorizontalScrollBarVisibility == measuredHorizontalScrollBarVisibility &&
-                        ComputedVerticalScrollBarVisibility == measuredVerticalScrollBarVisibility)
-                    {
-                        break;
-                    }
-
-                    ComputedHorizontalScrollBarVisibility = measuredHorizontalScrollBarVisibility;
-                    ComputedVerticalScrollBarVisibility = measuredVerticalScrollBarVisibility;
-                    ComputedScrollBarsVisibility = ComputedHorizontalScrollBarVisibility == Visibility.Visible && ComputedVerticalScrollBarVisibility == Visibility.Visible ? Visibility.Visible : Visibility.Collapsed;
+                    break;
                 }
 
-                SetScrollInfoSizes();
+                ComputedHorizontalScrollBarVisibility = measuredHorizontalScrollBarVisibility;
+                ComputedVerticalScrollBarVisibility = measuredVerticalScrollBarVisibility;
+                ComputedScrollBarsVisibility = ComputedHorizontalScrollBarVisibility == Visibility.Visible && ComputedVerticalScrollBarVisibility == Visibility.Visible ? Visibility.Visible : Visibility.Collapsed;
+            }
 
-                return TemplateChild.DesiredSize;
+            SetScrollInfoSizes();
+
+            return TemplateChild.DesiredSize;
+        }
+
+        private static void InvalidateElementMeasurePath(UIElement root, UIElement element)
+        {
+            if (element == null)
+            {
+                return;
+            }
+
+            while (element != root)
+            {
+                element.InvalidateMeasure();
+                element = (UIElement)element.VisualParent;
             }
         }
 

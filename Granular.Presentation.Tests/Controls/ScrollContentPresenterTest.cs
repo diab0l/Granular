@@ -23,11 +23,13 @@ namespace Granular.Presentation.Tests.Controls
 
             public Size MeasureSize { get; set; }
 
-            public Size LastAvailableSize { get; private set; }
+            public Size LastAvailableSize1 { get; private set; }
+            public Size LastAvailableSize2 { get; private set; }
 
             protected override Size MeasureOverride(Size availableSize)
             {
-                LastAvailableSize = availableSize;
+                LastAvailableSize2 = LastAvailableSize1;
+                LastAvailableSize1 = availableSize;
                 return MeasureSize;
             }
 
@@ -70,17 +72,17 @@ namespace Granular.Presentation.Tests.Controls
 
             scrollContentPresenter.CanContentScroll = true;
             Assert.AreEqual(new Size(400, 200), scrollContentPresenter.ExtentSize);
-            Assert.AreEqual(new Size(200, 100), content.LastAvailableSize);
+            Assert.AreEqual(new Size(200, 100), content.LastAvailableSize1);
             Assert.IsFalse(content.CanHorizontallyScroll);
             Assert.IsFalse(content.CanVerticallyScroll);
 
             scrollContentPresenter.CanHorizontallyScroll = true;
-            Assert.AreEqual(new Size(Double.PositiveInfinity, 100), content.LastAvailableSize);
+            Assert.AreEqual(new Size(Double.PositiveInfinity, 100), content.LastAvailableSize2);
             Assert.IsTrue(content.CanHorizontallyScroll);
             Assert.IsFalse(content.CanVerticallyScroll);
 
             scrollContentPresenter.CanVerticallyScroll = true;
-            Assert.AreEqual(new Size(Double.PositiveInfinity, Double.PositiveInfinity), content.LastAvailableSize);
+            Assert.AreEqual(new Size(Double.PositiveInfinity, Double.PositiveInfinity), content.LastAvailableSize2);
             Assert.IsTrue(content.CanHorizontallyScroll);
             Assert.IsTrue(content.CanVerticallyScroll);
         }
