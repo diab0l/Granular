@@ -17,6 +17,7 @@ namespace Granular.Presentation.Tests.Controls
         public void DockPanelLayoutTest()
         {
             DockPanel panel = new DockPanel();
+            panel.InvalidateMeasure();
 
             FrameworkElement child1 = new FrameworkElement { Width = 100 };
             FrameworkElement child2 = new FrameworkElement { Height = 100 };

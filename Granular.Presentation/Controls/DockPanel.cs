@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Windows.Media;
 
 namespace System.Windows.Controls
 {
@@ -14,7 +15,7 @@ namespace System.Windows.Controls
 
     public class DockPanel : Panel
     {
-        public static readonly DependencyProperty DockProperty = DependencyProperty.RegisterAttached("Dock", typeof(Dock), typeof(DockPanel), new FrameworkPropertyMetadata());
+        public static readonly DependencyProperty DockProperty = DependencyProperty.RegisterAttached("Dock", typeof(Dock), typeof(DockPanel), new FrameworkPropertyMetadata(propertyChangedCallback: OnDockChanged));
 
         public static Dock GetDock(DependencyObject obj)
         {
@@ -124,6 +125,14 @@ namespace System.Windows.Controls
         private static Orientation GetDockOrientation(Dock dock)
         {
             return dock == Dock.Left || dock == Dock.Right ? Orientation.Horizontal : Orientation.Vertical;
+        }
+
+        private static void OnDockChanged(DependencyObject dependencyObject, DependencyPropertyChangedEventArgs e)
+        {
+            if (dependencyObject is Visual && ((Visual)dependencyObject).VisualParent is DockPanel)
+            {
+                ((DockPanel)((Visual)dependencyObject).VisualParent).InvalidateArrange();
+            }
         }
     }
 }
