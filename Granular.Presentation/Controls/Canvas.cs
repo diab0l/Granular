@@ -2,12 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using Granular.Extensions;
+using System.Windows.Media;
 
 namespace System.Windows.Controls
 {
     public class Canvas : Panel
     {
-        public static readonly DependencyProperty LeftProperty = DependencyProperty.RegisterAttached("Left", typeof(double), typeof(Canvas), new FrameworkPropertyMetadata(Double.NaN, affectsArrange: true));
+        public static readonly DependencyProperty LeftProperty = DependencyProperty.RegisterAttached("Left", typeof(double), typeof(Canvas), new FrameworkPropertyMetadata(Double.NaN, propertyChangedCallback: OnPositioningChanged));
 
         public static double GetLeft(DependencyObject obj)
         {
@@ -19,7 +20,7 @@ namespace System.Windows.Controls
             obj.SetValue(LeftProperty, value);
         }
 
-        public static readonly DependencyProperty TopProperty = DependencyProperty.RegisterAttached("Top", typeof(double), typeof(Canvas), new FrameworkPropertyMetadata(Double.NaN, affectsArrange: true));
+        public static readonly DependencyProperty TopProperty = DependencyProperty.RegisterAttached("Top", typeof(double), typeof(Canvas), new FrameworkPropertyMetadata(Double.NaN, propertyChangedCallback: OnPositioningChanged));
 
         public static double GetTop(DependencyObject obj)
         {
@@ -31,7 +32,7 @@ namespace System.Windows.Controls
             obj.SetValue(TopProperty, value);
         }
 
-        public static readonly DependencyProperty RightProperty = DependencyProperty.RegisterAttached("Right", typeof(double), typeof(Canvas), new FrameworkPropertyMetadata(Double.NaN, affectsArrange: true));
+        public static readonly DependencyProperty RightProperty = DependencyProperty.RegisterAttached("Right", typeof(double), typeof(Canvas), new FrameworkPropertyMetadata(Double.NaN, propertyChangedCallback: OnPositioningChanged));
 
         public static double GetRight(DependencyObject obj)
         {
@@ -43,7 +44,7 @@ namespace System.Windows.Controls
             obj.SetValue(RightProperty, value);
         }
 
-        public static readonly DependencyProperty BottomProperty = DependencyProperty.RegisterAttached("Bottom", typeof(double), typeof(Canvas), new FrameworkPropertyMetadata(Double.NaN, affectsArrange: true));
+        public static readonly DependencyProperty BottomProperty = DependencyProperty.RegisterAttached("Bottom", typeof(double), typeof(Canvas), new FrameworkPropertyMetadata(Double.NaN, propertyChangedCallback: OnPositioningChanged));
 
         public static double GetBottom(DependencyObject obj)
         {
@@ -77,6 +78,14 @@ namespace System.Windows.Controls
             }
 
             return finalSize;
+        }
+
+        private static void OnPositioningChanged(DependencyObject dependencyObject, DependencyPropertyChangedEventArgs e)
+        {
+            if (dependencyObject is Visual && ((Visual)dependencyObject).VisualParent is Canvas)
+            {
+                ((Canvas)((Visual)dependencyObject).VisualParent).InvalidateArrange();
+            }
         }
     }
 }
