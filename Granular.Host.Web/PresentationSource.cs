@@ -89,13 +89,13 @@ namespace Granular.Host
             System.Html.Window.OnScroll = OnMouseWheel;
             System.Html.Window.OnFocus = e => MouseDevice.Activate();
             System.Html.Window.OnBlur = e => MouseDevice.Deactivate();
-            System.Html.Window.OnResize = e => UpdateLayout();
+            System.Html.Window.OnResize = e => SetRootElementSize();
             System.Html.Window.OnClick = PreventMouseHandled;
             System.Html.Window.OnDblclick = PreventMouseHandled;
             System.Html.Window.OnContextmenu = PreventMouseHandled;
             System.Html.Window.AddEventListener("wheel", OnMouseWheel);
 
-            UpdateLayout();
+            SetRootElementSize();
             System.Html.Window.Document.Body.Style.Overflow = "hidden";
             System.Html.Window.Document.Body.AppendChild(((HtmlRenderElement)RootElement.GetRenderElement(HtmlRenderElementFactory.Default)).HtmlElement);
 
@@ -103,10 +103,10 @@ namespace Granular.Host
             KeyboardDevice.Activate();
         }
 
-        private void UpdateLayout()
+        private void SetRootElementSize()
         {
-            RootElement.Measure(new Size(window.InnerWidth, window.InnerHeight));
-            RootElement.Arrange(new System.Windows.Rect(0, 0, window.InnerWidth, window.InnerHeight));
+            ((FrameworkElement)RootElement).Width = window.InnerWidth;
+            ((FrameworkElement)RootElement).Height = window.InnerHeight;
         }
 
         private void OnKeyDown(Event e)

@@ -81,22 +81,22 @@ namespace Granular.Host.Wpf
             window = new wpf::System.Windows.Window { UseLayoutRounding = true, Content = container };
             window.Activated += (sender, e) => MouseDevice.Activate();
             window.Deactivated += (sender, e) => MouseDevice.Deactivate();
-            window.SizeChanged += (sender, e) => UpdateLayout();
+            window.SizeChanged += (sender, e) => SetRootElementSize();
             window.PreviewKeyDown += (sender, e) => e.Handled = KeyboardDevice.ProcessRawEvent(new RawKeyboardEventArgs(converter.ConvertBack(e.Key), converter.ConvertBack(e.KeyStates), e.IsRepeat, GetTimestamp()));
             window.PreviewKeyUp += (sender, e) => e.Handled = KeyboardDevice.ProcessRawEvent(new RawKeyboardEventArgs(converter.ConvertBack(e.Key), converter.ConvertBack(e.KeyStates), e.IsRepeat, GetTimestamp()));
             window.Show();
 
             container.Children.Add(((IWpfRenderElement)rootElement.GetRenderElement(WpfRenderElementFactory.Default)).WpfElement);
-            UpdateLayout();
+            SetRootElementSize();
 
             MouseDevice.Activate();
             KeyboardDevice.Activate();
         }
 
-        private void UpdateLayout()
+        private void SetRootElementSize()
         {
-            RootElement.Measure(new Size(container.ActualWidth, container.ActualHeight));
-            RootElement.Arrange(new Rect(container.ActualWidth, container.ActualHeight));
+            ((FrameworkElement)RootElement).Width = container.ActualWidth;
+            ((FrameworkElement)RootElement).Height = container.ActualHeight;
         }
 
         private void OnContainerMouseDown(object sender, wpf::System.Windows.Input.MouseButtonEventArgs e)
