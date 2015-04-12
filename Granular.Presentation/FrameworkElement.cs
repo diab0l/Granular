@@ -53,7 +53,7 @@ namespace System.Windows
             set { SetValue(VerticalAlignmentProperty, value); }
         }
 
-        public static readonly DependencyProperty MarginProperty = DependencyProperty.Register("Margin", typeof(Thickness), typeof(FrameworkElement), new FrameworkPropertyMetadata(Thickness.Zero, affectsArrange: true));
+        public static readonly DependencyProperty MarginProperty = DependencyProperty.Register("Margin", typeof(Thickness), typeof(FrameworkElement), new FrameworkPropertyMetadata(Thickness.Zero, affectsMeasure: true));
         public Thickness Margin
         {
             get { return (Thickness)GetValue(MarginProperty); }
