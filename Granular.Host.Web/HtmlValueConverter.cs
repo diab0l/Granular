@@ -82,9 +82,9 @@ namespace Granular.Host
 
         public string ToPixelString(double value)
         {
-            if (value.IsNaN())
+            if (value.IsNaN() || !Double.IsFinite(value))
             {
-                throw new Exception("Can't convert Double.NaN to pixel string");
+                throw new Granular.Exception("Can't convert {0} to pixel string", value);
             }
 
             return String.Format("{0}px", Math.Round(value, 2));

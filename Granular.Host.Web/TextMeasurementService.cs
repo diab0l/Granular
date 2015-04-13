@@ -38,7 +38,7 @@ namespace Granular.Host
             style.SetFontStyle(typeface.Style, converter);
             style.SetFontWeight(typeface.Weight, converter);
 
-            if (maxWidth.IsNaN())
+            if (maxWidth.IsNaN() || !Double.IsFinite(maxWidth))
             {
                 style.SetTextWrapping(TextWrapping.NoWrap, converter);
             }
