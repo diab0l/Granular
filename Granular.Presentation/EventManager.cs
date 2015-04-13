@@ -10,7 +10,7 @@ namespace System.Windows
 {
     public static class EventManager
     {
-        private class RoutedEventKey
+        private sealed class RoutedEventKey
         {
             public Type Owner { get; private set; }
             public string Name { get; private set; }
@@ -25,7 +25,7 @@ namespace System.Windows
             {
                 RoutedEventKey other = obj as RoutedEventKey;
 
-                return other != null && this.GetType() == other.GetType() &&
+                return Object.ReferenceEquals(this, other) || !Object.ReferenceEquals(other, null) &&
                     Object.Equals(this.Owner, other.Owner) &&
                     Object.Equals(this.Name, other.Name);
             }
@@ -41,7 +41,7 @@ namespace System.Windows
             }
         }
 
-        private class ClassHandlerKey
+        private sealed class ClassHandlerKey
         {
             public Type ClassType { get; private set; }
             public RoutedEvent RoutedEvent { get; private set; }
@@ -56,7 +56,7 @@ namespace System.Windows
             {
                 ClassHandlerKey other = obj as ClassHandlerKey;
 
-                return other != null && this.GetType() == other.GetType() &&
+                return Object.ReferenceEquals(this, other) || !Object.ReferenceEquals(other, null) &&
                     Object.Equals(this.ClassType, other.ClassType) &&
                     Object.Equals(this.RoutedEvent, other.RoutedEvent);
             }

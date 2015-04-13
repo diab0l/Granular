@@ -16,7 +16,7 @@ namespace System.Windows.Media.Animation
 
     public class Storyboard : ParallelTimeline
     {
-        private class TargetKey
+        private sealed class TargetKey
         {
             public IAnimatable Target { get; private set; }
             public DependencyProperty TargetProperty { get; private set; }
@@ -31,7 +31,7 @@ namespace System.Windows.Media.Animation
             {
                 TargetKey other = obj as TargetKey;
 
-                return other != null && this.GetType() == other.GetType() &&
+                return Object.ReferenceEquals(this, other) || !Object.ReferenceEquals(other, null) &&
                     Object.Equals(this.Target, other.Target) &&
                     Object.Equals(this.TargetProperty, other.TargetProperty);
             }

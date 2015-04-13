@@ -59,7 +59,7 @@ namespace System.Windows
         {
             Thickness other = obj as Thickness;
 
-            return other != null && this.GetType() == other.GetType() &&
+            return Object.ReferenceEquals(this, other) || !Object.ReferenceEquals(other, null) &&
                 Granular.Compatibility.EqualityComparer<double>.Default.Equals(this.Left, other.Left) &&
                 Granular.Compatibility.EqualityComparer<double>.Default.Equals(this.Top, other.Top) &&
                 Granular.Compatibility.EqualityComparer<double>.Default.Equals(this.Right, other.Right) &&

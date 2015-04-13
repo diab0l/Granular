@@ -5,7 +5,7 @@ using Granular.Extensions;
 
 namespace System.Windows.Media
 {
-    public class Matrix
+    public sealed class Matrix
     {
         public static readonly Matrix Identity = new Matrix(1, 0, 0, 1, 0, 0);
 
@@ -57,7 +57,7 @@ namespace System.Windows.Media
         {
             Matrix other = obj as Matrix;
 
-            return other != null && this.GetType() == other.GetType() &&
+            return Object.ReferenceEquals(this, other) || !Object.ReferenceEquals(other, null) &&
                 Granular.Compatibility.EqualityComparer<double>.Default.Equals(this.M11, other.M11) &&
                 Granular.Compatibility.EqualityComparer<double>.Default.Equals(this.M12, other.M12) &&
                 Granular.Compatibility.EqualityComparer<double>.Default.Equals(this.M21, other.M21) &&

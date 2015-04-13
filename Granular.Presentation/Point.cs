@@ -43,7 +43,7 @@ namespace System.Windows
         {
             Point other = obj as Point;
 
-            return other != null && this.GetType() == other.GetType() &&
+            return Object.ReferenceEquals(this, other) || !Object.ReferenceEquals(other, null) &&
                 Granular.Compatibility.EqualityComparer<double>.Default.Equals(this.X, other.X) &&
                 Granular.Compatibility.EqualityComparer<double>.Default.Equals(this.Y, other.Y);
         }
@@ -107,7 +107,7 @@ namespace System.Windows
 
         public static bool IsNullOrEmpty(Point point)
         {
-            return point == null || point.IsEmpty;
+            return ReferenceEquals(point, null) || point.IsEmpty;
         }
     }
 

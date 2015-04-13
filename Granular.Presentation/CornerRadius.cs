@@ -42,7 +42,7 @@ namespace System.Windows
         {
             CornerRadius other = obj as CornerRadius;
 
-            return other != null && this.GetType() == other.GetType() &&
+            return Object.ReferenceEquals(this, other) || !Object.ReferenceEquals(other, null) &&
                 Granular.Compatibility.EqualityComparer<double>.Default.Equals(this.TopLeft, other.TopLeft) &&
                 Granular.Compatibility.EqualityComparer<double>.Default.Equals(this.TopRight, other.TopRight) &&
                 Granular.Compatibility.EqualityComparer<double>.Default.Equals(this.BottomRight, other.BottomRight) &&

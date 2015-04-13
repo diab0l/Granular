@@ -6,7 +6,7 @@ using Granular.Extensions;
 
 namespace System.Windows.Media.Animation
 {
-    public class AnimationLayerKey
+    public sealed class AnimationLayerKey
     {
         public static readonly AnimationLayerKey Default = new AnimationLayerKey(null);
 
@@ -21,7 +21,7 @@ namespace System.Windows.Media.Animation
         {
             AnimationLayerKey other = obj as AnimationLayerKey;
 
-            return other != null && this.GetType() == other.GetType() &&
+            return Object.ReferenceEquals(this, other) || !Object.ReferenceEquals(other, null) &&
                 Object.Equals(this.layerOwner, other.layerOwner);
         }
 

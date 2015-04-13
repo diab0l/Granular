@@ -7,7 +7,7 @@ using System.Text;
 
 namespace Granular.BuildTasks
 {
-    public class MemberDefinition
+    public sealed class MemberDefinition
     {
         public string Name { get; private set; }
         public string TypeName { get; private set; }
@@ -22,7 +22,7 @@ namespace Granular.BuildTasks
         {
             MemberDefinition other = obj as MemberDefinition;
 
-            return other != null && this.GetType() == other.GetType() &&
+            return Object.ReferenceEquals(this, other) || !Object.ReferenceEquals(other, null) &&
                 this.Name == other.Name && this.TypeName == other.TypeName;
         }
 

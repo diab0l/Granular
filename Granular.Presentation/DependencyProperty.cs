@@ -23,7 +23,7 @@ namespace System.Windows
     [TypeConverter(typeof(DependencyPropertyTypeConverter))]
     public sealed class DependencyProperty
     {
-        private class DependencyPropertyHashKey
+        private sealed class DependencyPropertyHashKey
         {
             public Type Owner { get; private set; }
             public string Name { get; private set; }
@@ -38,7 +38,7 @@ namespace System.Windows
             {
                 DependencyPropertyHashKey other = obj as DependencyPropertyHashKey;
 
-                return other != null && this.GetType() == other.GetType() &&
+                return Object.ReferenceEquals(this, other) || !Object.ReferenceEquals(other, null) &&
                     Object.Equals(this.Owner, other.Owner) &&
                     Object.Equals(this.Name, other.Name);
             }

@@ -12,7 +12,7 @@ namespace System.Windows.Media.Animation
         Paced
     }
 
-    public class KeyTime
+    public sealed class KeyTime
     {
         public static readonly KeyTime Paced = new KeyTime(KeyTimeType.Paced, TimeSpan.Zero, Double.NaN);
         public static readonly KeyTime Uniform = new KeyTime(KeyTimeType.Uniform, TimeSpan.Zero, Double.NaN);
@@ -37,7 +37,7 @@ namespace System.Windows.Media.Animation
         {
             KeyTime other = obj as KeyTime;
 
-            return other != null && this.GetType() == other.GetType() &&
+            return Object.ReferenceEquals(this, other) || !Object.ReferenceEquals(other, null) &&
                 Object.Equals(this.Type, other.Type) &&
                 Object.Equals(this.TimeSpan, other.TimeSpan) &&
                 Object.Equals(this.Percent, other.Percent);

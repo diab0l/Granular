@@ -79,7 +79,7 @@ namespace System.Windows
         }
     }
 
-    public class TemplateKey : IResourceKey
+    public sealed class TemplateKey : IResourceKey
     {
         public Assembly Assembly { get { return TargetType != null ? TargetType.Assembly : null; } }
 
@@ -94,7 +94,7 @@ namespace System.Windows
         {
             TemplateKey other = obj as TemplateKey;
 
-            return other != null && this.GetType() == other.GetType() &&
+            return Object.ReferenceEquals(this, other) || !Object.ReferenceEquals(other, null) &&
                 Object.Equals(this.TargetType, other.TargetType);
         }
 

@@ -83,7 +83,7 @@ namespace System.Windows
         {
             Rect other = obj as Rect;
 
-            return other != null && this.GetType() == other.GetType() &&
+            return Object.ReferenceEquals(this, other) || !Object.ReferenceEquals(other, null) &&
                 Object.Equals(this.Location, other.Location) &&
                 Object.Equals(this.Size, other.Size);
         }
@@ -105,7 +105,7 @@ namespace System.Windows
 
         public static bool IsNullOrEmpty(Rect rect)
         {
-            return rect == null || rect.IsEmpty;
+            return ReferenceEquals(rect, null) || rect.IsEmpty;
         }
 
         public static Rect Parse(string value)

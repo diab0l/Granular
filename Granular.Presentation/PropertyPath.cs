@@ -36,7 +36,7 @@ namespace System.Windows
         }
     }
 
-    public class PropertyPathElement : IPropertyPathElement
+    public sealed class PropertyPathElement : IPropertyPathElement
     {
         public XamlName PropertyName { get; private set; }
 
@@ -49,7 +49,7 @@ namespace System.Windows
         {
             PropertyPathElement other = obj as PropertyPathElement;
 
-            return other != null && this.GetType() == other.GetType() &&
+            return Object.ReferenceEquals(this, other) || !Object.ReferenceEquals(other, null) &&
                 this.PropertyName == other.PropertyName;
         }
 
@@ -137,7 +137,7 @@ namespace System.Windows
         {
             IndexPropertyPathElement other = obj as IndexPropertyPathElement;
 
-            return other != null && this.GetType() == other.GetType() &&
+            return Object.ReferenceEquals(this, other) || !Object.ReferenceEquals(other, null) &&
                 this.PropertyName == other.PropertyName &&
                 this.IndexRawValues.SequenceEqual(other.IndexRawValues);
         }
@@ -214,7 +214,7 @@ namespace System.Windows
         }
     }
 
-    public class DependencyPropertyPathElement : IPropertyPathElement
+    public sealed class DependencyPropertyPathElement : IPropertyPathElement
     {
         public DependencyProperty DependencyProperty { get; private set; }
 
@@ -227,7 +227,7 @@ namespace System.Windows
         {
             DependencyPropertyPathElement other = obj as DependencyPropertyPathElement;
 
-            return other != null && this.GetType() == other.GetType() &&
+            return Object.ReferenceEquals(this, other) || !Object.ReferenceEquals(other, null) &&
                 this.DependencyProperty == other.DependencyProperty;
         }
 

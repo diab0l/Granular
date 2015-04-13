@@ -13,7 +13,7 @@ namespace System.Windows
 {
     public static class EmbeddedResourceLoader
     {
-        private class EmbeddedResourceKey
+        private sealed class EmbeddedResourceKey
         {
             public string AssemblyName { get; private set; }
             public string ResourcePath { get; private set; }
@@ -28,7 +28,7 @@ namespace System.Windows
             {
                 EmbeddedResourceKey other = obj as EmbeddedResourceKey;
 
-                return other != null && this.GetType() == other.GetType() &&
+                return Object.ReferenceEquals(this, other) || !Object.ReferenceEquals(other, null) &&
                     Object.Equals(this.AssemblyName, other.AssemblyName) &&
                     Object.Equals(this.ResourcePath, other.ResourcePath);
             }

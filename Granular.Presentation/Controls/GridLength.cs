@@ -15,7 +15,7 @@ namespace System.Windows.Controls
     }
 
     [TypeConverter(typeof(GridLengthTypeConverter))]
-    public class GridLength
+    public sealed class GridLength
     {
         public static readonly GridLength Auto = new GridLength(GridUnitType.Auto, 0);
         public static readonly GridLength Star = new GridLength(GridUnitType.Star, 1);
@@ -37,7 +37,7 @@ namespace System.Windows.Controls
         {
             GridLength other = obj as GridLength;
 
-            return other != null && this.GetType() == other.GetType() &&
+            return Object.ReferenceEquals(this, other) || !Object.ReferenceEquals(other, null) &&
                 this.GridUnitType == other.GridUnitType &&
                 Granular.Compatibility.EqualityComparer<double>.Default.Equals(this.Value, other.Value);
         }

@@ -10,7 +10,7 @@ using Granular.Extensions;
 namespace System.Windows.Media
 {
     [TypeConverter(typeof(ColorTypeConverter))]
-    public class Color
+    public sealed class Color
     {
         public byte A { get; private set; }
         public byte R { get; private set; }
@@ -29,7 +29,7 @@ namespace System.Windows.Media
         {
             Color other = obj as Color;
 
-            return other != null && this.GetType() == other.GetType() &&
+            return Object.ReferenceEquals(this, other) || !Object.ReferenceEquals(other, null) &&
                 this.A == other.A && this.R == other.R &&
                 this.G == other.G && this.B == other.B;
         }

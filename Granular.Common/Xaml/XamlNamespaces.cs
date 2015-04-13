@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace System.Xaml
 {
-    public class NamespaceDeclaration
+    public sealed class NamespaceDeclaration
     {
         public string Prefix { get; private set; }
         public string Namespace { get; private set; }
@@ -25,7 +25,7 @@ namespace System.Xaml
         {
             NamespaceDeclaration other = obj as NamespaceDeclaration;
 
-            return other != null && this.GetType() == other.GetType() &&
+            return Object.ReferenceEquals(this, other) || !Object.ReferenceEquals(other, null) &&
                 this.Prefix == other.Prefix && this.Namespace == other.Namespace;
         }
 

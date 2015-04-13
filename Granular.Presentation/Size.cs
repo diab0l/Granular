@@ -37,7 +37,7 @@ namespace System.Windows
         {
             Size other = obj as Size;
 
-            return other != null && this.GetType() == other.GetType() &&
+            return Object.ReferenceEquals(this, other) || !Object.ReferenceEquals(other, null) &&
                 Granular.Compatibility.EqualityComparer<double>.Default.Equals(this.Width, other.Width) &&
                 Granular.Compatibility.EqualityComparer<double>.Default.Equals(this.Height, other.Height);
         }
@@ -111,7 +111,7 @@ namespace System.Windows
 
         public static bool IsNullOrEmpty(Size size)
         {
-            return size == null || size.IsEmpty;
+            return ReferenceEquals(size, null) || size.IsEmpty;
         }
     }
 

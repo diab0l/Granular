@@ -91,7 +91,7 @@ namespace System.Windows
         }
     }
 
-    public class StyleKey : IResourceKey
+    public sealed class StyleKey : IResourceKey
     {
         public Assembly Assembly { get { return TargetType != null ? TargetType.Assembly : null; } }
 
@@ -106,7 +106,7 @@ namespace System.Windows
         {
             StyleKey other = obj as StyleKey;
 
-            return other != null && this.GetType() == other.GetType() &&
+            return Object.ReferenceEquals(this, other) || !Object.ReferenceEquals(other, null) &&
                 Object.Equals(this.TargetType, other.TargetType);
         }
 

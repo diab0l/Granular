@@ -12,7 +12,7 @@ namespace System.Windows
         Assembly Assembly { get; }
     }
 
-    public class ComponentResourceKey : IResourceKey, IMarkupExtension
+    public sealed class ComponentResourceKey : IResourceKey, IMarkupExtension
     {
         public Assembly Assembly { get { return TypeInTargetAssembly != null ? TypeInTargetAssembly.Assembly : null; } }
 
@@ -29,7 +29,7 @@ namespace System.Windows
         {
             ComponentResourceKey other = obj as ComponentResourceKey;
 
-            return other != null && this.GetType() == other.GetType() &&
+            return Object.ReferenceEquals(this, other) || !Object.ReferenceEquals(other, null) &&
                 Object.Equals(this.TypeInTargetAssembly, other.TypeInTargetAssembly) &&
                 Object.Equals(this.ResourceId, other.ResourceId);
         }

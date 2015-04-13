@@ -29,7 +29,7 @@ namespace System.Windows
         {
             Duration other = obj as Duration;
 
-            return other != null && this.GetType() == other.GetType() &&
+            return Object.ReferenceEquals(this, other) || !Object.ReferenceEquals(other, null) &&
                 this.durationType == other.durationType && this.TimeSpan == other.TimeSpan;
         }
 

@@ -5,7 +5,7 @@ using Granular.Extensions;
 
 namespace System.Xaml
 {
-    public class XamlName
+    public sealed class XamlName
     {
         public static readonly XamlName Empty = new XamlName(String.Empty);
 
@@ -52,7 +52,7 @@ namespace System.Xaml
         {
             XamlName other = obj as XamlName;
 
-            return other != null && this.GetType() == other.GetType() &&
+            return Object.ReferenceEquals(this, other) || !Object.ReferenceEquals(other, null) &&
                 this.LocalName == other.LocalName &&
                 this.NamespaceName == other.NamespaceName;
         }
