@@ -28,10 +28,14 @@ namespace System.Windows
             public Type Owner { get; private set; }
             public string Name { get; private set; }
 
+            private int hashCode;
+
             public DependencyPropertyHashKey(Type owner, string name)
             {
                 this.Owner = owner;
                 this.Name = name;
+
+                this.hashCode = Owner.GetHashCode() ^ Name.GetHashCode();
             }
 
             public override bool Equals(object obj)
@@ -45,7 +49,7 @@ namespace System.Windows
 
             public override int GetHashCode()
             {
-                return Owner.GetHashCode() ^ Name.GetHashCode();
+                return hashCode;
             }
 
             public override string ToString()
@@ -86,6 +90,7 @@ namespace System.Windows
         public bool IsReadOnly { get; private set; }
         public bool Inherits { get; private set; }
 
+        private DependencyPropertyHashKey hashKey;
         private Dictionary<Type, PropertyMetadata> typeMetadata;
         private PropertyMetadata ownerMetadata;
         private bool isAttached;
@@ -100,10 +105,11 @@ namespace System.Windows
         private static readonly ListDictionary<Type, DependencyProperty> typeRegisteredProperties = new ListDictionary<Type, DependencyProperty>();
         private static readonly CacheDictionary<Type, IEnumerable<DependencyProperty>> typeFlattenedPropertiesCache = new CacheDictionary<Type, IEnumerable<DependencyProperty>>(ResolveTypeFlattenedProperties);
 
-        private DependencyProperty(string name, Type propertyType, Type ownerType, PropertyMetadata metadata, ValidateValueCallback validateValueCallback, bool isAttached, bool isReadOnly)
+        private DependencyProperty(DependencyPropertyHashKey hashKey, Type propertyType, PropertyMetadata metadata, ValidateValueCallback validateValueCallback, bool isAttached, bool isReadOnly)
         {
-            this.Name = name;
-            this.OwnerType = ownerType;
+            this.hashKey = hashKey;
+            this.Name = hashKey.Name;
+            this.OwnerType = hashKey.Owner;
             this.PropertyType = propertyType;
             this.ValidateValueCallback = validateValueCallback;
             this.IsReadOnly = isReadOnly;
@@ -113,14 +119,14 @@ namespace System.Windows
             this.isAttached = isAttached;
 
             typeMetadata = new Dictionary<Type, PropertyMetadata>();
-            typeMetadata.Add(ownerType, ownerMetadata);
+            typeMetadata.Add(OwnerType, ownerMetadata);
 
             typeMetadataCache = new CacheDictionary<Type, PropertyMetadata>(ResolveTypeMetadata);
         }
 
         public override int GetHashCode()
         {
-            return OwnerType.GetHashCode() ^ Name.GetHashCode();
+            return hashKey.GetHashCode();
         }
 
         public override string ToString()
@@ -262,7 +268,7 @@ namespace System.Windows
                 metadata.DefaultValue = ConvertDefaultValue(key, metadata.DefaultValue, propertyType);
             }
 
-            DependencyProperty property = new DependencyProperty(key.Name, propertyType, key.Owner, metadata, validateValueCallback, isAttached, isReadOnly);
+            DependencyProperty property = new DependencyProperty(key, propertyType, metadata, validateValueCallback, isAttached, isReadOnly);
 
             if (!property.IsValidValue(metadata.DefaultValue))
             {
@@ -303,7 +309,7 @@ namespace System.Windows
         public static bool IsValidReadOnlyKey(DependencyPropertyKey key)
         {
             DependencyPropertyKey registeredKey;
-            return registeredReadOnlyPropertiesKey.TryGetValue(new DependencyPropertyHashKey(key.DependencyProperty.OwnerType, key.DependencyProperty.Name), out registeredKey) && registeredKey == key;
+            return registeredReadOnlyPropertiesKey.TryGetValue(key.DependencyProperty.hashKey, out registeredKey) && registeredKey == key;
         }
 
         private static bool IsValidType(object value, Type propertyType)
