@@ -244,7 +244,6 @@ namespace System.Windows.Controls.Primitives
 
             if (isOpen)
             {
-                popupContainer.UpdateLayout();
                 SetPosition();
 
                 OnOpened();
@@ -269,8 +268,10 @@ namespace System.Windows.Controls.Primitives
         {
             if (PopupLayer != null && IsOpen)
             {
+                popupContainer.Measure(PopupLayer.VisualSize);
+                Size popupSize = popupContainer.DesiredSize;
                 Rect placementTargetRect = PlacementTarget != null ? new Rect(PopupLayer.PointFromRoot(PlacementTarget.PointToRoot(Point.Zero)), PlacementTarget.VisualSize) : Rect.Zero;
-                Point position = System.Windows.Controls.Primitives.Placement.GetPosition(Placement, placementTargetRect, PlacementRectangle, GetMouseBounds(), new Point(HorizontalOffset, VerticalOffset), popupContainer.VisualSize, new Rect(PopupLayer.VisualSize));
+                Point position = System.Windows.Controls.Primitives.Placement.GetPosition(Placement, placementTargetRect, PlacementRectangle, GetMouseBounds(), new Point(HorizontalOffset, VerticalOffset), popupSize, new Rect(PopupLayer.VisualSize));
 
                 popupContainer.Position = position;
                 PopupLayer.UpdateLayout();
