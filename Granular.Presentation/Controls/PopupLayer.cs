@@ -17,7 +17,7 @@ namespace System.Windows.Controls
     {
         public event EventHandler ClosePopupRequest;
 
-        public static readonly DependencyProperty PositionProperty = DependencyProperty.RegisterAttached("Position", typeof(Point), typeof(PopupLayer), new FrameworkPropertyMetadata(affectsArrange: true));
+        public static readonly DependencyProperty PositionProperty = DependencyProperty.RegisterAttached("Position", typeof(Point), typeof(PopupLayer), new FrameworkPropertyMetadata(Point.Zero, propertyChangedCallback: OnPositionChanged));
 
         public static Point GetPosition(DependencyObject obj)
         {
@@ -128,6 +128,14 @@ namespace System.Windows.Controls
             if ((bool)e.NewValue && dependencyObject is Visual && ((Visual)dependencyObject).VisualParent is PopupLayer)
             {
                 ((PopupLayer)((Visual)dependencyObject).VisualParent).BringToFront((Visual)dependencyObject);
+            }
+        }
+
+        private static void OnPositionChanged(DependencyObject dependencyObject, DependencyPropertyChangedEventArgs e)
+        {
+            if (dependencyObject is Visual && ((Visual)dependencyObject).VisualParent is PopupLayer)
+            {
+                ((PopupLayer)((Visual)dependencyObject).VisualParent).InvalidateArrange();
             }
         }
     }
