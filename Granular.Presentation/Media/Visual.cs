@@ -190,6 +190,20 @@ namespace System.Windows.Media
             }
         }
 
+        private int visualLevel;
+        public int VisualLevel
+        {
+            get
+            {
+                if (visualLevel == -1)
+                {
+                    visualLevel = VisualParent != null ? VisualParent.VisualLevel + 1 : 0;
+                }
+
+                return visualLevel;
+            }
+        }
+
         private Dictionary<IRenderElementFactory, IVisualRenderElement> visualRenderElements;
         private bool containsContentRenderElement;
 
@@ -207,6 +221,8 @@ namespace System.Windows.Media
             VisualIsVisible = true;
             VisualOpacity = 1;
             VisualTransform = Transform.Identity;
+
+            visualLevel = -1;
         }
 
         public void AddVisualChild(Visual child)
@@ -282,7 +298,7 @@ namespace System.Windows.Media
 
         protected virtual void OnVisualAncestorChanged()
         {
-            //
+            visualLevel = -1;
         }
 
         private void OnVisualAncestorChanged(object sender, EventArgs e)

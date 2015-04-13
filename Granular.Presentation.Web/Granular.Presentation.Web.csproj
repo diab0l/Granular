@@ -343,6 +343,9 @@
     <Compile Include="..\Granular.Presentation\Input\MouseEventArgs.cs">
       <Link>Input\MouseEventArgs.cs</Link>
     </Compile>
+    <Compile Include="..\Granular.Presentation\LayoutManager.cs">
+      <Link>LayoutManager.cs</Link>
+    </Compile>
     <Compile Include="..\Granular.Presentation\Markup\ElementFactory.cs">
       <Link>Markup\ElementFactory.cs</Link>
     </Compile>

@@ -45,7 +45,24 @@ namespace System.Windows
 
         public bool IsArrangeValid { get; private set; }
 
-        public Size DesiredSize { get; private set; }
+        private Size desiredSize;
+        public Size DesiredSize
+        {
+            get { return desiredSize; }
+            set
+            {
+                if (desiredSize == value)
+                {
+                    return;
+                }
+
+                desiredSize = value;
+                if (VisualParent != null)
+                {
+                    ((UIElement)VisualParent).InvalidateMeasure();
+                }
+            }
+        }
 
         public Size RenderSize { get { return VisualSize; } }
 
@@ -158,13 +175,13 @@ namespace System.Windows
             }
         }
 
+        public Size PreviousAvailableSize { get; private set; }
+        public Rect PreviousFinalRect { get; private set; }
+
         private int measureInvalidationDisabled;
-        private DispatcherOperation updateLayoutOperation;
         private ListDictionary<RoutedEvent, RoutedEventHandlerItem> routedEventHandlers;
         private CacheDictionary<RoutedEvent, IEnumerable<RoutedEventHandlerItem>> routedEventHandlersCache;
-        private Size previousAvailableSize;
         private Size previousDesiredSize;
-        private Rect previousFinalRect;
         private IDisposable focus;
 
         public UIElement()
@@ -173,9 +190,9 @@ namespace System.Windows
             LogicalChildren = new ReadOnlyCollection<object>(logicalChildren);
             routedEventHandlers = new ListDictionary<RoutedEvent, RoutedEventHandlerItem>();
             routedEventHandlersCache = new CacheDictionary<RoutedEvent, IEnumerable<RoutedEventHandlerItem>>(ResolveRoutedEventHandlers);
-            previousAvailableSize = Size.Infinity;
+            PreviousFinalRect = Rect.Empty;
+            PreviousAvailableSize = Size.Empty;
             previousDesiredSize = Size.Empty;
-            previousFinalRect = Rect.Empty;
 
             SetIsVisible();
 
@@ -292,40 +309,39 @@ namespace System.Windows
 
         public void UpdateLayout()
         {
-            if (!previousFinalRect.IsEmpty)
-            {
-                Measure(previousFinalRect.Size);
-                Arrange(previousFinalRect);
-            }
-            else
-            {
-                Measure(Size.Infinity);
-                Arrange(new Rect(DesiredSize));
-            }
+            LayoutManager.Current.UpdateLayout();
         }
 
         public void Measure(Size availableSize)
         {
             using (Dispatcher.CurrentDispatcher.DisableProcessing())
             {
-                if (Visibility == Visibility.Collapsed)
+                using (DisableMeasureInvalidation())
                 {
-                    DesiredSize = Size.Zero;
-                    return;
+                    if (Visibility == Visibility.Collapsed)
+                    {
+                        LayoutManager.Current.RemoveMeasure(this);
+                        DesiredSize = Size.Zero;
+                        return;
+                    }
+
+                    if (IsMeasureValid && PreviousAvailableSize.IsClose(availableSize))
+                    {
+                        LayoutManager.Current.RemoveMeasure(this);
+                        DesiredSize = previousDesiredSize;
+                        return;
+                    }
+
+                    InvalidateArrange();
+
+                    DesiredSize = MeasureCore(availableSize);
+
+                    IsMeasureValid = true;
+
+                    PreviousAvailableSize = availableSize;
+                    previousDesiredSize = DesiredSize;
+                    LayoutManager.Current.RemoveMeasure(this);
                 }
-
-                if (IsMeasureValid && previousAvailableSize.IsClose(availableSize))
-                {
-                    DesiredSize = previousDesiredSize;
-                    return;
-                }
-
-                DesiredSize = MeasureCore(availableSize);
-
-                IsMeasureValid = true;
-
-                previousAvailableSize = availableSize;
-                previousDesiredSize = DesiredSize;
             }
         }
 
@@ -336,50 +352,45 @@ namespace System.Windows
 
         public void InvalidateMeasure()
         {
-            if (measureInvalidationDisabled > 0)
+            if (measureInvalidationDisabled > 0 || !IsMeasureValid && !PreviousAvailableSize.IsEmpty)
             {
                 return;
             }
 
             IsMeasureValid = false;
-
-            if (VisualParent != null)
-            {
-                ((UIElement)VisualParent).InvalidateMeasure();
-            }
-            else if (IsRootElement)
-            {
-                EnqueueUpdateLayout();
-            }
+            LayoutManager.Current.AddMeasure(this);
         }
 
         public void Arrange(Rect finalRect)
         {
             using (Dispatcher.CurrentDispatcher.DisableProcessing())
             {
-                if (Visibility == Visibility.Collapsed)
+                using (DisableMeasureInvalidation())
                 {
-                    return;
+                    if (Visibility == Visibility.Collapsed)
+                    {
+                        LayoutManager.Current.RemoveArrange(this);
+                        return;
+                    }
+
+                    if (IsArrangeValid && finalRect.IsClose(PreviousFinalRect))
+                    {
+                        LayoutManager.Current.RemoveArrange(this);
+                        return;
+                    }
+
+                    if (!IsMeasureValid || !PreviousAvailableSize.IsClose(finalRect.Size))
+                    {
+                        Measure(finalRect.Size);
+                    }
+
+                    ArrangeCore(finalRect);
+
+                    PreviousFinalRect = finalRect;
+                    IsArrangeValid = true;
+                    LayoutManager.Current.RemoveArrange(this);
                 }
-
-                if (IsArrangeValid && finalRect.IsClose(previousFinalRect))
-                {
-                    return;
-                }
-
-                if (!IsMeasureValid || !finalRect.Size.IsClose(previousAvailableSize))
-                {
-                    Measure(finalRect.Size);
-                }
-
-                ArrangeCore(finalRect);
-
-                IsArrangeValid = true;
-                previousFinalRect = finalRect;
             }
-
-            OnLayoutUpdated();
-            LayoutUpdated.Raise(this, EventArgs.Empty);
         }
 
         protected virtual void ArrangeCore(Rect finalRect)
@@ -389,35 +400,30 @@ namespace System.Windows
 
         public void InvalidateArrange()
         {
-            IsArrangeValid = false;
+            if (!IsArrangeValid && !PreviousFinalRect.IsEmpty)
+            {
+                return;
+            }
 
-            if (VisualParent != null)
-            {
-                ((UIElement)VisualParent).InvalidateArrange();
-            }
-            else if (IsRootElement)
-            {
-                EnqueueUpdateLayout();
-            }
+            IsArrangeValid = false;
+            LayoutManager.Current.AddArrange(this);
         }
 
-        protected Disposable DisableMeasureInvalidation()
+        private Disposable DisableMeasureInvalidation()
         {
             measureInvalidationDisabled++;
             return new Disposable(() => measureInvalidationDisabled--);
         }
 
+        internal void RaiseLayoutUpdated()
+        {
+            OnLayoutUpdated();
+            LayoutUpdated.Raise(this, EventArgs.Empty);
+        }
+
         protected virtual void OnLayoutUpdated()
         {
             //
-        }
-
-        private void EnqueueUpdateLayout()
-        {
-            if (updateLayoutOperation == null || updateLayoutOperation.Status != DispatcherOperationStatus.Pending)
-            {
-               updateLayoutOperation = Dispatcher.CurrentDispatcher.BeginInvoke(DispatcherPriority.Background, (Action)UpdateLayout);
-            }
         }
 
         protected override void OnVisualParentChanged(Visual oldVisualParent, Visual newVisualParent)
@@ -531,6 +537,19 @@ namespace System.Windows
 
         private void OnVisibilityChanged(DependencyPropertyChangedEventArgs e)
         {
+            if (Visibility != Visibility.Collapsed)
+            {
+                if (!IsMeasureValid)
+                {
+                    LayoutManager.Current.AddMeasure(this);
+                }
+
+                if (!IsArrangeValid)
+                {
+                    LayoutManager.Current.AddArrange(this);
+                }
+            }
+
             VisualIsVisible = Visibility == Visibility.Visible;
             SetIsVisible();
         }
