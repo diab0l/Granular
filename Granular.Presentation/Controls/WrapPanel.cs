@@ -63,7 +63,7 @@ namespace System.Windows.Controls
                 totalCrossLength += groupMaxCrossLength;
             }
 
-            return CreateSize(maxMainLength, totalCrossLength);
+            return finalSize;
         }
 
         // get groups of elements that should be arranged in the same row or column

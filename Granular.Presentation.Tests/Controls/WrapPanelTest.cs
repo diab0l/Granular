@@ -17,6 +17,7 @@ namespace Granular.Presentation.Tests.Controls
         public void WrapPanelLayoutTest()
         {
             WrapPanel panel = new WrapPanel();
+            panel.IsRootElement = true;
 
             FrameworkElement child1 = new FrameworkElement { Width = 200, Height = 100 };
             FrameworkElement child2 = new FrameworkElement { Width = 200, Height = 100 };
@@ -71,6 +72,7 @@ namespace Granular.Presentation.Tests.Controls
 
             XamlElement rootElement = XamlParser.Parse(text);
             WrapPanel panel = XamlLoader.Load(rootElement) as WrapPanel;
+            panel.IsRootElement = true;
 
             panel.Measure(new Size(1000, 1000));
 
