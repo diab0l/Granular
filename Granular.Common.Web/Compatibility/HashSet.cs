@@ -5,7 +5,7 @@ using System.Text;
 
 namespace System.Collections.Generic
 {
-    public class HashSet<T> : IEnumerable<T>
+    public class HashSet<T> : ICollection<T>
     {
         public int Count { get { return dictionary.Count; } }
 
