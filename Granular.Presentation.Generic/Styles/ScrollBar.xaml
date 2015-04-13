@@ -6,7 +6,7 @@
         <ResourceDictionary Source="/Granular.Presentation.Generic;component/Styles/Button.xaml"/>
     </ResourceDictionary.MergedDictionaries>
 
-    <SolidColorBrush x:Key="BackgroundBrush" Color="#FFFCFCFC"/>
+    <SolidColorBrush x:Key="BackgroundBrush" Color="#FFFFFFFF"/>
     <SolidColorBrush x:Key="BackgroundOverlayBrush" Color="#FFF0F0F0"/>
     <SolidColorBrush x:Key="ForegroundBrush" Color="#FF808080"/>
 
