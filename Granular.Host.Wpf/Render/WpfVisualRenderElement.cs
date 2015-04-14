@@ -91,7 +91,7 @@ namespace Granular.Host.Wpf.Render
         {
             this.converter = converter;
             children = new List<object>();
-            container = new wpf::System.Windows.Controls.Canvas { Name = owner.GetType().Name };
+            container = new wpf::System.Windows.Controls.Canvas { Name = owner.GetType().Name, DataContext = owner };
         }
 
         public void InsertChild(int index, object child)
