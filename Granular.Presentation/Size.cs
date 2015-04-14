@@ -17,6 +17,7 @@ namespace System.Windows
         public bool IsWidthEmpty { get; private set; }
         public bool IsHeightEmpty { get; private set; }
         public bool IsEmpty { get; private set; }
+        public bool IsPartiallyEmpty { get; private set; }
 
         public Size(double width, double height)
         {
@@ -26,6 +27,7 @@ namespace System.Windows
             this.IsWidthEmpty = Double.IsNaN(Width);
             this.IsHeightEmpty = Double.IsNaN(Height);
             this.IsEmpty = IsWidthEmpty && IsHeightEmpty;
+            this.IsPartiallyEmpty = IsWidthEmpty || IsHeightEmpty;
         }
 
         public override string ToString()
@@ -132,6 +134,29 @@ namespace System.Windows
 
         public static Size Min(this Size @this, Size size)
         {
+            if (@this.IsEmpty)
+            {
+                return size;
+            }
+
+            if (size.IsEmpty)
+            {
+                return @this;
+            }
+
+            if (!@this.IsPartiallyEmpty && !@size.IsPartiallyEmpty)
+            {
+                if (@this.Width < size.Width && @this.Height < size.Height)
+                {
+                    return @this;
+                }
+
+                if (@this.Width >= size.Width && @this.Height >= size.Height)
+                {
+                    return size;
+                }
+            }
+
             return new Size(
                 @this.IsWidthEmpty ? size.Width : (size.IsWidthEmpty ? @this.Width : Math.Min(@this.Width, size.Width)),
                 @this.IsHeightEmpty ? size.Height : (size.IsHeightEmpty ? @this.Height : Math.Min(@this.Height, size.Height)));
@@ -139,6 +164,29 @@ namespace System.Windows
 
         public static Size Max(this Size @this, Size size)
         {
+            if (@this.IsEmpty)
+            {
+                return size;
+            }
+
+            if (size.IsEmpty)
+            {
+                return @this;
+            }
+
+            if (!@this.IsPartiallyEmpty && !@size.IsPartiallyEmpty)
+            {
+                if (@this.Width > size.Width && @this.Height > size.Height)
+                {
+                    return @this;
+                }
+
+                if (@this.Width <= size.Width && @this.Height <= size.Height)
+                {
+                    return size;
+                }
+            }
+
             return new Size(
                 @this.IsWidthEmpty ? size.Width : (size.IsWidthEmpty ? @this.Width : Math.Max(@this.Width, size.Width)),
                 @this.IsHeightEmpty ? size.Height : (size.IsHeightEmpty ? @this.Height : Math.Max(@this.Height, size.Height)));

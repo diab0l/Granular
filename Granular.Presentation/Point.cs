@@ -125,12 +125,52 @@ namespace System.Windows
 
         public static Point Min(this Point @this, Point point)
         {
-            return @this.IsEmpty ? point : (point.IsEmpty ? @this : new Point(Math.Min(@this.X, point.X), Math.Min(@this.Y, point.Y)));
+            if (@this.IsEmpty)
+            {
+                return point;
+            }
+
+            if (point.IsEmpty)
+            {
+                return @this;
+            }
+
+            if (@this.X < point.X && @this.Y < point.Y)
+            {
+                return @this;
+            }
+
+            if (@this.X >= point.X && @this.Y >= point.Y)
+            {
+                return point;
+            }
+
+            return new Point(Math.Min(@this.X, point.X), Math.Min(@this.Y, point.Y));
         }
 
         public static Point Max(this Point @this, Point point)
         {
-            return @this.IsEmpty ? point : (point.IsEmpty ? @this : new Point(Math.Max(@this.X, point.X), Math.Max(@this.Y, point.Y)));
+            if (@this.IsEmpty)
+            {
+                return point;
+            }
+
+            if (point.IsEmpty)
+            {
+                return @this;
+            }
+
+            if (@this.X > point.X && @this.Y > point.Y)
+            {
+                return @this;
+            }
+
+            if (@this.X <= point.X && @this.Y <= point.Y)
+            {
+                return point;
+            }
+
+            return new Point(Math.Max(@this.X, point.X), Math.Max(@this.Y, point.Y));
         }
 
         public static Point Bounds(this Point point, Point minimum, Point maximum)
