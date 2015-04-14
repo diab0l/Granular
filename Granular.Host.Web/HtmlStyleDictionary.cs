@@ -11,35 +11,94 @@ namespace Granular.Host
 {
     public class HtmlStyleDictionary
     {
-        public event EventHandler Changed;
-
-        private Dictionary<string, string> dictionary;
-
-        public HtmlStyleDictionary()
+        public event EventHandler Invalidated;
+        private bool isValid;
+        public bool IsValid
         {
-            dictionary = new Dictionary<string, string>();
+            get { return isValid; }
+            set
+            {
+                if (isValid == value)
+                {
+                    return;
+                }
+
+                isValid = value;
+
+                if (!isValid)
+                {
+                    Invalidated.Raise(this);
+                }
+            }
         }
 
-        public string GetValue(string key)
+        private System.Html.Element element;
+
+        private Dictionary<string, string> dictionary;
+        private Dictionary<string, string> setProperties;
+        private HashSet<string> clearProperties;
+
+        public HtmlStyleDictionary(System.Html.Element element)
         {
-            return dictionary[key];
+            this.element = element;
+
+            dictionary = new Dictionary<string, string>();
+            setProperties = new Dictionary<string, string>();
+            clearProperties = new HashSet<string>();
+
+            IsValid = true;
         }
 
         public void SetValue(string key, string value)
         {
+            string currentValue;
+            if (dictionary.TryGetValue(key, out currentValue) && currentValue == value)
+            {
+                return;
+            }
+
             dictionary[key] = value;
-            Changed.Raise(this);
+            setProperties[key] = value;
+            clearProperties.Remove(key);
+
+            IsValid = false;
         }
 
         public void ClearValue(string key)
         {
+            if (!dictionary.ContainsKey(key))
+            {
+                return;
+            }
+
             dictionary.Remove(key);
-            Changed.Raise(this);
+            setProperties.Remove(key);
+            clearProperties.Add(key);
+
+            IsValid = false;
         }
 
-        public override string ToString()
+        public void Apply()
         {
-            return dictionary.Select(pair => String.Format("{0}: {1}", pair.Key, pair.Value)).DefaultIfEmpty(String.Empty).Aggregate((s1, s2) => String.Format("{0}; {1}", s1, s2));
+            if (IsValid)
+            {
+                return;
+            }
+
+            foreach (KeyValuePair<string, string> pair in setProperties)
+            {
+                element.Style.SetProperty(pair.Key, pair.Value);
+            }
+
+            foreach (string key in clearProperties)
+            {
+                element.Style.RemoveProperty(key);
+            }
+
+            setProperties.Clear();
+            clearProperties.Clear();
+
+            IsValid = true;
         }
     }
 

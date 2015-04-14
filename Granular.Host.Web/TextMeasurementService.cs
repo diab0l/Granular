@@ -15,6 +15,7 @@ namespace Granular.Host
 
         private IHtmlValueConverter converter;
         private Element htmlElement;
+        private HtmlStyleDictionary style;
 
         private TextMeasurementService(IHtmlValueConverter converter)
         {
@@ -26,10 +27,11 @@ namespace Granular.Host
             if (htmlElement == null)
             {
                 htmlElement = Document.CreateElement("div");
+                style = new HtmlStyleDictionary(htmlElement);
+
                 Document.Body.AppendChild(htmlElement);
             }
 
-            HtmlStyleDictionary style = new HtmlStyleDictionary();
             style.SetValue("position", "absolute");
             style.SetValue("visibility", "hidden");
             style.SetFontSize(fontSize, converter);
@@ -41,6 +43,7 @@ namespace Granular.Host
             if (maxWidth.IsNaN() || !Double.IsFinite(maxWidth))
             {
                 style.SetTextWrapping(TextWrapping.NoWrap, converter);
+                style.ClearValue("max-width");
             }
             else
             {
@@ -48,7 +51,8 @@ namespace Granular.Host
                 style.SetValue("max-width", converter.ToPixelString(maxWidth));
             }
 
-            htmlElement.SetAttribute("style", style.ToString());
+            style.Apply();
+
             htmlElement.InnerHTML = converter.ToHtmlContentString(text.DefaultIfNullOrEmpty("A"));
 
             return new Size(text.IsNullOrEmpty() ? 0 : htmlElement.OffsetWidth + 2, htmlElement.OffsetHeight);

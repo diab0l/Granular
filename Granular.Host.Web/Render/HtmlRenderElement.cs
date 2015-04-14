@@ -13,7 +13,6 @@ namespace Granular.Host.Render
         public HtmlStyleDictionary Style { get; private set; }
 
         private bool isRenderValid;
-        private bool isStyleValid;
         private IRenderQueue renderQueue;
 
         public HtmlRenderElement(IRenderQueue renderQueue) :
@@ -38,15 +37,10 @@ namespace Granular.Host.Render
                 this.HtmlElement.Id = htmlElementId;
             }
 
-            Style = new HtmlStyleDictionary();
-            Style.Changed += (sender, e) =>
-            {
-                isStyleValid = false;
-                InvalidateRender();
-            };
+            Style = new HtmlStyleDictionary(HtmlElement);
+            Style.Invalidated += (sender, e) => InvalidateRender();
 
             this.isRenderValid = true;
-            this.isStyleValid = true;
         }
 
         protected void InvalidateRender()
@@ -64,11 +58,7 @@ namespace Granular.Host.Render
         {
             isRenderValid = true;
 
-            if (!isStyleValid)
-            {
-                HtmlElement.SetAttribute("style", Style.ToString());
-                isStyleValid = true;
-            }
+            Style.Apply();
 
             OnRender();
         }
