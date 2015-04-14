@@ -79,7 +79,7 @@ namespace System.Windows
 
         public static Size operator -(Size size1, Size size2)
         {
-            return size1 + (-size2);
+            return new Size(size1.Width - size2.Width, size1.Height - size2.Height);
         }
 
         public static Size operator *(Size size, double factor)

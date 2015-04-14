@@ -83,7 +83,7 @@ namespace System.Windows
 
         public static Thickness operator -(Thickness thickness1, Thickness thickness2)
         {
-            return thickness1 + (-thickness2);
+            return new Thickness(thickness1.Left - thickness2.Left, thickness1.Top - thickness2.Top, thickness1.Right - thickness2.Right, thickness1.Bottom - thickness2.Bottom);
         }
 
         public static Thickness operator *(Thickness thickness, double scalar)
