@@ -259,8 +259,8 @@ namespace System.Windows
 
         protected void RaisePropertyChanged(DependencyPropertyChangedEventArgs e)
         {
-            OnPropertyChanged(e);
             e.Property.RaiseMetadataPropertyChangedCallback(this, e);
+            OnPropertyChanged(e);
             PropertyChanged.Raise(this, e);
         }
 
