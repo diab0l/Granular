@@ -78,24 +78,34 @@ namespace System.Windows.Controls
             IDefinitionBase[] currentRowDefinitions = RowDefinitions.Count == 0 ? defaultRowDefinitions : RowDefinitions.ToArray();
             IDefinitionBase[] currentColumnDefinitions = ColumnDefinitions.Count == 0 ? defaultColumnDefinitions : ColumnDefinitions.ToArray();
 
+            if (currentRowDefinitions.Length == 1 && currentColumnDefinitions.Length == 1)
+            {
+                // optimization
+                return MeasureSingleCell(availableSize, currentColumnDefinitions[0].Length, currentRowDefinitions[0].Length);
+            }
+
             double[] rowsLength = currentRowDefinitions.Select(definitionBase => definitionBase.Length.IsAbsolute ? definitionBase.Length.Value : 0).ToArray();
             double[] columnsLength = currentColumnDefinitions.Select(definitionBase => definitionBase.Length.IsAbsolute ? definitionBase.Length.Value : 0).ToArray();
 
+            int row;
+            int column;
+            int rowSpan;
+            int columnSpan;
+
             foreach (FrameworkElement child in Children)
             {
+                GetChildPosition(child, currentRowDefinitions.Length, currentColumnDefinitions.Length, out row, out column, out rowSpan, out columnSpan);
+
                 child.Measure(new Size(
-                    GetMeasureLength(currentColumnDefinitions, availableSize.Width, GetColumn(child), GetColumnSpan(child)),
-                    GetMeasureLength(currentRowDefinitions, availableSize.Height, GetRow(child), GetRowSpan(child))));
+                    GetMeasureLength(currentColumnDefinitions, availableSize.Width, column, columnSpan),
+                    GetMeasureLength(currentRowDefinitions, availableSize.Height, row, rowSpan)));
 
-                int row = GetRow(child);
-                int column = GetColumn(child);
-
-                if (GetRowSpan(child) == 1 && (currentRowDefinitions[row].Length.IsAuto || currentRowDefinitions[row].Length.IsStar))
+                if (rowSpan == 1 && (currentRowDefinitions[row].Length.IsAuto || currentRowDefinitions[row].Length.IsStar))
                 {
                     rowsLength[row] = Math.Max(rowsLength[row], child.DesiredSize.Height);
                 }
 
-                if (GetColumnSpan(child) == 1 && (currentColumnDefinitions[column].Length.IsAuto || currentColumnDefinitions[column].Length.IsStar))
+                if (columnSpan == 1 && (currentColumnDefinitions[column].Length.IsAuto || currentColumnDefinitions[column].Length.IsStar))
                 {
                     columnsLength[column] = Math.Max(columnsLength[column], child.DesiredSize.Width);
                 }
@@ -112,20 +122,30 @@ namespace System.Windows.Controls
             IDefinitionBase[] currentRowDefinitions = RowDefinitions.Count == 0 ? defaultRowDefinitions : RowDefinitions.ToArray();
             IDefinitionBase[] currentColumnDefinitions = ColumnDefinitions.Count == 0 ? defaultColumnDefinitions : ColumnDefinitions.ToArray();
 
+            if (currentRowDefinitions.Length == 1 && currentColumnDefinitions.Length == 1)
+            {
+                // optimization
+                return ArrangeSingleCell(finalSize, currentColumnDefinitions[0].Length, currentRowDefinitions[0].Length);
+            }
+
             double[] rowsLength = currentRowDefinitions.Select(definitionBase => definitionBase.Length.IsAbsolute ? definitionBase.Length.Value : 0).ToArray();
             double[] columnsLength = currentColumnDefinitions.Select(definitionBase => definitionBase.Length.IsAbsolute ? definitionBase.Length.Value : 0).ToArray();
 
+            int row;
+            int column;
+            int rowSpan;
+            int columnSpan;
+
             foreach (FrameworkElement child in Children)
             {
-                int row = GetRow(child);
-                int column = GetColumn(child);
+                GetChildPosition(child, currentRowDefinitions.Length, currentColumnDefinitions.Length, out row, out column, out rowSpan, out columnSpan);
 
-                if (GetRowSpan(child) == 1 && currentRowDefinitions[row].Length.IsAuto)
+                if (rowSpan == 1 && currentRowDefinitions[row].Length.IsAuto)
                 {
                     rowsLength[row] = Math.Max(rowsLength[row], child.DesiredSize.Height);
                 }
 
-                if (GetColumnSpan(child) == 1 && currentColumnDefinitions[column].Length.IsAuto)
+                if (columnSpan == 1 && currentColumnDefinitions[column].Length.IsAuto)
                 {
                     columnsLength[column] = Math.Max(columnsLength[column], child.DesiredSize.Width);
                 }
@@ -145,14 +165,56 @@ namespace System.Windows.Controls
 
             foreach (FrameworkElement child in Children)
             {
+                GetChildPosition(child, currentRowDefinitions.Length, currentColumnDefinitions.Length, out row, out column, out rowSpan, out columnSpan);
+
                 child.Arrange(new Rect(
-                    columnsLength.Take(GetColumn(child)).Sum(),
-                    rowsLength.Take(GetRow(child)).Sum(),
-                    columnsLength.Skip(GetColumn(child)).Take(GetColumnSpan(child)).Sum(),
-                    rowsLength.Skip(GetRow(child)).Take(GetRowSpan(child)).Sum()));
+                    columnsLength.Take(column).Sum(),
+                    rowsLength.Take(row).Sum(),
+                    columnsLength.Skip(column).Take(columnSpan).Sum(),
+                    rowsLength.Skip(row).Take(rowSpan).Sum()));
             }
 
             return finalSize;
+        }
+
+        // optimized measure for common usage
+        private Size MeasureSingleCell(Size availableSize, GridLength width, GridLength height)
+        {
+            Size desiredSize = Size.Zero;
+            availableSize = new Size(width.IsAbsolute ? width.Value : availableSize.Width, height.IsAbsolute ? height.Value : availableSize.Height);
+
+            foreach (FrameworkElement child in Children)
+            {
+                child.Measure(availableSize);
+                desiredSize = desiredSize.Max(child.DesiredSize);
+            }
+
+            return desiredSize;
+        }
+
+        // optimized arrange for common usage
+        private Size ArrangeSingleCell(Size finalSize, GridLength width, GridLength height)
+        {
+            double finalWidth = width.IsAbsolute ? width.Value : finalSize.Width;
+            double finalHeight = height.IsAbsolute ? height.Value : finalSize.Height;
+
+            Rect finalRect = new Rect(finalWidth, finalHeight);
+
+            foreach (FrameworkElement child in Children)
+            {
+                child.Arrange(finalRect);
+            }
+
+            return finalSize;
+        }
+
+        [System.Runtime.CompilerServices.Reflectable(false)]
+        private static void GetChildPosition(FrameworkElement child, int rowsCount, int columnsCount, out int row, out int column, out int rowSpan, out int columnSpan)
+        {
+            row = GetRow(child).Bounds(0, rowsCount - 1);
+            column = GetColumn(child).Bounds(0, columnsCount - 1);
+            rowSpan = GetRowSpan(child).Bounds(1, rowsCount - row);
+            columnSpan = GetColumnSpan(child).Bounds(1, columnsCount - column);
         }
 
         private static double GetMeasureLength(IDefinitionBase[] definitionBases, double availableLength, double start, double span)
@@ -225,6 +287,11 @@ namespace System.Windows.Controls
             if (starredAxis.Count() == 0 || totalStarsLength <= 0)
             {
                 return 0;
+            }
+
+            if (starredAxis.Count() == 1)
+            {
+                return totalStarsLength;
             }
 
             double[] bounds = starredAxis.Select(axis => axis.MinLength / axis.Length.Value).Union(starredAxis.Select(axis => axis.MaxLength / axis.Length.Value)).ToArray();
