@@ -72,20 +72,7 @@ namespace System.Windows
 
         public object GetValue(DependencyProperty dependencyProperty)
         {
-            IDependencyPropertyValueEntry entry;
-            if (entries.TryGetValue(dependencyProperty, out entry))
-            {
-                return entry.Value;
-            }
-
-            if (dependencyProperty.Inherits && inheritanceParent != null)
-            {
-                // create an entry to cache the inherited value
-                entry = GetInitializedValueEntry(dependencyProperty);
-                return entry.Value;
-            }
-
-            return dependencyProperty.GetMetadata(GetType()).DefaultValue;
+            return GetInitializedValueEntry(dependencyProperty).Value;
         }
 
         public object GetValue(DependencyPropertyKey dependencyPropertyKey)
@@ -206,14 +193,11 @@ namespace System.Windows
         private IDependencyPropertyValueEntry GetInitializedValueEntry(DependencyProperty dependencyProperty)
         {
             IDependencyPropertyValueEntry entry;
-
-            if (entries.TryGetValue(dependencyProperty, out entry))
+            if (!entries.TryGetValue(dependencyProperty, out entry))
             {
-                return entry;
+                entry = CreateDependencyPropertyValueEntry(dependencyProperty);
+                entries.Add(dependencyProperty, entry);
             }
-
-            entry = CreateDependencyPropertyValueEntry(dependencyProperty);
-            entries.Add(dependencyProperty, entry);
 
             return entry;
         }
@@ -246,18 +230,12 @@ namespace System.Windows
             }
 
             entry.SetBaseValue((int)BaseValueSource.Default, propertyMetadata.DefaultValue);
-
-            if (dependencyProperty.Inherits && inheritanceParent != null)
-            {
-                entry.SetBaseValue((int)BaseValueSource.Inherited, inheritanceParent.GetValue(dependencyProperty));
-            }
-
             entry.ValueChanged += (sender, e) => RaisePropertyChanged(new DependencyPropertyChangedEventArgs(dependencyProperty, e.OldValue, e.NewValue));
 
             return entry;
         }
 
-        protected void RaisePropertyChanged(DependencyPropertyChangedEventArgs e)
+        private void RaisePropertyChanged(DependencyPropertyChangedEventArgs e)
         {
             e.Property.RaiseMetadataPropertyChangedCallback(this, e);
             OnPropertyChanged(e);
@@ -290,33 +268,34 @@ namespace System.Windows
                 inheritanceParent.PropertyChanged += OnParentPropertyChanged;
             }
 
-            IEnumerable<DependencyProperty> inheritedProperties = DependencyProperty.GetFlattenedProperties(GetType()).Where(property => property.Inherits);
-
-            foreach (DependencyProperty property in inheritedProperties)
+            if (inheritanceParent == null)
             {
-                IDependencyPropertyValueEntry entry;
-                if (entries.TryGetValue(property, out entry))
+                // clear inherited values
+                foreach (KeyValuePair<DependencyProperty, IDependencyPropertyValueEntry> pair in entries)
                 {
-                    // copy or clear inherited value for existing entry
-                    if (inheritanceParent != null)
+                    if (pair.Key.Inherits)
                     {
-                        entry.SetBaseValue((int)BaseValueSource.Inherited, inheritanceParent.GetValue(property));
-                    }
-                    else
-                    {
-                        entry.ClearBaseValue((int)BaseValueSource.Inherited);
+                        pair.Value.ClearBaseValue((int)BaseValueSource.Inherited);
                     }
                 }
-                else
+            }
+            else
+            {
+                // update existing inherited values
+                foreach (KeyValuePair<DependencyProperty, IDependencyPropertyValueEntry> pair in entries)
                 {
-                    PropertyMetadata propertyMetadata = property.GetMetadata(GetType());
-                    object oldValue = oldInheritanceParent != null ? oldInheritanceParent.GetValue(property) : propertyMetadata.DefaultValue;
-                    object newValue = inheritanceParent != null ? inheritanceParent.GetValue(property) : propertyMetadata.DefaultValue;
-
-                    if (!Granular.Compatibility.EqualityComparer<object>.Default.Equals(oldValue, newValue))
+                    if (pair.Key.Inherits)
                     {
-                        // raise inherited value changed between parents
-                        RaisePropertyChanged(new DependencyPropertyChangedEventArgs(property, oldValue, newValue));
+                        pair.Value.SetBaseValue((int)BaseValueSource.Inherited, inheritanceParent.GetValue(pair.Key));
+                    }
+                }
+
+                // add missing inherited values
+                foreach (KeyValuePair<DependencyProperty, IDependencyPropertyValueEntry> pair in inheritanceParent.entries)
+                {
+                    if (pair.Key.Inherits)
+                    {
+                        GetInitializedValueEntry(pair.Key).SetBaseValue((int)BaseValueSource.Inherited, pair.Value.Value);
                     }
                 }
             }
@@ -331,21 +310,9 @@ namespace System.Windows
 
         private void OnParentPropertyChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
-            if (!e.Property.Inherits)
+            if (e.Property.Inherits)
             {
-                return;
-            }
-
-            IDependencyPropertyValueEntry entry;
-            if (entries.TryGetValue(e.Property, out entry))
-            {
-                // the entry will raise an event if it's changed
-                entry.SetBaseValue((int)BaseValueSource.Inherited, e.NewValue);
-            }
-            else
-            {
-                // entry doesn't exist so the value was inherited and changed
-                RaisePropertyChanged(e);
+                GetInitializedValueEntry(e.Property).SetBaseValue((int)BaseValueSource.Inherited, e.NewValue);
             }
         }
 
