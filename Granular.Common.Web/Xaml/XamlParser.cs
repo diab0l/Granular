@@ -57,7 +57,7 @@ namespace System.Xaml
 
             if (xmlElement.NodeName == "parsererror" || xmlElement.FirstChild != null && xmlElement.FirstChild.NodeName == "parsererror")
             {
-                throw new Exception(GetParserErrorMessage(xmlElement.TextContent));
+                throw new Granular.Exception(GetParserErrorMessage(xmlElement.TextContent));
             }
 
             return Parse(xmlElement);

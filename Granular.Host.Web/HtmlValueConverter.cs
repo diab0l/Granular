@@ -92,7 +92,7 @@ namespace Granular.Host
         {
             if (value.IsNaN())
             {
-                throw new Exception("Can't convert Double.NaN to percent string");
+                throw new Granular.Exception("Can't convert Double.NaN to percent string");
             }
 
             return String.Format("{0}%", Math.Round(value * 100, 2));
@@ -102,7 +102,7 @@ namespace Granular.Host
         {
             if (value.IsNaN())
             {
-                throw new Exception("Can't convert Double.NaN to degrees string");
+                throw new Granular.Exception("Can't convert Double.NaN to degrees string");
             }
 
             return String.Format("{0}deg", Math.Round(value, 2));

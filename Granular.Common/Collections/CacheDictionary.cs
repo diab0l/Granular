@@ -45,7 +45,7 @@ namespace Granular.Collections
                 return value;
             }
 
-            throw new Exception("Key \"{0}\" was not found", key);
+            throw new Granular.Exception("Key \"{0}\" was not found", key);
         }
 
         [System.Runtime.CompilerServices.Reflectable(false)]

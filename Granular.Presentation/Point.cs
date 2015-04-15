@@ -26,7 +26,7 @@ namespace System.Windows
         {
             if (x.IsNaN() || y.IsNaN())
             {
-                throw new Exception("Can't create point with NaN values");
+                throw new Granular.Exception("Can't create point with NaN values");
             }
 
             this.X = x;
