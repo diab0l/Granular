@@ -113,6 +113,11 @@ namespace System.Windows
 
     public static class PointExtensions
     {
+        public static bool IsNullOrEmpty(this Point point)
+        {
+            return Point.IsNullOrEmpty(point);
+        }
+
         public static Point DefaultIfNullOrEmpty(this Point point, Point defaultValue = null)
         {
             return Point.IsNullOrEmpty(point) ? (defaultValue ?? Point.Zero) : point;

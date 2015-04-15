@@ -44,7 +44,7 @@ namespace System.Windows
 
         public Rect(Point location, Size size)
         {
-            if (Point.IsNullOrEmpty(location) || Size.IsNullOrEmpty(size))
+            if (location.IsNullOrEmpty() || size.IsNullOrEmpty())
             {
                 this.IsEmpty = true;
 

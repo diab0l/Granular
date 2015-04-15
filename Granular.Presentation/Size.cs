@@ -120,6 +120,11 @@ namespace System.Windows
 
     public static class SizeExtensions
     {
+        public static bool IsNullOrEmpty(this Size size)
+        {
+            return Size.IsNullOrEmpty(size);
+        }
+
         public static Size DefaultIfNullOrEmpty(this Size size, Size defaultValue = null)
         {
             return Size.IsNullOrEmpty(size) ? (defaultValue ?? Size.Zero) : size;

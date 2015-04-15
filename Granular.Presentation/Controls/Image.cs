@@ -134,7 +134,7 @@ namespace System.Windows.Controls
 
         private static Rect GetStretchRect(Size size, Size availableSize, Stretch stretch, StretchDirection stretchDirection)
         {
-            if (Size.IsNullOrEmpty(size) || size == Size.Zero || availableSize == Size.Zero)
+            if (size.IsNullOrEmpty() || size == Size.Zero || availableSize == Size.Zero)
             {
                 return Rect.Zero;
             }
