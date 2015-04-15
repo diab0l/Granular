@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Media;
+using Granular.Extensions;
 
 namespace System.Windows.Controls
 {
@@ -97,7 +98,7 @@ namespace System.Windows.Controls
                 double cellLeft = childDock == Dock.Right ? remainingWidth - cellWidth : 0;
                 double cellTop = childDock == Dock.Bottom ? remainingHeight - cellHeight : 0;
 
-                child.Arrange(new Rect(left + cellLeft, top + cellTop, cellWidth, cellHeight));
+                child.Arrange(new Rect(left + cellLeft, top + cellTop, cellWidth.Max(0), cellHeight.Max(0)));
 
                 if (childDockOrientation == Orientation.Horizontal)
                 {

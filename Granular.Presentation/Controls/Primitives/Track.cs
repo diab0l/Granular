@@ -180,8 +180,8 @@ namespace System.Windows.Controls.Primitives
         private void ArrangeChild(UIElement child, double finalMainStart, double finalCrossStart, double finalMainLength, double finalCrossLength)
         {
             child.Arrange(Orientation == Orientation.Horizontal ?
-                new Rect(finalMainStart, finalCrossStart, finalMainLength, finalCrossLength) :
-                new Rect(finalCrossStart, finalMainStart, finalCrossLength, finalMainLength));
+                new Rect(finalMainStart, finalCrossStart, finalMainLength.Max(0), finalCrossLength.Max(0)) :
+                new Rect(finalCrossStart, finalMainStart, finalCrossLength.Max(0), finalMainLength.Max(0)));
         }
     }
 }
