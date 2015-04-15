@@ -69,6 +69,20 @@ namespace System.Windows.Controls
             set { SetValue(TextWrappingProperty, value); }
         }
 
+        public static readonly DependencyProperty HorizontalScrollBarVisibilityProperty = ScrollViewer.HorizontalScrollBarVisibilityProperty.AddOwner(typeof(TextBoxBase), new FrameworkPropertyMetadata(ScrollBarVisibility.Hidden, propertyChangedCallback: (sender, e) => ((TextBox)sender).textBoxView.HorizontalScrollBarVisibility = (ScrollBarVisibility)e.NewValue));
+        public ScrollBarVisibility HorizontalScrollBarVisibility
+        {
+            get { return (ScrollBarVisibility)GetValue(HorizontalScrollBarVisibilityProperty); }
+            set { SetValue(HorizontalScrollBarVisibilityProperty, value); }
+        }
+
+        public static readonly DependencyProperty VerticalScrollBarVisibilityProperty = ScrollViewer.VerticalScrollBarVisibilityProperty.AddOwner(typeof(TextBoxBase), new FrameworkPropertyMetadata(ScrollBarVisibility.Hidden, propertyChangedCallback: (sender, e) => ((TextBox)sender).textBoxView.VerticalScrollBarVisibility = (ScrollBarVisibility)e.NewValue));
+        public ScrollBarVisibility VerticalScrollBarVisibility
+        {
+            get { return (ScrollBarVisibility)GetValue(VerticalScrollBarVisibilityProperty); }
+            set { SetValue(VerticalScrollBarVisibilityProperty, value); }
+        }
+
         public int LineCount { get; private set; }
 
         private TextBoxView textBoxView;
@@ -80,16 +94,14 @@ namespace System.Windows.Controls
             TextBoxBase.AcceptsTabProperty.OverrideMetadata(typeof(TextBox), new FrameworkPropertyMetadata(propertyChangedCallback: (sender, e) => ((TextBox)sender).textBoxView.AcceptsTab = (bool)e.NewValue));
             TextBoxBase.IsReadOnlyProperty.OverrideMetadata(typeof(TextBox), new FrameworkPropertyMetadata(propertyChangedCallback: (sender, e) => ((TextBox)sender).textBoxView.IsReadOnly = ((TextBox)sender).IsReadOnly || !((TextBox)sender).IsEnabled));
             UIElement.IsEnabledProperty.OverrideMetadata(typeof(TextBox), new FrameworkPropertyMetadata(inherits: true, propertyChangedCallback: (sender, e) => ((TextBox)sender).textBoxView.IsReadOnly = ((TextBox)sender).IsReadOnly || !((TextBox)sender).IsEnabled));
-            ScrollViewer.HorizontalScrollBarVisibilityProperty.OverrideMetadata(typeof(TextBox), new FrameworkPropertyMetadata(ScrollBarVisibility.Disabled, propertyChangedCallback: (sender, e) => ((TextBox)sender).textBoxView.HorizontalScrollBarVisibility = (ScrollBarVisibility)e.NewValue));
-            ScrollViewer.VerticalScrollBarVisibilityProperty.OverrideMetadata(typeof(TextBox), new FrameworkPropertyMetadata(ScrollBarVisibility.Disabled, propertyChangedCallback: (sender, e) => ((TextBox)sender).textBoxView.VerticalScrollBarVisibility = (ScrollBarVisibility)e.NewValue));
             SpellCheck.IsEnabledProperty.OverrideMetadata(typeof(TextBox), new FrameworkPropertyMetadata(propertyChangedCallback: (sender, e) => ((TextBox)sender).textBoxView.SpellCheck = (bool)e.NewValue));
         }
 
         public TextBox()
         {
             textBoxView = new TextBoxView();
-            textBoxView.HorizontalScrollBarVisibility = (ScrollBarVisibility)GetValue(ScrollViewer.HorizontalScrollBarVisibilityProperty);
-            textBoxView.VerticalScrollBarVisibility = (ScrollBarVisibility)GetValue(ScrollViewer.VerticalScrollBarVisibilityProperty);
+            textBoxView.HorizontalScrollBarVisibility = HorizontalScrollBarVisibility;
+            textBoxView.VerticalScrollBarVisibility = VerticalScrollBarVisibility;
             textBoxView.SpellCheck = (bool)GetValue(SpellCheck.IsEnabledProperty);
             textBoxView.TextChanged += (sender, e) => this.Text = textBoxView.Text;
             textBoxView.CaretIndexChanged += (sender, e) => this.CaretIndex = textBoxView.CaretIndex;
