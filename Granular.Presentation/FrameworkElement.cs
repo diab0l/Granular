@@ -60,42 +60,42 @@ namespace System.Windows
             set { SetValue(MarginProperty, value); }
         }
 
-        public static readonly DependencyProperty WidthProperty = DependencyProperty.Register("Width", typeof(double), typeof(FrameworkElement), new FrameworkPropertyMetadata(Double.NaN, affectsMeasure: true));
+        public static readonly DependencyProperty WidthProperty = DependencyProperty.Register("Width", typeof(double), typeof(FrameworkElement), new FrameworkPropertyMetadata(Double.NaN, affectsMeasure: true, propertyChangedCallback: (sender, e) => ((FrameworkElement)sender).SetSize()));
         public double Width
         {
             get { return (double)GetValue(WidthProperty); }
             set { SetValue(WidthProperty, value); }
         }
 
-        public static readonly DependencyProperty HeightProperty = DependencyProperty.Register("Height", typeof(double), typeof(FrameworkElement), new FrameworkPropertyMetadata(Double.NaN, affectsMeasure: true));
+        public static readonly DependencyProperty HeightProperty = DependencyProperty.Register("Height", typeof(double), typeof(FrameworkElement), new FrameworkPropertyMetadata(Double.NaN, affectsMeasure: true, propertyChangedCallback: (sender, e) => ((FrameworkElement)sender).SetSize()));
         public double Height
         {
             get { return (double)GetValue(HeightProperty); }
             set { SetValue(HeightProperty, value); }
         }
 
-        public static readonly DependencyProperty MinWidthProperty = DependencyProperty.Register("MinWidth", typeof(double), typeof(FrameworkElement), new FrameworkPropertyMetadata(0.0, affectsMeasure: true));
+        public static readonly DependencyProperty MinWidthProperty = DependencyProperty.Register("MinWidth", typeof(double), typeof(FrameworkElement), new FrameworkPropertyMetadata(0.0, affectsMeasure: true, propertyChangedCallback: (sender, e) => ((FrameworkElement)sender).SetMinSize()));
         public double MinWidth
         {
             get { return (double)GetValue(MinWidthProperty); }
             set { SetValue(MinWidthProperty, value); }
         }
 
-        public static readonly DependencyProperty MinHeightProperty = DependencyProperty.Register("MinHeight", typeof(double), typeof(FrameworkElement), new FrameworkPropertyMetadata(0.0, affectsMeasure: true));
+        public static readonly DependencyProperty MinHeightProperty = DependencyProperty.Register("MinHeight", typeof(double), typeof(FrameworkElement), new FrameworkPropertyMetadata(0.0, affectsMeasure: true, propertyChangedCallback: (sender, e) => ((FrameworkElement)sender).SetMinSize()));
         public double MinHeight
         {
             get { return (double)GetValue(MinHeightProperty); }
             set { SetValue(MinHeightProperty, value); }
         }
 
-        public static readonly DependencyProperty MaxWidthProperty = DependencyProperty.Register("MaxWidth", typeof(double), typeof(FrameworkElement), new FrameworkPropertyMetadata(Double.PositiveInfinity, affectsMeasure: true));
+        public static readonly DependencyProperty MaxWidthProperty = DependencyProperty.Register("MaxWidth", typeof(double), typeof(FrameworkElement), new FrameworkPropertyMetadata(Double.PositiveInfinity, affectsMeasure: true, propertyChangedCallback: (sender, e) => ((FrameworkElement)sender).SetMaxSize()));
         public double MaxWidth
         {
             get { return (double)GetValue(MaxWidthProperty); }
             set { SetValue(MaxWidthProperty, value); }
         }
 
-        public static readonly DependencyProperty MaxHeightProperty = DependencyProperty.Register("MaxHeight", typeof(double), typeof(FrameworkElement), new FrameworkPropertyMetadata(Double.PositiveInfinity, affectsMeasure: true));
+        public static readonly DependencyProperty MaxHeightProperty = DependencyProperty.Register("MaxHeight", typeof(double), typeof(FrameworkElement), new FrameworkPropertyMetadata(Double.PositiveInfinity, affectsMeasure: true, propertyChangedCallback: (sender, e) => ((FrameworkElement)sender).SetMaxSize()));
         public double MaxHeight
         {
             get { return (double)GetValue(MaxHeightProperty); }
@@ -120,9 +120,9 @@ namespace System.Windows
 
         public Size ActualSize { get; private set; }
 
-        public Size Size { get { return new Size(Width, Height); } }
-        public Size MinSize { get { return new Size(MinWidth, MinHeight); } }
-        public Size MaxSize { get { return new Size(MaxWidth, MaxHeight); } }
+        public Size Size { get; private set; }
+        public Size MinSize { get; private set; }
+        public Size MaxSize { get; private set; }
 
         public bool IsInitialized { get; private set; }
 
@@ -260,7 +260,11 @@ namespace System.Windows
             Triggers.CollectionChanged += OnTriggersCollectionChanged;
 
             resourcesCache = new CacheDictionary<object, object>(TryResolveResource);
+
             ActualSize = Size.Empty;
+            Size = Size.Empty;
+            MinSize = Size.Zero;
+            MaxSize = Size.Infinity;
         }
 
         public override string ToString()
@@ -546,6 +550,21 @@ namespace System.Windows
                 e.Cursor = Cursor;
                 e.Handled = true;
             }
+        }
+
+        private void SetSize()
+        {
+            Size = new Size(Width, Height);
+        }
+
+        private void SetMinSize()
+        {
+            MinSize = new Size(MinWidth, MinHeight);
+        }
+
+        private void SetMaxSize()
+        {
+            MaxSize = new Size(MaxWidth, MaxHeight);
         }
 
         private static Point GetAlignmentOffset(Rect container, Size alignedRectSize, HorizontalAlignment horizontalAlignment, VerticalAlignment verticalAlignment)
