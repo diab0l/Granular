@@ -104,18 +104,20 @@ namespace System.Windows
 
         private static readonly DependencyPropertyKey ActualWidthPropertyKey = DependencyProperty.RegisterReadOnly("ActualWidth", typeof(double), typeof(FrameworkElement), new FrameworkPropertyMetadata());
         public static readonly DependencyProperty ActualWidthProperty = ActualWidthPropertyKey.DependencyProperty;
+        private IDependencyPropertyValueEntry actualWidthValueEntry;
         public double ActualWidth
         {
             get { return (double)GetValue(ActualWidthPropertyKey); }
-            private set { SetValue(ActualWidthPropertyKey, value); }
+            private set { actualWidthValueEntry.SetBaseValue((int)BaseValueSource.Local, value); }
         }
 
         private static readonly DependencyPropertyKey ActualHeightPropertyKey = DependencyProperty.RegisterReadOnly("ActualHeight", typeof(double), typeof(FrameworkElement), new FrameworkPropertyMetadata());
         public static readonly DependencyProperty ActualHeightProperty = ActualHeightPropertyKey.DependencyProperty;
+        private IDependencyPropertyValueEntry actualHeightValueEntry;
         public double ActualHeight
         {
             get { return (double)GetValue(ActualHeightPropertyKey); }
-            private set { SetValue(ActualHeightPropertyKey, value); }
+            private set { actualHeightValueEntry.SetBaseValue((int)BaseValueSource.Local, value); }
         }
 
         public Size ActualSize { get; private set; }
@@ -260,6 +262,9 @@ namespace System.Windows
             Triggers.CollectionChanged += OnTriggersCollectionChanged;
 
             resourcesCache = new CacheDictionary<object, object>(TryResolveResource);
+
+            actualWidthValueEntry = GetValueEntry(ActualWidthPropertyKey);
+            actualHeightValueEntry = GetValueEntry(ActualHeightPropertyKey);
 
             ActualSize = Size.Empty;
             Size = Size.Empty;
