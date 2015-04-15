@@ -252,15 +252,9 @@ namespace System.Windows
                 entry.SetBaseValue((int)BaseValueSource.Inherited, inheritanceParent.GetValue(dependencyProperty));
             }
 
-            entry.ValueChanged += OnDependencyPropertyValueChanged;
+            entry.ValueChanged += (sender, e) => RaisePropertyChanged(new DependencyPropertyChangedEventArgs(dependencyProperty, e.OldValue, e.NewValue));
 
             return entry;
-        }
-
-        private void OnDependencyPropertyValueChanged(object sender, ObservableValueChangedArgs e)
-        {
-            DependencyProperty dependencyProperty = entries.Where(keyValuePair => keyValuePair.Value == sender).Select(keyValuePair => keyValuePair.Key).First() as DependencyProperty;
-            RaisePropertyChanged(new DependencyPropertyChangedEventArgs(dependencyProperty, e.OldValue, e.NewValue));
         }
 
         protected void RaisePropertyChanged(DependencyPropertyChangedEventArgs e)
