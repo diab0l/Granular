@@ -1,7 +1,7 @@
 Granular - WPF for JavaScript!
 ==============================
 
-Granular is a re-implementation of WPF that was designed to run in the browser, it aims to bring to web applications the same development experience as WPF brings to desktop applications (with xamls, code-behind, _real_ MVVM and everything that is good).
+Granular is a re-implementation of WPF which is designed to run in the browser, it aims to bring to web applications the same development experience as WPF brings to desktop applications (with xamls, code-behind, _real_ MVVM).
 
 Using [Saltarelle C# to JavaScript compiler](http://www.saltarelle-compiler.com), Granular fills the gap between a simple JavaScript "Console Application" and a full "WPF Application".
 
@@ -23,11 +23,11 @@ Granular can be separated into two parts:
 Creating a new Granular application
 -----------------------------------
 
-Granular is portable and can be hosted in many environments, at the moment it can be hosted in a Windows desktop application and in the browser.
+Granular aims to seamlessly replace WPF so that Granular applications could be created **in addition** to existing WPF applications, share the same source code, and deploy to a different environment.
 
-Creating a Granular application is as easy as creating any other WPF application - you can fully run, test and debug it with Visual Studio (and even inspect it to some extent with [Snoop](http://snoopwpf.codeplex.com)), while you can simultaneously compile it to JavaScript and run it in the browser (and inspect the DOM).
+In addition to a browser, Granular can also be hosted in a desktop application, so that verifying compatibility with WPF could be easily done with Visual Studio.
 
-[See a complete guide here](https://github.com/yuvaltz/Granular/wiki/Creating-a-new-Granular-application)
+More details on Granular applications configuration [can be found here](https://github.com/yuvaltz/Granular/wiki/Creating-a-new-Granular-application)
 
 
 Supported features
