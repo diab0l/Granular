@@ -37,10 +37,11 @@ namespace System.Windows.Controls
 
         private static readonly DependencyPropertyKey ActualWidthPropertyKey = DependencyProperty.RegisterReadOnly("ActualWidth", typeof(double), typeof(ColumnDefinition), new FrameworkPropertyMetadata());
         public static readonly DependencyProperty ActualWidthProperty = ActualWidthPropertyKey.DependencyProperty;
+        private IDependencyPropertyValueEntry actualWidthValueEntry;
         public double ActualWidth
         {
-            get { return (double)GetValue(ActualWidthPropertyKey); }
-            private set { SetValue(ActualWidthPropertyKey, value); }
+            get { return (double)actualWidthValueEntry.Value; }
+            private set { actualWidthValueEntry.SetBaseValue((int)BaseValueSource.Local, value); }
         }
 
         double IDefinitionBase.ActualLength
@@ -52,6 +53,11 @@ namespace System.Windows.Controls
         double IDefinitionBase.MinLength { get { return MinWidth; } }
         double IDefinitionBase.MaxLength { get { return MaxWidth; } }
         GridLength IDefinitionBase.Length { get { return Width; } }
+
+        public ColumnDefinition()
+        {
+            actualWidthValueEntry = GetValueEntry(ActualWidthPropertyKey);
+        }
     }
 
     public class RowDefinition : Freezable, IDefinitionBase
@@ -79,10 +85,11 @@ namespace System.Windows.Controls
 
         private static readonly DependencyPropertyKey ActualHeightPropertyKey = DependencyProperty.RegisterReadOnly("ActualHeight", typeof(double), typeof(RowDefinition), new FrameworkPropertyMetadata());
         public static readonly DependencyProperty ActualHeightProperty = ActualHeightPropertyKey.DependencyProperty;
+        private IDependencyPropertyValueEntry actualHeightValueEntry;
         public double ActualHeight
         {
-            get { return (double)GetValue(ActualHeightPropertyKey); }
-            private set { SetValue(ActualHeightPropertyKey, value); }
+            get { return (double)actualHeightValueEntry.Value; }
+            private set { actualHeightValueEntry.SetBaseValue((int)BaseValueSource.Local, value); }
         }
 
         double IDefinitionBase.ActualLength
@@ -94,5 +101,10 @@ namespace System.Windows.Controls
         double IDefinitionBase.MinLength { get { return MinHeight; } }
         double IDefinitionBase.MaxLength { get { return MaxHeight; } }
         GridLength IDefinitionBase.Length { get { return Height; } }
+
+        public RowDefinition()
+        {
+            actualHeightValueEntry = GetValueEntry(ActualHeightPropertyKey);
+        }
     }
 }
