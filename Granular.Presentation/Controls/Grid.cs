@@ -125,7 +125,7 @@ namespace System.Windows.Controls
             if (currentRowDefinitions.Length == 1 && currentColumnDefinitions.Length == 1)
             {
                 // optimization
-                return ArrangeSingleCell(finalSize, currentColumnDefinitions[0].Length, currentRowDefinitions[0].Length);
+                return ArrangeSingleCell(finalSize, currentColumnDefinitions[0], currentRowDefinitions[0]);
             }
 
             double[] rowsLength = currentRowDefinitions.Select(definitionBase => definitionBase.Length.IsAbsolute ? definitionBase.Length.Value : 0).ToArray();
@@ -193,10 +193,10 @@ namespace System.Windows.Controls
         }
 
         // optimized arrange for common usage
-        private Size ArrangeSingleCell(Size finalSize, GridLength width, GridLength height)
+        private Size ArrangeSingleCell(Size finalSize, IDefinitionBase columnDefinition, IDefinitionBase rowDefinition)
         {
-            double finalWidth = width.IsAbsolute ? width.Value : finalSize.Width;
-            double finalHeight = height.IsAbsolute ? height.Value : finalSize.Height;
+            double finalWidth = rowDefinition.Length.IsAbsolute ? rowDefinition.Length.Value : finalSize.Width;
+            double finalHeight = columnDefinition.Length.IsAbsolute ? columnDefinition.Length.Value : finalSize.Height;
 
             Rect finalRect = new Rect(finalWidth, finalHeight);
 
@@ -204,6 +204,9 @@ namespace System.Windows.Controls
             {
                 child.Arrange(finalRect);
             }
+
+            columnDefinition.ActualLength = finalWidth;
+            rowDefinition.ActualLength = finalHeight;
 
             return finalSize;
         }
