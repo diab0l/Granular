@@ -85,6 +85,9 @@
     <Compile Include="..\Granular.Presentation\Controls\DockPanel.cs">
       <Link>Controls\DockPanel.cs</Link>
     </Compile>
+    <Compile Include="..\Granular.Presentation\Controls\Expander.cs">
+      <Link>Controls\Expander.cs</Link>
+    </Compile>
     <Compile Include="..\Granular.Presentation\Controls\FlowDirection.cs">
       <Link>Controls\FlowDirection.cs</Link>
     </Compile>

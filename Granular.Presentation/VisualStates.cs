@@ -20,5 +20,9 @@ namespace System.Windows
         public const string CheckedState = "Checked";
         public const string UncheckedState = "Unchecked";
         public const string IndeterminateState = "Indeterminate";
+
+        public const string ExpansionStates = "ExpansionStates";
+        public const string ExpandedState = "Expanded";
+        public const string CollapsedState = "Collapsed";
     }
 }
