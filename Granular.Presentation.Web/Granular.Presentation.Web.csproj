@@ -94,6 +94,9 @@
     <Compile Include="..\Granular.Presentation\Controls\GridLength.cs">
       <Link>Controls\GridLength.cs</Link>
     </Compile>
+    <Compile Include="..\Granular.Presentation\Controls\HeaderedContentControl.cs">
+      <Link>Controls\HeaderedContentControl.cs</Link>
+    </Compile>
     <Compile Include="..\Granular.Presentation\Controls\Image.cs">
       <Link>Controls\Image.cs</Link>
     </Compile>

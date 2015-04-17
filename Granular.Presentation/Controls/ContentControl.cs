@@ -9,7 +9,7 @@ namespace System.Windows.Controls
     [ContentProperty("Content")]
     public class ContentControl : Control, IItemContainer
     {
-        public static readonly DependencyProperty ContentProperty = DependencyProperty.Register("Content", typeof(object), typeof(ContentControl), new FrameworkPropertyMetadata(propertyChangedCallback: (sender, e) => (sender as ContentControl).OnContentChanged(e)));
+        public static readonly DependencyProperty ContentProperty = DependencyProperty.Register("Content", typeof(object), typeof(ContentControl), new FrameworkPropertyMetadata(propertyChangedCallback: (sender, e) => ((ContentControl)sender).OnContentChanged(e)));
         public object Content
         {
             get { return (object)GetValue(ContentProperty); }
@@ -52,7 +52,7 @@ namespace System.Windows.Controls
             AddLogicalChild(e.NewValue);
         }
 
-        public void PrepareContainerForItem(object item, DataTemplate template)
+        public virtual void PrepareContainerForItem(object item, DataTemplate template)
         {
             if (!ContainsValue(ContentTemplateProperty) && !ContainsValue(ContentTemplateSelectorProperty))
             {
@@ -63,7 +63,7 @@ namespace System.Windows.Controls
             Content = item;
         }
 
-        public void ClearContainerForItem(object item)
+        public virtual void ClearContainerForItem(object item)
         {
             if (isContainerTemplate)
             {
