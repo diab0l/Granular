@@ -51,8 +51,16 @@
                                 </VisualStateGroup.Transitions>
                                 <VisualState x:Name="Normal"/>
                                 <VisualState x:Name="MouseOver"/>
-                                <VisualState x:Name="Pressed"/>
-                                <VisualState x:Name="Disabled"/>
+                                <VisualState x:Name="Pressed">
+                                    <Storyboard>
+                                        <DoubleAnimation Storyboard.TargetName="backgroundOverlay" Storyboard.TargetProperty="(UIElement.Opacity)" Duration="0" To="1" />
+                                    </Storyboard>
+                                </VisualState>
+                                <VisualState x:Name="Disabled">
+                                    <Storyboard>
+                                        <DoubleAnimation Storyboard.TargetName="backgroundOverlay" Storyboard.TargetProperty="(UIElement.Opacity)" Duration="0" To="0" />
+                                    </Storyboard>
+                                </VisualState>
                             </VisualStateGroup>
                         </VisualStateManager.VisualStateGroups>
 
