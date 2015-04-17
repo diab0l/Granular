@@ -61,7 +61,7 @@ namespace System.Windows.Controls.Primitives
 
         protected virtual void ToggleState()
         {
-            IsChecked = GetToggledState(IsChecked, IsThreeState);
+            SetCurrentValue(IsCheckedProperty, GetToggledState(IsChecked, IsThreeState));
         }
 
         protected virtual void OnIsCheckedChanged(DependencyPropertyChangedEventArgs e)
