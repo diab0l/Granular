@@ -7,6 +7,7 @@
         <ResourceDictionary Source="/Granular.Presentation.Generic;component/Styles/ButtonChrome.xaml"/>
         <ResourceDictionary Source="/Granular.Presentation.Generic;component/Styles/CheckBox.xaml"/>
         <ResourceDictionary Source="/Granular.Presentation.Generic;component/Styles/ContentControl.xaml"/>
+        <ResourceDictionary Source="/Granular.Presentation.Generic;component/Styles/Expander.xaml"/>
         <ResourceDictionary Source="/Granular.Presentation.Generic;component/Styles/Focus.xaml"/>
         <ResourceDictionary Source="/Granular.Presentation.Generic;component/Styles/ItemsControl.xaml"/>
         <ResourceDictionary Source="/Granular.Presentation.Generic;component/Styles/PasswordBox.xaml"/>
