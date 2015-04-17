@@ -26,16 +26,18 @@ namespace System.Windows
     public class ValueSource
     {
         public BaseValueSource BaseValueSource { get; private set; }
+        public bool IsExpression { get; private set; }
+        public bool IsCurrent { get; private set; }
         public bool IsAnimated { get; private set; }
         public bool IsCoerced { get; private set; }
-        public bool IsExpression { get; private set; }
 
-        public ValueSource(BaseValueSource baseValueSource, bool isAnimated, bool isCoerced, bool isExpression)
+        public ValueSource(BaseValueSource baseValueSource, bool isExpression, bool isCurrent, bool isAnimated, bool isCoerced)
         {
             this.BaseValueSource = baseValueSource;
-            this.IsAnimated = isAnimated;
-            this.IsCoerced  = isCoerced;
             this.IsExpression = isExpression;
+            this.IsCurrent = isCurrent;
+            this.IsAnimated = isAnimated;
+            this.IsCoerced = isCoerced;
         }
     }
 
@@ -82,27 +84,39 @@ namespace System.Windows
 
         public void SetValue(DependencyProperty dependencyProperty, object value, BaseValueSource source = BaseValueSource.Local)
         {
-            SetValue(dependencyProperty, null, value, source);
+            SetValue(dependencyProperty, null, value, source: source);
         }
 
         public void SetValue(DependencyPropertyKey dependencyPropertyKey, object value, BaseValueSource source = BaseValueSource.Local)
         {
-            SetValue(dependencyPropertyKey.DependencyProperty, dependencyPropertyKey, value, source);
+            SetValue(dependencyPropertyKey.DependencyProperty, dependencyPropertyKey, value, source: source);
         }
 
-        private void SetValue(DependencyProperty dependencyProperty, DependencyPropertyKey dependencyPropertyKey, object value, BaseValueSource source)
+        public void SetCurrentValue(DependencyProperty dependencyProperty, object value)
+        {
+            SetValue(dependencyProperty, null, value, setCurrentValue: true);
+        }
+
+        public void SetCurrentValue(DependencyPropertyKey dependencyPropertyKey, object value)
+        {
+            SetValue(dependencyPropertyKey.DependencyProperty, dependencyPropertyKey, value, setCurrentValue: true);
+        }
+
+        private void SetValue(DependencyProperty dependencyProperty, DependencyPropertyKey dependencyPropertyKey, object value, bool setCurrentValue = false, BaseValueSource source = BaseValueSource.Unknown)
         {
             VerifyReadOnlyProperty(dependencyProperty, dependencyPropertyKey);
 
             IExpressionProvider newExpressionProvider = value as IExpressionProvider;
             if (newExpressionProvider == null && !dependencyProperty.IsValidValue(value))
             {
-                return;
+                return; // invalid value
             }
 
             IDependencyPropertyValueEntry entry = GetInitializedValueEntry(dependencyProperty);
 
-            IExpression oldExpression = entry.GetBaseValue((int)source, false) as IExpression;
+            IExpression oldExpression = setCurrentValue ?
+                entry.GetBaseValue(false) as IExpression : // current value may be set in the top priority expression
+                entry.GetBaseValue((int)source, false) as IExpression;
 
             if (newExpressionProvider != null)
             {
@@ -110,15 +124,22 @@ namespace System.Windows
             }
             else if (oldExpression != null && oldExpression.SetValue(value))
             {
-                return;
+                return; // value (current or not) was set in the existing expression, nothing else to do
             }
 
-            if (oldExpression is IDisposable)
+            if (setCurrentValue)
+            {
+                entry.SetCurrentValue(value);
+                return; // base value isn't changed
+            }
+
+            if (oldExpression is IDisposable) // expression is being replaced
             {
                 ((IDisposable)oldExpression).Dispose();
             }
 
             entry.SetBaseValue((int)source, value);
+            entry.ClearCurrentValue();
         }
 
         public void ClearValue(DependencyProperty dependencyProperty, BaseValueSource source = BaseValueSource.Local)
@@ -148,6 +169,7 @@ namespace System.Windows
             }
 
             entry.ClearBaseValue((int)source);
+            entry.ClearCurrentValue();
         }
 
         public ValueSource GetValueSource(DependencyProperty dependencyProperty)
@@ -157,14 +179,15 @@ namespace System.Windows
             {
                 return new ValueSource(
                     (BaseValueSource)entry.GetBaseValuePriority(),
+                    entry.GetBaseValue(false) is IExpression || entry.GetCurrentValue(false) is IExpression,
+                    entry.GetCurrentValue(true) != ObservableValue.UnsetValue,
                     entry.GetAnimationValue(true) != ObservableValue.UnsetValue,
-                    entry is CoercedDependencyPropertyValueEntry,
-                    entry.GetBaseValue(false) is IExpression);
+                    (entry is CoercedDependencyPropertyValueEntry) && ((CoercedDependencyPropertyValueEntry)entry).IsCoerced);
             }
 
             PropertyMetadata propertyMetadata = dependencyProperty.GetMetadata(GetType());
             BaseValueSource baseValueSource = propertyMetadata.Inherits && inheritanceParent != null ? BaseValueSource.Inherited : BaseValueSource.Default;
-            return new ValueSource(baseValueSource, false, propertyMetadata.CoerceValueCallback != null, false);
+            return new ValueSource(baseValueSource, false, false, false, false);
         }
 
         public BaseValueSource GetBaseValueSource(DependencyProperty dependencyProperty)

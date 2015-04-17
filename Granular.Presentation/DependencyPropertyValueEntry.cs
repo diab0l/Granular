@@ -16,6 +16,10 @@ namespace System.Windows
         void ClearBaseValue(int priority);
         int GetBaseValuePriority();
 
+        object GetCurrentValue(bool flattened);
+        void SetCurrentValue(object value);
+        void ClearCurrentValue();
+
         object GetAnimationValue(bool flattened);
         void SetAnimationValue(object value);
         void ClearAnimationValue();
@@ -28,10 +32,11 @@ namespace System.Windows
 
         public event EventHandler<ObservableValueChangedArgs> ValueChanged;
 
-        public object Value { get { return currentValue.Value; } }
+        public object Value { get { return observableValue.Value; } }
 
-        private ObservableValue currentValue;
+        private ObservableValue observableValue;
         private object[] baseValues;
+        private object currentValue;
         private object animationValue;
         private DependencyProperty dependencyProperty;
         private object defaultValue;
@@ -41,8 +46,8 @@ namespace System.Windows
             this.dependencyProperty = dependencyProperty;
             this.defaultValue = dependencyProperty.GetMetadata(dependencyObject.GetType()).DefaultValue;
 
-            currentValue = new ObservableValue();
-            currentValue.ValueChanged += (sender, e) => ValueChanged.Raise(this, e);
+            observableValue = new ObservableValue();
+            observableValue.ValueChanged += (sender, e) => ValueChanged.Raise(this, e);
 
             baseValues = new object[BaseValuePriorities];
 
@@ -51,6 +56,7 @@ namespace System.Windows
                 baseValues[i] = ObservableValue.UnsetValue;
             }
 
+            currentValue = ObservableValue.UnsetValue;
             animationValue = ObservableValue.UnsetValue;
         }
 
@@ -89,7 +95,7 @@ namespace System.Windows
                 newObservableValue.ValueChanged += OnObservableValueChanged;
             }
 
-            SetCurrentValue();
+            SetValue();
         }
 
         public void ClearBaseValue(int priority)
@@ -100,6 +106,35 @@ namespace System.Windows
         public int GetBaseValuePriority()
         {
             return Granular.Compatibility.Array.FindLastIndex(baseValues, value => value != ObservableValue.UnsetValue);
+        }
+
+        public object GetCurrentValue(bool flattened)
+        {
+            return flattened ? GetFlattenedValue(currentValue) : currentValue;
+        }
+
+        public void SetCurrentValue(object value)
+        {
+            IObservableValue oldObservableValue = currentValue as IObservableValue;
+            if (oldObservableValue != null)
+            {
+                oldObservableValue.ValueChanged -= OnObservableValueChanged;
+            }
+
+            currentValue = value;
+
+            IObservableValue newObservableValue = currentValue as IObservableValue;
+            if (newObservableValue != null)
+            {
+                newObservableValue.ValueChanged += OnObservableValueChanged;
+            }
+
+            SetValue();
+        }
+
+        public void ClearCurrentValue()
+        {
+            SetCurrentValue(ObservableValue.UnsetValue);
         }
 
         public object GetAnimationValue(bool flattened)
@@ -123,23 +158,28 @@ namespace System.Windows
                 newObservableValue.ValueChanged += OnObservableValueChanged;
             }
 
-            SetCurrentValue();
+            SetValue();
         }
 
         public void ClearAnimationValue()
         {
             animationValue = ObservableValue.UnsetValue;
-            SetCurrentValue();
+            SetValue();
         }
 
         private void OnObservableValueChanged(object sender, ObservableValueChangedArgs e)
         {
-            SetCurrentValue();
+            SetValue();
         }
 
-        private void SetCurrentValue()
+        private void SetValue()
         {
             object value = GetAnimationValue(true);
+
+            if (value == ObservableValue.UnsetValue)
+            {
+                value = GetCurrentValue(true);
+            }
 
             if (value == ObservableValue.UnsetValue)
             {
@@ -151,7 +191,7 @@ namespace System.Windows
                 value = defaultValue;
             }
 
-            currentValue.Value = value;
+            observableValue.Value = value;
         }
 
         // get the inner IObservableValue.Value
@@ -167,6 +207,8 @@ namespace System.Windows
         public event EventHandler<ObservableValueChangedArgs> ValueChanged;
 
         public object Value { get { return observableValue.Value; } }
+
+        public bool IsCoerced { get { return !Granular.Compatibility.EqualityComparer<object>.Default.Equals(this.Value, source.Value); } }
 
         private IDependencyPropertyValueEntry source;
         private ObservableValue observableValue;
@@ -205,6 +247,21 @@ namespace System.Windows
         public int GetBaseValuePriority()
         {
             return source.GetBaseValuePriority();
+        }
+
+        public object GetCurrentValue(bool flattened)
+        {
+            return source.GetCurrentValue(flattened);
+        }
+
+        public void SetCurrentValue(object value)
+        {
+            source.SetCurrentValue(value);
+        }
+
+        public void ClearCurrentValue()
+        {
+            source.ClearCurrentValue();
         }
 
         public object GetAnimationValue(bool flattened)
@@ -261,6 +318,21 @@ namespace System.Windows
         public int GetBaseValuePriority()
         {
             return source.GetBaseValuePriority();
+        }
+
+        public object GetCurrentValue(bool flattened)
+        {
+            return source.GetCurrentValue(flattened);
+        }
+
+        public void SetCurrentValue(object value)
+        {
+            ThrowReadOnlyException();
+        }
+
+        public void ClearCurrentValue()
+        {
+            ThrowReadOnlyException();
         }
 
         public object GetAnimationValue(bool flattened)

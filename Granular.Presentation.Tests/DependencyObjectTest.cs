@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Windows;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Windows.Data;
+using Granular.Extensions;
 
 namespace Granular.Presentation.Tests
 {
@@ -65,6 +67,166 @@ namespace Granular.Presentation.Tests
                     (dependencyObject as TestObject).Value3Changed(dependencyObject as TestObject, e);
                 }
             }
+        }
+
+        private class TestExpression : IExpressionProvider, IExpression
+        {
+            public event EventHandler<ObservableValueChangedArgs> ValueChanged;
+
+            public object Value { get { return observableValue.Value; } }
+
+            private ObservableValue observableValue;
+            private bool isReadOnly;
+
+            public TestExpression(object value, bool isReadOnly = false)
+            {
+                observableValue = new ObservableValue(value);
+                observableValue.ValueChanged += (sender, e) => ValueChanged.Raise(this, e);
+
+                this.isReadOnly = isReadOnly;
+            }
+
+            public IExpression CreateExpression(DependencyObject dependencyObject, DependencyProperty dependencyProperty)
+            {
+                return this;
+            }
+
+            public bool SetValue(object value)
+            {
+                if (isReadOnly)
+                {
+                    return false;
+                }
+
+                observableValue.Value = value;
+                return true;
+            }
+        }
+
+        [TestMethod]
+        public void SetCurrentValueOnLocalValue()
+        {
+            TestObject element = new TestObject();
+            Assert.AreEqual("defaultValue1", element.GetValue(TestObject.Value1Property));
+
+            element.SetValue(TestObject.Value1Property, "value1", BaseValueSource.Local);
+            Assert.AreEqual("value1", element.GetValue(TestObject.Value1Property));
+            AssertValueSource(element.GetValueSource(TestObject.Value1Property), isCurrent: false, isExpression: false, baseValueSource: BaseValueSource.Local);
+
+            element.SetCurrentValue(TestObject.Value1Property, "currentValue1");
+            Assert.AreEqual("currentValue1", element.GetValue(TestObject.Value1Property));
+            AssertValueSource(element.GetValueSource(TestObject.Value1Property), isCurrent: true, isExpression: false, baseValueSource: BaseValueSource.Local);
+
+            element.SetValue(TestObject.Value1Property, "value1b", BaseValueSource.Local);
+            Assert.AreEqual("value1b", element.GetValue(TestObject.Value1Property));
+            AssertValueSource(element.GetValueSource(TestObject.Value1Property), isCurrent: false, isExpression: false, baseValueSource: BaseValueSource.Local);
+
+            element.ClearValue(TestObject.Value1Property, BaseValueSource.Local);
+            Assert.AreEqual("defaultValue1", element.GetValue(TestObject.Value1Property));
+            AssertValueSource(element.GetValueSource(TestObject.Value1Property), isCurrent: false, isExpression: false, baseValueSource: BaseValueSource.Default);
+        }
+
+        [TestMethod]
+        public void SetCurrentValueOnStyleValue()
+        {
+            TestObject element = new TestObject();
+            Assert.AreEqual("defaultValue1", element.GetValue(TestObject.Value1Property));
+
+            element.SetValue(TestObject.Value1Property, "value1", BaseValueSource.Style);
+            Assert.AreEqual("value1", element.GetValue(TestObject.Value1Property));
+            AssertValueSource(element.GetValueSource(TestObject.Value1Property), isCurrent: false, isExpression: false, baseValueSource: BaseValueSource.Style);
+
+            element.SetCurrentValue(TestObject.Value1Property, "value2");
+            Assert.AreEqual("value2", element.GetValue(TestObject.Value1Property));
+            AssertValueSource(element.GetValueSource(TestObject.Value1Property), isCurrent: true, isExpression: false, baseValueSource: BaseValueSource.Style);
+
+            element.ClearValue(TestObject.Value1Property, BaseValueSource.Local);
+            Assert.AreEqual("value1", element.GetValue(TestObject.Value1Property));
+            AssertValueSource(element.GetValueSource(TestObject.Value1Property), isCurrent: false, isExpression: false, baseValueSource: BaseValueSource.Style);
+        }
+
+        [TestMethod]
+        public void SetCurrentValueOnLocalExpression()
+        {
+            TestObject element = new TestObject();
+            Assert.AreEqual("defaultValue1", element.GetValue(TestObject.Value1Property));
+
+            TestExpression expression = new TestExpression("value1", isReadOnly: false);
+            Assert.AreEqual("value1", expression.Value);
+
+            element.SetValue(TestObject.Value1Property, expression, BaseValueSource.Local);
+            Assert.AreEqual("value1", element.GetValue(TestObject.Value1Property));
+            AssertValueSource(element.GetValueSource(TestObject.Value1Property), isCurrent: false, isExpression: true, baseValueSource: BaseValueSource.Local);
+
+            element.SetCurrentValue(TestObject.Value1Property, "value2");
+            Assert.AreEqual("value2", element.GetValue(TestObject.Value1Property));
+            Assert.AreEqual("value2", expression.Value);
+            AssertValueSource(element.GetValueSource(TestObject.Value1Property), isCurrent: false, isExpression: true, baseValueSource: BaseValueSource.Local);
+
+            element.ClearValue(TestObject.Value1Property, BaseValueSource.Local);
+            Assert.AreEqual("defaultValue1", element.GetValue(TestObject.Value1Property));
+            AssertValueSource(element.GetValueSource(TestObject.Value1Property), isCurrent: false, isExpression: false, baseValueSource: BaseValueSource.Default);
+        }
+
+        [TestMethod]
+        public void SetCurrentValueOnLocalReadOnlyExpression()
+        {
+            TestObject element = new TestObject();
+            Assert.AreEqual("defaultValue1", element.GetValue(TestObject.Value1Property));
+
+            element.SetValue(TestObject.Value1Property, new TestExpression("value1", isReadOnly: true), BaseValueSource.Local);
+            Assert.AreEqual("value1", element.GetValue(TestObject.Value1Property));
+            AssertValueSource(element.GetValueSource(TestObject.Value1Property), isCurrent: false, isExpression: true, baseValueSource: BaseValueSource.Local);
+
+            element.SetCurrentValue(TestObject.Value1Property, "value2");
+            Assert.AreEqual("value2", element.GetValue(TestObject.Value1Property));
+            AssertValueSource(element.GetValueSource(TestObject.Value1Property), isCurrent: true, isExpression: true, baseValueSource: BaseValueSource.Local);
+
+            element.ClearValue(TestObject.Value1Property, BaseValueSource.Local);
+            Assert.AreEqual("defaultValue1", element.GetValue(TestObject.Value1Property));
+            AssertValueSource(element.GetValueSource(TestObject.Value1Property), isCurrent: false, isExpression: false, baseValueSource: BaseValueSource.Default);
+        }
+
+        [TestMethod]
+        public void SetCurrentValueOnStyleExpression()
+        {
+            TestObject element = new TestObject();
+            Assert.AreEqual("defaultValue1", element.GetValue(TestObject.Value1Property));
+
+            TestExpression expression = new TestExpression("value1", isReadOnly: false);
+            Assert.AreEqual("value1", expression.Value);
+
+            element.SetValue(TestObject.Value1Property, expression, BaseValueSource.Style);
+            Assert.AreEqual("value1", element.GetValue(TestObject.Value1Property));
+            AssertValueSource(element.GetValueSource(TestObject.Value1Property), isCurrent: false, isExpression: true, baseValueSource: BaseValueSource.Style);
+
+            element.SetCurrentValue(TestObject.Value1Property, "value2");
+            Assert.AreEqual("value2", element.GetValue(TestObject.Value1Property));
+            Assert.AreEqual("value2", expression.Value);
+            AssertValueSource(element.GetValueSource(TestObject.Value1Property), isCurrent: false, isExpression: true, baseValueSource: BaseValueSource.Style);
+
+            element.ClearValue(TestObject.Value1Property, BaseValueSource.Local);
+            Assert.AreEqual("value2", element.GetValue(TestObject.Value1Property));
+            AssertValueSource(element.GetValueSource(TestObject.Value1Property), isCurrent: false, isExpression: true, baseValueSource: BaseValueSource.Style);
+        }
+
+        [TestMethod]
+        public void SetCurrentValueOnStyleReadOnlyExpression()
+        {
+            TestObject element = new TestObject();
+            Assert.AreEqual("defaultValue1", element.GetValue(TestObject.Value1Property));
+
+            element.SetValue(TestObject.Value1Property, new TestExpression("value1", isReadOnly: true), BaseValueSource.Style);
+            Assert.AreEqual("value1", element.GetValue(TestObject.Value1Property));
+            AssertValueSource(element.GetValueSource(TestObject.Value1Property), isCurrent: false, isExpression: true, baseValueSource: BaseValueSource.Style);
+
+            element.SetCurrentValue(TestObject.Value1Property, "value2");
+            Assert.AreEqual("value2", element.GetValue(TestObject.Value1Property));
+            AssertValueSource(element.GetValueSource(TestObject.Value1Property), isCurrent: true, isExpression: true, baseValueSource: BaseValueSource.Style);
+
+            element.ClearValue(TestObject.Value1Property, BaseValueSource.Local);
+            Assert.AreEqual("value1", element.GetValue(TestObject.Value1Property));
+            AssertValueSource(element.GetValueSource(TestObject.Value1Property), isCurrent: false, isExpression: true, baseValueSource: BaseValueSource.Style);
         }
 
         [TestMethod]
@@ -147,6 +309,13 @@ namespace Granular.Presentation.Tests
 
             Assert.AreEqual(6, childValue2Changed);
             Assert.AreEqual(parent.Value2, child.Value2);
+        }
+
+        private static void AssertValueSource(ValueSource valueSource, bool isCurrent = false, bool isExpression = false, BaseValueSource baseValueSource = BaseValueSource.Local)
+        {
+            Assert.AreEqual(isCurrent, valueSource.IsCurrent);
+            Assert.AreEqual(isExpression, valueSource.IsExpression);
+            Assert.AreEqual(baseValueSource, valueSource.BaseValueSource);
         }
     }
 }
