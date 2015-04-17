@@ -73,7 +73,7 @@ namespace System.Windows.Controls
             set { SetValue(TextTrimmingProperty, value); }
         }
 
-        public static readonly DependencyProperty TextWrappingProperty = DependencyProperty.Register("TextWrapping", typeof(TextWrapping), typeof(TextBlock), new FrameworkPropertyMetadata(inherits: true, affectsMeasure: true, propertyChangedCallback: (sender, e) => ((TextBlock)sender).SetRenderElementsProperty(textBlockRenderElement => textBlockRenderElement.TextWrapping = (TextWrapping)e.NewValue)));
+        public static readonly DependencyProperty TextWrappingProperty = DependencyProperty.Register("TextWrapping", typeof(TextWrapping), typeof(TextBlock), new FrameworkPropertyMetadata(TextWrapping.NoWrap, inherits: true, affectsMeasure: true, propertyChangedCallback: (sender, e) => ((TextBlock)sender).SetRenderElementsProperty(textBlockRenderElement => textBlockRenderElement.TextWrapping = (TextWrapping)e.NewValue)));
         public TextWrapping TextWrapping
         {
             get { return (TextWrapping)GetValue(TextWrappingProperty); }
