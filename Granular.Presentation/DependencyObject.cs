@@ -172,6 +172,15 @@ namespace System.Windows
             entry.ClearCurrentValue();
         }
 
+        public void CoerceValue(DependencyProperty dependencyProperty)
+        {
+            IDependencyPropertyValueEntry entry;
+            if (entries.TryGetValue(dependencyProperty, out entry) && entry is CoercedDependencyPropertyValueEntry)
+            {
+                ((CoercedDependencyPropertyValueEntry)entry).CoerceValue();
+            }
+        }
+
         public ValueSource GetValueSource(DependencyProperty dependencyProperty)
         {
             IDependencyPropertyValueEntry entry;

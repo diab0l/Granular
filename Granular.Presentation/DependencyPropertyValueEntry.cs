@@ -211,17 +211,26 @@ namespace System.Windows
         public bool IsCoerced { get { return !Granular.Compatibility.EqualityComparer<object>.Default.Equals(this.Value, source.Value); } }
 
         private IDependencyPropertyValueEntry source;
+        private CoerceValueCallback coerceValueCallback;
+        private DependencyObject dependencyObject;
         private ObservableValue observableValue;
 
         public CoercedDependencyPropertyValueEntry(IDependencyPropertyValueEntry source, DependencyObject dependencyObject, CoerceValueCallback coerceValueCallback)
         {
             this.source = source;
+            this.dependencyObject = dependencyObject;
+            this.coerceValueCallback = coerceValueCallback;
 
             observableValue = new ObservableValue();
             observableValue.ValueChanged += (sender, e) => ValueChanged.Raise(this, e);
-            observableValue.Value = source.Value;
 
-            source.ValueChanged += (sender, e) => observableValue.Value = coerceValueCallback(dependencyObject, source.Value);
+            source.ValueChanged += (sender, e) => CoerceValue();
+            CoerceValue();
+        }
+
+        public void CoerceValue()
+        {
+            observableValue.Value = source.Value != ObservableValue.UnsetValue ? coerceValueCallback(dependencyObject, source.Value) : ObservableValue.UnsetValue;
         }
 
         public object GetBaseValue(bool flattened)
