@@ -72,12 +72,12 @@ namespace System.Windows.Controls.Primitives
 
         protected virtual void OnMinimumChanged(DependencyPropertyChangedEventArgs e)
         {
-            //
+            CoerceValue(ValueProperty); // CoerceValueRange may return a different value
         }
 
         protected virtual void OnMaximumChanged(DependencyPropertyChangedEventArgs e)
         {
-            //
+            CoerceValue(ValueProperty); // CoerceValueRange may return a different value
         }
 
         private string GetCommonState()
