@@ -52,48 +52,48 @@ namespace System.Xaml
 
             MatchTerminal("{");
             string typeFullName = MatchIdentifier();
-            IEnumerable<XamlAttribute> attributesList = MatchAttributesList();
+            IEnumerable<XamlMember> membersList = MatchMembersList();
             MatchTerminal("}");
 
-            return new XamlElement(new XamlName(GetTypeName(typeFullName), GetTypeNamespace(typeFullName)), namespaces, attributes: attributesList);
+            return new XamlElement(new XamlName(GetTypeName(typeFullName), GetTypeNamespace(typeFullName)), namespaces, members: membersList);
         }
 
         // PL -> P PL' | epsilon
-        private IEnumerable<XamlAttribute> MatchAttributesList()
+        private IEnumerable<XamlMember> MatchMembersList()
         {
             VerifyTokensExists();
 
-            List<XamlAttribute> list = new List<XamlAttribute>();
+            List<XamlMember> list = new List<XamlMember>();
 
             if (tokens.Peek().Value != "}")
             {
-                list.Add(MatchAttribute());
-                list.AddRange(MatchAttributesListEnd());
+                list.Add(MatchMember());
+                list.AddRange(MatchMembersListEnd());
             }
 
             return list;
         }
 
         // PL' -> , P PL' | epsilon
-        private IEnumerable<XamlAttribute> MatchAttributesListEnd()
+        private IEnumerable<XamlMember> MatchMembersListEnd()
         {
             VerifyTokensExists();
 
-            List<XamlAttribute> list = new List<XamlAttribute>();
+            List<XamlMember> list = new List<XamlMember>();
 
             if (tokens.Peek().Value != "}")
             {
                 MatchTerminal(",");
 
-                list.Add(MatchAttribute());
-                list.AddRange(MatchAttributesListEnd());
+                list.Add(MatchMember());
+                list.AddRange(MatchMembersListEnd());
             }
 
             return list;
         }
 
         // P -> Identifier NV | V
-        private XamlAttribute MatchAttribute()
+        private XamlMember MatchMember()
         {
             VerifyTokensExists();
 
@@ -119,7 +119,7 @@ namespace System.Xaml
                 value = MatchValue();
             }
 
-            return new XamlAttribute(new XamlName(name), namespaces, value);
+            return new XamlMember(new XamlName(name), namespaces, value);
         }
 
         // NV -> = V | epsilon

@@ -90,14 +90,14 @@
     <Compile Include="..\Granular.Common\Xaml\MarkupExtensionParser.cs">
       <Link>Xaml\MarkupExtensionParser.cs</Link>
     </Compile>
-    <Compile Include="..\Granular.Common\Xaml\XamlAttribute.cs">
-      <Link>Xaml\XamlAttribute.cs</Link>
-    </Compile>
     <Compile Include="..\Granular.Common\Xaml\XamlElement.cs">
       <Link>Xaml\XamlElement.cs</Link>
     </Compile>
     <Compile Include="..\Granular.Common\Xaml\XamlLanguage.cs">
       <Link>Xaml\XamlLanguage.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Common\Xaml\XamlMember.cs">
+      <Link>Xaml\XamlMember.cs</Link>
     </Compile>
     <Compile Include="..\Granular.Common\Xaml\XamlName.cs">
       <Link>Xaml\XamlName.cs</Link>

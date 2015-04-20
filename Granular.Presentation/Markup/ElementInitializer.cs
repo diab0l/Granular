@@ -114,12 +114,12 @@ namespace System.Windows.Markup
             string contentPropertyName = PropertyAttribute.GetPropertyName<ContentPropertyAttribute>(elementType);
             if (!contentPropertyName.IsNullOrEmpty())
             {
-                return ElementMemberInitializer.FromXamlElement(new XamlName(contentPropertyName), element, elementType);
+                return ElementMemberInitializer.Create(new XamlName(contentPropertyName), elementType, element.Values, element.Namespaces);
             }
 
-            if (ElementCollectionContentInitailizer.IsCollectionType(element.GetElementType()))
+            if (ElementCollectionContentInitailizer.IsCollectionType(elementType))
             {
-                return ElementCollectionContentInitailizer.FromXamlElement(element, element.GetElementType());
+                return ElementCollectionContentInitailizer.Create(element.Values, elementType);
             }
 
             return null;
@@ -132,18 +132,13 @@ namespace System.Windows.Markup
             List<IElementInitializer> list = new List<IElementInitializer>();
 
             int index = 0;
-            foreach (XamlAttribute attribute in element.GetMemberAttributes())
+            foreach (XamlMember member in element.Members)
             {
-                // markup extensions can contain empty attributes, the member name is determined by its index
-                XamlName memberName = attribute.Name.IsEmpty ? GetParameterName(elementType, index) : attribute.Name;
-                list.Add(ElementMemberInitializer.FromXamlAttribute(memberName, attribute, elementType));
+                // markup extensions may contain members with an empty name, the name should be resolved from the member index
+                XamlName memberName = member.Name.IsEmpty ? GetParameterName(elementType, index) : member.Name;
 
+                list.Add(ElementMemberInitializer.Create(memberName, elementType, member.Values, member.Namespaces));
                 index++;
-            }
-
-            foreach (XamlElement child in element.GetMemberChildren())
-            {
-                list.Add(ElementMemberInitializer.FromXamlElement(child.Name, child, elementType));
             }
 
             return list;
@@ -152,13 +147,19 @@ namespace System.Windows.Markup
         private static XamlName GetParameterName(Type type, int index)
         {
             MarkupExtensionParameterAttribute parameterAttribute = type.GetCustomAttributes(true).OfType<MarkupExtensionParameterAttribute>().FirstOrDefault(attribute => attribute.Index == index);
-            return parameterAttribute != null ? new XamlName(parameterAttribute.Name) : XamlName.Empty;
+
+            if (parameterAttribute == null)
+            {
+                throw new Granular.Exception("Type \"{0}\" does not declare MarkupExtensionParameter for index {1}", type.Name, index);
+            }
+
+            return new XamlName(parameterAttribute.Name);
         }
 
         private static string GetNameDirectiveValue(XamlElement element)
         {
-            object value;
-            return element.TryGetMemberValue(XamlLanguage.NameDirective, out value) ? (string)value : null;
+            XamlMember nameDirective = element.Directives.FirstOrDefault(directive => directive.Name == XamlLanguage.NameDirective);
+            return nameDirective != null ? (string)nameDirective.GetSingleValue() : null;
         }
 
         private static IPropertyAdapter GetNameProperty(Type type)
@@ -186,38 +187,41 @@ namespace System.Windows.Markup
 
     public static class ElementMemberInitializer
     {
-        public static IElementInitializer FromXamlAttribute(XamlName memberName, XamlAttribute memberAttribute, Type containingType)
+        public static IElementInitializer Create(XamlName memberName, Type containingType, IEnumerable<object> values, XamlNamespaces namespaces)
         {
             IEventAdapter eventAdapter = EventAdapter.CreateAdapter(containingType, memberName);
             if (eventAdapter != null)
             {
-                return ElementEventMemberInitializer.FromXamlAttribute(eventAdapter, memberAttribute);
+                return new ElementEventMemberInitializer(eventAdapter, GetEventHandlerName(memberName, values));
             }
 
             IPropertyAdapter propertyAdapter = PropertyAdapter.CreateAdapter(containingType, memberName);
             if (propertyAdapter != null)
             {
-                return ElementPropertyMemberInitializer.FromXamlAttribute(propertyAdapter, memberAttribute);
+                return ElementPropertyMemberInitializer.Create(propertyAdapter, values, namespaces);
             }
 
             throw new Granular.Exception("Type \"{0}\" does not contain a member named \"{1}\"", containingType.Name, memberName);
         }
 
-        public static IElementInitializer FromXamlElement(XamlName memberName, XamlElement memberElement, Type containingType)
+        private static string GetEventHandlerName(XamlName memberName, IEnumerable<object> values)
         {
-            IEventAdapter eventAdapter = EventAdapter.CreateAdapter(containingType, memberName);
-            if (eventAdapter != null)
+            if (!values.Any())
             {
-                return ElementEventMemberInitializer.FromXamlElement(eventAdapter, memberElement);
+                throw new Granular.Exception("Member \"{0}\" doesn't have values", memberName);
             }
 
-            IPropertyAdapter propertyAdapter = PropertyAdapter.CreateAdapter(containingType, memberName);
-            if (propertyAdapter != null)
+            if (values.Count() > 1)
             {
-                return ElementPropertyMemberInitializer.FromXamlElement(propertyAdapter, memberElement);
+                throw new Granular.Exception("Member \"{0}\" cannot have multiple values", memberName);
             }
 
-            throw new Granular.Exception("Type \"{0}\" does not contain a member named \"{1}\"", containingType.Name, memberName);
+            if (!(values.First() is String))
+            {
+                throw new Granular.Exception("Member \"{0}\" value is not an event handler name", memberName);
+            }
+
+            return (string)values.First();
         }
     }
 
@@ -226,7 +230,7 @@ namespace System.Windows.Markup
         private IEventAdapter eventAdapter;
         private string eventHandlerName;
 
-        private ElementEventMemberInitializer(IEventAdapter eventAdapter, string eventHandlerName)
+        public ElementEventMemberInitializer(IEventAdapter eventAdapter, string eventHandlerName)
         {
             this.eventAdapter = eventAdapter;
             this.eventHandlerName = eventHandlerName;
@@ -235,46 +239,6 @@ namespace System.Windows.Markup
         public void InitializeElement(object element, InitializeContext context)
         {
             eventAdapter.AddHandler(element, CreateEventHandler(eventAdapter.HandlerType, context.Root, eventHandlerName));
-        }
-
-        public static IElementInitializer FromXamlElement(IEventAdapter eventAdapter, XamlElement eventElement)
-        {
-            return new ElementEventMemberInitializer(eventAdapter, GetEventHandlerName(eventElement));
-        }
-
-        public static IElementInitializer FromXamlAttribute(IEventAdapter eventAdapter, XamlAttribute eventAttribute)
-        {
-            return new ElementEventMemberInitializer(eventAdapter, GetEventHandlerName(eventAttribute));
-        }
-
-        private static string GetEventHandlerName(XamlElement element)
-        {
-            if (element.Children.Any())
-            {
-                throw new Granular.Exception("Element \"{0}\" can't have children", element.Name);
-            }
-
-            if (element.Attributes.Any())
-            {
-                throw new Granular.Exception("Element \"{0}\" can't have attributes", element.Name);
-            }
-
-            if (element.TextValue.IsNullOrEmpty())
-            {
-                throw new Granular.Exception("Element \"{0}\" doesn't contain an event handler name", element.Name);
-            }
-
-            return element.TextValue;
-        }
-
-        private static string GetEventHandlerName(XamlAttribute attribute)
-        {
-            if (!(attribute.Value is String))
-            {
-                throw new Granular.Exception("Attribute \"{0}\" value is not an event handler name", attribute.Name);
-            }
-
-            return (string)attribute.Value;
         }
 
         private static Delegate CreateEventHandler(Type eventHandlerType, object source, string eventHandlerName)
@@ -320,7 +284,7 @@ namespace System.Windows.Markup
         private IPropertyAdapter propertyAdapter;
         private IElementFactory propertyValueFactory;
 
-        public ElementPropertyMemberInitializer(IPropertyAdapter propertyAdapter, IElementFactory propertyValueFactory)
+        private ElementPropertyMemberInitializer(IPropertyAdapter propertyAdapter, IElementFactory propertyValueFactory)
         {
             this.propertyAdapter = propertyAdapter;
             this.propertyValueFactory = propertyValueFactory;
@@ -331,62 +295,49 @@ namespace System.Windows.Markup
             propertyAdapter.SetValue(element, propertyValueFactory.CreateElement(context), context.ValueSource);
         }
 
-        public static IElementInitializer FromXamlAttribute(IPropertyAdapter propertyAdapter, XamlAttribute memberAttribute)
+        public static IElementInitializer Create(IPropertyAdapter propertyAdapter, IEnumerable<object> values, XamlNamespaces namespaces)
         {
-            IElementFactory contentFactory = ElementFactory.FromXamlAttribute(memberAttribute, propertyAdapter.PropertyType);
-            return new ElementPropertyMemberInitializer(propertyAdapter, contentFactory);
-        }
-
-        public static IElementInitializer FromXamlElement(IPropertyAdapter propertyAdapter, XamlElement memberElement)
-        {
-            IEnumerable<XamlElement> children = memberElement.GetContentChildren();
-
-            if (!children.Any())
+            if (!values.Any())
             {
-                if (!memberElement.TextValue.IsNullOrEmpty())
-                {
-                    object value = TypeConverter.ConvertValue(memberElement.TextValue, propertyAdapter.PropertyType, memberElement.Namespaces);
-                    return new ElementPropertyMemberInitializer(propertyAdapter, new ConstantElementFactory(value));
-                }
-
                 return ElementInitializer.Empty;
             }
 
             if (ElementCollectionContentInitailizer.IsCollectionType(propertyAdapter.PropertyType) &&
-                !(children.Count() == 1 && propertyAdapter.PropertyType.IsAssignableFrom(children.First().GetElementType())))
+                !(values.Count() == 1 && values.First() is XamlElement && propertyAdapter.PropertyType.IsAssignableFrom(((XamlElement)values.First()).GetElementType())))
             {
-                IElementInitializer propertyContentInitializer = ElementCollectionContentInitailizer.FromXamlElement(memberElement, propertyAdapter.PropertyType);
-                // use a factory that creates the property value before initializing its content (when its null)
+                IElementInitializer propertyContentInitializer = ElementCollectionContentInitailizer.Create(values, propertyAdapter.PropertyType);
+
+                // wrap with a factory that creates the collection (when it's null) before adding its values
                 return new ElementPropertyMemberFactoryInitializer(propertyAdapter, propertyContentInitializer);
             }
 
-            if (children.Count() == 1)
+            if (values.Count() == 1)
             {
                 if (propertyAdapter.PropertyType == typeof(IFrameworkElementFactory))
                 {
-                    return new FrameworkElementFactoryInitializer(propertyAdapter, ElementFactory.FromXamlElement(children.First(), children.First().GetElementType()));
+                    return new FrameworkElementFactoryInitializer(propertyAdapter, ElementFactory.FromValue(values.First(), null, namespaces));
                 }
 
-                IElementFactory contentFactory = ElementFactory.FromXamlElement(children.First(), propertyAdapter.PropertyType);
+                IElementFactory contentFactory = ElementFactory.FromValue(values.First(), propertyAdapter.PropertyType, namespaces);
                 return new ElementPropertyMemberInitializer(propertyAdapter, contentFactory);
             }
 
-            throw new Granular.Exception("Element \"{0}\" cannot have more than one child", memberElement.Name);
+            throw new Granular.Exception("Member of type \"{0}\" cannot have more than one child", propertyAdapter.PropertyType.Name);
         }
     }
 
     public static class ElementCollectionContentInitailizer
     {
-        public static IElementInitializer FromXamlElement(XamlElement element, Type containingType)
+        public static IElementInitializer Create(IEnumerable<object> values, Type containingType)
         {
             if (IsList(containingType))
             {
-                return new ElementListContentInitializer(element);
+                return new ElementListContentInitializer(values);
             }
 
             if (IsDictionary(containingType))
             {
-                return new ElementDictionaryContentInitializer(element);
+                return new ElementDictionaryContentInitializer(values);
             }
 
             throw new Granular.Exception("Can't initialize type \"{0}\" content", containingType.Name);
@@ -412,9 +363,9 @@ namespace System.Windows.Markup
     {
         private IEnumerable<IElementFactory> elementsFactory;
 
-        public ElementListContentInitializer(XamlElement element)
+        public ElementListContentInitializer(IEnumerable<object> values)
         {
-            elementsFactory = element.GetContentChildren().Select(contentChild => ElementFactory.FromXamlElement(contentChild, null)).ToArray();
+            elementsFactory = values.Select(value => ElementFactory.FromValue(value, null, XamlNamespaces.Empty)).ToArray();
         }
 
         public void InitializeElement(object element, InitializeContext context)
@@ -485,8 +436,8 @@ namespace System.Windows.Markup
 
             private static object GetKeyDirectiveValue(XamlElement element)
             {
-                object value;
-                return element.TryGetMemberValue(XamlLanguage.KeyDirective, out value) ? value : null;
+                XamlMember keyDirective = element.Directives.FirstOrDefault(directive => directive.Name == XamlLanguage.KeyDirective);
+                return keyDirective != null ? keyDirective.GetSingleValue() : null;
             }
 
             private static IPropertyAdapter GetKeyProperty(Type type)
@@ -497,9 +448,9 @@ namespace System.Windows.Markup
 
         private IEnumerable<KeyElementFactory> keyElementFactories;
 
-        public ElementDictionaryContentInitializer(XamlElement memberElement)
+        public ElementDictionaryContentInitializer(IEnumerable<object> values)
         {
-            keyElementFactories = CreateElementsFactories(memberElement);
+            keyElementFactories = CreateElementsFactories(values);
         }
 
         public void InitializeElement(object element, InitializeContext context)
@@ -512,13 +463,20 @@ namespace System.Windows.Markup
             }
         }
 
-        private static IEnumerable<KeyElementFactory> CreateElementsFactories(XamlElement memberElement)
+        private static IEnumerable<KeyElementFactory> CreateElementsFactories(IEnumerable<object> values)
         {
+            if (values.Any(value => !(value is XamlElement)))
+            {
+                throw new Granular.Exception("Can't add a value of type \"{0}\" to a dictionary, as it cannot have a key", values.First(value => !(value is XamlElement)).GetType().Name);
+            }
+
+            IEnumerable<XamlElement> valuesElements = values.Cast<XamlElement>();
+
             List<KeyElementFactory> list = new List<KeyElementFactory>();
 
-            foreach (XamlElement contentChild in memberElement.GetContentChildren())
+            foreach (XamlElement contentChild in valuesElements)
             {
-                bool isShared = contentChild.Attributes.All(attribute => attribute.Name != XamlLanguage.SharedDirective || (bool)TypeConverter.ConvertValue(attribute.Value, typeof(bool), XamlNamespaces.Empty));
+                bool isShared = contentChild.Directives.All(directive => directive.Name != XamlLanguage.SharedDirective || (bool)TypeConverter.ConvertValue(directive.GetSingleValue(), typeof(bool), XamlNamespaces.Empty));
 
                 IElementFactory contentChildFactory = ElementFactory.FromXamlElement(contentChild, null);
 

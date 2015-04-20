@@ -78,9 +78,9 @@
     <Compile Include="Exception.cs" />
     <Compile Include="Xaml\Lexer.cs" />
     <Compile Include="Xaml\MarkupExtensionParser.cs" />
+    <Compile Include="Xaml\XamlMember.cs" />
     <Compile Include="Xaml\XamlNamespaces.cs" />
     <Compile Include="Xaml\XamlName.cs" />
-    <Compile Include="Xaml\XamlAttribute.cs" />
     <Compile Include="Xaml\XamlElement.cs" />
     <Compile Include="Xaml\XamlLanguage.cs" />
     <Compile Include="Xaml\XamlNode.cs" />

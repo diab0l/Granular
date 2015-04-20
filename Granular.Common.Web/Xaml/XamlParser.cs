@@ -68,38 +68,102 @@ namespace System.Xaml
             return CreateXamlElement(element, XamlNamespaces.Empty);
         }
 
-        private static XamlElement CreateXamlElement(XmlElement root, XamlNamespaces namespaces)
+        private static XamlElement CreateXamlElement(XmlElement element, XamlNamespaces namespaces)
         {
-            if (root.Nodes().OfType<XmlText>().Where(text => !text.Value.IsNullOrWhitespace()).Count() > 1)
+            if (element.Nodes().OfType<XmlText>().Where(text => !text.Value.IsNullOrWhitespace()).Count() > 1)
             {
-                throw new Granular.Exception("Xml cannot contain more than one text node");
+                throw new Granular.Exception("Element \"{0}\" cannot contain more than one text node", element.LocalName);
             }
 
-            IEnumerable<NamespaceDeclaration> elementNamespaces = root.Attributes().Where(attribute => IsNamespaceDeclaration(attribute)).Select(attribute => new NamespaceDeclaration(GetNamespaceDeclarationPrefix(attribute), attribute.Value)).ToArray();
+            IEnumerable<NamespaceDeclaration> elementNamespaces = element.Attributes().Where(IsNamespaceDeclaration).Select(attribute => new NamespaceDeclaration(GetNamespaceDeclarationPrefix(attribute), attribute.Value)).ToArray();
             if (elementNamespaces.Any())
             {
                 namespaces = namespaces.Merge(elementNamespaces);
             }
 
-            IEnumerable<XamlAttribute> attributes = root.Attributes().Where(attribute => !IsNamespaceDeclaration(attribute)).Select(attribute => CreateXamlAttribute(attribute, namespaces)).ToArray();
-            IEnumerable<XamlElement> elements = root.Elements().Select(element => CreateXamlElement(element, namespaces)).ToArray();
+            return new XamlElement(new XamlName(element.LocalName, element.NamespaceURI), namespaces, CreateXamlMembers(element, namespaces), CreateValues(element, namespaces), CreateDirectives(element, namespaces));
+        }
 
-            string textValue = root.Nodes().OfType<XmlText>().Where(text => !text.Value.IsNullOrWhitespace()).Select(text => text.Value.Trim()).DefaultIfEmpty(String.Empty).First();
+        private static IEnumerable<XamlMember> CreateXamlMembers(XmlElement element, XamlNamespaces namespaces)
+        {
+            IEnumerable<XamlMember> attributeMembers = element.Attributes().Where(attribute => !IsDirective(attribute) && !IsNamespaceDeclaration(attribute)).Select(attribute => CreateXamlMember(attribute, namespaces));
+            IEnumerable<XamlMember> elementMembers = element.Elements().Where(child => IsMemberName(child)).Select(child => CreateXamlMember(child, namespaces));
 
-            return new XamlElement(new XamlName(root.LocalName, root.NamespaceURI), namespaces, attributes, elements, textValue);
+            return attributeMembers.Concat(elementMembers).ToArray();
+        }
+
+        private static XamlMember CreateXamlMember(XmlAttribute attribute, XamlNamespaces namespaces)
+        {
+            XamlName name = new XamlName(attribute.LocalName, attribute.NamespaceURI.IsNullOrEmpty() ? namespaces.Get(String.Empty) : attribute.NamespaceURI);
+            object value = (object)MarkupExtensionParser.Parse(attribute.Value, namespaces);
+
+            return new XamlMember(name, namespaces, value);
+        }
+
+        private static XamlMember CreateXamlMember(XmlElement element, XamlNamespaces namespaces)
+        {
+            XamlName name = new XamlName(element.LocalName, element.NamespaceURI.IsNullOrEmpty() ? namespaces.Get(String.Empty) : element.NamespaceURI);
+
+            if (element.Attributes().Any())
+            {
+                throw new Granular.Exception("Member \"{0}\" cannot contain attributes", element.LocalName);
+            }
+
+            if (element.Elements().Any(child => IsMemberName(child)))
+            {
+                throw new Granular.Exception("Member \"{0}\" cannot contain member elements", element.LocalName);
+            }
+
+            if (element.Nodes().OfType<XmlText>().Where(text => !text.Value.IsNullOrWhitespace()).Count() > 1)
+            {
+                throw new Granular.Exception("Member \"{0}\" cannot contain more than one text node", element.LocalName);
+            }
+
+            return new XamlMember(name, namespaces, CreateValues(element, namespaces));
+        }
+
+        private static IEnumerable<XamlMember> CreateDirectives(XmlElement element, XamlNamespaces namespaces)
+        {
+            IEnumerable<XamlMember> attributeDirectives = element.Attributes().Where(attribute => IsDirective(attribute) && !IsNamespaceDeclaration(attribute)).Select(attribute => CreateXamlMember(attribute, namespaces));
+            IEnumerable<XamlMember> elementDirectives = element.Elements().Where(child => IsDirective(child)).Select(child => CreateXamlMember(child, namespaces));
+
+            return attributeDirectives.Concat(elementDirectives).ToArray();
+        }
+
+        private static IEnumerable<object> CreateValues(XmlElement element, XamlNamespaces namespaces)
+        {
+            IEnumerable<object> elementValues = element.Elements().Where(child => IsValueName(child)).Select(child => (object)CreateXamlElement(child, namespaces));
+            IEnumerable<object> textValues = element.Nodes().OfType<XmlText>().Where(text => !text.Value.IsNullOrWhitespace()).Select(textValue => textValue.Value.Trim());
+
+            return elementValues.Concat(textValues).ToArray();
+        }
+
+        private static bool IsMemberName(XmlElement element)
+        {
+            return element.LocalName.Contains(".") && !IsDirective(element);
+        }
+
+        private static bool IsValueName(XmlElement element)
+        {
+            return !element.LocalName.Contains(".") && !IsDirective(element);
+        }
+
+        private static bool IsDirective(XmlAttribute attribute)
+        {
+            return XamlLanguage.NamespaceName == attribute.NamespaceURI &&
+                XamlLanguage.IsDirective(new XamlName(attribute.LocalName, attribute.NamespaceURI));
+        }
+
+        private static bool IsDirective(XmlElement element)
+        {
+            return XamlLanguage.NamespaceName == element.NamespaceURI &&
+                XamlLanguage.IsDirective(new XamlName(element.LocalName, element.NamespaceURI));
         }
 
         private static bool IsNamespaceDeclaration(XmlAttribute attribute)
         {
             string name = attribute.Name.ToLower();
             return name == "xmlns" || name.StartsWith("xmlns:");
-        }
-
-        private static XamlAttribute CreateXamlAttribute(XmlAttribute attribute, XamlNamespaces namespaces)
-        {
-            XamlName name = new XamlName(attribute.LocalName, attribute.NamespaceURI.IsNullOrEmpty() ? namespaces.Get(String.Empty) : attribute.NamespaceURI);
-            object value = (object)MarkupExtensionParser.Parse(attribute.Value, namespaces);
-            return new XamlAttribute(name, namespaces, value);
         }
 
         private static string GetNamespaceDeclarationPrefix(XmlAttribute attribute)

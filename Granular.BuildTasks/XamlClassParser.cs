@@ -32,16 +32,16 @@ namespace Granular.BuildTasks
                 yield break;
             }
 
-            XamlAttribute nameAttribute = element.Attributes.FirstOrDefault(attribute => attribute.Name == XamlLanguage.NameDirective);
+            XamlMember nameDirective = element.Directives.FirstOrDefault(directive => directive.Name == XamlLanguage.NameDirective);
 
-            if (nameAttribute != null)
+            if (nameDirective != null)
             {
-                yield return new MemberDefinition((string)nameAttribute.Value, elementTypeName);
+                yield return new MemberDefinition((string)nameDirective.GetSingleValue(), elementTypeName);
             }
 
-            foreach (XamlElement child in element.Children)
+            foreach (XamlElement child in element.Values.OfType<XamlElement>().Concat(element.Members.SelectMany(member => member.Values.OfType<XamlElement>())))
             {
-                string childTypeName = typeParser.ParseTypeName(child.Name.IsMemberName ? child.Name.ContainingTypeName : child.Name);
+                string childTypeName = typeParser.ParseTypeName(child.Name);
 
                 foreach (MemberDefinition member in GetMembers(child, childTypeName, typeParser))
                 {
@@ -52,8 +52,8 @@ namespace Granular.BuildTasks
 
         private static string GetClassFullName(XamlElement root)
         {
-            XamlAttribute classAttribute = root.Attributes.FirstOrDefault(attribute => attribute.Name == XamlLanguage.ClassDirective);
-            return classAttribute != null ? (string)classAttribute.Value : String.Empty;
+            XamlMember classDirective = root.Directives.FirstOrDefault(directive => directive.Name == XamlLanguage.ClassDirective);
+            return classDirective != null ? (string)classDirective.GetSingleValue() : String.Empty;
         }
 
         private static string GetTypeName(string typeFullName)

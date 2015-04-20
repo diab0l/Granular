@@ -31,14 +31,14 @@ namespace System.Windows.Markup
             return target;
         }
 
-        public static IElementFactory FromXamlAttribute(XamlAttribute attribute, Type targetType)
+        public static IElementFactory FromValue(object value, Type targetType, XamlNamespaces namespaces)
         {
-            if (attribute.Value is XamlElement)
+            if (value is XamlElement)
             {
-                return FromXamlElement((XamlElement)attribute.Value, targetType);
+                return FromXamlElement((XamlElement)value, targetType);
             }
 
-            return FromElementFactory(new ConstantElementFactory(attribute.Value), targetType, attribute.Namespaces);
+            return FromElementFactory(new ConstantElementFactory(value), targetType, namespaces);
         }
 
         public static IElementFactory FromXamlElement(XamlElement element, Type targetType)
@@ -58,29 +58,22 @@ namespace System.Windows.Markup
 
         private static IElementFactory FromXamlElementContent(XamlElement element)
         {
-            if (element.GetMemberNodes().Any())
+            if (element.Members.Any())
             {
                 throw new Granular.Exception("Element \"{0}\" can't have members, as its type doesn't have a default constructor and it can only be converted from its content", element.Name);
             }
 
-            IEnumerable<XamlElement> contentChilren = element.GetContentChildren();
-
-            if (contentChilren.Any() && !element.TextValue.IsNullOrEmpty())
+            if (!element.Values.Any())
             {
-                throw new Granular.Exception("Element \"{0}\" cannot have both children and text value", element.Name);
+                throw new Granular.Exception("Element \"{0}\" must have a value, as its type doesn't have a default constructor and it can only be converted from its content", element.Name);
             }
 
-            if (!contentChilren.Any())
+            if (element.Values.Count() > 1)
             {
-                return new ConvertedElementFactory(new ConstantElementFactory(element.TextValue), element.GetElementType(), element.Namespaces);
+                throw new Granular.Exception("Element \"{0}\" can't have multiple children, as its type doesn't have a default constructor and it can only be converted from its content", element.Name);
             }
 
-            if (contentChilren.Count() == 1)
-            {
-                return ElementFactory.FromXamlElement(contentChilren.First(), element.GetElementType());
-            }
-
-            throw new Granular.Exception("Element \"{0}\" can't have multiple children, as its type doesn't have a default constructor and it can only be converted from its content", element.Name);
+            return FromValue(element.Values.First(), element.GetElementType(), element.Namespaces);
         }
 
         private static IElementFactory FromElementFactory(IElementFactory elementFactory, Type targetType, XamlNamespaces namespaces)

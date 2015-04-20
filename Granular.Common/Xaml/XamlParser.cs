@@ -19,32 +19,90 @@ namespace System.Xaml
             return CreateXamlElement(element, XamlNamespaces.Empty);
         }
 
-        private static XamlElement CreateXamlElement(XElement root, XamlNamespaces namespaces)
+        private static XamlElement CreateXamlElement(XElement element, XamlNamespaces namespaces)
         {
-            if (root.Nodes().OfType<XText>().Count() > 1)
+            if (element.Nodes().OfType<XText>().Count() > 1)
             {
-                throw new Granular.Exception("Xml cannot contain more than one text node");
+                throw new Granular.Exception("Element \"{0}\" cannot contain more than one text node", element.Name);
             }
 
-            IEnumerable<NamespaceDeclaration> elementNamespaces = root.Attributes().Where(attribute => attribute.IsNamespaceDeclaration).Select(attribute => new NamespaceDeclaration(GetNamespaceDeclarationPrefix(attribute), attribute.Value)).ToArray();
+            IEnumerable<NamespaceDeclaration> elementNamespaces = element.Attributes().Where(attribute => attribute.IsNamespaceDeclaration).Select(attribute => new NamespaceDeclaration(GetNamespaceDeclarationPrefix(attribute), attribute.Value)).ToArray();
             if (elementNamespaces.Any())
             {
                 namespaces = namespaces.Merge(elementNamespaces);
             }
 
-            IEnumerable<XamlAttribute> attributes = root.Attributes().Where(attribute => !attribute.IsNamespaceDeclaration).Select(attribute => CreateXamlAttribute(attribute, namespaces)).ToArray();
-            IEnumerable<XamlElement> elements = root.Elements().Select(element => CreateXamlElement(element, namespaces)).ToArray();
-
-            string textValue = root.Nodes().OfType<XText>().Select(text => text.Value.Trim()).DefaultIfEmpty(String.Empty).First();
-
-            return new XamlElement(new XamlName(root.Name.LocalName, root.Name.NamespaceName), namespaces, attributes, elements, textValue);
+            return new XamlElement(new XamlName(element.Name.LocalName, element.Name.NamespaceName), namespaces, CreateXamlMembers(element, namespaces), CreateValues(element, namespaces), CreateDirectives(element, namespaces));
         }
 
-        private static XamlAttribute CreateXamlAttribute(XAttribute attribute, XamlNamespaces namespaces)
+        private static IEnumerable<XamlMember> CreateXamlMembers(XElement element, XamlNamespaces namespaces)
+        {
+            IEnumerable<XamlMember> attributeMembers = element.Attributes().Where(attribute => !IsDirective(attribute.Name) && !attribute.IsNamespaceDeclaration).Select(attribute => CreateXamlMember(attribute, namespaces));
+            IEnumerable<XamlMember> elementMembers = element.Elements().Where(child => IsMemberName(child.Name)).Select(child => CreateXamlMember(child, namespaces));
+
+            return attributeMembers.Concat(elementMembers).ToArray();
+        }
+
+        private static XamlMember CreateXamlMember(XAttribute attribute, XamlNamespaces namespaces)
         {
             XamlName name = new XamlName(attribute.Name.LocalName, attribute.Name.NamespaceName.IsNullOrEmpty() ? namespaces.Get(String.Empty) : attribute.Name.NamespaceName);
             object value = (object)MarkupExtensionParser.Parse(attribute.Value, namespaces);
-            return new XamlAttribute(name, namespaces, value);
+
+            return new XamlMember(name, namespaces, value);
+        }
+
+        private static XamlMember CreateXamlMember(XElement element, XamlNamespaces namespaces)
+        {
+            XamlName name = new XamlName(element.Name.LocalName, element.Name.NamespaceName.IsNullOrEmpty() ? namespaces.Get(String.Empty) : element.Name.NamespaceName);
+
+            if (element.Attributes().Any())
+            {
+                throw new Granular.Exception("Member \"{0}\" cannot contain attributes", element.Name);
+            }
+
+            if (element.Elements().Any(child => IsMemberName(child.Name)))
+            {
+                throw new Granular.Exception("Member \"{0}\" cannot contain member elements", element.Name);
+            }
+
+            if (element.Nodes().OfType<XText>().Count() > 1)
+            {
+                throw new Granular.Exception("Member \"{0}\" cannot contain more than one text node", element.Name);
+            }
+
+            return new XamlMember(name, namespaces, CreateValues(element, namespaces));
+        }
+
+        private static IEnumerable<XamlMember> CreateDirectives(XElement element, XamlNamespaces namespaces)
+        {
+            IEnumerable<XamlMember> attributeDirectives = element.Attributes().Where(attribute => IsDirective(attribute.Name) && !attribute.IsNamespaceDeclaration).Select(attribute => CreateXamlMember(attribute, namespaces));
+            IEnumerable<XamlMember> elementDirectives = element.Elements().Where(child => IsDirective(child.Name)).Select(child => CreateXamlMember(child, namespaces));
+
+            return attributeDirectives.Concat(elementDirectives).ToArray();
+        }
+
+        private static IEnumerable<object> CreateValues(XElement element, XamlNamespaces namespaces)
+        {
+            IEnumerable<object> elementValues = element.Elements().Where(child => IsValueName(child.Name)).Select(child => (object)CreateXamlElement(child, namespaces));
+            IEnumerable<object> textValues = element.Nodes().OfType<XText>().Select(textValue => textValue.Value.Trim());
+
+            return elementValues.Concat(textValues).ToArray();
+        }
+
+        private static bool IsMemberName(XName name)
+        {
+            return name.LocalName.Contains('.') && !IsDirective(name);
+        }
+
+        private static bool IsValueName(XName name)
+        {
+            return !name.LocalName.Contains('.') && !IsDirective(name);
+        }
+
+        private static bool IsDirective(XName name)
+        {
+            return XamlLanguage.NamespaceName == name.NamespaceName &&
+                XamlLanguage.IsDirective(new XamlName(name.LocalName, name.NamespaceName));
         }
 
         private static string GetNamespaceDeclarationPrefix(XAttribute attribute)

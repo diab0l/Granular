@@ -78,9 +78,9 @@ namespace System.Windows
             }
 
             XamlElement rootElement = XamlParser.Parse(Granular.Compatibility.String.FromByteArray(EmbeddedResourceLoader.LoadResourceData(StartupUri)));
-            XamlAttribute classAttribute = rootElement.Attributes.FirstOrDefault(attribute => attribute.Name == XamlLanguage.ClassDirective);
+            XamlMember classDirective = rootElement.Directives.FirstOrDefault(directive => directive.Name == XamlLanguage.ClassDirective);
 
-            Window window = Activator.CreateInstance(Type.GetType(String.Format("{0}, {1}", classAttribute.Value, GetType().Assembly.GetName().Name))) as Window;
+            Window window = Activator.CreateInstance(Type.GetType(String.Format("{0}, {1}", classDirective.GetSingleValue(), GetType().Assembly.GetName().Name))) as Window;
             if (window != null)
             {
                 window.Show();
