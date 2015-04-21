@@ -665,6 +665,7 @@
       <Link>Window.cs</Link>
     </Compile>
     <Compile Include="Media\Animation\ColorAnimation.cs" />
+    <Compile Include="Media\Animation\RectAnimation.cs" />
     <Compile Include="Media\Animation\ThicknessAnimation.cs" />
     <Compile Include="Media\Animation\DoubleAnimation.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
