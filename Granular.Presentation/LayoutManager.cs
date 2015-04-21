@@ -14,6 +14,7 @@ namespace System.Windows
 
         private HashSet<UIElement> measureQueue;
         private HashSet<UIElement> arrangeQueue;
+        private HashSet<UIElement> updatedElements;
 
         private DispatcherOperation updateLayoutOperation;
 
@@ -21,6 +22,7 @@ namespace System.Windows
         {
             measureQueue = new HashSet<UIElement>();
             arrangeQueue = new HashSet<UIElement>();
+            updatedElements = new HashSet<UIElement>();
         }
 
         public void AddMeasure(UIElement element)
@@ -45,6 +47,22 @@ namespace System.Windows
             arrangeQueue.Remove(element);
         }
 
+        public void AddUpdatedElement(UIElement element)
+        {
+            if (updateLayoutOperation == null || updateLayoutOperation.Status != DispatcherOperationStatus.Executing)
+            {
+                // element was updated manually (not through the UpdateLayout loop)
+                foreach (UIElement pathElement in GetElementPath(element))
+                {
+                    pathElement.RaiseLayoutUpdated();
+                }
+
+                return;
+            }
+
+            updatedElements.AddRange(GetElementPath(element));
+        }
+
         public void BeginUpdateLayout()
         {
             if (updateLayoutOperation == null || updateLayoutOperation.Status == DispatcherOperationStatus.Completed)
@@ -55,8 +73,6 @@ namespace System.Windows
 
         public void UpdateLayout()
         {
-            HashSet<UIElement> arrangedElements = new HashSet<UIElement>();
-
             while (measureQueue.Count > 0 || arrangeQueue.Count > 0)
             {
                 while (measureQueue.Count > 0)
@@ -65,18 +81,16 @@ namespace System.Windows
                     element.Measure(element.VisualParent == null || element.PreviousAvailableSize.IsEmpty ? Size.Infinity : element.PreviousAvailableSize);
                 }
 
-                arrangedElements.AddRange(arrangeQueue.SelectMany(element => GetElementPath(element)));
-
                 while (arrangeQueue.Count > 0)
                 {
                     UIElement element = GetTopElement(arrangeQueue);
                     element.Arrange(element.VisualParent == null || element.PreviousFinalRect.IsEmpty ? new Rect(element.DesiredSize) : element.PreviousFinalRect);
                 }
 
-                while (arrangedElements.Count > 0 && measureQueue.Count == 0 && arrangeQueue.Count == 0) // LayoutUpdated can invalidate other elements
+                while (updatedElements.Count > 0 && measureQueue.Count == 0 && arrangeQueue.Count == 0) // LayoutUpdated can invalidate other elements
                 {
-                    UIElement element = arrangedElements.First();
-                    arrangedElements.Remove(element);
+                    UIElement element = updatedElements.First();
+                    updatedElements.Remove(element);
 
                     element.RaiseLayoutUpdated();
                 }

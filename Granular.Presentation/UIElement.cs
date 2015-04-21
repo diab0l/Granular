@@ -389,6 +389,7 @@ namespace System.Windows
                     PreviousFinalRect = finalRect;
                     IsArrangeValid = true;
                     LayoutManager.Current.RemoveArrange(this);
+                    LayoutManager.Current.AddUpdatedElement(this);
                 }
             }
         }
