@@ -123,6 +123,7 @@
     <Compile Include="Compatibility\EventInfoExtensions.cs" />
     <Compile Include="Compatibility\HashSet.cs" />
     <Compile Include="Compatibility\NotifyPropertyChanged.cs" />
+    <Compile Include="Compatibility\ParameterInfoExtensions.cs" />
     <Compile Include="Compatibility\PropertyInfoExtensions.cs" />
     <Compile Include="Compatibility\RegexExtensions.cs" />
     <Compile Include="Compatibility\RuntimeHelpers.cs" />
