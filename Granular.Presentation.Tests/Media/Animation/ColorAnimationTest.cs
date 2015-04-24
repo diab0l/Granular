@@ -63,7 +63,7 @@ namespace Granular.Presentation.Media.Animation.Tests
             animation = new ColorAnimationUsingKeyFrames();
             animation.KeyFrames.Add(new LinearColorKeyFrame { KeyTime = KeyTime.FromTimeSpan(TimeSpan.FromSeconds(0)), Value = Color.FromUInt32(0) });
             animation.KeyFrames.Add(new LinearColorKeyFrame { KeyTime = KeyTime.FromTimeSpan(TimeSpan.FromSeconds(1)), Value = Color.FromUInt32(100) });
-            animation.Duration = Duration.FromTimeSpan(TimeSpan.FromSeconds(2));
+            animation.Duration = new Duration(TimeSpan.FromSeconds(2));
             animation.RepeatBehavior = RepeatBehavior.Forever;
 
             TestRootClock rootClock = new TestRootClock();

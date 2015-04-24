@@ -14,9 +14,9 @@ namespace Granular.Presentation.Media.Animation.Tests
         [TestMethod]
         public void SequentialTimelineClockStoryboardTest()
         {
-            DoubleAnimation animation1 = new DoubleAnimation { To = 100, Duration = Duration.FromTimeSpan(TimeSpan.FromSeconds(1)) };
-            DoubleAnimation animation2 = new DoubleAnimation { To = 200, Duration = Duration.FromTimeSpan(TimeSpan.FromSeconds(0)) };
-            DoubleAnimation animation3 = new DoubleAnimation { To = 300, Duration = Duration.FromTimeSpan(TimeSpan.FromSeconds(1)) };
+            DoubleAnimation animation1 = new DoubleAnimation { To = 100, Duration = new Duration(TimeSpan.FromSeconds(1)) };
+            DoubleAnimation animation2 = new DoubleAnimation { To = 200, Duration = new Duration(TimeSpan.FromSeconds(0)) };
+            DoubleAnimation animation3 = new DoubleAnimation { To = 300, Duration = new Duration(TimeSpan.FromSeconds(1)) };
 
             SequentialTimeline sequentialTimeline = new SequentialTimeline();
             sequentialTimeline.Children.Add(animation1);

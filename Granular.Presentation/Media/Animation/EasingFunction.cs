@@ -19,7 +19,7 @@ namespace System.Windows.Media.Animation
 
     public abstract class EasingFunctionBase : Freezable, IEasingFunction
     {
-        public static readonly DependencyProperty EasingModeProperty = DependencyProperty.Register("EasingMode", typeof(EasingMode), typeof(EasingFunctionBase), new FrameworkPropertyMetadata());
+        public static readonly DependencyProperty EasingModeProperty = DependencyProperty.Register("EasingMode", typeof(EasingMode), typeof(EasingFunctionBase), new FrameworkPropertyMetadata(EasingMode.EaseOut));
         public EasingMode EasingMode
         {
             get { return (EasingMode)GetValue(EasingModeProperty); }

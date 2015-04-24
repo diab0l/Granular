@@ -19,6 +19,12 @@ namespace System.Windows
 
         private DurationType durationType;
 
+        public Duration(TimeSpan timeSpan) :
+            this(DurationType.TimeSpan, timeSpan)
+        {
+            //
+        }
+
         private Duration(DurationType durationType, TimeSpan timeSpan)
         {
             this.TimeSpan = timeSpan;
@@ -53,11 +59,6 @@ namespace System.Windows
             return TimeSpan.ToString();
         }
 
-        public static Duration FromTimeSpan(TimeSpan timeSpan)
-        {
-            return new Duration(DurationType.TimeSpan, timeSpan);
-        }
-
         public static Duration Parse(string value)
         {
             value = value.Trim();
@@ -75,7 +76,7 @@ namespace System.Windows
             TimeSpan timeSpan;
             if (Granular.Compatibility.TimeSpan.TryParse(value, out timeSpan))
             {
-                return Duration.FromTimeSpan(timeSpan);
+                return new Duration(timeSpan);
             }
 
             throw new Granular.Exception("Can't parse Duration value \"{0}\"", value);

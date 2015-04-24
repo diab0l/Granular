@@ -210,7 +210,7 @@ namespace System.Windows.Controls
                 thicknessAnimation.KeyFrames.Add(new LinearThicknessKeyFrame { Value = new Thickness(startOffset, 0, 0, 0), KeyTime = KeyTime.FromTimeSpan(TimeSpan.Zero) });
                 thicknessAnimation.KeyFrames.Add(new LinearThicknessKeyFrame { Value = new Thickness(endOffset, 0, 0, 0), KeyTime = KeyTime.FromTimeSpan(time) });
 
-                thicknessAnimation.Duration = Duration.FromTimeSpan(time + TimeSpan.FromSeconds(1));
+                thicknessAnimation.Duration = new Duration(time + TimeSpan.FromSeconds(1));
 
                 thicknessAnimation.RepeatBehavior = RepeatBehavior.Forever;
                 thicknessAnimation.BeginTime = -time.Scale((currentOffset - startOffset) / (endOffset - startOffset));

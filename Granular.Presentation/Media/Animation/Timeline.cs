@@ -20,7 +20,7 @@ namespace System.Windows.Media.Animation
             set { SetValue(BeginTimeProperty, value); }
         }
 
-        public static readonly DependencyProperty DurationProperty = DependencyProperty.Register("Duration", typeof(Duration), typeof(Timeline), new FrameworkPropertyMetadata(Duration.FromTimeSpan(TimeSpan.FromSeconds(1))));
+        public static readonly DependencyProperty DurationProperty = DependencyProperty.Register("Duration", typeof(Duration), typeof(Timeline), new FrameworkPropertyMetadata(new Duration(TimeSpan.FromSeconds(1))));
         public Duration Duration
         {
             get { return (Duration)GetValue(DurationProperty); }
