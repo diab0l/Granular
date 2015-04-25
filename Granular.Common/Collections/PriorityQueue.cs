@@ -8,6 +8,8 @@ namespace Granular.Collections
 {
     public class PriorityQueue<TKey, TValue> : IEnumerable<KeyValuePair<TKey, TValue>>
     {
+        private static readonly TValue DefaultValue = default(TValue);
+
         private class IndexedKey
         {
             public TKey Key { get; private set; }
@@ -77,7 +79,7 @@ namespace Granular.Collections
                 return true;
             }
 
-            value = default(TValue);
+            value = DefaultValue;
             return false;
         }
 
@@ -101,7 +103,7 @@ namespace Granular.Collections
                 return true;
             }
 
-            value = default(TValue);
+            value = DefaultValue;
             return false;
         }
 

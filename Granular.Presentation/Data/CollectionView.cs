@@ -45,7 +45,7 @@ namespace System.Windows.Data
             public Func<object, bool> FilterPredicate { get { return null; } set { } }
             public bool CanSort { get { return false; } }
             public Func<object, object> SortKeySelector { get { return null; } set { } }
-            public ListSortDirection SortDirection { get { return default(ListSortDirection); } set { } }
+            public ListSortDirection SortDirection { get { return ListSortDirection.Ascending; } set { } }
 
             public IEnumerator<object> GetEnumerator()
             {

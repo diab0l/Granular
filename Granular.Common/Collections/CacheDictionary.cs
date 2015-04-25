@@ -7,6 +7,8 @@ namespace Granular.Collections
 {
     public class CacheDictionary<TKey, TValue>
     {
+        private static readonly TValue DefaultValue = default(TValue);
+
         public delegate bool TryResolveValue(TKey key, out TValue value);
         public delegate TValue ResolveValue(TKey key);
 
@@ -58,7 +60,7 @@ namespace Granular.Collections
 
             if (unsetValues.Contains(key))
             {
-                value = default(TValue);
+                value = DefaultValue;
                 return false;
             }
 
@@ -76,7 +78,7 @@ namespace Granular.Collections
             }
 
             unsetValues.Add(key);
-            value = default(TValue);
+            value = DefaultValue;
             return false;
         }
 

@@ -8,6 +8,8 @@ namespace System.Collections.Generic
 {
     public class SortedList<TKey, TValue> : IDictionary<TKey, TValue>
     {
+        private static readonly TValue DefaultValue = default(TValue);
+
         private List<TKey> keys;
         private ICollection<TKey> readOnlyKeys;
         ICollection<TKey> IDictionary<TKey, TValue>.Keys { get { return readOnlyKeys; } }
@@ -110,7 +112,7 @@ namespace System.Collections.Generic
             int index;
             if (!FindItem(key, out index))
             {
-                value = default(TValue);
+                value = DefaultValue;
                 return false;
             }
 
