@@ -84,5 +84,38 @@ namespace Granular.Presentation.Tests
             element.Triggers.Remove(trigger);
             Assert.AreEqual(0, element.GetValue(Value2Property));
         }
+
+        [TestMethod]
+        public void MultiTriggerBasicTest()
+        {
+            Condition condition1 = new Condition { Property = new DependencyPropertyPathElement(Value1Property), Value = 1 };
+            Condition condition2 = new Condition { Property = new DependencyPropertyPathElement(Value2Property), Value = 2 };
+
+            MultiTrigger multiTrigger = new MultiTrigger();
+            multiTrigger.Conditions.Add(condition1);
+            multiTrigger.Conditions.Add(condition2);
+            multiTrigger.Setters.Add(new Setter { Property = new DependencyPropertyPathElement(Value3Property), Value = 3 });
+
+
+            FrameworkElement element = new FrameworkElement();
+            element.SetValue(Value1Property, 1);
+            element.SetValue(Value2Property, 2);
+
+            Assert.AreEqual(1, element.GetValue(Value1Property));
+            Assert.AreEqual(2, element.GetValue(Value2Property));
+            Assert.AreEqual(0, element.GetValue(Value3Property));
+
+            element.Triggers.Add(multiTrigger);
+            Assert.AreEqual(3, element.GetValue(Value3Property));
+
+            element.SetValue(Value1Property, 2);
+            Assert.AreEqual(0, element.GetValue(Value3Property));
+
+            element.SetValue(Value1Property, 1);
+            Assert.AreEqual(3, element.GetValue(Value3Property));
+
+            element.Triggers.Remove(multiTrigger);
+            Assert.AreEqual(0, element.GetValue(Value3Property));
+        }
     }
 }

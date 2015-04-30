@@ -41,6 +41,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Condition.cs" />
     <Compile Include="Controls\Adorner.cs" />
     <Compile Include="Controls\AdornerLayer.cs" />
     <Compile Include="Controls\Expander.cs" />
@@ -172,6 +173,8 @@
     <Compile Include="Media\RenderImageSource.cs" />
     <Compile Include="Media\Stretch.cs" />
     <Compile Include="Media\Typeface.cs" />
+    <Compile Include="MultiTrigger.cs" />
+    <Compile Include="MultiTriggerBase.cs" />
     <Compile Include="ResourceKey.cs" />
     <Compile Include="StartupEventArgs.cs" />
     <Compile Include="StaticResourceExtension.cs" />

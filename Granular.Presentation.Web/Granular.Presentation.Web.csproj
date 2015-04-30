@@ -40,6 +40,9 @@
     <Compile Include="..\Granular.Presentation\ApplicationHost.cs">
       <Link>ApplicationHost.cs</Link>
     </Compile>
+    <Compile Include="..\Granular.Presentation\Condition.cs">
+      <Link>Condition.cs</Link>
+    </Compile>
     <Compile Include="..\Granular.Presentation\Controls\Adorner.cs">
       <Link>Controls\Adorner.cs</Link>
     </Compile>
@@ -561,6 +564,12 @@
     </Compile>
     <Compile Include="..\Granular.Presentation\Media\Visual.cs">
       <Link>Media\Visual.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\MultiTrigger.cs">
+      <Link>MultiTrigger.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\MultiTriggerBase.cs">
+      <Link>MultiTriggerBase.cs</Link>
     </Compile>
     <Compile Include="..\Granular.Presentation\Point.cs">
       <Link>Point.cs</Link>
