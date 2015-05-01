@@ -565,6 +565,9 @@
     <Compile Include="..\Granular.Presentation\Media\Visual.cs">
       <Link>Media\Visual.cs</Link>
     </Compile>
+    <Compile Include="..\Granular.Presentation\MultiDataTrigger.cs">
+      <Link>MultiDataTrigger.cs</Link>
+    </Compile>
     <Compile Include="..\Granular.Presentation\MultiTrigger.cs">
       <Link>MultiTrigger.cs</Link>
     </Compile>

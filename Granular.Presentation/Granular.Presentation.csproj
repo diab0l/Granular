@@ -55,6 +55,7 @@
     <Compile Include="Controls\SpellCheck.cs" />
     <Compile Include="Controls\TextBoxView.cs" />
     <Compile Include="Controls\TextChangedEventArgs.cs" />
+    <Compile Include="MultiDataTrigger.cs" />
     <Compile Include="EmbeddedResourceLoader.cs" />
     <Compile Include="Input\Cursor.cs" />
     <Compile Include="LayoutManager.cs" />

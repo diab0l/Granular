@@ -117,5 +117,35 @@ namespace Granular.Presentation.Tests
             element.Triggers.Remove(multiTrigger);
             Assert.AreEqual(0, element.GetValue(Value3Property));
         }
+
+        [TestMethod]
+        public void MultiDataTriggerBasicTest()
+        {
+            Condition condition1 = new Condition { Binding = new Binding { Path = PropertyPath.Parse("X") }, Value = 1 };
+            Condition condition2 = new Condition { Binding = new Binding { Path = PropertyPath.Parse("Y") }, Value = 2 };
+
+            MultiDataTrigger multiDataTrigger = new MultiDataTrigger();
+            multiDataTrigger.Conditions.Add(condition1);
+            multiDataTrigger.Conditions.Add(condition2);
+            multiDataTrigger.Setters.Add(new Setter { Property = new DependencyPropertyPathElement(Value1Property), Value = 1 });
+
+
+            FrameworkElement element = new FrameworkElement();
+            element.DataContext = new Point(1, 2);
+
+            Assert.AreEqual(0, element.GetValue(Value1Property));
+
+            element.Triggers.Add(multiDataTrigger);
+            Assert.AreEqual(1, element.GetValue(Value1Property));
+
+            element.DataContext = Point.Zero;
+            Assert.AreEqual(0, element.GetValue(Value1Property));
+
+            element.DataContext = new Point(1, 2);
+            Assert.AreEqual(1, element.GetValue(Value1Property));
+
+            element.Triggers.Remove(multiDataTrigger);
+            Assert.AreEqual(0, element.GetValue(Value1Property));
+        }
     }
 }
