@@ -114,6 +114,20 @@ namespace System.Windows.Controls
             set { SetValue(PaddingProperty, value); }
         }
 
+        public static readonly DependencyProperty IsTabStopProperty = KeyboardNavigation.IsTabStopProperty.AddOwner(typeof(Control));
+        public bool IsTabStop
+        {
+            get { return (bool)GetValue(IsTabStopProperty); }
+            set { SetValue(IsTabStopProperty, value); }
+        }
+
+        public static readonly DependencyProperty TabIndexProperty = KeyboardNavigation.TabIndexProperty.AddOwner(typeof(Control));
+        public int TabIndex
+        {
+            get { return (int)GetValue(TabIndexProperty); }
+            set { SetValue(TabIndexProperty, value); }
+        }
+
         static Control()
         {
             FocusableProperty.OverrideMetadata(typeof(Control), new FrameworkPropertyMetadata(true));

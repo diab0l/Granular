@@ -73,6 +73,17 @@ namespace System.Windows.Input
         }
     }
 
+    public static class KeyEventHandlerExtensions
+    {
+        public static void Raise(this KeyEventHandler handler, object sender, KeyEventArgs e)
+        {
+            if (handler != null)
+            {
+                handler(sender, e);
+            }
+        }
+    }
+
     public enum KeyStates
     {
         None,

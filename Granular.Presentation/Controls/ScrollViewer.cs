@@ -192,6 +192,11 @@ namespace System.Windows.Controls
 
         private ScrollContentPresenter scrollContentPresenter;
 
+        static ScrollViewer()
+        {
+            Control.IsTabStopProperty.OverrideMetadata(typeof(ScrollViewer), new FrameworkPropertyMetadata(false));
+        }
+
         protected override void OnApplyTemplate()
         {
             base.OnApplyTemplate();

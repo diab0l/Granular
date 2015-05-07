@@ -20,10 +20,15 @@ namespace System.Windows
         public PopupLayer PopupLayer { get; private set; }
 
         private IPresentationSource presentationSource;
+        private KeyboardNavigation keyboardNavigation;
         private ISelectionGroupScope<RadioButton> radioButtonGroupScope;
 
         static Window()
         {
+            Control.IsTabStopProperty.OverrideMetadata(typeof(Window), new FrameworkPropertyMetadata(false));
+            KeyboardNavigation.DirectionalNavigationProperty.OverrideMetadata(typeof(Window), new FrameworkPropertyMetadata(KeyboardNavigationMode.Cycle));
+            KeyboardNavigation.TabNavigationProperty.OverrideMetadata(typeof(Window), new FrameworkPropertyMetadata(KeyboardNavigationMode.Cycle));
+            KeyboardNavigation.ControlTabNavigationProperty.OverrideMetadata(typeof(Window), new FrameworkPropertyMetadata(KeyboardNavigationMode.Cycle));
             FocusManager.IsFocusScopeProperty.OverrideMetadata(typeof(Window), new FrameworkPropertyMetadata(true));
         }
 
@@ -60,6 +65,8 @@ namespace System.Windows
 
             presentationSource = ApplicationHost.Current.PresentationSourceFactory.CreatePresentationSource(this);
             presentationSource.Title = this.Title;
+
+            keyboardNavigation = new KeyboardNavigation(presentationSource);
         }
 
         public ISelectionGroup<RadioButton> GetRadioButtonGroup(string groupName)

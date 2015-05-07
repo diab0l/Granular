@@ -48,6 +48,11 @@ namespace System.Windows.Controls
             set { SetValue(IsExpandedProperty, value); }
         }
 
+        static Expander()
+        {
+            Control.IsTabStopProperty.OverrideMetadata(typeof(Expander), new FrameworkPropertyMetadata(false));
+        }
+
         public Expander()
         {
             //

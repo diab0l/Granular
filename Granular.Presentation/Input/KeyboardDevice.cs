@@ -30,6 +30,9 @@ namespace System.Windows.Input
 
     public class KeyboardDevice : IInputDevice
     {
+        public event KeyEventHandler PreProcessKey;
+        public event KeyEventHandler PostProcessKey;
+
         private IInputElement target;
         public IInputElement Target
         {
@@ -41,38 +44,10 @@ namespace System.Windows.Input
                     return;
                 }
 
-                int timestamp = presentationSource.GetTimestamp();
-
                 IInputElement oldTarget = target;
                 target = value;
 
-                if (oldTarget != null)
-                {
-                    foreach (Key key in downKeys)
-                    {
-                        oldTarget.RaiseEvents(
-                            new KeyEventArgs(Keyboard.PreviewKeyUpEvent, oldTarget, this, timestamp, key, KeyStates.None, false),
-                            new KeyEventArgs(Keyboard.KeyUpEvent, oldTarget, this, timestamp, key, KeyStates.None, false));
-                    }
-
-                    oldTarget.RaiseEvents(
-                        new KeyboardFocusChangedEventArgs(Keyboard.PreviewLostKeyboardFocusEvent, oldTarget, this, timestamp, oldTarget, target),
-                        new KeyboardFocusChangedEventArgs(Keyboard.LostKeyboardFocusEvent, oldTarget, this, timestamp, oldTarget, target));
-                }
-
-                if (target != null)
-                {
-                    target.RaiseEvents(
-                        new KeyboardFocusChangedEventArgs(Keyboard.PreviewGotKeyboardFocusEvent, target, this, timestamp, oldTarget, target),
-                        new KeyboardFocusChangedEventArgs(Keyboard.GotKeyboardFocusEvent, target, this, timestamp, oldTarget, target));
-
-                    foreach (Key key in downKeys)
-                    {
-                        target.RaiseEvents(
-                            new KeyEventArgs(Keyboard.PreviewKeyDownEvent, target, this, timestamp, key, KeyStates.None, false),
-                            new KeyEventArgs(Keyboard.KeyDownEvent, target, this, timestamp, key, KeyStates.None, false));
-                    }
-                }
+                OnTargetChanged(oldTarget, target);
             }
         }
 
@@ -131,11 +106,6 @@ namespace System.Windows.Input
                 downKeys.Remove(rawEvent.Key);
             }
 
-            if (Target == null)
-            {
-                return false;
-            }
-
             RoutedEvent previewRoutedEvent;
             RoutedEvent routedEvent;
 
@@ -157,7 +127,14 @@ namespace System.Windows.Input
             KeyEventArgs previewEventArgs = new KeyEventArgs(previewRoutedEvent, Target, this, rawEvent.Timestamp, rawEvent.Key, rawEvent.KeyStates, rawEvent.IsRepeat);
             KeyEventArgs eventArgs = new KeyEventArgs(routedEvent, Target, this, rawEvent.Timestamp, rawEvent.Key, rawEvent.KeyStates, rawEvent.IsRepeat);
 
-            Target.RaiseEvents(previewEventArgs, eventArgs);
+            PreProcessKey.Raise(this, previewEventArgs);
+
+            if (Target != null)
+            {
+                Target.RaiseEvents(previewEventArgs, eventArgs);
+            }
+
+            PostProcessKey.Raise(this, eventArgs);
 
             return previewEventArgs.Handled || eventArgs.Handled;
         }
@@ -178,6 +155,39 @@ namespace System.Windows.Input
                     Target = null;
                 }
             });
+        }
+
+        private void OnTargetChanged(IInputElement oldTarget, IInputElement newTarget)
+        {
+            int timestamp = presentationSource.GetTimestamp();
+
+            if (oldTarget != null)
+            {
+                foreach (Key key in downKeys)
+                {
+                    oldTarget.RaiseEvents(
+                        new KeyEventArgs(Keyboard.PreviewKeyUpEvent, oldTarget, this, timestamp, key, KeyStates.None, false),
+                        new KeyEventArgs(Keyboard.KeyUpEvent, oldTarget, this, timestamp, key, KeyStates.None, false));
+                }
+
+                oldTarget.RaiseEvents(
+                    new KeyboardFocusChangedEventArgs(Keyboard.PreviewLostKeyboardFocusEvent, oldTarget, this, timestamp, oldTarget, newTarget),
+                    new KeyboardFocusChangedEventArgs(Keyboard.LostKeyboardFocusEvent, oldTarget, this, timestamp, oldTarget, newTarget));
+            }
+
+            if (newTarget != null)
+            {
+                newTarget.RaiseEvents(
+                    new KeyboardFocusChangedEventArgs(Keyboard.PreviewGotKeyboardFocusEvent, newTarget, this, timestamp, oldTarget, newTarget),
+                    new KeyboardFocusChangedEventArgs(Keyboard.GotKeyboardFocusEvent, newTarget, this, timestamp, oldTarget, newTarget));
+
+                foreach (Key key in downKeys)
+                {
+                    newTarget.RaiseEvents(
+                        new KeyEventArgs(Keyboard.PreviewKeyDownEvent, newTarget, this, timestamp, key, KeyStates.None, false),
+                        new KeyEventArgs(Keyboard.KeyDownEvent, newTarget, this, timestamp, key, KeyStates.None, false));
+                }
+            }
         }
     }
 }
