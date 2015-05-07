@@ -387,4 +387,22 @@ namespace System.Windows.Media
             return point - VisualOffset;
         }
     }
+
+    public static class VisualExtensions
+    {
+        public static bool IsAncestorOf(this Visual visual, Visual descendant)
+        {
+            while (descendant != null)
+            {
+                if (descendant.VisualParent == visual)
+                {
+                    return true;
+                }
+
+                descendant = descendant.VisualParent;
+            }
+
+            return false;
+        }
+    }
 }

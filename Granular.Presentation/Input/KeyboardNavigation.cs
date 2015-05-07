@@ -117,7 +117,16 @@ namespace System.Windows.Input
 
             if (TryGetNavigationMode(e, out navigationModeProperty, out navigationDirection))
             {
-                //
+                UIElement currentTarget = (UIElement)presentationSource.KeyboardDevice.Target ?? presentationSource.RootElement;
+
+                UIElement newTarget = (UIElement)KeyboardNavigationTarget.FindTarget(currentTarget, navigationDirection, navigationModeProperty);
+
+                if (currentTarget != newTarget && newTarget != null)
+                {
+                    newTarget.Focus();
+                }
+
+                e.Handled = true;
             }
         }
 

@@ -187,5 +187,15 @@ namespace System.Windows
 
             return point.Max(minimum).Min(maximum);
         }
+
+        public static double GetLength(this Point point)
+        {
+            return Math.Sqrt(point.GetLengthSqr());
+        }
+
+        public static double GetLengthSqr(this Point point)
+        {
+            return point.X * point.X + point.Y * point.Y;
+        }
     }
 }

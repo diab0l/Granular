@@ -145,6 +145,9 @@
     <Compile Include="..\Granular.Presentation.Tests\Input\KeyboardDeviceTest.cs">
       <Link>Input\KeyboardDeviceTest.cs</Link>
     </Compile>
+    <Compile Include="..\Granular.Presentation.Tests\Input\KeyboardNavigationTargetTest.cs">
+      <Link>Input\KeyboardNavigationTargetTest.cs</Link>
+    </Compile>
     <Compile Include="..\Granular.Presentation.Tests\Input\MouseDeviceTest.cs">
       <Link>Input\MouseDeviceTest.cs</Link>
     </Compile>

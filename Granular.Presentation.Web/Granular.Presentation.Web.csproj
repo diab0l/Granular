@@ -346,6 +346,9 @@
     <Compile Include="..\Granular.Presentation\Input\KeyboardNavigation.cs">
       <Link>Input\KeyboardNavigation.cs</Link>
     </Compile>
+    <Compile Include="..\Granular.Presentation\Input\KeyboardNavigationTarget.cs">
+      <Link>Input\KeyboardNavigationTarget.cs</Link>
+    </Compile>
     <Compile Include="..\Granular.Presentation\Input\Mouse.cs">
       <Link>Input\Mouse.cs</Link>
     </Compile>
