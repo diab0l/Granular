@@ -48,6 +48,11 @@ namespace Granular.Presentation.Generic
             set { SetValue(RenderCornersProperty, value); }
         }
 
+        static ButtonChrome()
+        {
+            FocusableProperty.OverrideMetadata(typeof(ButtonChrome), new FrameworkPropertyMetadata(false));
+        }
+
         protected override void UpdateVisualState(bool useTransitions)
         {
             VisualStateManager.GoToState(this, GetStateName(), useTransitions);

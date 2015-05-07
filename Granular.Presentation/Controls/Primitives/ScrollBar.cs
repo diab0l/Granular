@@ -187,6 +187,11 @@ namespace System.Windows.Controls.Primitives
 
         private double dragInitialValue;
 
+        static ScrollBar()
+        {
+            FocusableProperty.OverrideMetadata(typeof(ScrollBar), new FrameworkPropertyMetadata(false));
+        }
+
         public ScrollBar()
         {
             //

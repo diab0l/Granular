@@ -97,7 +97,7 @@ namespace System.Windows.Input
                 return;
             }
 
-            currentFocusVisual = new Adorner(element) { Child = new Control { Style = element.FocusVisualStyle } };
+            currentFocusVisual = new Adorner(element) { Child = new Control { Style = element.FocusVisualStyle, Focusable = false } };
             AdornerLayer.GetAdornerLayer(element).Add(currentFocusVisual);
         }
 

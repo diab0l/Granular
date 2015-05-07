@@ -45,6 +45,11 @@ namespace System.Windows.Controls.Primitives
 
         private Point dragStartPosition;
 
+        static Thumb()
+        {
+            FocusableProperty.OverrideMetadata(typeof(Thumb), new FrameworkPropertyMetadata(false));
+        }
+
         protected override void OnMouseDown(MouseButtonEventArgs e)
         {
             if (e.ChangedButton == Input.MouseButton.Left)
