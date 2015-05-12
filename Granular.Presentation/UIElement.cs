@@ -521,7 +521,10 @@ namespace System.Windows
 
         public void Focus()
         {
-            focus = FocusManager.Focus(this);
+            if (!IsFocused && Focusable)
+            {
+                focus = Disposable.Combine(Keyboard.Focus(this), FocusManager.Focus(this));
+            }
         }
 
         public void ClearFocus()
