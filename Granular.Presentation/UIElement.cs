@@ -137,12 +137,28 @@ namespace System.Windows
             private set { SetValue(IsMouseOverPropertyKey, value); }
         }
 
+        private static readonly DependencyPropertyKey IsFocusedPropertyKey = DependencyProperty.RegisterReadOnly("IsFocused", typeof(bool), typeof(UIElement), new FrameworkPropertyMetadata());
+        public static readonly DependencyProperty IsFocusedProperty = IsFocusedPropertyKey.DependencyProperty;
+        public bool IsFocused
+        {
+            get { return (bool)GetValue(IsFocusedPropertyKey); }
+            private set { SetValue(IsFocusedPropertyKey, value); }
+        }
+
         private static readonly DependencyPropertyKey IsKeyboardFocusedPropertyKey = DependencyProperty.RegisterReadOnly("IsKeyboardFocused", typeof(bool), typeof(UIElement), new FrameworkPropertyMetadata());
         public static readonly DependencyProperty IsKeyboardFocusedProperty = IsKeyboardFocusedPropertyKey.DependencyProperty;
         public bool IsKeyboardFocused
         {
             get { return (bool)GetValue(IsKeyboardFocusedPropertyKey); }
             private set { SetValue(IsKeyboardFocusedPropertyKey, value); }
+        }
+
+        private static readonly DependencyPropertyKey IsKeyboardFocusWithinPropertyKey = DependencyProperty.RegisterReadOnly("IsKeyboardFocusWithin", typeof(bool), typeof(UIElement), new FrameworkPropertyMetadata());
+        public static readonly DependencyProperty IsKeyboardFocusWithinProperty = IsKeyboardFocusWithinPropertyKey.DependencyProperty;
+        public bool IsKeyboardFocusWithin
+        {
+            get { return (bool)GetValue(IsKeyboardFocusWithinPropertyKey); }
+            private set { SetValue(IsKeyboardFocusWithinPropertyKey, value); }
         }
 
         private bool isRootElement;

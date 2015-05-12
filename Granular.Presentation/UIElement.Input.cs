@@ -213,7 +213,8 @@ namespace System.Windows
 
         private static void OnGotKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
         {
-            ((UIElement)sender).IsKeyboardFocused = true;
+            ((UIElement)sender).IsKeyboardFocused = e.OriginalSource == sender;
+            ((UIElement)sender).IsKeyboardFocusWithin = true;
             ((UIElement)sender).OnGotKeyboardFocus(e);
         }
 
@@ -225,6 +226,7 @@ namespace System.Windows
         private static void OnLostKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
         {
             ((UIElement)sender).IsKeyboardFocused = false;
+            ((UIElement)sender).IsKeyboardFocusWithin = false;
             ((UIElement)sender).OnLostKeyboardFocus(e);
         }
 
@@ -269,14 +271,6 @@ namespace System.Windows
             remove { RemoveHandler(LostFocusEvent, value); }
         }
 
-        private static readonly DependencyPropertyKey IsFocusedPropertyKey = DependencyProperty.RegisterReadOnly("IsFocused", typeof(bool), typeof(UIElement), new FrameworkPropertyMetadata());
-        public static readonly DependencyProperty IsFocusedProperty = IsFocusedPropertyKey.DependencyProperty;
-        public bool IsFocused
-        {
-            get { return (bool)GetValue(IsFocusedPropertyKey); }
-            private set { SetValue(IsFocusedPropertyKey, value); }
-        }
-
         private static void OnGotFocus(object sender, RoutedEventArgs e)
         {
             ((UIElement)sender).IsFocused = true;
@@ -316,8 +310,8 @@ namespace System.Windows
             EventManager.RegisterClassHandler(typeof(UIElement), Mouse.MouseUpEvent, (MouseButtonEventHandler)((sender, e) => ((UIElement)sender).OnMouseUp(e)), false);
             EventManager.RegisterClassHandler(typeof(UIElement), Mouse.MouseWheelEvent, (MouseWheelEventHandler)((sender, e) => ((UIElement)sender).OnMouseWheel(e)), false);
 
-            EventManager.RegisterClassHandler(typeof(UIElement), Keyboard.GotKeyboardFocusEvent, (KeyboardFocusChangedEventHandler)OnGotKeyboardFocus, false);
-            EventManager.RegisterClassHandler(typeof(UIElement), Keyboard.LostKeyboardFocusEvent, (KeyboardFocusChangedEventHandler)OnLostKeyboardFocus, false);
+            EventManager.RegisterClassHandler(typeof(UIElement), Keyboard.GotKeyboardFocusEvent, (KeyboardFocusChangedEventHandler)OnGotKeyboardFocus, true);
+            EventManager.RegisterClassHandler(typeof(UIElement), Keyboard.LostKeyboardFocusEvent, (KeyboardFocusChangedEventHandler)OnLostKeyboardFocus, true);
 
             EventManager.RegisterClassHandler(typeof(UIElement), Keyboard.PreviewKeyDownEvent, (KeyEventHandler)((sender, e) => ((UIElement)sender).OnPreviewKeyDown(e)), false);
             EventManager.RegisterClassHandler(typeof(UIElement), Keyboard.PreviewKeyUpEvent, (KeyEventHandler)((sender, e) => ((UIElement)sender).OnPreviewKeyUp(e)), false);
