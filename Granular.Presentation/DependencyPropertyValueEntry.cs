@@ -105,7 +105,7 @@ namespace System.Windows
 
         public int GetBaseValuePriority()
         {
-            return Granular.Compatibility.Array.FindLastIndex(baseValues, value => value != ObservableValue.UnsetValue);
+            return Granular.Compatibility.Array.FindLastIndex(baseValues, value => GetFlattenedValue(value) != ObservableValue.UnsetValue);
         }
 
         public object GetCurrentValue(bool flattened)

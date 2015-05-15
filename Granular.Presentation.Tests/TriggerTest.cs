@@ -147,5 +147,36 @@ namespace Granular.Presentation.Tests
             element.Triggers.Remove(multiDataTrigger);
             Assert.AreEqual(0, element.GetValue(Value1Property));
         }
+
+        [TestMethod]
+        public void TriggerOverlapTest()
+        {
+            Trigger trigger1 = new Trigger { Property = new DependencyPropertyPathElement(Value1Property), Value = 1 };
+            trigger1.Setters.Add(new Setter { Property = new DependencyPropertyPathElement(Value3Property), Value = 1 });
+
+            MultiTrigger trigger2 = new MultiTrigger();
+            trigger2.Conditions.Add(new Condition { Property = new DependencyPropertyPathElement(Value1Property), Value = 1 });
+            trigger2.Conditions.Add(new Condition { Property = new DependencyPropertyPathElement(Value2Property), Value = 2 });
+            trigger2.Setters.Add(new Setter { Property = new DependencyPropertyPathElement(Value3Property), Value = 2 });
+
+            FrameworkElement element = new FrameworkElement();
+            element.Triggers.Add(trigger1);
+            element.Triggers.Add(trigger2);
+
+            element.SetValue(Value1Property, 1);
+            element.SetValue(Value2Property, 0);
+
+            Assert.AreEqual(1, element.GetValue(Value3Property));
+
+            element.SetValue(Value1Property, 1);
+            element.SetValue(Value2Property, 2);
+
+            Assert.AreEqual(2, element.GetValue(Value3Property));
+
+            element.SetValue(Value1Property, 1);
+            element.SetValue(Value2Property, 0);
+
+            Assert.AreEqual(1, element.GetValue(Value3Property));
+        }
     }
 }
