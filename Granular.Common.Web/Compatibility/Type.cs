@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
+using System.Collections;
 
 namespace Granular.Compatibility
 {
@@ -24,6 +26,30 @@ namespace Granular.Compatibility
             }
 
             return System.Type.GetType(name);
+        }
+
+        public static IEnumerable<System.Type> GetTypeInterfaceGenericArguments(System.Type type, System.Type interfaceType)
+        {
+            System.Type[] arguments = interfaceType.GetGenericArguments();
+
+            if (arguments != null)
+            {
+                return arguments;
+            }
+
+            if (interfaceType == typeof(ICollection<>))
+            {
+                return type.GetMethods(System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance).
+                    Where(methodInfo => methodInfo.Name == "Add" && methodInfo.ParameterTypes.Length == 1).First().ParameterTypes;
+            }
+
+            if (interfaceType == typeof(IDictionary<,>))
+            {
+                return type.GetMethods(System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance).
+                    Where(methodInfo => methodInfo.Name == "Add" && methodInfo.ParameterTypes.Length == 2).First().ParameterTypes;
+            }
+
+            throw new Granular.Exception("Can't get generic arguments for type \"{0}\" interface \"{1}\"", type.Name, interfaceType.Name);
         }
     }
 }

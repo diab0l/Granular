@@ -330,14 +330,17 @@ namespace System.Windows.Markup
     {
         public static IElementInitializer Create(IEnumerable<object> values, Type containingType)
         {
-            if (IsList(containingType))
+            Type keyType;
+            Type valueType;
+
+            if (TryGetDictionaryGenericArguments(containingType, out keyType, out valueType))
             {
-                return new ElementListContentInitializer(values);
+                return new ElementDictionaryContentInitializer(keyType, valueType, values);
             }
 
-            if (IsDictionary(containingType))
+            if (TryGetCollectionGenericArgument(containingType, out valueType))
             {
-                return new ElementDictionaryContentInitializer(values);
+                return new ElementCollectionContentInitializer(valueType, values);
             }
 
             throw new Granular.Exception("Can't initialize type \"{0}\" content", containingType.Name);
@@ -345,27 +348,51 @@ namespace System.Windows.Markup
 
         public static bool IsCollectionType(Type type)
         {
-            return IsList(type) || IsDictionary(type);
+            Type keyType;
+            Type valueType;
+
+            return TryGetDictionaryGenericArguments(type, out keyType, out valueType) || TryGetCollectionGenericArgument(type, out valueType);
         }
 
-        private static bool IsDictionary(Type type)
+        private static bool TryGetDictionaryGenericArguments(Type type, out Type keyType, out Type valueType)
         {
-            return type.GetInterfaceType(typeof(IDictionary<,>)) != null;
+            Type interfaceType = type.GetInterfaceType(typeof(IDictionary<,>));
+
+            if (interfaceType != null)
+            {
+                Type[] arguments = Granular.Compatibility.Type.GetTypeInterfaceGenericArguments(type, interfaceType).ToArray();
+                keyType = arguments[0];
+                valueType = arguments[1];
+                return true;
+            }
+
+            valueType = null;
+            keyType = null;
+            return false;
         }
 
-        private static bool IsList(Type type)
+        private static bool TryGetCollectionGenericArgument(Type type, out Type valueType)
         {
-            return type.GetInterfaceType(typeof(IList<>)) != null;
+            Type interfaceType = type.GetInterfaceType(typeof(ICollection<>));
+
+            if (interfaceType != null)
+            {
+                valueType = Granular.Compatibility.Type.GetTypeInterfaceGenericArguments(type, interfaceType).First();
+                return true;
+            }
+
+            valueType = null;
+            return false;
         }
     }
 
-    public class ElementListContentInitializer : IElementInitializer
+    public class ElementCollectionContentInitializer : IElementInitializer
     {
         private IEnumerable<IElementFactory> elementsFactory;
 
-        public ElementListContentInitializer(IEnumerable<object> values)
+        public ElementCollectionContentInitializer(Type valueTargetType, IEnumerable<object> values)
         {
-            elementsFactory = values.Select(value => ElementFactory.FromValue(value, null, XamlNamespaces.Empty)).ToArray();
+            elementsFactory = values.Select(value => ElementFactory.FromValue(value, valueTargetType, XamlNamespaces.Empty)).ToArray();
         }
 
         public void InitializeElement(object element, InitializeContext context)
@@ -400,20 +427,20 @@ namespace System.Windows.Markup
             }
         }
 
-        private class KeyElementFactory
+        private class KeyValueElementFactory
         {
-            private IElementFactory elementFactory;
-            private object keyDirectiveValue;
+            private IElementFactory valueFactory;
+            private IElementFactory keyDirectiveFactory;
             private IPropertyAdapter keyProperty;
 
-            public KeyElementFactory(IElementFactory elementFactory, XamlElement xamlElement)
+            public KeyValueElementFactory(Type keyType, IElementFactory valueFactory, XamlElement xamlElement)
             {
-                this.elementFactory = elementFactory;
+                this.valueFactory = valueFactory;
 
-                keyDirectiveValue = GetKeyDirectiveValue(xamlElement);
-                keyProperty = GetKeyProperty(elementFactory.ElementType);
+                keyProperty = GetKeyProperty(valueFactory.ElementType);
+                keyDirectiveFactory = GetKeyDirectiveFactory(xamlElement, keyType);
 
-                if (keyDirectiveValue == null && keyProperty == null)
+                if (keyDirectiveFactory == null && keyProperty == null)
                 {
                     throw new Granular.Exception("Dictionary item \"{0}\" must have a key", xamlElement.Name);
                 }
@@ -421,11 +448,11 @@ namespace System.Windows.Markup
 
             public KeyValuePair<object, object> CreateElement(InitializeContext context)
             {
-                object element = elementFactory.CreateElement(context);
+                object element = valueFactory.CreateElement(context);
 
-                object key = keyDirectiveValue ?? (keyProperty != null ? keyProperty.GetValue(element) : null);
+                object key = keyDirectiveFactory != null ? keyDirectiveFactory.CreateElement(context) : keyProperty.GetValue(element);
 
-                if (keyDirectiveValue != null && keyProperty != null)
+                if (keyDirectiveFactory != null && keyProperty != null)
                 {
                     // key property exists, but the key directive was used, so update the property
                     keyProperty.SetValue(element, key, context.ValueSource);
@@ -434,10 +461,10 @@ namespace System.Windows.Markup
                 return new KeyValuePair<object, object>(key, element);
             }
 
-            private static object GetKeyDirectiveValue(XamlElement element)
+            private static IElementFactory GetKeyDirectiveFactory(XamlElement element, Type keyType)
             {
                 XamlMember keyDirective = element.Directives.FirstOrDefault(directive => directive.Name == XamlLanguage.KeyDirective);
-                return keyDirective != null ? keyDirective.GetSingleValue() : null;
+                return keyDirective != null ? ElementFactory.FromValue(keyDirective.GetSingleValue(), keyType, element.Namespaces) : null;
             }
 
             private static IPropertyAdapter GetKeyProperty(Type type)
@@ -446,16 +473,16 @@ namespace System.Windows.Markup
             }
         }
 
-        private IEnumerable<KeyElementFactory> keyElementFactories;
+        private IEnumerable<KeyValueElementFactory> keyElementFactories;
 
-        public ElementDictionaryContentInitializer(IEnumerable<object> values)
+        public ElementDictionaryContentInitializer(Type keyType, Type valueType, IEnumerable<object> values)
         {
-            keyElementFactories = CreateElementsFactories(values);
+            keyElementFactories = CreateElementsFactories(keyType, valueType, values);
         }
 
         public void InitializeElement(object element, InitializeContext context)
         {
-            foreach (KeyElementFactory keyElementFactory in keyElementFactories)
+            foreach (KeyValueElementFactory keyElementFactory in keyElementFactories)
             {
                 KeyValuePair<object, object> pair = keyElementFactory.CreateElement(context);
 
@@ -463,7 +490,7 @@ namespace System.Windows.Markup
             }
         }
 
-        private static IEnumerable<KeyElementFactory> CreateElementsFactories(IEnumerable<object> values)
+        private static IEnumerable<KeyValueElementFactory> CreateElementsFactories(Type keyType, Type valueType, IEnumerable<object> values)
         {
             if (values.Any(value => !(value is XamlElement)))
             {
@@ -472,20 +499,20 @@ namespace System.Windows.Markup
 
             IEnumerable<XamlElement> valuesElements = values.Cast<XamlElement>();
 
-            List<KeyElementFactory> list = new List<KeyElementFactory>();
+            List<KeyValueElementFactory> list = new List<KeyValueElementFactory>();
 
             foreach (XamlElement contentChild in valuesElements)
             {
                 bool isShared = contentChild.Directives.All(directive => directive.Name != XamlLanguage.SharedDirective || (bool)TypeConverter.ConvertValue(directive.GetSingleValue(), typeof(bool), XamlNamespaces.Empty));
 
-                IElementFactory contentChildFactory = ElementFactory.FromXamlElement(contentChild, null);
+                IElementFactory contentChildFactory = ElementFactory.FromXamlElement(contentChild, valueType);
 
                 if (!isShared)
                 {
                     contentChildFactory = new ValueProviderFactory(contentChildFactory);
                 }
 
-                list.Add(new KeyElementFactory(contentChildFactory, contentChild));
+                list.Add(new KeyValueElementFactory(keyType, contentChildFactory, contentChild));
             }
 
             return list;

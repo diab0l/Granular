@@ -6,6 +6,7 @@ using System.Windows.Data;
 using System.Windows.Markup;
 using System.Xaml;
 using Granular.Extensions;
+using Granular.Collections;
 
 namespace System.Windows
 {
@@ -103,13 +104,13 @@ namespace System.Windows
 
         public object Value { get; set; }
 
-        public List<ITriggerAction> Setters { get; private set; }
+        public ObservableCollection<ITriggerAction> Setters { get; private set; }
 
         protected override IEnumerable<ITriggerAction> TriggerActions { get { return Setters; } }
 
         public DataTrigger()
         {
-            Setters = new List<ITriggerAction>();
+            Setters = new ObservableCollection<ITriggerAction>();
         }
 
         public override IDataTriggerCondition CreateDataTriggerCondition(FrameworkElement element)

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using Granular.Extensions;
 using System.Windows.Markup;
+using Granular.Collections;
 
 namespace System.Windows
 {
@@ -77,15 +78,15 @@ namespace System.Windows
     [ContentProperty("Setters")]
     public abstract class MultiDataTriggerBase : DataTriggerBase
     {
-        public List<Condition> Conditions { get; private set; }
-        public List<ITriggerAction> Setters { get; private set; }
+        public ObservableCollection<Condition> Conditions { get; private set; }
+        public ObservableCollection<ITriggerAction> Setters { get; private set; }
 
         protected override IEnumerable<ITriggerAction> TriggerActions { get { return Setters; } }
 
         public MultiDataTriggerBase()
         {
-            Conditions = new List<Condition>();
-            Setters = new List<ITriggerAction>();
+            Conditions = new ObservableCollection<Condition>();
+            Setters = new ObservableCollection<ITriggerAction>();
         }
     }
 }

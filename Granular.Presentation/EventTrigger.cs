@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Markup;
 using Granular.Extensions;
+using Granular.Collections;
 
 namespace System.Windows
 {
@@ -48,13 +49,13 @@ namespace System.Windows
 
         public RoutedEvent RoutedEvent { get; set; }
         public string SourceName { get; set; }
-        public List<ITriggerAction> Actions { get; private set; }
+        public ObservableCollection<ITriggerAction> Actions { get; private set; }
 
         protected override IEnumerable<ITriggerAction> TriggerActions { get { return Actions; } }
 
         public EventTrigger()
         {
-            Actions = new List<ITriggerAction>();
+            Actions = new ObservableCollection<ITriggerAction>();
         }
 
         public override IEventTriggerCondition CreateEventTriggerCondition(FrameworkElement element)

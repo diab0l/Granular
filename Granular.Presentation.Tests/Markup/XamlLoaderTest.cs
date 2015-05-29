@@ -6,6 +6,7 @@ using System.Windows;
 using System.Windows.Markup;
 using System.Xaml;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Granular.Collections;
 
 namespace Granular.Presentation.Tests.Markup
 {
@@ -29,11 +30,11 @@ namespace Granular.Presentation.Tests.Markup
 
         public object Value3 { get; set; }
 
-        public List<object> Children { get; private set; }
+        public ObservableCollection<object> Children { get; private set; }
 
         public LoaderTestElement()
         {
-            Children = new List<object>();
+            Children = new ObservableCollection<object>();
         }
 
         public void RaiseAction1()
@@ -218,6 +219,12 @@ namespace Granular.Presentation.Tests.Markup
 
             throw new Granular.Exception("Can't convert to \"LoaderTestElement\" from type \"{0}\"", value.GetType());
         }
+    }
+
+    [ContentProperty("Elements")]
+    public class LoaderTestConvertElementCollection
+    {
+        public TestCollection<LoaderTestElement> Elements { get; set; }
     }
 
     [TestClass]
@@ -479,6 +486,51 @@ namespace Granular.Presentation.Tests.Markup
             Assert.IsNotNull(root);
             Assert.IsNotNull(root.Element);
             Assert.AreEqual(1, root.Element.Value1);
+        }
+
+        [TestMethod]
+        public void XamlLoadCollectionConverterTest()
+        {
+            string text = @"
+            <test:LoaderTestConvertElementCollection xmlns='http://schemas.microsoft.com/winfx/2006/xaml/presentation' xmlns:test='clr-namespace:Granular.Presentation.Tests.Markup;assembly=Granular.Presentation.Tests'>
+                <test:LoaderTestContentElement>1</test:LoaderTestContentElement>
+                <test:LoaderTestContentElement>2</test:LoaderTestContentElement>
+                <test:LoaderTestContentElement>3</test:LoaderTestContentElement>
+            </test:LoaderTestConvertElementCollection>";
+
+            LoaderTestConvertElementCollection root = XamlLoader.Load(XamlParser.Parse(text)) as LoaderTestConvertElementCollection;
+
+            Assert.IsNotNull(root);
+            Assert.IsNotNull(root.Elements);
+            Assert.AreEqual(3, root.Elements.Count);
+            Assert.AreEqual(1, root.Elements[0].Value1);
+            Assert.AreEqual(2, root.Elements[1].Value1);
+            Assert.AreEqual(3, root.Elements[2].Value1);
+        }
+
+        [TestMethod]
+        public void XamlLoadKeyElementTest()
+        {
+            string text = @"
+            <ResourceDictionary xmlns='http://schemas.microsoft.com/winfx/2006/xaml/presentation' xmlns:x='http://schemas.microsoft.com/winfx/2006/xaml' xmlns:test='clr-namespace:Granular.Presentation.Tests.Markup;assembly=Granular.Presentation.Tests'>
+                <test:LoaderTestElement Value1='1' Value2='2'>
+                    <x:Key>
+                        <test:LoaderTestElement Value1='3' Value2='4'/>
+                    </x:Key>
+                </test:LoaderTestElement>
+            </ResourceDictionary>";
+
+            XamlElement rootElement = XamlParser.Parse(text);
+            ResourceDictionary dictionary = XamlLoader.Load(rootElement) as ResourceDictionary;
+
+            Assert.IsNotNull(dictionary);
+            Assert.AreEqual(1, dictionary.Count);
+
+            Assert.AreEqual(1, ((LoaderTestElement)dictionary.GetValues().First()).Value1);
+            Assert.AreEqual(2, ((LoaderTestElement)dictionary.GetValues().First()).Value2);
+
+            Assert.AreEqual(3, ((LoaderTestElement)dictionary.GetKeys().First()).Value1);
+            Assert.AreEqual(4, ((LoaderTestElement)dictionary.GetKeys().First()).Value2);
         }
     }
 }

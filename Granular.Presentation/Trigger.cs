@@ -5,6 +5,7 @@ using System.Text;
 using System.Windows.Markup;
 using System.Xaml;
 using Granular.Extensions;
+using Granular.Collections;
 
 namespace System.Windows
 {
@@ -75,13 +76,13 @@ namespace System.Windows
         public IPropertyPathElement Property { get; set; }
         public object Value { get; set; }
         public string SourceName { get; set; }
-        public List<ITriggerAction> Setters { get; private set; }
+        public ObservableCollection<ITriggerAction> Setters { get; private set; }
 
         protected override IEnumerable<ITriggerAction> TriggerActions { get { return Setters; } }
 
         public Trigger()
         {
-            Setters = new List<ITriggerAction>();
+            Setters = new ObservableCollection<ITriggerAction>();
         }
 
         public override IDataTriggerCondition CreateDataTriggerCondition(FrameworkElement element)

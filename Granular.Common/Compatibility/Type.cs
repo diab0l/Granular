@@ -10,5 +10,10 @@ namespace Granular.Compatibility
         {
             return System.Type.GetType(name);
         }
+
+        public static IEnumerable<System.Type> GetTypeInterfaceGenericArguments(System.Type type, System.Type interfaceType)
+        {
+            return interfaceType.GetGenericArguments();
+        }
     }
 }

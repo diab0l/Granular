@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Windows.Markup;
+using Granular.Collections;
 
 namespace System.Windows
 {
@@ -34,14 +35,14 @@ namespace System.Windows
         }
 
         public Style BasedOn { get; set; }
-        public List<ITrigger> Triggers { get; private set; }
-        public List<ITriggerAction> Setters { get; private set; }
+        public ObservableCollection<ITrigger> Triggers { get; private set; }
+        public ObservableCollection<ITriggerAction> Setters { get; private set; }
         //public ResourceDictionary Resources { get; set; }
 
         public Style()
         {
-            Triggers = new List<ITrigger>();
-            Setters = new List<ITriggerAction>();
+            Triggers = new ObservableCollection<ITrigger>();
+            Setters = new ObservableCollection<ITriggerAction>();
         }
 
         public void Attach(FrameworkElement element)

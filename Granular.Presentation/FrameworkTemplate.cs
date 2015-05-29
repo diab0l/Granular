@@ -33,11 +33,11 @@ namespace System.Windows
 
         public IFrameworkElementFactory FrameworkElementFactory { get; set; }
 
-        public List<ITrigger> Triggers { get; private set; }
+        public Granular.Collections.ObservableCollection<ITrigger> Triggers { get; private set; }
 
         public FrameworkTemplate()
         {
-            Triggers = new List<ITrigger>();
+            Triggers = new Granular.Collections.ObservableCollection<ITrigger>();
         }
 
         public void Attach(FrameworkElement element)
