@@ -23,9 +23,10 @@ namespace Granular.Presentation.Tests.Markup
                 <!-- comment -->
                 <ns1:child1/>
                 <child2>
+                    value3
                     <child3>
                     </child3>
-                    value3
+                    value4
                 </child2>
             </root1>");
 
@@ -39,7 +40,9 @@ namespace Granular.Presentation.Tests.Markup
             Assert.AreEqual("child1", ((XamlElement)root1.Values.First()).Name.LocalName);
             Assert.AreEqual("namespace1", ((XamlElement)root1.Values.First()).Name.NamespaceName);
 
-            Assert.AreEqual("value3", ((XamlElement)root1.Values.Last()).Values.Last());
+            Assert.AreEqual("value3", ((XamlElement)root1.Values.Last()).Values.ElementAt(0));
+            Assert.AreEqual("child3", ((XamlElement)((XamlElement)root1.Values.Last()).Values.ElementAt(1)).Name.LocalName);
+            Assert.AreEqual("value4", ((XamlElement)root1.Values.Last()).Values.ElementAt(2));
         }
 
         [TestMethod]

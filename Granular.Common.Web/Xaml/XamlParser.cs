@@ -70,11 +70,6 @@ namespace System.Xaml
 
         private static XamlElement CreateXamlElement(XmlElement element, XamlNamespaces namespaces)
         {
-            if (element.Nodes().OfType<XmlText>().Where(text => !text.Value.IsNullOrWhitespace()).Count() > 1)
-            {
-                throw new Granular.Exception("Element \"{0}\" cannot contain more than one text node", element.LocalName);
-            }
-
             IEnumerable<NamespaceDeclaration> elementNamespaces = element.Attributes().Where(IsNamespaceDeclaration).Select(attribute => new NamespaceDeclaration(GetNamespaceDeclarationPrefix(attribute), attribute.Value)).ToArray();
             if (elementNamespaces.Any())
             {
@@ -114,11 +109,6 @@ namespace System.Xaml
                 throw new Granular.Exception("Member \"{0}\" cannot contain member elements", element.LocalName);
             }
 
-            if (element.Nodes().OfType<XmlText>().Where(text => !text.Value.IsNullOrWhitespace()).Count() > 1)
-            {
-                throw new Granular.Exception("Member \"{0}\" cannot contain more than one text node", element.LocalName);
-            }
-
             return new XamlMember(name, namespaces, CreateValues(element, namespaces));
         }
 
@@ -132,10 +122,27 @@ namespace System.Xaml
 
         private static IEnumerable<object> CreateValues(XmlElement element, XamlNamespaces namespaces)
         {
-            IEnumerable<object> elementValues = element.Elements().Where(child => IsValueName(child)).Select(child => (object)CreateXamlElement(child, namespaces));
-            IEnumerable<object> textValues = element.Nodes().OfType<XmlText>().Where(text => !text.Value.IsNullOrWhitespace()).Select(textValue => textValue.Value.Trim());
+            return element.Nodes().Where(node => IsValue(node)).Select(node => CreateValue(node, namespaces)).ToArray();
+        }
 
-            return elementValues.Concat(textValues).ToArray();
+        private static bool IsValue(XmlNode node)
+        {
+            return node is XmlText && !((XmlText)node).Value.IsNullOrWhitespace() || node is XmlElement && IsValueName((XmlElement)node);
+        }
+
+        private static object CreateValue(XmlNode node, XamlNamespaces namespaces)
+        {
+            if (node is XmlText)
+            {
+                return ((XmlText)node).Value.Trim();
+            }
+
+            if (node is XmlElement)
+            {
+                return CreateXamlElement((XmlElement)node, namespaces);
+            }
+
+            throw new Granular.Exception("Node \"{0}\" doesn't contain a value", node);
         }
 
         private static bool IsMemberName(XmlElement element)
