@@ -70,8 +70,8 @@ namespace System.Windows.Data
         private bool isSourceUpdateMode;
         private bool isTargetUpdateMode;
 
-        private bool isSourceUpdateDisabled;
-        private bool isTargetUpdateDisabled;
+        private ReentrancyLock disableSourceUpdate;
+        private ReentrancyLock disableTargetUpdate;
 
         public BindingExpression(DependencyObject target, DependencyProperty targetProperty, PropertyPath path,
             object source = null, RelativeSource relativeSource = null, string elementName = null,
@@ -92,6 +92,9 @@ namespace System.Windows.Data
             this.TargetNullValue = targetNullValue;
 
             Status = BindingStatus.Inactive;
+
+            disableSourceUpdate = new ReentrancyLock();
+            disableTargetUpdate = new ReentrancyLock();
 
             targetValue = new ObservableValue(Target.GetValue(TargetProperty));
             targetValue.ValueChanged += OnTargetValueChanged;
@@ -114,7 +117,7 @@ namespace System.Windows.Data
             {
                 sourceExpression.ValueChanged += (sender, e) =>
                 {
-                    if (Status == BindingStatus.UpdateSourceError && sourceExpression.Value != ObservableValue.UnsetValue && !isTargetUpdateDisabled)
+                    if (Status == BindingStatus.UpdateSourceError && sourceExpression.Value != ObservableValue.UnsetValue && !disableTargetUpdate)
                     {
                         // source was connected
                         UpdateSourceOnTargetChanged();
@@ -168,12 +171,12 @@ namespace System.Windows.Data
 
         private void UpdateTargetOnSourceChanged()
         {
-            if (isTargetUpdateDisabled)
+            if (disableTargetUpdate)
             {
                 return;
             }
 
-            using (DisableSourceUpdate())
+            using (disableSourceUpdate.Enter())
             {
                 UpdateTarget();
             }
@@ -203,12 +206,12 @@ namespace System.Windows.Data
 
         private void UpdateSourceOnTargetChanged()
         {
-            if (isSourceUpdateDisabled)
+            if (disableSourceUpdate)
             {
                 return;
             }
 
-            using (DisableTargetUpdate())
+            using (disableTargetUpdate.Enter())
             {
                 UpdateSource();
             }
@@ -241,28 +244,6 @@ namespace System.Windows.Data
         private void OnLostFocus(object sender, RoutedEventArgs e)
         {
             UpdateSourceOnTargetChanged();
-        }
-
-        private IDisposable DisableSourceUpdate()
-        {
-            if (isSourceUpdateDisabled)
-            {
-                throw new Granular.Exception("Source update is already disabled");
-            }
-
-            isSourceUpdateDisabled = true;
-            return new Disposable(() => isSourceUpdateDisabled = false);
-        }
-
-        private IDisposable DisableTargetUpdate()
-        {
-            if (isTargetUpdateDisabled)
-            {
-                throw new Granular.Exception("Target update is already disabled");
-            }
-
-            isTargetUpdateDisabled = true;
-            return new Disposable(() => isTargetUpdateDisabled = false);
         }
 
         private static object GetRelativeSource(DependencyObject target, RelativeSource relativeSource, string elementName)

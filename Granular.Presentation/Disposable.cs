@@ -37,4 +37,30 @@ namespace System.Windows
             });
         }
     }
+
+    public class ReentrancyLock
+    {
+        public bool IsEntered { get; private set; }
+
+        public ReentrancyLock()
+        {
+            IsEntered = false;
+        }
+
+        public IDisposable Enter()
+        {
+            if (IsEntered)
+            {
+                throw new Granular.Exception("Can't enter the scope more than once");
+            }
+
+            IsEntered = true;
+            return new Disposable(() => IsEntered = false);
+        }
+
+        public static implicit operator bool(ReentrancyLock ScopeEntrancyLock)
+        {
+            return ScopeEntrancyLock.IsEntered;
+        }
+    }
 }
