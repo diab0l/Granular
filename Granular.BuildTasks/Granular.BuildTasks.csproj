@@ -72,7 +72,7 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>xcopy /Y "$(TargetDir)$(TargetName).dll" "$(SolutionDir)Output\"
+    <PostBuildEvent>xcopy /Y "$(TargetDir)$(TargetName).*" "$(SolutionDir)Output\"
 xcopy /Y "$(ProjectDir)*.targets" "$(SolutionDir)Output\"</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
