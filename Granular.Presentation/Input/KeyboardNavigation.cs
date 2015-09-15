@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Windows.Media;
+using System.Windows.Controls;
 
 namespace System.Windows.Input
 {
@@ -30,6 +31,30 @@ namespace System.Windows.Input
 
     public class KeyboardNavigation : IDisposable
     {
+        private class FocusVisualAdorner : IDisposable
+        {
+            private AdornerLayer adornerLayer;
+            private Adorner adorner;
+
+            private FocusVisualAdorner(FrameworkElement element)
+            {
+                adornerLayer = AdornerLayer.GetAdornerLayer(element);
+                adorner = new Adorner(element) { Child = new Control { Style = element.FocusVisualStyle, Focusable = false } };
+
+                adornerLayer.Add(adorner);
+            }
+
+            public void Dispose()
+            {
+                adornerLayer.Remove(adorner);
+            }
+
+            public static FocusVisualAdorner Attach(FrameworkElement element)
+            {
+                return new FocusVisualAdorner(element);
+            }
+        }
+
         public static readonly DependencyProperty TabNavigationProperty = DependencyProperty.RegisterAttached("TabNavigation", typeof(KeyboardNavigationMode), typeof(KeyboardNavigation), new FrameworkPropertyMetadata(KeyboardNavigationMode.Continue));
 
         public static KeyboardNavigationMode GetTabNavigation(DependencyObject obj)
@@ -91,11 +116,13 @@ namespace System.Windows.Input
         }
 
         private IPresentationSource presentationSource;
+        private FocusVisualAdorner focusVisualAdorner;
 
         public KeyboardNavigation(IPresentationSource presentationSource)
         {
             this.presentationSource = presentationSource;
 
+            presentationSource.KeyboardDevice.TargetChanged += OnTargetChanged;
             presentationSource.KeyboardDevice.PostProcessKey += OnPostProcessKey;
         }
 
@@ -103,6 +130,20 @@ namespace System.Windows.Input
         {
             presentationSource.KeyboardDevice.TargetChanged -= OnTargetChanged;
             presentationSource.KeyboardDevice.PostProcessKey -= OnPostProcessKey;
+        }
+
+        private void OnTargetChanged(object sender, EventArgs e)
+        {
+            if (focusVisualAdorner != null)
+            {
+                focusVisualAdorner.Dispose();
+                focusVisualAdorner = null;
+            }
+
+            if (presentationSource.KeyboardDevice.Target != null)
+            {
+                focusVisualAdorner = FocusVisualAdorner.Attach((FrameworkElement)presentationSource.KeyboardDevice.Target);
+            }
         }
 
         private void OnPostProcessKey(object sender, KeyEventArgs e)

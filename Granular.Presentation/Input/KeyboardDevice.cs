@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Granular.Extensions;
 
 namespace System.Windows.Input
 {
@@ -33,6 +34,7 @@ namespace System.Windows.Input
         public event KeyEventHandler PreProcessKey;
         public event KeyEventHandler PostProcessKey;
 
+        public event EventHandler TargetChanged;
         private IInputElement target;
         public IInputElement Target
         {
@@ -48,6 +50,7 @@ namespace System.Windows.Input
                 target = value;
 
                 OnTargetChanged(oldTarget, target);
+                TargetChanged.Raise(this);
             }
         }
 

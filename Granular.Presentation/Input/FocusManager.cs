@@ -76,37 +76,11 @@ namespace System.Windows.Input
             if (oldElement != null)
             {
                 oldElement.RaiseEvent(new RoutedEventArgs(LostFocusEvent, oldElement));
-                HideFocusVisual();
             }
 
             if (newElement != null)
             {
                 newElement.RaiseEvent(new RoutedEventArgs(GotFocusEvent, newElement));
-                ShowFocusVisual(newElement);
-            }
-        }
-
-        private static Adorner currentFocusVisual;
-
-        private static void ShowFocusVisual(FrameworkElement element)
-        {
-            HideFocusVisual();
-
-            if (element.FocusVisualStyle == null)
-            {
-                return;
-            }
-
-            currentFocusVisual = new Adorner(element) { Child = new Control { Style = element.FocusVisualStyle, Focusable = false } };
-            AdornerLayer.GetAdornerLayer(element).Add(currentFocusVisual);
-        }
-
-        private static void HideFocusVisual()
-        {
-            if (currentFocusVisual != null)
-            {
-                ((AdornerLayer)currentFocusVisual.VisualParent).Remove(currentFocusVisual);
-                currentFocusVisual = null;
             }
         }
     }
