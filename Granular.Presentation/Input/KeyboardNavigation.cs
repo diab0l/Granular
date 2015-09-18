@@ -115,6 +115,18 @@ namespace System.Windows.Input
             obj.SetValue(TabIndexProperty, value);
         }
 
+        public static readonly DependencyProperty NavigationFocusElementProperty = DependencyProperty.RegisterAttached("NavigationFocusElement", typeof(VisualWeakReference), typeof(KeyboardNavigation), new FrameworkPropertyMetadata());
+
+        public static VisualWeakReference GetNavigationFocusElement(DependencyObject obj)
+        {
+            return (VisualWeakReference)obj.GetValue(NavigationFocusElementProperty);
+        }
+
+        public static void SetNavigationFocusElement(DependencyObject obj, VisualWeakReference value)
+        {
+            obj.SetValue(NavigationFocusElementProperty, value);
+        }
+
         private IPresentationSource presentationSource;
         private FocusVisualAdorner focusVisualAdorner;
 
@@ -140,9 +152,12 @@ namespace System.Windows.Input
                 focusVisualAdorner = null;
             }
 
-            if (presentationSource.KeyboardDevice.Target != null)
+            FrameworkElement focusedElement = (FrameworkElement)presentationSource.KeyboardDevice.Target;
+
+            if (focusedElement != null)
             {
-                focusVisualAdorner = FocusVisualAdorner.Attach((FrameworkElement)presentationSource.KeyboardDevice.Target);
+                focusVisualAdorner = FocusVisualAdorner.Attach(focusedElement);
+                SetNavigationFocusElement(focusedElement);
             }
         }
 
@@ -217,6 +232,31 @@ namespace System.Windows.Input
             }
 
             return false;
+        }
+
+        private static void SetNavigationFocusElement(FrameworkElement focusedElement)
+        {
+            Visual navigationScope = GetNavigationScope(focusedElement);
+            if (navigationScope != null)
+            {
+                VisualWeakReference visualWeakReference = GetNavigationFocusElement(focusedElement);
+                SetNavigationFocusElement(navigationScope, new VisualWeakReference(focusedElement, navigationScope));
+            }
+        }
+
+        private static bool IsNavigationScope(KeyboardNavigationMode keyboardNavigationMode)
+        {
+            return keyboardNavigationMode == KeyboardNavigationMode.Once;
+        }
+
+        private static Visual GetNavigationScope(Visual element)
+        {
+            while (element != null && !IsNavigationScope(GetTabNavigation(element)) && !IsNavigationScope(GetControlTabNavigation(element)))
+            {
+                element = element.VisualParent;
+            }
+
+            return element;
         }
     }
 }

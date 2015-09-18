@@ -26,7 +26,7 @@ namespace Granular.Presentation.Tests.Input
         public void KeyboardTabNavigationOnceTest()
         {
             KeyboardNavigationInnerScopeTest(KeyboardNavigationMode.Once, Orientation.Horizontal, null, FocusNavigationDirection.Next, new[] { 1, 4, 4, 4, 0 });
-            KeyboardNavigationInnerScopeTest(KeyboardNavigationMode.Once, Orientation.Horizontal, null, FocusNavigationDirection.Previous, new[] { 4, 0, 0, 0, 3 });
+            KeyboardNavigationInnerScopeTest(KeyboardNavigationMode.Once, Orientation.Horizontal, null, FocusNavigationDirection.Previous, new[] { 4, 0, 0, 0, 1 });
             KeyboardNavigationInnerScopeTest(KeyboardNavigationMode.Once, Orientation.Horizontal, null, FocusNavigationDirection.First, new[] { 0, 0, 0, 0, 0 });
             KeyboardNavigationInnerScopeTest(KeyboardNavigationMode.Once, Orientation.Horizontal, null, FocusNavigationDirection.Last, new[] { 4, 4, 4, 4, 4 });
         }

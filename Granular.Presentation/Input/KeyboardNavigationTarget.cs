@@ -236,6 +236,29 @@ namespace System.Windows.Input
                 // forward the request to the parent
                 return scope.VisualParent != null ? KeyboardNavigationTarget.FindPreviousTarget(scope.VisualParent, currentStop, navigationModeProperty, stopComparerProvider) : null;
             }
+
+            public override IEnumerable<Stop> GetGlobalStops(Visual scope, Visual currentElement, DependencyProperty navigationModeProperty)
+            {
+                if (IsStop((UIElement)scope) || scope == currentElement)
+                {
+                    yield return new Stop(scope);
+                }
+
+                VisualWeakReference navigationFocusElementReference = KeyboardNavigation.GetNavigationFocusElement(scope);
+                Visual navigationFocusElement = navigationFocusElementReference != null ? navigationFocusElementReference.Visual : null;
+
+                Stop[] stops = scope.VisualChildren.SelectMany(child => KeyboardNavigationTarget.GetGlobalStops(child, currentElement, navigationModeProperty)).ToArray();
+
+                if (stops.Any())
+                {
+                    stops = stops.Where(stop => stop.Element == currentElement || stop.Element == navigationFocusElement).DefaultIfEmpty(stops.First()).ToArray();
+
+                    foreach (Stop stop in stops)
+                    {
+                        yield return stop;
+                    }
+                }
+            }
         }
 
         private class CycleNavigation : BaseNavigation
