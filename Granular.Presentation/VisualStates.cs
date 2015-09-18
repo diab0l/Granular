@@ -24,5 +24,11 @@ namespace System.Windows
         public const string ExpansionStates = "ExpansionStates";
         public const string ExpandedState = "Expanded";
         public const string CollapsedState = "Collapsed";
+
+        public const string SelectionStates = "SelectionStates";
+        public const string SelectedState = "Selected";
+        public const string SelectedUnfocusedState = "SelectedUnfocused";
+        public const string SelectedInactiveState = "SelectedInactive";
+        public const string UnselectedState = "Unselected";
     }
 }

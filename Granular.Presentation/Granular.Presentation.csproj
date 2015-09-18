@@ -46,6 +46,8 @@
     <Compile Include="Controls\AdornerLayer.cs" />
     <Compile Include="Controls\Expander.cs" />
     <Compile Include="Controls\HeaderedContentControl.cs" />
+    <Compile Include="Controls\ListBox.cs" />
+    <Compile Include="Controls\ListBoxItem.cs" />
     <Compile Include="Controls\PasswordBox.cs" />
     <Compile Include="Controls\Primitives\Selector.cs" />
     <Compile Include="Controls\ProgressBar.cs" />

@@ -121,6 +121,12 @@
     <Compile Include="..\Granular.Presentation\Controls\ItemsPresenter.cs">
       <Link>Controls\ItemsPresenter.cs</Link>
     </Compile>
+    <Compile Include="..\Granular.Presentation\Controls\ListBox.cs">
+      <Link>Controls\ListBox.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\Controls\ListBoxItem.cs">
+      <Link>Controls\ListBoxItem.cs</Link>
+    </Compile>
     <Compile Include="..\Granular.Presentation\Controls\MeasureCache.cs">
       <Link>Controls\MeasureCache.cs</Link>
     </Compile>

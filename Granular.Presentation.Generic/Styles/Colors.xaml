@@ -28,4 +28,22 @@
     <SolidColorBrush x:Key="ForegroundBrush" Color="#FF000000"/>
     <SolidColorBrush x:Key="DisabledForegroundBrush" Color="#FFADADAD"/>
 
+    <LinearGradientBrush x:Key="SelectionBackgroundBrush" StartPoint="0,0" EndPoint="0,1">
+        <GradientBrush.GradientStops>
+            <GradientStop Color="#FFEAF6FD" Offset="0"/>
+            <GradientStop Color="#FFA7D9F5" Offset="1"/>
+        </GradientBrush.GradientStops>
+    </LinearGradientBrush>
+
+    <SolidColorBrush x:Key="SelectionForegroundBrush" Color="#FF000000"/>
+
+    <LinearGradientBrush x:Key="InactiveSelectionBackgroundBrush" StartPoint="0,0" EndPoint="0,1">
+        <GradientBrush.GradientStops>
+            <GradientStop Color="#FFF0F0F0" Offset="0"/>
+            <GradientStop Color="#FFE0E0E0" Offset="1"/>
+        </GradientBrush.GradientStops>
+    </LinearGradientBrush>
+
+    <SolidColorBrush x:Key="InactiveSelectionForegroundBrush" Color="#FF000000"/>
+
 </ResourceDictionary>
