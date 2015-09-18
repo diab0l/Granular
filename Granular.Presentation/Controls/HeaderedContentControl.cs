@@ -36,16 +36,6 @@ namespace System.Windows.Controls
             private set { SetValue(HasHeaderPropertyKey, value); }
         }
 
-        public override void PrepareContainerForItem(object item, DataTemplate template)
-        {
-            base.PrepareContainerForItem(item, template);
-        }
-
-        public override void ClearContainerForItem(object item)
-        {
-            base.ClearContainerForItem(item);
-        }
-
         private void OnHeaderChanged(DependencyPropertyChangedEventArgs e)
         {
             HasHeader = Header != null;

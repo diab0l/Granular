@@ -10,7 +10,7 @@ namespace System.Windows.Controls
 {
     public interface IItemContainer
     {
-        void PrepareContainerForItem(object item, DataTemplate template);
+        void PrepareContainerForItem(object item, DataTemplate itemTemplate, Style itemContainerStyle);
         void ClearContainerForItem(object item);
     }
 
@@ -101,7 +101,7 @@ namespace System.Windows.Controls
 
         public FrameworkElement GetContainerForItem(object item)
         {
-            if (IsItemItsOwnContainerOverride(item))
+            if (IsItemItsOwnContainer(item))
             {
                 return item as FrameworkElement;
             }
@@ -116,44 +116,32 @@ namespace System.Windows.Controls
 
         public void PrepareContainerForItem(object item, FrameworkElement container)
         {
-            if (IsItemItsOwnContainerOverride(item))
-            {
-                return;
-            }
-
-            container.DataContext = item;
-
-            if (ContainsValue(ItemContainerStyleProperty) || ContainsValue(ItemContainerStyleSelectorProperty))
-            {
-                container.Style = ItemContainerStyle ?? ItemContainerStyleSelector.SelectStyle(item, container);
-            }
-
             PrepareContainerForItemOverride(item, container);
+
+            OnPrepareContainerForItem(item, container);
         }
 
         protected virtual void PrepareContainerForItemOverride(object item, FrameworkElement container)
         {
             if (container is IItemContainer)
             {
-                ((IItemContainer)container).PrepareContainerForItem(item, ItemTemplate ?? (ItemTemplateSelector != null ? ItemTemplateSelector.SelectTemplate(item, container) : null));
+                DataTemplate itemTemplate = ItemTemplate ?? (ItemTemplateSelector != null ? ItemTemplateSelector.SelectTemplate(item, container) : null);
+                Style itemContainerStyle = ItemContainerStyle ?? (ItemContainerStyleSelector != null ? ItemContainerStyleSelector.SelectStyle(item, container) : null);
+
+                ((IItemContainer)container).PrepareContainerForItem(item, itemTemplate, itemContainerStyle);
             }
+        }
+
+        protected virtual void OnPrepareContainerForItem(object item, FrameworkElement container)
+        {
+            //
         }
 
         public void ClearContainerForItem(object item, FrameworkElement container)
         {
-            if (IsItemItsOwnContainerOverride(item))
-            {
-                return;
-            }
-
-            container.DataContext = BindingExpression.DisconnectedItem;
-
-            if (ContainsValue(ItemContainerStyleProperty) || ContainsValue(ItemContainerStyleSelectorProperty))
-            {
-                container.ClearValue(StyleProperty);
-            }
-
             ClearContainerForItemOverride(item, container);
+
+            OnClearContainerForItem(item, container);
         }
 
         protected virtual void ClearContainerForItemOverride(object item, FrameworkElement container)
@@ -162,6 +150,11 @@ namespace System.Windows.Controls
             {
                 ((IItemContainer)container).ClearContainerForItem(item);
             }
+        }
+
+        protected virtual void OnClearContainerForItem(object item, FrameworkElement container)
+        {
+            //
         }
 
         private void OnItemsSourceChanged(DependencyPropertyChangedEventArgs e)

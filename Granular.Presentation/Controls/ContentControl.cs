@@ -38,7 +38,8 @@ namespace System.Windows.Controls
             private set { SetValue(HasContentPropertyKey, value); }
         }
 
-        private bool isContainerTemplate;
+        private DataTemplate itemTemplate;
+        private Style itemContainerStyle;
 
         public ContentControl()
         {
@@ -52,26 +53,44 @@ namespace System.Windows.Controls
             AddLogicalChild(e.NewValue);
         }
 
-        public virtual void PrepareContainerForItem(object item, DataTemplate template)
+        public virtual void PrepareContainerForItem(object item, DataTemplate itemTemplate, Style itemContainerStyle)
         {
-            if (!ContainsValue(ContentTemplateProperty) && !ContainsValue(ContentTemplateSelectorProperty))
+            if (!ContainsValue(ContentTemplateProperty) && !ContainsValue(ContentTemplateSelectorProperty) && itemTemplate != null)
             {
-                this.ContentTemplate = template;
-                isContainerTemplate = true;
+                ContentTemplate = itemTemplate;
+                this.itemTemplate = itemTemplate;
             }
 
-            Content = item;
+            if (!ContainsValue(StyleProperty) && itemContainerStyle != null)
+            {
+                Style = itemContainerStyle;
+                this.itemContainerStyle = itemContainerStyle;
+            }
+
+            if (item != this)
+            {
+                Content = item;
+            }
         }
 
         public virtual void ClearContainerForItem(object item)
         {
-            if (isContainerTemplate)
+            if (itemTemplate == ContentTemplate)
             {
                 ClearValue(ContentTemplateProperty);
-                isContainerTemplate = false;
+                itemTemplate = null;
             }
 
-            ClearValue(ContentProperty);
+            if (itemContainerStyle == Style)
+            {
+                ClearValue(StyleProperty);
+                itemContainerStyle = null;
+            }
+
+            if (Content == item)
+            {
+                ClearValue(ContentProperty);
+            }
         }
     }
 }

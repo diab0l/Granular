@@ -110,7 +110,8 @@ namespace System.Windows.Controls
             }
         }
 
-        private bool isContainerTemplate;
+        private DataTemplate itemTemplate;
+        private Style itemContainerStyle;
 
         public ContentPresenter()
         {
@@ -227,23 +228,35 @@ namespace System.Windows.Controls
             return false;
         }
 
-        public void PrepareContainerForItem(object item, DataTemplate template)
+        public virtual void PrepareContainerForItem(object item, DataTemplate itemTemplate, Style itemContainerStyle)
         {
             if (!ContainsValue(ContentTemplateProperty) && !ContainsValue(ContentTemplateSelectorProperty))
             {
-                this.ContentTemplate = template;
-                isContainerTemplate = true;
+                ContentTemplate = itemTemplate;
+                this.itemTemplate = itemTemplate;
+            }
+
+            if (!ContainsValue(StyleProperty))
+            {
+                Style = itemContainerStyle;
+                this.itemContainerStyle = itemContainerStyle;
             }
 
             Content = item;
         }
 
-        public void ClearContainerForItem(object item)
+        public virtual void ClearContainerForItem(object item)
         {
-            if (isContainerTemplate)
+            if (itemTemplate == ContentTemplate)
             {
                 ClearValue(ContentTemplateProperty);
-                isContainerTemplate = false;
+                itemTemplate = null;
+            }
+
+            if (itemContainerStyle == Style)
+            {
+                ClearValue(StyleProperty);
+                itemContainerStyle = null;
             }
 
             ClearValue(ContentProperty);
