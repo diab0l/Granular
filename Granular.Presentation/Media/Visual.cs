@@ -405,4 +405,37 @@ namespace System.Windows.Media
             return false;
         }
     }
+
+    // hold a reference to a Visual as long as it's a descendant of ancestor
+    public class VisualWeakReference : IDisposable
+    {
+        public Visual Visual { get; private set; }
+
+        private Visual ancestor;
+
+        public VisualWeakReference(Visual visual, Visual ancestor)
+        {
+            this.Visual = visual;
+            this.ancestor = ancestor;
+
+            visual.VisualAncestorChanged += OnVisualAncestorChanged;
+        }
+
+        public void Dispose()
+        {
+            if (Visual != null)
+            {
+                Visual.VisualAncestorChanged -= OnVisualAncestorChanged;
+                Visual = null;
+            }
+        }
+
+        private void OnVisualAncestorChanged(object sender, EventArgs e)
+        {
+            if (!ancestor.IsAncestorOf(Visual))
+            {
+                Dispose();
+            }
+        }
+    }
 }
