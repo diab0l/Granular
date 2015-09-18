@@ -157,6 +157,9 @@
     <Compile Include="..\Granular.Presentation\Controls\Primitives\ScrollInfo.cs">
       <Link>Controls\Primitives\ScrollInfo.cs</Link>
     </Compile>
+    <Compile Include="..\Granular.Presentation\Controls\Primitives\Selector.cs">
+      <Link>Controls\Primitives\Selector.cs</Link>
+    </Compile>
     <Compile Include="..\Granular.Presentation\Controls\Primitives\TextBoxBase.cs">
       <Link>Controls\Primitives\TextBoxBase.cs</Link>
     </Compile>
@@ -186,6 +189,9 @@
     </Compile>
     <Compile Include="..\Granular.Presentation\Controls\ScrollViewer.cs">
       <Link>Controls\ScrollViewer.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\Controls\SelectionChangedEventArgs.cs">
+      <Link>Controls\SelectionChangedEventArgs.cs</Link>
     </Compile>
     <Compile Include="..\Granular.Presentation\Controls\SelectionGroup.cs">
       <Link>Controls\SelectionGroup.cs</Link>

@@ -47,10 +47,12 @@
     <Compile Include="Controls\Expander.cs" />
     <Compile Include="Controls\HeaderedContentControl.cs" />
     <Compile Include="Controls\PasswordBox.cs" />
+    <Compile Include="Controls\Primitives\Selector.cs" />
     <Compile Include="Controls\ProgressBar.cs" />
     <Compile Include="Controls\RadioButton.cs" />
     <Compile Include="Controls\Image.cs" />
     <Compile Include="Controls\Primitives\TextBoxBase.cs" />
+    <Compile Include="Controls\SelectionChangedEventArgs.cs" />
     <Compile Include="Controls\SelectionGroup.cs" />
     <Compile Include="Controls\SpellCheck.cs" />
     <Compile Include="Controls\TextBoxView.cs" />
