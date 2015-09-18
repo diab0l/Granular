@@ -10,12 +10,12 @@ namespace System.Windows
         public RoutedEventHandler Handler { get; set; }
         public bool HandledEventsToo { get; set; }
 
-        public void EnterAction(FrameworkElement target, BaseValueSource valueSource)
+        public void Apply(FrameworkElement target, BaseValueSource valueSource)
         {
             target.AddHandler(Event, Handler, HandledEventsToo);
         }
 
-        public void ExitAction(FrameworkElement target, BaseValueSource valueSource)
+        public void Clean(FrameworkElement target, BaseValueSource valueSource)
         {
             target.RemoveHandler(Event, Handler);
         }

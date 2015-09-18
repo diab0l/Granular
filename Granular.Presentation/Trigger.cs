@@ -8,110 +8,83 @@ using Granular.Extensions;
 
 namespace System.Windows
 {
-    public interface ITrigger
+    internal class TriggerCondition : IDataTriggerCondition, IDisposable
     {
-        void Attach(FrameworkElement element, BaseValueSource valueSource);
-        void Detach(FrameworkElement element, BaseValueSource valueSource);
-    }
-
-    public interface ITriggerAction
-    {
-        bool IsActionOverlaps(ITriggerAction action);
-        void EnterAction(FrameworkElement target, BaseValueSource valueSource);
-        void ExitAction(FrameworkElement target, BaseValueSource valueSource);
-    }
-
-    [ContentProperty("Setters")]
-    public class Trigger : Freezable, ITrigger
-    {
-        private class TriggerHandler : IDisposable
+        public event EventHandler IsMatchedChanged;
+        private bool isMatched;
+        public bool IsMatched
         {
-            private FrameworkElement element;
-            private DependencyProperty property;
-            private object value;
-            private IEnumerable<ITriggerAction> actions;
-            private BaseValueSource valueSource;
-
-            private TriggerHandler(FrameworkElement element, DependencyProperty property, object value, IEnumerable<ITriggerAction> actions, BaseValueSource valueSource)
+            get { return isMatched; }
+            private set
             {
-                this.element = element;
-                this.property = property;
-                this.value = value;
-                this.actions = actions;
-                this.valueSource = valueSource;
-            }
-
-            private void OnPropertyChanged(object sender, DependencyPropertyChangedEventArgs e)
-            {
-                if (e.Property != property)
+                if (isMatched == value)
                 {
                     return;
                 }
 
-                if (Granular.Compatibility.EqualityComparer<object>.Default.Equals(e.NewValue, value))
-                {
-                    ExecuteEnterActions();
-                }
-
-                if (Granular.Compatibility.EqualityComparer<object>.Default.Equals(e.OldValue, value))
-                {
-                    ExecuteExitActions();
-                }
-            }
-
-            private void ExecuteEnterActions()
-            {
-                foreach (ITriggerAction action in actions)
-                {
-                    action.EnterAction(element, valueSource);
-                }
-            }
-
-            private void ExecuteExitActions()
-            {
-                foreach (ITriggerAction action in actions)
-                {
-                    action.ExitAction(element, valueSource);
-                }
-            }
-
-            public void Register()
-            {
-                element.PropertyChanged += OnPropertyChanged;
-
-                if (Granular.Compatibility.EqualityComparer<object>.Default.Equals(element.GetValue(property), value))
-                {
-                    ExecuteEnterActions();
-                }
-            }
-
-            public void Dispose()
-            {
-                element.PropertyChanged -= OnPropertyChanged;
-            }
-
-            public static IDisposable Register(FrameworkElement element, DependencyProperty property, object value, IEnumerable<ITriggerAction> actions, BaseValueSource valueSource)
-            {
-                TriggerHandler handler = new TriggerHandler(element, property, value, actions, valueSource);
-                handler.Register();
-                return handler;
+                isMatched = value;
+                IsMatchedChanged.Raise(this);
             }
         }
 
+        private FrameworkElement element;
+        private DependencyProperty property;
+        private object value;
+
+        private TriggerCondition(FrameworkElement element, DependencyProperty property, object value)
+        {
+            this.element = element;
+            this.property = property;
+            this.value = value;
+        }
+
+        private void Register()
+        {
+            IsMatched = Granular.Compatibility.EqualityComparer<object>.Default.Equals(element.GetValue(property), value);
+
+            element.PropertyChanged += OnPropertyChanged;
+        }
+
+        public void Dispose()
+        {
+            element.PropertyChanged -= OnPropertyChanged;
+        }
+
+        private void OnPropertyChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            if (e.Property != property)
+            {
+                return;
+            }
+
+            IsMatched = Granular.Compatibility.EqualityComparer<object>.Default.Equals(e.NewValue, value);
+        }
+
+        public static TriggerCondition Register(FrameworkElement element, DependencyProperty property, object value)
+        {
+            TriggerCondition condition = new TriggerCondition(element, property, value);
+            condition.Register();
+
+            return condition;
+        }
+    }
+
+    [ContentProperty("Setters")]
+    public class Trigger : DataTriggerBase
+    {
         public IPropertyPathElement Property { get; set; }
         public object Value { get; set; }
         public string SourceName { get; set; }
         public List<ITriggerAction> Setters { get; private set; }
 
-        private Dictionary<FrameworkElement, IDisposable> handlers;
+        protected override IEnumerable<ITriggerAction> TriggerActions { get { return Setters; } }
 
         public Trigger()
         {
             Setters = new List<ITriggerAction>();
-            handlers = new Dictionary<FrameworkElement, IDisposable>();
         }
 
-        public void Attach(FrameworkElement element, BaseValueSource valueSource)
+        public override IDataTriggerCondition CreateDataTriggerCondition(FrameworkElement element)
         {
             if (Property == null)
             {
@@ -123,13 +96,8 @@ namespace System.Windows
             object resolvedValue = Value == null || dependencyProperty.PropertyType.IsInstanceOfType(Value) ? Value : TypeConverter.ConvertValue(Value.ToString(), dependencyProperty.PropertyType, XamlNamespaces.Empty);
 
             FrameworkElement source = SourceName.IsNullOrEmpty() ? element : NameScope.GetTemplateNameScope(element).FindName(SourceName) as FrameworkElement;
-            handlers.Add(element, TriggerHandler.Register(source, dependencyProperty, resolvedValue, Setters, valueSource));
-        }
 
-        public void Detach(FrameworkElement element, BaseValueSource valueSource)
-        {
-            handlers[element].Dispose();
-            handlers.Remove(element);
+            return TriggerCondition.Register(source, dependencyProperty, resolvedValue);
         }
     }
 }

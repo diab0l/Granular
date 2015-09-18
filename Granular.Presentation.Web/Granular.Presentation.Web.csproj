@@ -640,6 +640,9 @@
     <Compile Include="..\Granular.Presentation\Trigger.cs">
       <Link>Trigger.cs</Link>
     </Compile>
+    <Compile Include="..\Granular.Presentation\TriggerBase.cs">
+      <Link>TriggerBase.cs</Link>
+    </Compile>
     <Compile Include="..\Granular.Presentation\UIElement.cs">
       <Link>UIElement.cs</Link>
     </Compile>

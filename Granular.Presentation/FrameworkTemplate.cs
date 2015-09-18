@@ -52,12 +52,12 @@ namespace System.Windows
 
         public void Detach(FrameworkElement element)
         {
-            element.TemplateChild = null;
-
             foreach (ITrigger trigger in Triggers)
             {
                 trigger.Detach(element, BaseValueSource.TemplateTrigger);
             }
+
+            element.TemplateChild = null;
         }
 
         private FrameworkElement CreateVisualTree(FrameworkElement templatedParent)

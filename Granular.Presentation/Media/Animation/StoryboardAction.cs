@@ -21,14 +21,14 @@ namespace System.Windows.Media.Animation
 
         public string Name { get; set; }
 
-        public void EnterAction(FrameworkElement target, BaseValueSource valueSource)
+        public void Apply(FrameworkElement target, BaseValueSource valueSource)
         {
             INameScope nameScope = valueSource == BaseValueSource.Local ? NameScope.GetContainingNameScope(target) : NameScope.GetTemplateNameScope(target);
             object layerOwner = valueSource == BaseValueSource.Local ? null : target.TemplatedParent;
             Begin(target, nameScope, layerOwner);
         }
 
-        public void ExitAction(FrameworkElement target, BaseValueSource valueSource)
+        public void Clean(FrameworkElement target, BaseValueSource valueSource)
         {
             //
         }
@@ -91,9 +91,9 @@ namespace System.Windows.Media.Animation
     {
         public string BeginStoryboardName { get; set; }
 
-        public abstract void EnterAction(FrameworkElement target, BaseValueSource valueSource);
+        public abstract void Apply(FrameworkElement target, BaseValueSource valueSource);
 
-        public void ExitAction(FrameworkElement target, BaseValueSource valueSource)
+        public void Clean(FrameworkElement target, BaseValueSource valueSource)
         {
             //
         }
@@ -112,7 +112,7 @@ namespace System.Windows.Media.Animation
 
     public class RemoveStoryboard : StoryboardAction
     {
-        public override void EnterAction(FrameworkElement target, BaseValueSource valueSource)
+        public override void Apply(FrameworkElement target, BaseValueSource valueSource)
         {
             BeginStoryboard beginStoryboard = GetBeginStoryboard(target);
 
@@ -127,7 +127,7 @@ namespace System.Windows.Media.Animation
 
     public class PauseStoryboard : StoryboardAction
     {
-        public override void EnterAction(FrameworkElement target, BaseValueSource valueSource)
+        public override void Apply(FrameworkElement target, BaseValueSource valueSource)
         {
             BeginStoryboard beginStoryboard = GetBeginStoryboard(target);
 
@@ -140,7 +140,7 @@ namespace System.Windows.Media.Animation
 
     public class ResumeStoryboard : StoryboardAction
     {
-        public override void EnterAction(FrameworkElement target, BaseValueSource valueSource)
+        public override void Apply(FrameworkElement target, BaseValueSource valueSource)
         {
             BeginStoryboard beginStoryboard = GetBeginStoryboard(target);
 
@@ -153,7 +153,7 @@ namespace System.Windows.Media.Animation
 
     public class SkipToFillStoryboard : StoryboardAction
     {
-        public override void EnterAction(FrameworkElement target, BaseValueSource valueSource)
+        public override void Apply(FrameworkElement target, BaseValueSource valueSource)
         {
             BeginStoryboard beginStoryboard = GetBeginStoryboard(target);
 
@@ -166,7 +166,7 @@ namespace System.Windows.Media.Animation
 
     public class StopStoryboard : StoryboardAction
     {
-        public override void EnterAction(FrameworkElement target, BaseValueSource valueSource)
+        public override void Apply(FrameworkElement target, BaseValueSource valueSource)
         {
             BeginStoryboard beginStoryboard = GetBeginStoryboard(target);
 

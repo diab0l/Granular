@@ -14,7 +14,7 @@ namespace System.Windows
         public object Value { get; set; }
         public string TargetName { get; set; }
 
-        public void EnterAction(FrameworkElement target, BaseValueSource valueSource)
+        public void Apply(FrameworkElement target, BaseValueSource valueSource)
         {
             if (Property == null)
             {
@@ -29,7 +29,7 @@ namespace System.Windows
             resolvedTarget.SetValue(resolvedProperty, resolvedValue, resolvedValueSource);
         }
 
-        public void ExitAction(FrameworkElement target, BaseValueSource valueSource)
+        public void Clean(FrameworkElement target, BaseValueSource valueSource)
         {
             if (Property == null)
             {

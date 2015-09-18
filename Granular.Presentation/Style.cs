@@ -58,7 +58,7 @@ namespace System.Windows
 
             foreach (ITriggerAction action in Setters.Where(settersFilter))
             {
-                action.EnterAction(element, BaseValueSource.Style);
+                action.Apply(element, BaseValueSource.Style);
             }
 
             foreach (ITrigger trigger in Triggers)
@@ -81,7 +81,7 @@ namespace System.Windows
 
             foreach (ITriggerAction action in Setters.Where(settersFilter))
             {
-                action.ExitAction(element, BaseValueSource.Style);
+                action.Clean(element, BaseValueSource.Style);
             }
 
             foreach (ITrigger trigger in Triggers)

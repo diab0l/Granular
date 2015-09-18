@@ -23,8 +23,8 @@ namespace Granular.Presentation.Tests
 
     public class TestTriggerAction : ITriggerAction
     {
-        public int EnterCount { get; private set; }
-        public int ExitCount { get; private set; }
+        public int ApplyCount { get; private set; }
+        public int ClearCount { get; private set; }
 
         public string Key { get; private set; }
 
@@ -32,15 +32,14 @@ namespace Granular.Presentation.Tests
         {
             this.Key = key;
         }
-
-        public void EnterAction(FrameworkElement target, BaseValueSource valueSource)
+        public void Apply(FrameworkElement target, BaseValueSource valueSource)
         {
-            EnterCount++;
+            ApplyCount++;
         }
 
-        public void ExitAction(FrameworkElement target, BaseValueSource valueSource)
+        public void Clean(FrameworkElement target, BaseValueSource valueSource)
         {
-            ExitCount++;
+            ClearCount++;
         }
 
         public bool IsActionOverlaps(ITriggerAction action)
@@ -167,20 +166,20 @@ namespace Granular.Presentation.Tests
             FrameworkElement element = new FrameworkElement();
 
             element.Style = style;
-            Assert.AreEqual(1, ((TestTriggerAction)base1.Setters[0]).EnterCount);
-            Assert.AreEqual(0, ((TestTriggerAction)base1.Setters[1]).EnterCount);
-            Assert.AreEqual(1, ((TestTriggerAction)base2.Setters[0]).EnterCount);
-            Assert.AreEqual(0, ((TestTriggerAction)base2.Setters[1]).EnterCount);
-            Assert.AreEqual(1, ((TestTriggerAction)style.Setters[0]).EnterCount);
-            Assert.AreEqual(1, ((TestTriggerAction)style.Setters[1]).EnterCount);
+            Assert.AreEqual(1, ((TestTriggerAction)base1.Setters[0]).ApplyCount);
+            Assert.AreEqual(0, ((TestTriggerAction)base1.Setters[1]).ApplyCount);
+            Assert.AreEqual(1, ((TestTriggerAction)base2.Setters[0]).ApplyCount);
+            Assert.AreEqual(0, ((TestTriggerAction)base2.Setters[1]).ApplyCount);
+            Assert.AreEqual(1, ((TestTriggerAction)style.Setters[0]).ApplyCount);
+            Assert.AreEqual(1, ((TestTriggerAction)style.Setters[1]).ApplyCount);
 
             element.Style = null;
-            Assert.AreEqual(1, ((TestTriggerAction)base1.Setters[0]).ExitCount);
-            Assert.AreEqual(0, ((TestTriggerAction)base1.Setters[1]).ExitCount);
-            Assert.AreEqual(1, ((TestTriggerAction)base2.Setters[0]).ExitCount);
-            Assert.AreEqual(0, ((TestTriggerAction)base2.Setters[1]).ExitCount);
-            Assert.AreEqual(1, ((TestTriggerAction)style.Setters[0]).ExitCount);
-            Assert.AreEqual(1, ((TestTriggerAction)style.Setters[1]).ExitCount);
+            Assert.AreEqual(1, ((TestTriggerAction)base1.Setters[0]).ClearCount);
+            Assert.AreEqual(0, ((TestTriggerAction)base1.Setters[1]).ClearCount);
+            Assert.AreEqual(1, ((TestTriggerAction)base2.Setters[0]).ClearCount);
+            Assert.AreEqual(0, ((TestTriggerAction)base2.Setters[1]).ClearCount);
+            Assert.AreEqual(1, ((TestTriggerAction)style.Setters[0]).ClearCount);
+            Assert.AreEqual(1, ((TestTriggerAction)style.Setters[1]).ClearCount);
         }
     }
 }

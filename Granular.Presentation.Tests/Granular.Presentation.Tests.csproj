@@ -124,6 +124,7 @@
     <Compile Include="Threading\TestSchedulerTest.cs" />
     <Compile Include="Threading\TestTaskScheduler.cs" />
     <Compile Include="Media\Animation\AnimationExpressionTest.cs" />
+    <Compile Include="TriggerTest.cs" />
     <Compile Include="UIElementTest.cs" />
     <Compile Include="VisualStateTest.cs" />
   </ItemGroup>

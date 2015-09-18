@@ -8,45 +8,22 @@ using Granular.Extensions;
 namespace System.Windows
 {
     [ContentProperty("Actions")]
-    public class EventTrigger : Freezable, ITrigger
+    public class EventTrigger : EventTriggerBase
     {
-        private class EventTriggerHandler : IDisposable
+        private class EventTriggerCondition : IEventTriggerCondition, IDisposable
         {
+            public event EventHandler EventRaised;
+
             private FrameworkElement element;
             private RoutedEvent routedEvent;
-            private IEnumerable<ITriggerAction> actions;
-            private BaseValueSource valueSource;
 
-            private EventTriggerHandler(FrameworkElement element, RoutedEvent routedEvent, IEnumerable<ITriggerAction> actions, BaseValueSource valueSource)
+            private EventTriggerCondition(FrameworkElement element, RoutedEvent routedEvent)
             {
                 this.element = element;
                 this.routedEvent = routedEvent;
-                this.actions = actions;
-                this.valueSource = valueSource;
             }
 
-            private void RoutedEventHandler(object sender, RoutedEventArgs e)
-            {
-                ExecuteEnterActions();
-            }
-
-            private void ExecuteEnterActions()
-            {
-                foreach (ITriggerAction action in actions)
-                {
-                    action.EnterAction(element, valueSource);
-                }
-            }
-
-            private void ExecuteExitActions()
-            {
-                foreach (ITriggerAction action in actions)
-                {
-                    action.ExitAction(element, valueSource);
-                }
-            }
-
-            public void Register()
+            private void Register()
             {
                 element.AddHandler(routedEvent, (RoutedEventHandler)RoutedEventHandler);
             }
@@ -54,14 +31,18 @@ namespace System.Windows
             public void Dispose()
             {
                 element.RemoveHandler(routedEvent, (RoutedEventHandler)RoutedEventHandler);
-                ExecuteExitActions();
             }
 
-            public static IDisposable Register(FrameworkElement element, RoutedEvent routedEvent, IEnumerable<ITriggerAction> actions, BaseValueSource valueSource)
+            private void RoutedEventHandler(object sender, RoutedEventArgs e)
             {
-                EventTriggerHandler handler = new EventTriggerHandler(element, routedEvent, actions, valueSource);
-                handler.Register();
-                return handler;
+                EventRaised.Raise(this);
+            }
+
+            public static EventTriggerCondition Register(FrameworkElement element, RoutedEvent routedEvent)
+            {
+                EventTriggerCondition condition = new EventTriggerCondition(element, routedEvent);
+                condition.Register();
+                return condition;
             }
         }
 
@@ -69,29 +50,21 @@ namespace System.Windows
         public string SourceName { get; set; }
         public List<ITriggerAction> Actions { get; private set; }
 
-        private Dictionary<FrameworkElement, IDisposable> handlers;
+        protected override IEnumerable<ITriggerAction> TriggerActions { get { return Actions; } }
 
         public EventTrigger()
         {
             Actions = new List<ITriggerAction>();
-            handlers = new Dictionary<FrameworkElement, IDisposable>();
         }
 
-        public void Attach(FrameworkElement element, BaseValueSource valueSource)
+        public override IEventTriggerCondition CreateEventTriggerCondition(FrameworkElement element)
         {
             if (RoutedEvent == null)
             {
                 throw new Granular.Exception("EventTrigger.RoutedEvent cannot be null");
             }
 
-            FrameworkElement source = SourceName.IsNullOrEmpty() ? element : (valueSource == BaseValueSource.Local ? NameScope.GetContainingNameScope(element) : NameScope.GetTemplateNameScope(element)).FindName(SourceName) as FrameworkElement;
-            handlers.Add(element, EventTriggerHandler.Register(source, RoutedEvent, Actions, valueSource));
-        }
-
-        public void Detach(FrameworkElement element, BaseValueSource valueSource)
-        {
-            handlers[element].Dispose();
-            handlers.Remove(element);
+            return EventTriggerCondition.Register(element, RoutedEvent);
         }
     }
 }

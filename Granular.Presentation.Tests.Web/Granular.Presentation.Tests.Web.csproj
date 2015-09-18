@@ -259,6 +259,9 @@
     <Compile Include="..\Granular.Presentation.Tests\Threading\TestTaskScheduler.cs">
       <Link>Threading\TestTaskScheduler.cs</Link>
     </Compile>
+    <Compile Include="..\Granular.Presentation.Tests\TriggerTest.cs">
+      <Link>TriggerTest.cs</Link>
+    </Compile>
     <Compile Include="..\Granular.Presentation.Tests\UIElementTest.cs">
       <Link>UIElementTest.cs</Link>
     </Compile>
