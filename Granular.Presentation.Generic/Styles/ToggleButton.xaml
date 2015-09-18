@@ -20,7 +20,7 @@
         <Setter Property="Control.Background" Value="Transparent"/>
         <Setter Property="Control.Foreground" Value="{StaticResource ForegroundBrush}"/>
         <Setter Property="Control.BorderBrush" Value="{StaticResource BorderBrush}"/>
-        <Setter Property="FrameworkElement.FocusVisualStyle" Value="{StaticResource BulletDefaultFocusVisualStyle}"/>
+        <Setter Property="FrameworkElement.FocusVisualStyle" Value="{StaticResource MarginlessDefaultFocusVisualStyle}"/>
         <Setter Property="Control.Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ToggleButton}">

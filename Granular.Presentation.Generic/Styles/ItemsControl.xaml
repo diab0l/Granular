@@ -7,7 +7,7 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ItemsControl}">
-                    <ItemsPresenter ItemContainerGenerator='{TemplateBinding ItemContainerGenerator}' Template='{TemplateBinding ItemsPanel}'/>
+                    <ItemsPresenter ItemContainerGenerator="{TemplateBinding ItemContainerGenerator}" Template="{TemplateBinding ItemsPanel}"/>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
