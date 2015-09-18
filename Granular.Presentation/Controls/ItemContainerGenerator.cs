@@ -13,6 +13,10 @@ namespace System.Windows.Controls
         int ItemsCount { get; }
         FrameworkElement Generate(int index);
         void RemoveRange(int startIndex, int count);
+
+        DependencyObject ContainerFromItem(object item);
+        object ItemFromContainer(DependencyObject container);
+        int IndexFromContainer(DependencyObject container);
     }
 
     public static class ItemContainerGeneratorExtensions
@@ -119,7 +123,7 @@ namespace System.Windows.Controls
 
             if (e.Action == NotifyCollectionChangedAction.Replace)
             {
-                Refersh(e.NewStartingIndex);
+                RefershRange(e.NewStartingIndex, newItemsCount);
             }
 
             if (e.Action == NotifyCollectionChangedAction.Reset)
@@ -168,13 +172,14 @@ namespace System.Windows.Controls
             host.ClearContainerForItem(container.Item, container.Container);
         }
 
-        private void Refersh(int index)
+        private void RefershRange(int startIndex, int count)
         {
-            GeneratedItemContainer container = generatedContainers.FirstOrDefault(c => c.Index == index);
-
-            if (container != null)
+            foreach (GeneratedItemContainer container in generatedContainers)
             {
-                Refersh(container);
+                if (container.Index >= startIndex && container.Index < startIndex + count)
+                {
+                    Refersh(container);
+                }
             }
         }
 
@@ -186,6 +191,24 @@ namespace System.Windows.Controls
             container.Container = host.GetContainerForItem(host.View[container.Index]);
 
             host.PrepareContainerForItem(container.Item, container.Container);
+        }
+
+        public DependencyObject ContainerFromItem(object item)
+        {
+            GeneratedItemContainer generatedItemContainer = generatedContainers.FirstOrDefault(c => c.Item == item);
+            return generatedItemContainer != null ? generatedItemContainer.Container : null;
+        }
+
+        public object ItemFromContainer(DependencyObject container)
+        {
+            GeneratedItemContainer generatedItemContainer = generatedContainers.FirstOrDefault(c => c.Container == container);
+            return generatedItemContainer != null ? generatedItemContainer.Item : null;
+        }
+
+        public int IndexFromContainer(DependencyObject container)
+        {
+            GeneratedItemContainer generatedItemContainer = generatedContainers.FirstOrDefault(c => c.Container == container);
+            return generatedItemContainer != null ? generatedItemContainer.Index : -1;
         }
 
         private void ShiftGeneratedContainersIndex(int startIndex, int offset)
