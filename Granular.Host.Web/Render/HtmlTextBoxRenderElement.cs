@@ -505,7 +505,8 @@ namespace Granular.Host.Render
             {
                 int selectionStart = SelectionStart;
 
-                this.Text = String.Format("{0}\t{1}", this.Text.Substring(0, SelectionStart), this.Text.Substring(SelectionStart + SelectionLength));
+                string contentElementText = ContentElement.HtmlElement.GetValue();
+                this.Text = String.Format("{0}\t{1}", contentElementText.Substring(0, SelectionStart), contentElementText.Substring(SelectionStart + SelectionLength));
 
                 ContentElement.HtmlElement.SetSelectionStart(selectionStart + 1);
                 ContentElement.HtmlElement.SetSelectionEnd(selectionStart + 1);
