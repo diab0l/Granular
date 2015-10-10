@@ -86,7 +86,6 @@ namespace System.Windows.Controls
         public int LineCount { get; private set; }
 
         private TextBoxView textBoxView;
-        private IDisposable textBoxViewKeyboardFocus;
 
         static TextBox()
         {
@@ -107,7 +106,6 @@ namespace System.Windows.Controls
             textBoxView.CaretIndexChanged += (sender, e) => this.CaretIndex = textBoxView.CaretIndex;
             textBoxView.SelectionStartChanged += (sender, e) => this.SelectionStart = textBoxView.SelectionStart;
             textBoxView.SelectionLengthChanged += (sender, e) => this.SelectionLength = textBoxView.SelectionLength;
-            textBoxView.GotKeyboardFocus += (sender, e) => Focus();
         }
 
         protected override FrameworkElement GetTextBoxContent()
@@ -164,12 +162,14 @@ namespace System.Windows.Controls
 
         protected override void OnGotFocus(RoutedEventArgs e)
         {
-            textBoxViewKeyboardFocus = Keyboard.Focus(textBoxView);
+            textBoxView.FocusRenderElement();
         }
 
         protected override void OnLostFocus(RoutedEventArgs e)
         {
-            if (textBoxViewKeyboardFocus != null)
+            textBoxView.ClearFocusRenderElement();
+        }
+
         protected override void OnKeyDown(KeyEventArgs e)
         {
             if (e.Key == Key.Enter && !AcceptsReturn || e.Key == Key.Tab && !AcceptsTab)

@@ -42,7 +42,6 @@ namespace System.Windows.Controls
         }
 
         private TextBoxView textBoxView;
-        private IDisposable passwordBoxViewKeyboardFocus;
         private Decorator contentHost;
 
         static PasswordBox()
@@ -57,7 +56,6 @@ namespace System.Windows.Controls
         {
             textBoxView = new TextBoxView { IsPassword = true };
             textBoxView.TextChanged += (sender, e) => this.Password = textBoxView.Text;
-            textBoxView.GotKeyboardFocus += (sender, e) => Focus();
         }
 
         protected override void OnApplyTemplate()
@@ -83,16 +81,12 @@ namespace System.Windows.Controls
 
         protected override void OnGotFocus(RoutedEventArgs e)
         {
-            passwordBoxViewKeyboardFocus = Keyboard.Focus(textBoxView);
+            textBoxView.FocusRenderElement();
         }
 
         protected override void OnLostFocus(RoutedEventArgs e)
         {
-            if (passwordBoxViewKeyboardFocus != null)
-            {
-                passwordBoxViewKeyboardFocus.Dispose();
-                passwordBoxViewKeyboardFocus = null;
-            }
+            textBoxView.ClearFocusRenderElement();
         }
 
         protected override void OnMouseDown(MouseButtonEventArgs e)

@@ -306,7 +306,7 @@ namespace System.Windows.Controls
             return finalSize;
         }
 
-        protected override void OnGotKeyboardFocus(KeyboardFocusChangedEventArgs e)
+        public void FocusRenderElement()
         {
             foreach (ITextBoxRenderElement textBoxRenderElement in textBoxRenderElements.Values)
             {
@@ -314,7 +314,7 @@ namespace System.Windows.Controls
             }
         }
 
-        protected override void OnLostKeyboardFocus(KeyboardFocusChangedEventArgs e)
+        public void ClearFocusRenderElement()
         {
             foreach (ITextBoxRenderElement textBoxRenderElement in textBoxRenderElements.Values)
             {
