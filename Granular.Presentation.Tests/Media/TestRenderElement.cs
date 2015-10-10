@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Windows.Controls;
+using System.Windows.Input;
 
 namespace System.Windows.Media
 {
@@ -87,6 +88,11 @@ namespace System.Windows.Media
         }
 
         public void ClearFocus()
+        {
+            //
+        }
+
+        public void ProcessKeyEvent(KeyEventArgs e)
         {
             //
         }

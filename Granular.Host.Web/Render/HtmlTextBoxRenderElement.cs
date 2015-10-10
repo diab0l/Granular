@@ -7,6 +7,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using Granular.Extensions;
+using System.Windows.Input;
 
 namespace Granular.Host.Render
 {
@@ -596,6 +597,12 @@ namespace Granular.Host.Render
         private void SetContentElementTextWrapping()
         {
             ContentElement.HtmlElement.SetAttribute("wrap", converter.ToWrapString(TextWrapping));
+        }
+
+        public void ProcessKeyEvent(KeyEventArgs e)
+        {
+            e.ForceHostHandling = true;
+            e.Handled = true;
         }
     }
 }

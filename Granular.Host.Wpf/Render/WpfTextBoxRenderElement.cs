@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using System.Windows.Media;
 using Granular.Extensions;
 
@@ -546,7 +547,9 @@ namespace Granular.Host.Wpf.Render
 
         public void ClearFocus()
         {
-            wpf::System.Windows.Input.Keyboard.ClearFocus();
+            wpf::System.Windows.Window window = wpf::System.Windows.Window.GetWindow(contentAdapter.Control);
+            wpf::System.Windows.Input.FocusManager.SetFocusedElement(window, null);
+            wpf::System.Windows.Input.Keyboard.Focus(window);
         }
 
         private void SetContentBounds()
@@ -555,6 +558,14 @@ namespace Granular.Host.Wpf.Render
             wpf::System.Windows.Controls.Canvas.SetTop(contentAdapter.Control, bounds.Top);
             contentAdapter.Control.Width = bounds.Width;
             contentAdapter.Control.Height = bounds.Height;
+        }
+
+        public void ProcessKeyEvent(KeyEventArgs e)
+        {
+            wpf::System.Windows.Input.KeyEventArgs wpfKeyEventArgs = new wpf::System.Windows.Input.KeyEventArgs(wpf::System.Windows.Input.Keyboard.PrimaryDevice, wpf::System.Windows.PresentationSource.FromVisual(contentAdapter.Control), 0, converter.Convert(e.Key));
+            wpfKeyEventArgs.RoutedEvent = e.KeyStates == KeyStates.Down ? wpf::System.Windows.Input.Keyboard.KeyDownEvent : wpf::System.Windows.Input.Keyboard.KeyUpEvent;
+            contentAdapter.Control.RaiseEvent(wpfKeyEventArgs);
+            e.Handled = wpfKeyEventArgs.Handled;
         }
     }
 }

@@ -170,10 +170,14 @@ namespace System.Windows.Controls
         protected override void OnLostFocus(RoutedEventArgs e)
         {
             if (textBoxViewKeyboardFocus != null)
+        protected override void OnKeyDown(KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter && !AcceptsReturn || e.Key == Key.Tab && !AcceptsTab)
             {
-                textBoxViewKeyboardFocus.Dispose();
-                textBoxViewKeyboardFocus = null;
+                return;
             }
+
+            textBoxView.ProcessRenderElementKeyEvent(e);
         }
     }
 }

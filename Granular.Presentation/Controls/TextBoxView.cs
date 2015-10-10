@@ -322,6 +322,14 @@ namespace System.Windows.Controls
             }
         }
 
+        public void ProcessRenderElementKeyEvent(KeyEventArgs e)
+        {
+            foreach (ITextBoxRenderElement textBoxRenderElement in textBoxRenderElements.Values)
+            {
+                textBoxRenderElement.ProcessKeyEvent(e);
+            }
+        }
+
         private void OnIsEnabledChanged()
         {
             SetRenderElementsIsHitTestVisible();

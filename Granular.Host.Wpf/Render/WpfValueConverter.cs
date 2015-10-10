@@ -32,6 +32,8 @@ namespace Granular.Host.Wpf.Render
         wpf::System.Windows.Controls.ScrollBarVisibility Convert(ScrollBarVisibility scrollBarVisibility);
         wpf::System.Windows.Media.ImageSource Convert(ImageSource source);
         wpf::System.Windows.Input.Cursor Convert(Cursor cursor);
+        wpf::System.Windows.Input.Key Convert(Key key);
+        wpf::System.Windows.Input.KeyStates Convert(KeyStates keyStates);
 
         MouseButton ConvertBack(wpf::System.Windows.Input.MouseButton mouseButton);
         MouseButtonState ConvertBack(wpf::System.Windows.Input.MouseButtonState mouseButtonState);
@@ -298,6 +300,16 @@ namespace Granular.Host.Wpf.Render
             }
 
             throw new Granular.Exception("Unexpected CursorType \"{0}\"", cursor.CursorType);
+        }
+
+        public wpf::System.Windows.Input.Key Convert(Key key)
+        {
+            return (wpf::System.Windows.Input.Key)((int)key);
+        }
+
+        public wpf::System.Windows.Input.KeyStates Convert(KeyStates keyStates)
+        {
+            return (wpf::System.Windows.Input.KeyStates)((int)keyStates);
         }
 
         public MouseButton ConvertBack(wpf::System.Windows.Input.MouseButton mouseButton)

@@ -27,6 +27,8 @@ namespace System.Windows.Input
         public bool IsDown { get { return KeyStates == KeyStates.Down; } }
         public bool IsRepeat { get; private set; }
 
+        public bool ForceHostHandling { get; set; }
+
         public KeyEventArgs(RoutedEvent routedEvent, object originalSource, KeyboardDevice keyboardDevice, int timestamp, Key key, KeyStates keyStates, bool isRepeat) :
             base(routedEvent, originalSource, keyboardDevice, timestamp)
         {

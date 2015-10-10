@@ -139,7 +139,7 @@ namespace System.Windows.Input
 
             PostProcessKey.Raise(this, eventArgs);
 
-            return previewEventArgs.Handled || eventArgs.Handled;
+            return (previewEventArgs.Handled || eventArgs.Handled) && !previewEventArgs.ForceHostHandling && !eventArgs.ForceHostHandling;
         }
 
         public KeyStates GetKeyStates(Key key)

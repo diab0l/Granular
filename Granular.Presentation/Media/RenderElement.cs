@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Controls;
+using System.Windows.Input;
 
 namespace System.Windows.Media
 {
@@ -62,6 +63,7 @@ namespace System.Windows.Media
 
         void Focus();
         void ClearFocus();
+        void ProcessKeyEvent(KeyEventArgs e);
     }
 
     public interface ITextBlockRenderElement
