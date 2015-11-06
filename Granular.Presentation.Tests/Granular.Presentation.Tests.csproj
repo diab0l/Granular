@@ -55,6 +55,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Controls\ImageTest.cs" />
+    <Compile Include="Controls\Primitives\ButtonBaseTest.cs" />
+    <Compile Include="Controls\Primitives\RelayCommand.cs" />
     <Compile Include="Controls\ScrollContentPresenterTest.cs" />
     <Compile Include="Controls\ScrollViewerTest.cs" />
     <Compile Include="Controls\TextBoxTest.cs" />
@@ -142,7 +144,6 @@
       <Name>Granular.Presentation</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
