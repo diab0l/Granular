@@ -122,6 +122,7 @@
     <Compile Include="Compatibility\EqualityComparer.cs" />
     <Compile Include="Compatibility\EventInfoExtensions.cs" />
     <Compile Include="Compatibility\HashSet.cs" />
+    <Compile Include="Compatibility\ICommand.cs" />
     <Compile Include="Compatibility\NotifyPropertyChanged.cs" />
     <Compile Include="Compatibility\ParameterInfoExtensions.cs" />
     <Compile Include="Compatibility\PropertyInfoExtensions.cs" />
