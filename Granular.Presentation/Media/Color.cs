@@ -140,6 +140,11 @@ namespace System.Windows.Media
                     return Color.FromUInt32(0xff000000 | Granular.Compatibility.Convert.ToUInt32(stringValue.Substring(1), 16));
                 }
 
+                if (stringValue.StartsWith("#") && stringValue.Length == 4)
+                {
+                    return Color.FromUInt32(0xff000000 | Granular.Compatibility.Convert.ToUInt32(String.Format("{0}{0}{1}{1}{2}{2}", stringValue[1], stringValue[2], stringValue[3]), 16));
+                }
+
                 PropertyInfo propertyInfo = typeof(Colors).GetProperty(stringValue, BindingFlags.Static | BindingFlags.Public);
                 if (propertyInfo != null)
                 {
