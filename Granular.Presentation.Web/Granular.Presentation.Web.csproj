@@ -43,6 +43,9 @@
     <Compile Include="..\Granular.Presentation\Condition.cs">
       <Link>Condition.cs</Link>
     </Compile>
+    <Compile Include="..\Granular.Presentation\ContentElement.cs">
+      <Link>ContentElement.cs</Link>
+    </Compile>
     <Compile Include="..\Granular.Presentation\Controls\Adorner.cs">
       <Link>Controls\Adorner.cs</Link>
     </Compile>
@@ -283,6 +286,21 @@
     <Compile Include="..\Granular.Presentation\DependencyPropertyValueEntry.cs">
       <Link>DependencyPropertyValueEntry.cs</Link>
     </Compile>
+    <Compile Include="..\Granular.Presentation\Documents\Block.cs">
+      <Link>Documents\Block.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\Documents\Inline.cs">
+      <Link>Documents\Inline.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\Documents\Paragraph.cs">
+      <Link>Documents\Paragraph.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\Documents\Run.cs">
+      <Link>Documents\Run.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\Documents\TextElement.cs">
+      <Link>Documents\TextElement.cs</Link>
+    </Compile>
     <Compile Include="..\Granular.Presentation\Duration.cs">
       <Link>Duration.cs</Link>
     </Compile>
@@ -309,6 +327,9 @@
     </Compile>
     <Compile Include="..\Granular.Presentation\Font.cs">
       <Link>Font.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\FrameworkContentElement.cs">
+      <Link>FrameworkContentElement.cs</Link>
     </Compile>
     <Compile Include="..\Granular.Presentation\FrameworkElement.cs">
       <Link>FrameworkElement.cs</Link>

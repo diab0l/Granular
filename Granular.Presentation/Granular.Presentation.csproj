@@ -45,6 +45,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Condition.cs" />
+    <Compile Include="ContentElement.cs" />
     <Compile Include="Controls\Adorner.cs" />
     <Compile Include="Controls\AdornerLayer.cs" />
     <Compile Include="Controls\Expander.cs" />
@@ -62,6 +63,12 @@
     <Compile Include="Controls\SpellCheck.cs" />
     <Compile Include="Controls\TextBoxView.cs" />
     <Compile Include="Controls\TextChangedEventArgs.cs" />
+    <Compile Include="Documents\Block.cs" />
+    <Compile Include="Documents\Inline.cs" />
+    <Compile Include="Documents\Paragraph.cs" />
+    <Compile Include="Documents\Run.cs" />
+    <Compile Include="Documents\TextElement.cs" />
+    <Compile Include="FrameworkContentElement.cs" />
     <Compile Include="Input\KeyboardNavigation.cs" />
     <Compile Include="Input\KeyboardNavigationTarget.cs" />
     <Compile Include="MultiDataTrigger.cs" />

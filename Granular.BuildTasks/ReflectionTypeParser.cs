@@ -33,6 +33,7 @@ namespace Granular.BuildTasks
             new LocalXmlnsDefinitionAttribute("http://schemas.microsoft.com/winfx/2006/xaml/presentation", "System.Windows.Controls", "Granular.Presentation"),
             new LocalXmlnsDefinitionAttribute("http://schemas.microsoft.com/winfx/2006/xaml/presentation", "System.Windows.Controls.Primitives", "Granular.Presentation"),
             new LocalXmlnsDefinitionAttribute("http://schemas.microsoft.com/winfx/2006/xaml/presentation", "System.Windows.Data", "Granular.Presentation"),
+            new LocalXmlnsDefinitionAttribute("http://schemas.microsoft.com/winfx/2006/xaml/presentation", "System.Windows.Documents", "Granular.Presentation"),
             new LocalXmlnsDefinitionAttribute("http://schemas.microsoft.com/winfx/2006/xaml/presentation", "System.Windows.Input", "Granular.Presentation"),
             new LocalXmlnsDefinitionAttribute("http://schemas.microsoft.com/winfx/2006/xaml/presentation", "System.Windows.Media", "Granular.Presentation"),
             new LocalXmlnsDefinitionAttribute("http://schemas.microsoft.com/winfx/2006/xaml/presentation", "System.Windows.Media.Animation", "Granular.Presentation"),

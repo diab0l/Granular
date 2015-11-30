@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Markup;
 using System.Windows.Media;
+using System.Windows.Documents;
 
 namespace System.Windows.Controls
 {
@@ -17,49 +18,49 @@ namespace System.Windows.Controls
             set { SetValue(TextProperty, value); }
         }
 
-        public static readonly DependencyProperty ForegroundProperty = DependencyProperty.Register("Foreground", typeof(Brush), typeof(TextBlock), new FrameworkPropertyMetadata(Brushes.Black, inherits: true, propertyChangedCallback: (sender, e) => ((TextBlock)sender).SetRenderElementsProperty(textBlockRenderElement => textBlockRenderElement.Foreground = (Brush)e.NewValue)));
+        public static readonly DependencyProperty ForegroundProperty = TextElement.ForegroundProperty.AddOwner(typeof(TextBlock), new FrameworkPropertyMetadata(Brushes.Black, inherits: true, propertyChangedCallback: (sender, e) => ((TextBlock)sender).SetRenderElementsProperty(textBlockRenderElement => textBlockRenderElement.Foreground = (Brush)e.NewValue)));
         public Brush Foreground
         {
             get { return (Brush)GetValue(ForegroundProperty); }
             set { SetValue(ForegroundProperty, value); }
         }
 
-        public static readonly DependencyProperty FontFamilyProperty = DependencyProperty.Register("FontFamily", typeof(FontFamily), typeof(TextBlock), new FrameworkPropertyMetadata(FontFamily.Default, inherits: true, affectsMeasure: true, propertyChangedCallback: (sender, e) => ((TextBlock)sender).OnFontFamilyChanged(e)));
+        public static readonly DependencyProperty FontFamilyProperty = TextElement.FontFamilyProperty.AddOwner(typeof(TextBlock), new FrameworkPropertyMetadata(inherits: true, affectsMeasure: true, propertyChangedCallback: (sender, e) => ((TextBlock)sender).OnFontFamilyChanged(e)));
         public FontFamily FontFamily
         {
             get { return (FontFamily)GetValue(FontFamilyProperty); }
             set { SetValue(FontFamilyProperty, value); }
         }
 
-        public static readonly DependencyProperty FontSizeProperty = DependencyProperty.Register("FontSize", typeof(double), typeof(TextBlock), new FrameworkPropertyMetadata(11.0, inherits: true, affectsMeasure: true, propertyChangedCallback: (sender, e) => ((TextBlock)sender).OnFontSizeChanged(e)));
+        public static readonly DependencyProperty FontSizeProperty = TextElement.FontSizeProperty.AddOwner(typeof(TextBlock), new FrameworkPropertyMetadata(inherits: true, affectsMeasure: true, propertyChangedCallback: (sender, e) => ((TextBlock)sender).OnFontSizeChanged(e)));
         public double FontSize
         {
             get { return (double)GetValue(FontSizeProperty); }
             set { SetValue(FontSizeProperty, value); }
         }
 
-        public static readonly DependencyProperty FontStyleProperty = DependencyProperty.Register("FontStyle", typeof(FontStyle), typeof(TextBlock), new FrameworkPropertyMetadata(inherits: true, affectsMeasure: true, propertyChangedCallback: (sender, e) => ((TextBlock)sender).OnFontStyleChanged(e)));
+        public static readonly DependencyProperty FontStyleProperty = TextElement.FontStyleProperty.AddOwner(typeof(TextBlock), new FrameworkPropertyMetadata(inherits: true, affectsMeasure: true, propertyChangedCallback: (sender, e) => ((TextBlock)sender).OnFontStyleChanged(e)));
         public FontStyle FontStyle
         {
             get { return (FontStyle)GetValue(FontStyleProperty); }
             set { SetValue(FontStyleProperty, value); }
         }
 
-        public static readonly DependencyProperty FontWeightProperty = DependencyProperty.Register("FontWeight", typeof(FontWeight), typeof(TextBlock), new FrameworkPropertyMetadata(inherits: true, affectsMeasure: true, propertyChangedCallback: (sender, e) => ((TextBlock)sender).OnFontWeightChanged(e)));
+        public static readonly DependencyProperty FontWeightProperty = TextElement.FontWeightProperty.AddOwner(typeof(TextBlock), new FrameworkPropertyMetadata(inherits: true, affectsMeasure: true, propertyChangedCallback: (sender, e) => ((TextBlock)sender).OnFontWeightChanged(e)));
         public FontWeight FontWeight
         {
             get { return (FontWeight)GetValue(FontWeightProperty); }
             set { SetValue(FontWeightProperty, value); }
         }
 
-        public static readonly DependencyProperty FontStretchProperty = DependencyProperty.Register("FontStretch", typeof(FontStretch), typeof(TextBlock), new FrameworkPropertyMetadata(inherits: true, affectsMeasure: true, propertyChangedCallback: (sender, e) => ((TextBlock)sender).OnFontStretchChanged(e)));
+        public static readonly DependencyProperty FontStretchProperty = TextElement.FontStretchProperty.AddOwner(typeof(TextBlock), new FrameworkPropertyMetadata(inherits: true, affectsMeasure: true, propertyChangedCallback: (sender, e) => ((TextBlock)sender).OnFontStretchChanged(e)));
         public FontStretch FontStretch
         {
             get { return (FontStretch)GetValue(FontStretchProperty); }
             set { SetValue(FontStretchProperty, value); }
         }
 
-        public static readonly DependencyProperty TextAlignmentProperty = DependencyProperty.Register("TextAlignment", typeof(TextAlignment), typeof(TextBlock), new FrameworkPropertyMetadata(inherits: true, propertyChangedCallback: (sender, e) => ((TextBlock)sender).SetRenderElementsProperty(textBlockRenderElement => textBlockRenderElement.TextAlignment = (TextAlignment)e.NewValue)));
+        public static readonly DependencyProperty TextAlignmentProperty = Block.TextAlignmentProperty.AddOwner(typeof(TextBlock), new FrameworkPropertyMetadata(inherits: true, propertyChangedCallback: (sender, e) => ((TextBlock)sender).SetRenderElementsProperty(textBlockRenderElement => textBlockRenderElement.TextAlignment = (TextAlignment)e.NewValue)));
         public TextAlignment TextAlignment
         {
             get { return (TextAlignment)GetValue(TextAlignmentProperty); }
@@ -73,7 +74,7 @@ namespace System.Windows.Controls
             set { SetValue(TextTrimmingProperty, value); }
         }
 
-        public static readonly DependencyProperty TextWrappingProperty = DependencyProperty.Register("TextWrapping", typeof(TextWrapping), typeof(TextBlock), new FrameworkPropertyMetadata(TextWrapping.NoWrap, inherits: true, affectsMeasure: true, propertyChangedCallback: (sender, e) => ((TextBlock)sender).SetRenderElementsProperty(textBlockRenderElement => textBlockRenderElement.TextWrapping = (TextWrapping)e.NewValue)));
+        public static readonly DependencyProperty TextWrappingProperty = DependencyProperty.Register("TextWrapping", typeof(TextWrapping), typeof(TextBlock), new FrameworkPropertyMetadata(inherits: true, affectsMeasure: true, propertyChangedCallback: (sender, e) => ((TextBlock)sender).SetRenderElementsProperty(textBlockRenderElement => textBlockRenderElement.TextWrapping = (TextWrapping)e.NewValue)));
         public TextWrapping TextWrapping
         {
             get { return (TextWrapping)GetValue(TextWrappingProperty); }
