@@ -5,6 +5,7 @@ using System.Text;
 using System.Windows.Markup;
 using System.Xaml;
 using Granular.Collections;
+using Granular.Extensions;
 
 namespace System.Windows
 {
@@ -89,14 +90,15 @@ namespace System.Windows
         public ValidateValueCallback ValidateValueCallback { get; private set; }
         public bool IsReadOnly { get; private set; }
         public bool Inherits { get; private set; }
+        public bool IsAttached { get; private set; }
 
         private DependencyPropertyHashKey hashKey;
         private Dictionary<Type, PropertyMetadata> typeMetadata;
         private PropertyMetadata ownerMetadata;
-        private bool isAttached;
         private bool isMetadataOverridden;
 
         private CacheDictionary<Type, PropertyMetadata> typeMetadataCache;
+        private CacheDictionary<Type, bool> typeContainsCache;
         private IEnumerable<Type> orderedTypeMetadataCache;
 
         private static readonly Dictionary<DependencyPropertyHashKey, DependencyProperty> registeredProperties = new Dictionary<DependencyPropertyHashKey, DependencyProperty>();
@@ -116,12 +118,13 @@ namespace System.Windows
             this.Inherits = metadata.Inherits;
 
             this.ownerMetadata = metadata;
-            this.isAttached = isAttached;
+            this.IsAttached = isAttached;
 
             typeMetadata = new Dictionary<Type, PropertyMetadata>();
             typeMetadata.Add(OwnerType, ownerMetadata);
 
             typeMetadataCache = new CacheDictionary<Type, PropertyMetadata>(ResolveTypeMetadata);
+            typeContainsCache = new CacheDictionary<Type, bool>(ResolveTypeContains);
         }
 
         public override int GetHashCode()
@@ -188,6 +191,8 @@ namespace System.Windows
                 OverrideMetadata(ownerType, metadata);
             }
 
+            typeContainsCache.Clear();
+
             return this;
         }
 
@@ -207,16 +212,26 @@ namespace System.Windows
             return closestBaseType != null ? typeMetadata[closestBaseType] : ownerMetadata;
         }
 
+        public bool IsContainedBy(Type type)
+        {
+            return typeContainsCache.GetValue(type);
+        }
+
+        private bool ResolveTypeContains(Type type)
+        {
+            return GetFlattenedProperties(type).Contains(this);
+        }
+
         internal void RaiseMetadataPropertyChangedCallback(DependencyObject dependencyObject, DependencyPropertyChangedEventArgs e)
         {
             // metadata's changed callback will be raised for
             // - the original owner metadata
             // - every attached property metadata
-            // - every metadata that the currently changed object derives from it's owner type
+            // - every metadata that the currently changed object derives from its owner type
 
             foreach (Type type in GetOrderedTypeMetadata())
             {
-                if (!type.IsInstanceOfType(dependencyObject) && (!isAttached || type != OwnerType))
+                if (!type.IsInstanceOfType(dependencyObject) && (!IsAttached || type != OwnerType))
                 {
                     continue;
                 }

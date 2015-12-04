@@ -82,7 +82,7 @@ namespace System.Windows
 
         protected override void OnPropertyChanged(DependencyPropertyChangedEventArgs e)
         {
-            if (!e.Property.OwnerType.IsInstanceOfType(this))
+            if (!e.Property.IsContainedBy(GetType()))
             {
                 return;
             }

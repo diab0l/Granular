@@ -74,7 +74,22 @@ namespace System.Windows
 
         public object GetValue(DependencyProperty dependencyProperty)
         {
-            return GetInitializedValueEntry(dependencyProperty).Value;
+            IDependencyPropertyValueEntry entry;
+            if (!entries.TryGetValue(dependencyProperty, out entry))
+            {
+                PropertyMetadata propertyMetadata = dependencyProperty.GetMetadata(GetType());
+
+                // no need to create a new entry if the value is not inherited or coerced
+                if (!propertyMetadata.Inherits && (propertyMetadata.CoerceValueCallback == null || !dependencyProperty.IsAttached && !dependencyProperty.IsContainedBy(GetType())))
+                {
+                    return propertyMetadata.DefaultValue;
+                }
+
+                entry = CreateDependencyPropertyValueEntry(dependencyProperty, propertyMetadata);
+                entries.Add(dependencyProperty, entry);
+            }
+
+            return entry.Value;
         }
 
         public object GetValue(DependencyPropertyKey dependencyPropertyKey)
@@ -174,8 +189,8 @@ namespace System.Windows
 
         public void CoerceValue(DependencyProperty dependencyProperty)
         {
-            IDependencyPropertyValueEntry entry;
-            if (entries.TryGetValue(dependencyProperty, out entry) && entry is CoercedDependencyPropertyValueEntry)
+            IDependencyPropertyValueEntry entry = GetInitializedValueEntry(dependencyProperty);
+            if (entry is CoercedDependencyPropertyValueEntry)
             {
                 ((CoercedDependencyPropertyValueEntry)entry).CoerceValue();
             }
@@ -227,7 +242,7 @@ namespace System.Windows
             IDependencyPropertyValueEntry entry;
             if (!entries.TryGetValue(dependencyProperty, out entry))
             {
-                entry = CreateDependencyPropertyValueEntry(dependencyProperty);
+                entry = CreateDependencyPropertyValueEntry(dependencyProperty, dependencyProperty.GetMetadata(GetType()));
                 entries.Add(dependencyProperty, entry);
             }
 
@@ -250,24 +265,35 @@ namespace System.Windows
         }
 
         // create dependency property entry and set its default and initial inherited value
-        private IDependencyPropertyValueEntry CreateDependencyPropertyValueEntry(DependencyProperty dependencyProperty)
+        private IDependencyPropertyValueEntry CreateDependencyPropertyValueEntry(DependencyProperty dependencyProperty, PropertyMetadata propertyMetadata)
         {
             IDependencyPropertyValueEntry entry = new DependencyPropertyValueEntry(this, dependencyProperty);
-
-            PropertyMetadata propertyMetadata = dependencyProperty.GetMetadata(GetType());
-
-            if (propertyMetadata.CoerceValueCallback != null)
-            {
-                entry = new CoercedDependencyPropertyValueEntry(entry, this, propertyMetadata.CoerceValueCallback);
-            }
-
             entry.SetBaseValue((int)BaseValueSource.Default, propertyMetadata.DefaultValue);
-            entry.ValueChanged += (sender, e) => RaisePropertyChanged(new DependencyPropertyChangedEventArgs(dependencyProperty, e.OldValue, e.NewValue));
+
+            if (dependencyProperty.IsAttached || dependencyProperty.IsContainedBy(GetType()))
+            {
+                if (propertyMetadata.CoerceValueCallback != null)
+                {
+                    entry = new CoercedDependencyPropertyValueEntry(entry, this, propertyMetadata.CoerceValueCallback);
+                }
+
+                entry.ValueChanged += (sender, e) => OnContainedEntryValueChanged(new DependencyPropertyChangedEventArgs(dependencyProperty, e.OldValue, e.NewValue));
+            }
+            else
+            {
+                entry.ValueChanged += (sender, e) => OnEntryValueChanged(new DependencyPropertyChangedEventArgs(dependencyProperty, e.OldValue, e.NewValue));
+            }
 
             return entry;
         }
 
-        private void RaisePropertyChanged(DependencyPropertyChangedEventArgs e)
+        private void OnEntryValueChanged(DependencyPropertyChangedEventArgs e)
+        {
+            OnPropertyChanged(e);
+            PropertyChanged.Raise(this, e);
+        }
+
+        private void OnContainedEntryValueChanged(DependencyPropertyChangedEventArgs e)
         {
             e.Property.RaiseMetadataPropertyChangedCallback(this, e);
             OnPropertyChanged(e);

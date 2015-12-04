@@ -55,6 +55,7 @@ namespace Granular.Presentation.Tests
             static ElementD()
             {
                 ElementA.Value0Property.AddOwner(typeof(ElementD));
+                ElementA.Value1Property.AddOwner(typeof(ElementD));
                 ElementA.Value1Property.OverrideMetadata(typeof(ElementD), new PropertyMetadata(defaultValue: 4, propertyChangedCallback: (sender, e) => { if (Value1ChangedD != null) { Value1ChangedD(sender, e); } }));
                 ElementA.Value2Property.OverrideMetadata(typeof(ElementD), new PropertyMetadata(defaultValue: 4, propertyChangedCallback: (sender, e) => { if (Value2ChangedD != null) { Value2ChangedD(sender, e); } }));
             }
@@ -237,7 +238,7 @@ namespace Granular.Presentation.Tests
         public void OverrideMetadataGetPropertiesTest()
         {
             DependencyProperty[] properties = DependencyProperty.GetFlattenedProperties(typeof(ElementD)).ToArray();
-            CollectionAssert.AreEqual(properties, new [] { ElementA.Value0Property });
+            CollectionAssert.AreEqual(properties, new[] { ElementA.Value0Property, ElementA.Value1Property });
         }
 
         [TestMethod]
