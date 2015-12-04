@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Xaml;
+using Granular.Collections;
 
 namespace System.Windows.Markup
 {
@@ -149,7 +150,14 @@ namespace System.Windows.Markup
 
     public static class KnownTypes
     {
+        private static CacheDictionary<Type, ITypeConverter> typeConverterCache = new CacheDictionary<Type, ITypeConverter>(ResolveTypeConverter);
+
         public static ITypeConverter GetTypeConverter(Type type)
+        {
+            return typeConverterCache.GetValue(type);
+        }
+
+        private static ITypeConverter ResolveTypeConverter(Type type)
         {
             if (type == typeof(object))
             {
