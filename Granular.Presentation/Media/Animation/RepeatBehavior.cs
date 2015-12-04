@@ -2,9 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Windows.Markup;
+using System.Xaml;
 
 namespace System.Windows.Media.Animation
 {
+    [TypeConverter(typeof(RepeatBehaviorTypeConverter))]
     public class RepeatBehavior
     {
         public static readonly RepeatBehavior Forever = new RepeatBehavior(Double.PositiveInfinity, TimeSpan.Zero);
@@ -59,6 +62,14 @@ namespace System.Windows.Media.Animation
             }
 
             throw new Granular.Exception("Can't parse RepeatBehavior value \"{0}\"", value);
+        }
+    }
+
+    public class RepeatBehaviorTypeConverter : ITypeConverter
+    {
+        public object ConvertFrom(XamlNamespaces namespaces, object value)
+        {
+            return RepeatBehavior.Parse(value.ToString().Trim());
         }
     }
 }

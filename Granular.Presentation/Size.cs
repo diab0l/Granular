@@ -2,9 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using Granular.Extensions;
+using System.Windows.Markup;
+using System.Xaml;
 
 namespace System.Windows
 {
+    [TypeConverter(typeof(SizeTypeConverter))]
     public sealed class Size
     {
         public static readonly Size Empty = new Size(Double.NaN, Double.NaN);
@@ -220,6 +223,14 @@ namespace System.Windows
         public static bool Contains(this Size size, Point point)
         {
             return 0 <= point.X && point.X < size.Width && 0 <= point.Y && point.Y < size.Height;
+        }
+    }
+
+    public class SizeTypeConverter : ITypeConverter
+    {
+        public object ConvertFrom(XamlNamespaces namespaces, object value)
+        {
+            return Size.Parse(value.ToString().Trim());
         }
     }
 }

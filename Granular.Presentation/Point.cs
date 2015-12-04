@@ -2,9 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using Granular.Extensions;
+using System.Windows.Markup;
+using System.Xaml;
 
 namespace System.Windows
 {
+    [TypeConverter(typeof(PointTypeConverter))]
     public sealed class Point
     {
         public static readonly Point Empty = new Point();
@@ -196,6 +199,14 @@ namespace System.Windows
         public static double GetLengthSqr(this Point point)
         {
             return point.X * point.X + point.Y * point.Y;
+        }
+    }
+
+    public class PointTypeConverter : ITypeConverter
+    {
+        public object ConvertFrom(XamlNamespaces namespaces, object value)
+        {
+            return Point.Parse(value.ToString().Trim());
         }
     }
 }

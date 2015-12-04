@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Linq;
+using System.Windows.Markup;
+using System.Xaml;
 
 namespace System.Windows
 {
+    [TypeConverter(typeof(ThicknessTypeConverter))]
     public sealed class Thickness
     {
         public static readonly Thickness Zero = new Thickness();
@@ -129,6 +132,14 @@ namespace System.Windows
         public static Thickness DefaultIfNull(this Thickness thickness, Thickness defaultValue = null)
         {
             return thickness ?? defaultValue ?? Thickness.Zero;
+        }
+    }
+
+    public class ThicknessTypeConverter : ITypeConverter
+    {
+        public object ConvertFrom(XamlNamespaces namespaces, object value)
+        {
+            return Thickness.Parse(value.ToString().Trim());
         }
     }
 }

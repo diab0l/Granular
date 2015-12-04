@@ -2,9 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using Granular.Extensions;
+using System.Windows.Markup;
+using System.Xaml;
 
 namespace System.Windows.Media
 {
+    [TypeConverter(typeof(MatrixTypeConverter))]
     public sealed class Matrix
     {
         public static readonly Matrix Identity = new Matrix(1, 0, 0, 1, 0, 0);
@@ -157,6 +160,14 @@ namespace System.Windows.Media
             }
 
             throw new Granular.Exception("Can't parse Matrix value \"{0}\"", value);
+        }
+    }
+
+    public class MatrixTypeConverter : ITypeConverter
+    {
+        public object ConvertFrom(XamlNamespaces namespaces, object value)
+        {
+            return Matrix.Parse(value.ToString().Trim());
         }
     }
 }

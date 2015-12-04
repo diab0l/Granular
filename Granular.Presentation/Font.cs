@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Windows.Markup;
+using System.Xaml;
 
 namespace System.Windows
 {
@@ -59,6 +61,7 @@ namespace System.Windows
         //WordEllipsis,
     }
 
+    [TypeConverter(typeof(FontFamilyTypeConverter))]
     public class FontFamily
     {
         public static readonly FontFamily Default = new FontFamily(String.Empty);
@@ -79,6 +82,14 @@ namespace System.Windows
         public static FontFamily Parse(string value)
         {
             return new FontFamily(value.Split(',').Select(s => s.Trim()).ToArray());
+        }
+    }
+
+    public class FontFamilyTypeConverter : ITypeConverter
+    {
+        public object ConvertFrom(XamlNamespaces namespaces, object value)
+        {
+            return FontFamily.Parse(value.ToString().Trim());
         }
     }
 }

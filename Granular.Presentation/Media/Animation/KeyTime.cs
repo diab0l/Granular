@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Windows.Markup;
+using System.Xaml;
 
 namespace System.Windows.Media.Animation
 {
@@ -12,6 +14,7 @@ namespace System.Windows.Media.Animation
         Paced
     }
 
+    [TypeConverter(typeof(KeyTimeTypeConverter))]
     public sealed class KeyTime
     {
         public static readonly KeyTime Paced = new KeyTime(KeyTimeType.Paced, TimeSpan.Zero, Double.NaN);
@@ -88,6 +91,14 @@ namespace System.Windows.Media.Animation
             }
 
             throw new Granular.Exception("Can't parse KeyTime value \"{0}\"", value);
+        }
+    }
+
+    public class KeyTimeTypeConverter : ITypeConverter
+    {
+        public object ConvertFrom(XamlNamespaces namespaces, object value)
+        {
+            return KeyTime.Parse(value.ToString().Trim());
         }
     }
 }

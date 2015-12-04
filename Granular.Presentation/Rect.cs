@@ -4,9 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Windows.Media;
 using Granular.Extensions;
+using System.Windows.Markup;
+using System.Xaml;
 
 namespace System.Windows
 {
+    [TypeConverter(typeof(RectTypeConverter))]
     public sealed class Rect
     {
         public static readonly Rect Empty = new Rect(Point.Empty, Size.Empty);
@@ -204,6 +207,14 @@ namespace System.Windows
         public static Rect AddMargin(this Rect rect, Thickness margin)
         {
             return new Rect(rect.Location - margin.Location, rect.Size + margin.Size);
+        }
+    }
+
+    public class RectTypeConverter : ITypeConverter
+    {
+        public object ConvertFrom(XamlNamespaces namespaces, object value)
+        {
+            return Rect.Parse(value.ToString().Trim());
         }
     }
 }

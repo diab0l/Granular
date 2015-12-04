@@ -18,30 +18,13 @@ namespace Granular.Presentation.Tests.Markup
     [TestClass]
     public class TypeParserTest
     {
-        private class Entry1
-        {
-            public string Value1 { get; private set; }
-            public string Value2 { get; private set; }
-
-            public Entry1(string value1, string value2)
-            {
-                this.Value1 = value1;
-                this.Value2 = value2;
-            }
-
-            public static Entry1 Parse(string value)
-            {
-                return new Entry1(value.Split(',')[0], value.Split(',')[1]);
-            }
-        }
-
         [TypeConverter(typeof(Entry2TypeConverter))]
-        public class Entry2
+        private class Entry
         {
             public string Value1 { get; private set; }
             public string Value2 { get; private set; }
 
-            public Entry2(string value1, string value2)
+            public Entry(string value1, string value2)
             {
                 this.Value1 = value1;
                 this.Value2 = value2;
@@ -54,23 +37,14 @@ namespace Granular.Presentation.Tests.Markup
             {
                 string text = value.ToString().Trim();
 
-                return new Entry2(text.Split(',')[0], text.Split(',')[1]);
+                return new Entry(text.Split(',')[0], text.Split(',')[1]);
             }
-        }
-
-        [TestMethod]
-        public void ParseValueTest()
-        {
-            Entry1 entry = (Entry1)TypeConverter.ConvertValue("A,B", typeof(Entry1), XamlNamespaces.Empty);
-
-            Assert.AreEqual("A", entry.Value1);
-            Assert.AreEqual("B", entry.Value2);
         }
 
         [TestMethod]
         public void ParseTypeConverterTest()
         {
-            Entry2 entry = (Entry2)TypeConverter.ConvertValue("A,B", typeof(Entry2), XamlNamespaces.Empty);
+            Entry entry = (Entry)TypeConverter.ConvertValue("A,B", typeof(Entry), XamlNamespaces.Empty);
 
             Assert.AreEqual("A", entry.Value1);
             Assert.AreEqual("B", entry.Value2);

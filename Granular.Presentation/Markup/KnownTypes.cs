@@ -147,31 +147,6 @@ namespace System.Windows.Markup
         }
     }
 
-    internal class ParseTypeConverter : ITypeConverter
-    {
-        private MethodInfo parseMethod;
-
-        public ParseTypeConverter(Type type)
-        {
-            parseMethod = GetParseMethod(type);
-        }
-
-        public object ConvertFrom(XamlNamespaces namespaces, object value)
-        {
-            return parseMethod.Invoke(null, new[] { value.ToString().Trim() });
-        }
-
-        public static bool ContainsParseMethod(Type type)
-        {
-            return GetParseMethod(type) != null;
-        }
-
-        private static MethodInfo GetParseMethod(Type type)
-        {
-            return type.GetMethod("Parse", new[] { typeof(string) });
-        }
-    }
-
     public static class KnownTypes
     {
         public static ITypeConverter GetTypeConverter(Type type)
@@ -225,11 +200,6 @@ namespace System.Windows.Markup
             if (typeConverterAttribute != null)
             {
                 return Activator.CreateInstance(typeConverterAttribute.ConverterType) as ITypeConverter;
-            }
-
-            if (ParseTypeConverter.ContainsParseMethod(type))
-            {
-                return new ParseTypeConverter(type);
             }
 
             return null;

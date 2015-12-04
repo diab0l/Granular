@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Windows.Markup;
+using System.Xaml;
 
 namespace System.Windows
 {
+    [TypeConverter(typeof(CornerRadiusTypeConverter))]
     public sealed class CornerRadius
     {
         public static readonly CornerRadius Zero = new CornerRadius(0);
@@ -90,6 +93,14 @@ namespace System.Windows
         public static CornerRadius DefaultIfNull(this CornerRadius cornerRadius, CornerRadius defaultValue = null)
         {
             return cornerRadius ?? defaultValue ?? CornerRadius.Zero;
+        }
+    }
+
+    public class CornerRadiusTypeConverter : ITypeConverter
+    {
+        public object ConvertFrom(XamlNamespaces namespaces, object value)
+        {
+            return CornerRadius.Parse(value.ToString().Trim());
         }
     }
 }

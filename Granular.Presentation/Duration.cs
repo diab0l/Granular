@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Windows.Markup;
+using System.Xaml;
 
 namespace System.Windows
 {
+    [TypeConverter(typeof(DurationTypeConverter))]
     public sealed class Duration
     {
         private enum DurationType { Automatic, TimeSpan, Forever }
@@ -80,6 +83,14 @@ namespace System.Windows
             }
 
             throw new Granular.Exception("Can't parse Duration value \"{0}\"", value);
+        }
+    }
+
+    public class DurationTypeConverter : ITypeConverter
+    {
+        public object ConvertFrom(XamlNamespaces namespaces, object value)
+        {
+            return Duration.Parse(value.ToString().Trim());
         }
     }
 }
