@@ -46,7 +46,8 @@ namespace System.Windows.Markup
             string propertyMemberName = propertyName.MemberName;
             Type propertyContainingType = propertyName.IsMemberName ? TypeParser.ParseType(propertyName.ContainingTypeName) : containingType;
 
-            return propertyContainingType.GetInstanceProperty(propertyMemberName);
+            PropertyInfo propertyInfo = propertyContainingType.GetInstanceProperty(propertyMemberName);
+            return propertyInfo != null && !propertyInfo.IsDelegate() ? propertyInfo : null;
         }
     }
 

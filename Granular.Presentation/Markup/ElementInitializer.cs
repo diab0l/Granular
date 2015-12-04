@@ -189,16 +189,16 @@ namespace System.Windows.Markup
     {
         public static IElementInitializer Create(XamlName memberName, Type containingType, IEnumerable<object> values, XamlNamespaces namespaces)
         {
-            IEventAdapter eventAdapter = EventAdapter.CreateAdapter(containingType, memberName);
-            if (eventAdapter != null)
-            {
-                return new ElementEventMemberInitializer(eventAdapter, GetEventHandlerName(memberName, values));
-            }
-
             IPropertyAdapter propertyAdapter = PropertyAdapter.CreateAdapter(containingType, memberName);
             if (propertyAdapter != null)
             {
                 return ElementPropertyMemberInitializer.Create(propertyAdapter, values, namespaces);
+            }
+
+            IEventAdapter eventAdapter = EventAdapter.CreateAdapter(containingType, memberName);
+            if (eventAdapter != null)
+            {
+                return new ElementEventMemberInitializer(eventAdapter, GetEventHandlerName(memberName, values));
             }
 
             throw new Granular.Exception("Type \"{0}\" does not contain a member named \"{1}\"", containingType.Name, memberName);
