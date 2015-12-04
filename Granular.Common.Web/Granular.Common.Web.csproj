@@ -72,6 +72,9 @@
     <Compile Include="..\Granular.Common\Extensions\DoubleExtensions.cs">
       <Link>Extensions\DoubleExtensions.cs</Link>
     </Compile>
+    <Compile Include="..\Granular.Common\Extensions\EnumerableExtensions.cs">
+      <Link>Extensions\EnumerableExtensions.cs</Link>
+    </Compile>
     <Compile Include="..\Granular.Common\Extensions\EventHandlerExtensions.cs">
       <Link>Extensions\EventHandlerExtensions.cs</Link>
     </Compile>
