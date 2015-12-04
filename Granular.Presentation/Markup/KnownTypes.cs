@@ -70,7 +70,7 @@ namespace System.Windows.Markup
 
         public object ConvertFrom(XamlNamespaces namespaces, object value)
         {
-            return Int32.Parse((string)value);
+            return Int32.Parse(value.ToString());
         }
     }
 

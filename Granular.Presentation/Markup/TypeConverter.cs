@@ -22,18 +22,47 @@ namespace System.Windows.Markup
 
     public static class TypeConverter
     {
-        [System.Runtime.CompilerServices.Reflectable(false)]
-        public static bool TryConvertValue(object value, Type type, XamlNamespaces namespaces, out object result)
+        private class EmptyTypeConverter : ITypeConverter
         {
-            if (type.IsInstanceOfType(value))
+            public object ConvertFrom(XamlNamespaces namespaces, object value)
             {
-                result = value;
+                return value;
+            }
+        }
+
+        public static ITypeConverter Empty = new EmptyTypeConverter();
+
+        [System.Runtime.CompilerServices.Reflectable(false)]
+        public static bool TryGetTypeConverter(Type sourceType, Type targetType, out ITypeConverter typeConverter)
+        {
+            if (targetType.IsAssignableFrom(sourceType))
+            {
+                typeConverter = Empty;
                 return true;
             }
 
-            ITypeConverter typeConverter = KnownTypes.GetTypeConverter(type);
+            typeConverter = KnownTypes.GetTypeConverter(targetType);
+            return typeConverter != null;
+        }
 
-            if (typeConverter != null)
+        public static ITypeConverter GetTypeConverter(Type sourceType, Type targetType)
+        {
+            ITypeConverter typeConverter;
+
+            if (!TryGetTypeConverter(sourceType, targetType, out typeConverter))
+            {
+                throw new Granular.Exception("Can't create type converter from \"{0}\" to \"{1}\"", sourceType.Name, targetType.Name);
+            }
+
+            return typeConverter;
+        }
+
+        [System.Runtime.CompilerServices.Reflectable(false)]
+        public static bool TryConvertValue(object value, Type type, XamlNamespaces namespaces, out object result)
+        {
+            ITypeConverter typeConverter;
+
+            if (TryGetTypeConverter(value.GetType(), type, out typeConverter))
             {
                 result = typeConverter.ConvertFrom(namespaces, value);
                 return true;

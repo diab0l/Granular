@@ -98,17 +98,19 @@ namespace System.Windows.Markup
 
         private IElementFactory valueFactory;
         private XamlNamespaces namespaces;
+        private ITypeConverter typeConverter;
 
         public ConvertedElementFactory(IElementFactory elementFactory, Type elementTargetType, XamlNamespaces namespaces)
         {
             this.valueFactory = elementFactory;
             this.ElementType = elementTargetType;
             this.namespaces = namespaces;
+            this.typeConverter = TypeConverter.GetTypeConverter(elementFactory.ElementType, elementTargetType);
         }
 
         public object CreateElement(InitializeContext context)
         {
-            return TypeConverter.ConvertValue(valueFactory.CreateElement(context), ElementType, namespaces);
+            return typeConverter.ConvertFrom(namespaces, valueFactory.CreateElement(context));
         }
     }
 
