@@ -64,14 +64,14 @@ namespace System.Windows.Controls
             private set { SetValue(ComputedScrollBarsVisibilityPropertyKey, value); }
         }
 
-        public static readonly DependencyProperty HorizontalScrollBarVisibilityProperty = DependencyProperty.Register("HorizontalScrollBarVisibility", typeof(ScrollBarVisibility), typeof(ScrollViewer), new FrameworkPropertyMetadata(ScrollBarVisibility.Visible, affectsMeasure: true, propertyChangedCallback: (sender, e) => ((ScrollViewer)sender).SetContentCanScroll()));
+        public static readonly DependencyProperty HorizontalScrollBarVisibilityProperty = DependencyProperty.RegisterAttached("HorizontalScrollBarVisibility", typeof(ScrollBarVisibility), typeof(ScrollViewer), new FrameworkPropertyMetadata(ScrollBarVisibility.Visible, affectsMeasure: true, propertyChangedCallback: OnScrollBarVisibilityChanged));
         public ScrollBarVisibility HorizontalScrollBarVisibility
         {
             get { return (ScrollBarVisibility)GetValue(HorizontalScrollBarVisibilityProperty); }
             set { SetValue(HorizontalScrollBarVisibilityProperty, value); }
         }
 
-        public static readonly DependencyProperty VerticalScrollBarVisibilityProperty = DependencyProperty.Register("VerticalScrollBarVisibility", typeof(ScrollBarVisibility), typeof(ScrollViewer), new FrameworkPropertyMetadata(ScrollBarVisibility.Visible, affectsMeasure: true, propertyChangedCallback: (sender, e) => ((ScrollViewer)sender).SetContentCanScroll()));
+        public static readonly DependencyProperty VerticalScrollBarVisibilityProperty = DependencyProperty.RegisterAttached("VerticalScrollBarVisibility", typeof(ScrollBarVisibility), typeof(ScrollViewer), new FrameworkPropertyMetadata(ScrollBarVisibility.Visible, affectsMeasure: true, propertyChangedCallback: OnScrollBarVisibilityChanged));
         public ScrollBarVisibility VerticalScrollBarVisibility
         {
             get { return (ScrollBarVisibility)GetValue(VerticalScrollBarVisibilityProperty); }
@@ -348,6 +348,14 @@ namespace System.Windows.Controls
             }
 
             throw new Granular.Exception("Unexpected ScrollBarVisibility \"{0}\"", scrollBarVisibility);
+        }
+
+        private static void OnScrollBarVisibilityChanged(DependencyObject dependencyObject, DependencyPropertyChangedEventArgs e)
+        {
+            if (dependencyObject is ScrollViewer)
+            {
+                ((ScrollViewer)dependencyObject).SetContentCanScroll();
+            }
         }
     }
 }

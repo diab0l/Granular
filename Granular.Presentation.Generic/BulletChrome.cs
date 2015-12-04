@@ -17,56 +17,56 @@ namespace Granular.Presentation.Generic
     [TemplateVisualState(VisualStates.CheckStates, VisualStates.IndeterminateState)]
     public class BulletChrome : Control
     {
-        public static readonly DependencyProperty RenderEnabledProperty = DependencyProperty.Register("RenderEnabled", typeof(bool), typeof(BulletChrome), new ControlPropertyMetadata(affectsVisualState: true));
+        public static readonly DependencyProperty RenderEnabledProperty = DependencyProperty.RegisterAttached("RenderEnabled", typeof(bool), typeof(BulletChrome), new ControlPropertyMetadata(affectsVisualState: true));
         public bool RenderEnabled
         {
             get { return (bool)GetValue(RenderEnabledProperty); }
             set { SetValue(RenderEnabledProperty, value); }
         }
 
-        public static readonly DependencyProperty RenderMouseOverProperty = DependencyProperty.Register("RenderMouseOver", typeof(bool), typeof(BulletChrome), new ControlPropertyMetadata(affectsVisualState: true));
+        public static readonly DependencyProperty RenderMouseOverProperty = DependencyProperty.RegisterAttached("RenderMouseOver", typeof(bool), typeof(BulletChrome), new ControlPropertyMetadata(affectsVisualState: true));
         public bool RenderMouseOver
         {
             get { return (bool)GetValue(RenderMouseOverProperty); }
             set { SetValue(RenderMouseOverProperty, value); }
         }
 
-        public static readonly DependencyProperty RenderPressedProperty = DependencyProperty.Register("RenderPressed", typeof(bool), typeof(BulletChrome), new ControlPropertyMetadata(affectsVisualState: true));
+        public static readonly DependencyProperty RenderPressedProperty = DependencyProperty.RegisterAttached("RenderPressed", typeof(bool), typeof(BulletChrome), new ControlPropertyMetadata(affectsVisualState: true));
         public bool RenderPressed
         {
             get { return (bool)GetValue(RenderPressedProperty); }
             set { SetValue(RenderPressedProperty, value); }
         }
 
-        public static readonly DependencyProperty RenderCheckedProperty = DependencyProperty.Register("RenderChecked", typeof(bool?), typeof(BulletChrome), new ControlPropertyMetadata(affectsVisualState: true));
+        public static readonly DependencyProperty RenderCheckedProperty = DependencyProperty.RegisterAttached("RenderChecked", typeof(bool?), typeof(BulletChrome), new ControlPropertyMetadata(affectsVisualState: true));
         public bool? RenderChecked
         {
             get { return (bool?)GetValue(RenderCheckedProperty); }
             set { SetValue(RenderCheckedProperty, value); }
         }
 
-        public static readonly DependencyProperty RenderRoundProperty = DependencyProperty.Register("RenderRound", typeof(bool), typeof(BulletChrome), new FrameworkPropertyMetadata(true));
+        public static readonly DependencyProperty RenderRoundProperty = DependencyProperty.RegisterAttached("RenderRound", typeof(bool), typeof(BulletChrome), new FrameworkPropertyMetadata(true));
         public bool RenderRound
         {
             get { return (bool)GetValue(RenderRoundProperty); }
             set { SetValue(RenderRoundProperty, value); }
         }
 
-        public static readonly DependencyProperty BulletTemplateProperty = DependencyProperty.Register("BulletTemplate", typeof(ControlTemplate), typeof(BulletChrome), new FrameworkPropertyMetadata());
+        public static readonly DependencyProperty BulletTemplateProperty = DependencyProperty.RegisterAttached("BulletTemplate", typeof(ControlTemplate), typeof(BulletChrome), new FrameworkPropertyMetadata());
         public ControlTemplate BulletTemplate
         {
             get { return (ControlTemplate)GetValue(BulletTemplateProperty); }
             set { SetValue(BulletTemplateProperty, value); }
         }
 
-        public static readonly DependencyProperty IndeterminateBulletTemplateProperty = DependencyProperty.Register("IndeterminateBulletTemplate", typeof(ControlTemplate), typeof(BulletChrome), new FrameworkPropertyMetadata());
+        public static readonly DependencyProperty IndeterminateBulletTemplateProperty = DependencyProperty.RegisterAttached("IndeterminateBulletTemplate", typeof(ControlTemplate), typeof(BulletChrome), new FrameworkPropertyMetadata());
         public ControlTemplate IndeterminateBulletTemplate
         {
             get { return (ControlTemplate)GetValue(IndeterminateBulletTemplateProperty); }
             set { SetValue(IndeterminateBulletTemplateProperty, value); }
         }
 
-        public static readonly DependencyProperty IsThreeStateProperty = DependencyProperty.Register("IsThreeState", typeof(bool), typeof(BulletChrome), new FrameworkPropertyMetadata());
+        public static readonly DependencyProperty IsThreeStateProperty = DependencyProperty.RegisterAttached("IsThreeState", typeof(bool), typeof(BulletChrome), new FrameworkPropertyMetadata());
         public bool IsThreeState
         {
             get { return (bool)GetValue(IsThreeStateProperty); }
