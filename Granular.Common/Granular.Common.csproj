@@ -66,6 +66,7 @@
     <Compile Include="Compatibility\Type.cs" />
     <Compile Include="Compatibility\TypeExtensions.cs" />
     <Compile Include="Diagnostics\HitCounter.cs" />
+    <Compile Include="Diagnostics\Profiler.cs" />
     <Compile Include="Disposable.cs" />
     <Compile Include="Extensions\AssemblyExtensions.cs" />
     <Compile Include="Extensions\CollectionExtensions.cs" />
