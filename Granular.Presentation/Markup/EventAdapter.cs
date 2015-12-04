@@ -5,6 +5,7 @@ using System.Reflection;
 using System.Text;
 using System.Xaml;
 using Granular.Extensions;
+using Granular.Collections;
 
 namespace System.Windows.Markup
 {
@@ -16,27 +17,41 @@ namespace System.Windows.Markup
 
     public static class EventAdapter
     {
+        private static CacheDictionary<TypeMemberKey, IEventAdapter> adaptersCache = new CacheDictionary<TypeMemberKey, IEventAdapter>(TryCreateAdapter);
+
         public static IEventAdapter CreateAdapter(Type targetType, XamlName eventName)
         {
-            RoutedEvent routedEvent = GetRoutedEvent(targetType, eventName);
+            IEventAdapter eventAdapter;
+            return adaptersCache.TryGetValue(new TypeMemberKey(targetType, eventName), out eventAdapter) ? eventAdapter : null;
+        }
+
+        [System.Runtime.CompilerServices.Reflectable(false)]
+        private static bool TryCreateAdapter(TypeMemberKey key, out IEventAdapter adapter)
+        {
+            adapter = null;
+
+            RoutedEvent routedEvent = GetRoutedEvent(key.Type, key.MemberName);
             if (routedEvent != null)
             {
-                return new RoutedEventAdapter(routedEvent);
+                adapter = new RoutedEventAdapter(routedEvent);
+                return true;
             }
 
-            EventInfo clrEvent = GetClrEvent(targetType, eventName);
+            EventInfo clrEvent = GetClrEvent(key.Type, key.MemberName);
             if (clrEvent != null)
             {
-                return new ClrEventAdapter(clrEvent);
+                adapter = new ClrEventAdapter(clrEvent);
+                return true;
             }
 
-            PropertyInfo eventProperty = GetEventProperty(targetType, eventName);
+            PropertyInfo eventProperty = GetEventProperty(key.Type, key.MemberName);
             if (eventProperty != null)
             {
-                return new EventPropertyAdapter(eventProperty);
+                adapter = new EventPropertyAdapter(eventProperty);
+                return true;
             }
 
-            return null;
+            return false;
         }
 
         private static RoutedEvent GetRoutedEvent(Type containingType, XamlName eventName)

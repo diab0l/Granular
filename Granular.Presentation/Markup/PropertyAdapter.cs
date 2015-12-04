@@ -5,6 +5,7 @@ using System.Reflection;
 using System.Text;
 using System.Xaml;
 using Granular.Extensions;
+using Granular.Collections;
 
 namespace System.Windows.Markup
 {
@@ -17,28 +18,76 @@ namespace System.Windows.Markup
         void SetValue(object target, object value, BaseValueSource valueSource);
     }
 
+    public class TypeMemberKey
+    {
+        public Type Type { get; private set; }
+        public XamlName MemberName { get; private set; }
+
+        private int hashCode;
+
+        public TypeMemberKey(Type type, XamlName memberName)
+        {
+            this.Type = type;
+            this.MemberName = memberName;
+
+            this.hashCode = type.GetHashCode() ^ memberName.GetHashCode();
+        }
+
+        public override bool Equals(object obj)
+        {
+            TypeMemberKey other = obj as TypeMemberKey;
+
+            return Object.ReferenceEquals(this, other) || !Object.ReferenceEquals(other, null) &&
+                Object.Equals(this.Type, other.Type) &&
+                Object.Equals(this.MemberName, other.MemberName);
+        }
+
+        public override int GetHashCode()
+        {
+            return hashCode;
+        }
+
+        public override string ToString()
+        {
+            return String.Format("{0}.{1}", Type.FullName, MemberName.LocalName);
+        }
+    }
+
     public static class PropertyAdapter
     {
+        private static CacheDictionary<TypeMemberKey, IPropertyAdapter> adaptersCache = new CacheDictionary<TypeMemberKey, IPropertyAdapter>(TryCreateAdapter);
+
         public static IPropertyAdapter CreateAdapter(Type targetType, XamlName propertyName)
         {
-            if (propertyName.IsEmpty)
+            IPropertyAdapter propertyAdapter;
+            return adaptersCache.TryGetValue(new TypeMemberKey(targetType, propertyName), out propertyAdapter) ? propertyAdapter : null;
+        }
+
+        [System.Runtime.CompilerServices.Reflectable(false)]
+        private static bool TryCreateAdapter(TypeMemberKey key, out IPropertyAdapter adapter)
+        {
+            adapter = null;
+
+            if (key.MemberName.IsEmpty)
             {
-                return null;
+                return false;
             }
 
-            DependencyProperty dependencyProperty = DependencyProperty.GetProperty(targetType, propertyName);
+            DependencyProperty dependencyProperty = DependencyProperty.GetProperty(key.Type, key.MemberName);
             if (dependencyProperty != null)
             {
-                return new DependencyPropertyAdapter(dependencyProperty);
+                adapter = new DependencyPropertyAdapter(dependencyProperty);
+                return true;
             }
 
-            PropertyInfo clrProperty = GetClrProperty(targetType, propertyName);
+            PropertyInfo clrProperty = GetClrProperty(key.Type, key.MemberName);
             if (clrProperty != null)
             {
-                return new ClrPropertyAdapter(clrProperty);
+                adapter = new ClrPropertyAdapter(clrProperty);
+                return true;
             }
 
-            return null;
+            return false;
         }
 
         private static PropertyInfo GetClrProperty(Type containingType, XamlName propertyName)
