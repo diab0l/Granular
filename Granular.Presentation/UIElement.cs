@@ -7,6 +7,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Threading;
+using Granular;
 using Granular.Collections;
 using Granular.Extensions;
 
@@ -426,7 +427,7 @@ namespace System.Windows
             LayoutManager.Current.AddArrange(this);
         }
 
-        private Disposable DisableMeasureInvalidation()
+        private IDisposable DisableMeasureInvalidation()
         {
             measureInvalidationDisabled++;
             return new Disposable(() => measureInvalidationDisabled--);

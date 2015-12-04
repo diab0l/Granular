@@ -283,9 +283,6 @@
     <Compile Include="..\Granular.Presentation\DependencyPropertyValueEntry.cs">
       <Link>DependencyPropertyValueEntry.cs</Link>
     </Compile>
-    <Compile Include="..\Granular.Presentation\Disposable.cs">
-      <Link>Disposable.cs</Link>
-    </Compile>
     <Compile Include="..\Granular.Presentation\Duration.cs">
       <Link>Duration.cs</Link>
     </Compile>

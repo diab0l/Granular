@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Markup;
 using System.Windows.Media;
+using Granular;
 using Granular.Extensions;
 
 namespace System.Windows.Data

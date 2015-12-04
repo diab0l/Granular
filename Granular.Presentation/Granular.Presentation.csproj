@@ -152,7 +152,6 @@
     <Compile Include="Controls\TextBlock.cs" />
     <Compile Include="DataTrigger.cs" />
     <Compile Include="Data\BindingExpression.cs" />
-    <Compile Include="Disposable.cs" />
     <Compile Include="Controls\Canvas.cs" />
     <Compile Include="Controls\Control.cs" />
     <Compile Include="Controls\DockPanel.cs" />

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Granular;
 using Granular.Extensions;
 
 namespace System.Windows.Input

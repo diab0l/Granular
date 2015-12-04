@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace System.Windows
+namespace Granular
 {
     public class Disposable : IDisposable
     {

@@ -54,6 +54,9 @@
     <Compile Include="..\Granular.Common\Diagnostics\HitCounter.cs">
       <Link>Diagnostics\HitCounter.cs</Link>
     </Compile>
+    <Compile Include="..\Granular.Common\Disposable.cs">
+      <Link>Disposable.cs</Link>
+    </Compile>
     <Compile Include="..\Granular.Common\Exception.cs">
       <Link>Exception.cs</Link>
     </Compile>
