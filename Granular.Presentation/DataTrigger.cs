@@ -10,7 +10,7 @@ using Granular.Collections;
 
 namespace System.Windows
 {
-    internal class DataTriggerCondition : DependencyObject, IDataTriggerCondition, IDisposable
+    internal class DataTriggerCondition : Freezable, IDataTriggerCondition, IDisposable
     {
         private static readonly DependencyProperty ValueProperty = DependencyProperty.Register("Value", typeof(object), typeof(DataTriggerCondition), new FrameworkPropertyMetadata(propertyChangedCallback: (sender, e) => ((DataTriggerCondition)sender).OnValueChanged(e)));
 
