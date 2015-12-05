@@ -222,8 +222,8 @@ namespace System.Windows.Controls
 
         static TextBoxView()
         {
-            UIElement.IsHitTestVisibleProperty.OverrideMetadata(typeof(TextBoxView), new FrameworkPropertyMetadata(inherits: true, propertyChangedCallback: (sender, e) => ((TextBoxView)sender).SetRenderElementsIsHitTestVisible()));
-            UIElement.IsEnabledProperty.OverrideMetadata(typeof(TextBoxView), new FrameworkPropertyMetadata(inherits: true, propertyChangedCallback: (sender, e) => ((TextBoxView)sender).OnIsEnabledChanged()));
+            UIElement.IsHitTestVisibleProperty.OverrideMetadata(typeof(TextBoxView), new FrameworkPropertyMetadata(propertyChangedCallback: (sender, e) => ((TextBoxView)sender).SetRenderElementsIsHitTestVisible()));
+            UIElement.IsEnabledProperty.OverrideMetadata(typeof(TextBoxView), new FrameworkPropertyMetadata(propertyChangedCallback: (sender, e) => ((TextBoxView)sender).OnIsEnabledChanged()));
             Control.ForegroundProperty.OverrideMetadata(typeof(TextBoxView), new FrameworkPropertyMetadata(inherits: true, propertyChangedCallback: (sender, e) => ((TextBoxView)sender).SetRenderElementsProperty(renderElement => renderElement.Foreground = (Brush)e.NewValue)));
             Control.FontFamilyProperty.OverrideMetadata(typeof(TextBoxView), new FrameworkPropertyMetadata(inherits: true, propertyChangedCallback: (sender, e) => ((TextBoxView)sender).SetRenderElementsProperty(renderElement => renderElement.FontFamily = (FontFamily)e.NewValue)));
             Control.FontSizeProperty.OverrideMetadata(typeof(TextBoxView), new FrameworkPropertyMetadata(inherits: true, propertyChangedCallback: (sender, e) => ((TextBoxView)sender).SetRenderElementsProperty(renderElement => renderElement.FontSize = (double)e.NewValue)));

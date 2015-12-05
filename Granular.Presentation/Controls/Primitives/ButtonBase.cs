@@ -63,7 +63,7 @@ namespace System.Windows.Controls.Primitives
         {
             EventManager.RegisterClassHandler(typeof(ButtonBase), ClickEvent, (RoutedEventHandler)((sender, e) => ((ButtonBase)sender).OnClick(e)), false);
 
-            UIElement.IsEnabledProperty.OverrideMetadata(typeof(ButtonBase), new ControlPropertyMetadata(inherits: true, affectsVisualState: true));
+            UIElement.IsEnabledProperty.OverrideMetadata(typeof(ButtonBase), new ControlPropertyMetadata(affectsVisualState: true));
             UIElement.IsMouseOverProperty.OverrideMetadata(typeof(ButtonBase), new ControlPropertyMetadata(affectsVisualState: true));
             UIElement.IsFocusedProperty.OverrideMetadata(typeof(ButtonBase), new ControlPropertyMetadata(affectsVisualState: true));
         }

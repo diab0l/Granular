@@ -46,7 +46,7 @@ namespace System.Windows.Controls
 
         static PasswordBox()
         {
-            UIElement.IsEnabledProperty.OverrideMetadata(typeof(PasswordBox), new ControlPropertyMetadata(inherits: true, affectsVisualState: true, propertyChangedCallback: (sender, e) => ((PasswordBox)sender).textBoxView.IsReadOnly = !((PasswordBox)sender).IsEnabled));
+            UIElement.IsEnabledProperty.OverrideMetadata(typeof(PasswordBox), new ControlPropertyMetadata(affectsVisualState: true, propertyChangedCallback: (sender, e) => ((PasswordBox)sender).textBoxView.IsReadOnly = !((PasswordBox)sender).IsEnabled));
             UIElement.IsMouseOverProperty.OverrideMetadata(typeof(PasswordBox), new ControlPropertyMetadata(affectsVisualState: true));
             UIElement.IsFocusedProperty.OverrideMetadata(typeof(PasswordBox), new ControlPropertyMetadata(affectsVisualState: true));
             FrameworkElement.CursorProperty.OverrideMetadata(typeof(PasswordBox), new FrameworkPropertyMetadata(Cursors.IBeam));

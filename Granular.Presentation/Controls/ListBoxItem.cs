@@ -40,7 +40,7 @@ namespace System.Windows.Controls
 
         static ListBoxItem()
         {
-            UIElement.IsEnabledProperty.OverrideMetadata(typeof(ListBoxItem), new ControlPropertyMetadata(inherits: true, affectsVisualState: true));
+            UIElement.IsEnabledProperty.OverrideMetadata(typeof(ListBoxItem), new ControlPropertyMetadata(affectsVisualState: true));
             UIElement.IsMouseOverProperty.OverrideMetadata(typeof(ListBoxItem), new ControlPropertyMetadata(affectsVisualState: true));
             Selector.IsSelectionActiveProperty.OverrideMetadata(typeof(ListBoxItem), new ControlPropertyMetadata(inherits: true, affectsVisualState: true));
         }

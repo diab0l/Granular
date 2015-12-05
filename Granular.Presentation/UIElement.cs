@@ -84,32 +84,22 @@ namespace System.Windows
             set { SetValue(VisibilityProperty, value); }
         }
 
-        private static readonly DependencyPropertyKey IsVisiblePropertyKey = DependencyProperty.RegisterReadOnly("IsVisible", typeof(bool), typeof(UIElement), new FrameworkPropertyMetadata(true, inherits: true, propertyChangedCallback: (sender, e) => ((UIElement)sender).OnIsVisibleChanged(e)));
+        private static readonly DependencyPropertyKey IsVisiblePropertyKey = DependencyProperty.RegisterReadOnly("IsVisible", typeof(bool), typeof(UIElement), new FrameworkPropertyMetadata(true, propertyChangedCallback: (sender, e) => ((UIElement)sender).OnIsVisibleChanged(e), coerceValueCallback: (sender, value) => ((UIElement)sender).CoerceIsVisible((bool)value)));
         public static readonly DependencyProperty IsVisibleProperty = IsVisiblePropertyKey.DependencyProperty;
         public bool IsVisible
         {
             get { return (bool)GetValue(IsVisiblePropertyKey); }
-            private set
-            {
-                if (value)
-                {
-                    ClearValue(IsVisiblePropertyKey);
-                }
-                else
-                {
-                    SetValue(IsVisiblePropertyKey, value);
-                }
-            }
+            private set { SetValue(IsVisiblePropertyKey, value); }
         }
 
-        public static readonly DependencyProperty IsEnabledProperty = DependencyProperty.Register("IsEnabled", typeof(bool), typeof(UIElement), new FrameworkPropertyMetadata(true, inherits: true, propertyChangedCallback: (sender, e) => ((UIElement)sender).OnIsEnabledChanged(e)));
+        public static readonly DependencyProperty IsEnabledProperty = DependencyProperty.Register("IsEnabled", typeof(bool), typeof(UIElement), new FrameworkPropertyMetadata(true, propertyChangedCallback: (sender, e) => ((UIElement)sender).OnIsEnabledChanged(e), coerceValueCallback: (sender, value) => ((UIElement)sender).CoerceInheritedValue(IsEnabledProperty, (bool)value)));
         public bool IsEnabled
         {
             get { return (bool)GetValue(IsEnabledProperty); }
             set { SetValue(IsEnabledProperty, value); }
         }
 
-        public static readonly DependencyProperty IsHitTestVisibleProperty = DependencyProperty.Register("IsHitTestVisible", typeof(bool), typeof(UIElement), new FrameworkPropertyMetadata(true, inherits: true, propertyChangedCallback: (sender, e) => ((UIElement)sender).OnIsHitTestVisibleChanged(e)));
+        public static readonly DependencyProperty IsHitTestVisibleProperty = DependencyProperty.Register("IsHitTestVisible", typeof(bool), typeof(UIElement), new FrameworkPropertyMetadata(true, propertyChangedCallback: (sender, e) => ((UIElement)sender).OnIsHitTestVisibleChanged(e), coerceValueCallback: (sender, value) => ((UIElement)sender).CoerceInheritedValue(IsHitTestVisibleProperty, (bool)value)));
         public bool IsHitTestVisible
         {
             get { return (bool)GetValue(IsHitTestVisibleProperty); }
@@ -174,7 +164,7 @@ namespace System.Windows
                 }
 
                 isRootElement = value;
-                SetIsVisible();
+                CoerceValue(IsVisibleProperty);
             }
         }
 
@@ -210,8 +200,6 @@ namespace System.Windows
             PreviousFinalRect = Rect.Empty;
             PreviousAvailableSize = Size.Empty;
             previousDesiredSize = Size.Empty;
-
-            SetIsVisible();
 
             VisualClipToBounds = ClipToBounds;
             VisualIsHitTestVisible = IsHitTestVisible;
@@ -447,7 +435,10 @@ namespace System.Windows
         protected override void OnVisualParentChanged(Visual oldVisualParent, Visual newVisualParent)
         {
             SetInheritanceParent();
-            SetIsVisible();
+
+            CoerceValue(IsVisibleProperty);
+            CoerceValue(IsEnabledProperty);
+            CoerceValue(IsHitTestVisibleProperty);
         }
 
         protected virtual void OnLogicalParentChanged(UIElement oldLogicalParent, UIElement newLogicalParent)
@@ -571,8 +562,8 @@ namespace System.Windows
                 }
             }
 
-            VisualIsVisible = Visibility == Visibility.Visible;
-            SetIsVisible();
+            IsVisible = Visibility == Visibility.Visible;
+            VisualIsVisible = IsVisible;
         }
 
         private void OnIsVisibleChanged(DependencyPropertyChangedEventArgs e)
@@ -586,28 +577,45 @@ namespace System.Windows
             }
 
             VisualIsVisible = IsVisible;
+
+            CoerceChildrenInheritedValue(IsVisibleProperty);
         }
 
         private void OnIsEnabledChanged(DependencyPropertyChangedEventArgs e)
         {
-            ForceDefaultValueInheritance(e);
             ClearFocus();
+
+            CoerceChildrenInheritedValue(IsEnabledProperty);
         }
 
         private void OnIsHitTestVisibleChanged(DependencyPropertyChangedEventArgs e)
         {
-            ForceDefaultValueInheritance(e);
             VisualIsHitTestVisible = IsHitTestVisible;
+
+            CoerceChildrenInheritedValue(IsHitTestVisibleProperty);
+        }
+
+        private bool CoerceIsVisible(bool value)
+        {
+            return value && (VisualParent != null ? ((UIElement)VisualParent).IsVisible : IsRootElement);
+        }
+
+        private bool CoerceInheritedValue(DependencyProperty dependencyProperty, bool value)
+        {
+            return VisualParent != null ? value && (bool)VisualParent.GetValue(dependencyProperty) : value;
+        }
+
+        private void CoerceChildrenInheritedValue(DependencyProperty dependencyProperty)
+        {
+            foreach (Visual child in VisualChildren)
+            {
+                child.CoerceValue(dependencyProperty);
+            }
         }
 
         private void OnFocusableChanged(DependencyPropertyChangedEventArgs e)
         {
             ClearFocus();
-        }
-
-        private void SetIsVisible()
-        {
-            IsVisible = Visibility == Visibility.Visible && VisualParent != null || IsRootElement;
         }
 
         IEnumerable<IInputElement> IInputElement.GetPathFromRoot()

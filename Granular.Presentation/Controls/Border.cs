@@ -46,7 +46,7 @@ namespace System.Windows.Controls
 
         static Border()
         {
-            UIElement.IsHitTestVisibleProperty.OverrideMetadata(typeof(Border), new FrameworkPropertyMetadata(inherits: true, propertyChangedCallback: (sender, e) => ((Border)sender).SetRenderElementsProperty(renderElement => renderElement.IsHitTestVisible = (bool)e.NewValue)));
+            UIElement.IsHitTestVisibleProperty.OverrideMetadata(typeof(Border), new FrameworkPropertyMetadata(propertyChangedCallback: (sender, e) => ((Border)sender).SetRenderElementsProperty(renderElement => renderElement.IsHitTestVisible = (bool)e.NewValue)));
         }
 
         public Border()
