@@ -36,7 +36,8 @@
                                                 VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
                                                 Content="{TemplateBinding Content}"
                                                 ContentTemplate="{TemplateBinding ContentTemplate}"
-                                                ContentTemplateSelector="{TemplateBinding ContentTemplateSelector}"/>
+                                                ContentTemplateSelector="{TemplateBinding ContentTemplateSelector}"
+                                                ClipToBounds="True"/>
                     </DockPanel>
                 </ControlTemplate>
             </Setter.Value>

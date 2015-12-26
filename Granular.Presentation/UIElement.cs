@@ -106,7 +106,7 @@ namespace System.Windows
             set { SetValue(IsHitTestVisibleProperty, value); }
         }
 
-        public static readonly DependencyProperty ClipToBoundsProperty = DependencyProperty.Register("ClipToBounds", typeof(bool), typeof(UIElement), new FrameworkPropertyMetadata(true, propertyChangedCallback: (sender, e) => ((UIElement)sender).VisualClipToBounds = (bool)e.NewValue));
+        public static readonly DependencyProperty ClipToBoundsProperty = DependencyProperty.Register("ClipToBounds", typeof(bool), typeof(UIElement), new FrameworkPropertyMetadata(false, propertyChangedCallback: (sender, e) => ((UIElement)sender).OnClipToBoundsChanged(e)));
         public bool ClipToBounds
         {
             get { return (bool)GetValue(ClipToBoundsProperty); }
@@ -484,9 +484,19 @@ namespace System.Windows
             return animationExpression;
         }
 
+        protected override Rect GetHitTestBoundsOverride()
+        {
+            if (!IsHitTestVisible || !IsVisible || !IsEnabled)
+            {
+                return Rect.Empty;
+            }
+
+            return base.GetHitTestBoundsOverride();
+        }
+
         public Visual HitTest(Point position)
         {
-            if (!IsHitTestVisible || !IsEnabled || !IsVisible || VisualClipToBounds && !VisualBounds.Contains(position))
+            if (!GetHitTestBounds().Contains(position))
             {
                 return null;
             }
@@ -563,7 +573,6 @@ namespace System.Windows
             }
 
             IsVisible = Visibility == Visibility.Visible;
-            VisualIsVisible = IsVisible;
         }
 
         private void OnIsVisibleChanged(DependencyPropertyChangedEventArgs e)
@@ -579,6 +588,7 @@ namespace System.Windows
             VisualIsVisible = IsVisible;
 
             CoerceChildrenInheritedValue(IsVisibleProperty);
+            InvalidateHitTestBounds();
         }
 
         private void OnIsEnabledChanged(DependencyPropertyChangedEventArgs e)
@@ -586,6 +596,7 @@ namespace System.Windows
             ClearFocus();
 
             CoerceChildrenInheritedValue(IsEnabledProperty);
+            InvalidateHitTestBounds();
         }
 
         private void OnIsHitTestVisibleChanged(DependencyPropertyChangedEventArgs e)
@@ -593,6 +604,12 @@ namespace System.Windows
             VisualIsHitTestVisible = IsHitTestVisible;
 
             CoerceChildrenInheritedValue(IsHitTestVisibleProperty);
+            InvalidateHitTestBounds();
+        }
+
+        private void OnClipToBoundsChanged(DependencyPropertyChangedEventArgs e)
+        {
+            VisualClipToBounds = (bool)e.NewValue;
         }
 
         private bool CoerceIsVisible(bool value)

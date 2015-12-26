@@ -87,6 +87,8 @@ namespace System.Windows.Media
                 {
                     visualRenderElement.Bounds = visualBounds;
                 }
+
+                InvalidateHitTestBounds();
             }
         }
 
@@ -107,6 +109,8 @@ namespace System.Windows.Media
                 {
                     visualRenderElement.ClipToBounds = visualClipToBounds;
                 }
+
+                InvalidateHitTestBounds();
             }
         }
 
@@ -207,6 +211,9 @@ namespace System.Windows.Media
         private Dictionary<IRenderElementFactory, IVisualRenderElement> visualRenderElements;
         private bool containsContentRenderElement;
 
+        private Rect hitTestBounds;
+        private bool isHitTestBoundsValid;
+
         public Visual()
         {
             visualChildren = new List<Visual>();
@@ -245,6 +252,8 @@ namespace System.Windows.Media
             {
                 visualRenderElements[factory].InsertChild(renderChildIndex, child.GetRenderElement(factory));
             }
+
+            InvalidateHitTestBounds();
         }
 
         public void RemoveVisualChild(Visual child)
@@ -261,6 +270,8 @@ namespace System.Windows.Media
             {
                 visualRenderElements[factory].RemoveChild(child.GetRenderElement(factory));
             }
+
+            InvalidateHitTestBounds();
         }
 
         public void SetVisualChildIndex(Visual child, int newIndex)
@@ -385,6 +396,46 @@ namespace System.Windows.Media
             }
 
             return point - VisualOffset;
+        }
+
+        protected void InvalidateHitTestBounds()
+        {
+            if (!isHitTestBoundsValid)
+            {
+                return;
+            }
+
+            isHitTestBoundsValid = false;
+            if (VisualParent != null)
+            {
+                VisualParent.InvalidateHitTestBounds();
+            }
+        }
+
+        protected Rect GetHitTestBounds()
+        {
+            if (!isHitTestBoundsValid)
+            {
+                hitTestBounds = GetHitTestBoundsOverride();
+                isHitTestBoundsValid = true;
+            }
+
+            return hitTestBounds;
+        }
+
+        protected virtual Rect GetHitTestBoundsOverride()
+        {
+            Rect bounds = VisualBounds;
+
+            if (!VisualClipToBounds)
+            {
+                foreach (Visual child in VisualChildren)
+                {
+                    bounds = bounds.Union(child.GetHitTestBounds());
+                }
+            }
+
+            return bounds;
         }
     }
 

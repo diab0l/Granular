@@ -66,6 +66,11 @@ namespace System.Windows.Controls
 
         private Dictionary<IRenderElementFactory, IImageRenderElement> imageRenderElements;
 
+        static Image()
+        {
+            UIElement.ClipToBoundsProperty.OverrideMetadata(typeof(Image), new FrameworkPropertyMetadata(true));
+        }
+
         public Image()
         {
             imageRenderElements = new Dictionary<IRenderElementFactory, IImageRenderElement>();

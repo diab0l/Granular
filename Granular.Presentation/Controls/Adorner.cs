@@ -38,15 +38,9 @@ namespace System.Windows.Controls
 
         public UIElement AdornedElement { get; private set; }
 
-        static Adorner()
-        {
-            ClipToBoundsProperty.OverrideMetadata(typeof(Adorner), new FrameworkPropertyMetadata(false));
-        }
-
         public Adorner(UIElement adornedElement)
         {
             this.AdornedElement = adornedElement;
-            VisualClipToBounds = false;
         }
 
         protected override Size MeasureOverride(Size availableSize)

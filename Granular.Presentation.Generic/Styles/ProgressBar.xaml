@@ -22,7 +22,7 @@
                 <ControlTemplate TargetType="{x:Type ProgressBar}">
                     <Grid>
                         <Border Background="{TemplateBinding Control.Background}" BorderBrush="{TemplateBinding Control.BorderBrush}" BorderThickness="1" CornerRadius="2.5"/>
-                        <Decorator x:Name="PART_Track" Margin="2" MinHeight="2">
+                        <Decorator x:Name="PART_Track" Margin="2" MinHeight="2" ClipToBounds="True">
                             <Grid x:Name="PART_Indicator" HorizontalAlignment="Left">
                                 <Border x:Name="indicatorBackground" Background="{TemplateBinding Control.Foreground}"/>
                                 <Border x:Name="PART_Glow" HorizontalAlignment="Left" Width="200"/>
