@@ -46,7 +46,7 @@ namespace System.Windows.Media
 
         public static bool operator ==(Color color1, Color color2)
         {
-            return Object.ReferenceEquals(color1, null) ? Object.ReferenceEquals(color2, null) : color1.Equals(color2);
+            return Object.Equals(color1, color2);
         }
 
         public static bool operator !=(Color color1, Color color2)

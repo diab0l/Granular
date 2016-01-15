@@ -58,7 +58,7 @@ namespace System.Windows
 
         public static bool operator ==(Point point1, Point point2)
         {
-            return Object.ReferenceEquals(point1, null) ? Object.ReferenceEquals(point2, null) : point1.Equals(point2);
+            return Object.Equals(point1, point2);
         }
 
         public static bool operator !=(Point point1, Point point2)

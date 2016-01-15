@@ -59,7 +59,7 @@ namespace System.Xaml
 
         public static bool operator ==(XamlName name1, XamlName name2)
         {
-            return ReferenceEquals(name1, null) && ReferenceEquals(name2, null) || !ReferenceEquals(name1, null) && name1.Equals(name2);
+            return Object.Equals(name1, name2);
         }
 
         public static bool operator !=(XamlName name1, XamlName name2)

@@ -85,7 +85,7 @@ namespace System.Windows.Media
 
         public static bool operator ==(Matrix matrix1, Matrix matrix2)
         {
-            return Object.ReferenceEquals(matrix1, null) ? Object.ReferenceEquals(matrix2, null) : matrix1.Equals(matrix2);
+            return Object.Equals(matrix1, matrix2);
         }
 
         public static bool operator !=(Matrix matrix1, Matrix matrix2)

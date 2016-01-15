@@ -64,7 +64,7 @@ namespace System.Windows
 
         public static bool operator ==(Size size1, Size size2)
         {
-            return Object.ReferenceEquals(size1, null) ? Object.ReferenceEquals(size2, null) : size1.Equals(size2);
+            return Object.Equals(size1, size2);
         }
 
         public static bool operator !=(Size size1, Size size2)

@@ -62,7 +62,7 @@ namespace System.Windows
 
         public static bool operator ==(CornerRadius cornerRadius1, CornerRadius cornerRadius2)
         {
-            return Object.ReferenceEquals(cornerRadius1, null) ? Object.ReferenceEquals(cornerRadius2, null) : cornerRadius1.Equals(cornerRadius2);
+            return Object.Equals(cornerRadius1, cornerRadius2);
         }
 
         public static bool operator !=(CornerRadius cornerRadius1, CornerRadius cornerRadius2)
