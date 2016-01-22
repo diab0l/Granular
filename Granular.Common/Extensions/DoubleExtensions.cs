@@ -43,5 +43,10 @@ namespace Granular.Extensions
 
             return @this.Max(minimum).Min(maximum);
         }
+
+        public static double Abs(this double @this)
+        {
+            return Math.Abs(@this);
+        }
     }
 }
