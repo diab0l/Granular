@@ -63,10 +63,10 @@ namespace System.Windows
             Thickness other = obj as Thickness;
 
             return Object.ReferenceEquals(this, other) || !Object.ReferenceEquals(other, null) &&
-                Granular.Compatibility.EqualityComparer<double>.Default.Equals(this.Left, other.Left) &&
-                Granular.Compatibility.EqualityComparer<double>.Default.Equals(this.Top, other.Top) &&
-                Granular.Compatibility.EqualityComparer<double>.Default.Equals(this.Right, other.Right) &&
-                Granular.Compatibility.EqualityComparer<double>.Default.Equals(this.Bottom, other.Bottom);
+                Granular.Compatibility.EqualityComparer.Double.Equals(this.Left, other.Left) &&
+                Granular.Compatibility.EqualityComparer.Double.Equals(this.Top, other.Top) &&
+                Granular.Compatibility.EqualityComparer.Double.Equals(this.Right, other.Right) &&
+                Granular.Compatibility.EqualityComparer.Double.Equals(this.Bottom, other.Bottom);
         }
 
         public override int GetHashCode()

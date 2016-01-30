@@ -208,7 +208,7 @@ namespace System.Windows
 
         public object Value { get { return observableValue.Value; } }
 
-        public bool IsCoerced { get { return !Granular.Compatibility.EqualityComparer<object>.Default.Equals(this.Value, source.Value); } }
+        public bool IsCoerced { get { return !Granular.Compatibility.EqualityComparer.Default.Equals(this.Value, source.Value); } }
 
         private IDependencyPropertyValueEntry source;
         private CoerceValueCallback coerceValueCallback;

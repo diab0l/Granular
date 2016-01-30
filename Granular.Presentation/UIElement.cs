@@ -541,7 +541,7 @@ namespace System.Windows
         private void ForceDefaultValueInheritance(DependencyPropertyChangedEventArgs e)
         {
             // clear modified value if it's equal to a default value that should be inherited
-            if (Granular.Compatibility.EqualityComparer<object>.Default.Equals(e.NewValue, e.Property.GetMetadata(GetType()).DefaultValue) && !GetValueSource(e.Property).IsExpression)
+            if (Granular.Compatibility.EqualityComparer.Default.Equals(e.NewValue, e.Property.GetMetadata(GetType()).DefaultValue) && !GetValueSource(e.Property).IsExpression)
             {
                 ClearValue(e.Property);
             }

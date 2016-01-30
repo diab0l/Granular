@@ -41,7 +41,7 @@ namespace System.Windows
 
         private void Register()
         {
-            IsMatched = Granular.Compatibility.EqualityComparer<object>.Default.Equals(element.GetValue(property), value);
+            IsMatched = Granular.Compatibility.EqualityComparer.Default.Equals(element.GetValue(property), value);
 
             element.PropertyChanged += OnPropertyChanged;
         }
@@ -58,7 +58,7 @@ namespace System.Windows
                 return;
             }
 
-            IsMatched = Granular.Compatibility.EqualityComparer<object>.Default.Equals(e.NewValue, value);
+            IsMatched = Granular.Compatibility.EqualityComparer.Default.Equals(e.NewValue, value);
         }
 
         public static TriggerCondition Register(FrameworkElement element, DependencyProperty property, object value)

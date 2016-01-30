@@ -23,7 +23,7 @@ namespace System.Windows.Controls
             get { return selection; }
             set
             {
-                if (Granular.Compatibility.EqualityComparer<object>.Default.Equals(this.selection, value))
+                if (Granular.Compatibility.EqualityComparer.Default.Equals(this.selection, value))
                 {
                     return;
                 }

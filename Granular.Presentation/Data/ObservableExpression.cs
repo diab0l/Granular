@@ -75,7 +75,7 @@ namespace System.Windows.Data
         public bool TrySetValue(object value)
         {
             return delegateObserver != null &&
-                (Granular.Compatibility.EqualityComparer<object>.Default.Equals(delegateObserver.Value, value) || delegateObserver.TrySetValue(value));
+                (Granular.Compatibility.EqualityComparer.Default.Equals(delegateObserver.Value, value) || delegateObserver.TrySetValue(value));
         }
 
         private void SetDelegateObserverBaseValue()

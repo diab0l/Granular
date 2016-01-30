@@ -39,7 +39,7 @@ namespace System.Windows.Controls
 
             return Object.ReferenceEquals(this, other) || !Object.ReferenceEquals(other, null) &&
                 this.GridUnitType == other.GridUnitType &&
-                Granular.Compatibility.EqualityComparer<double>.Default.Equals(this.Value, other.Value);
+                Granular.Compatibility.EqualityComparer.Double.Equals(this.Value, other.Value);
         }
 
         public override int GetHashCode()

@@ -53,7 +53,7 @@ namespace System.Windows.Data
             get { return value; }
             set
             {
-                if (Granular.Compatibility.EqualityComparer<object>.Default.Equals(this.value, value))
+                if (Granular.Compatibility.EqualityComparer.Default.Equals(this.value, value))
                 {
                     return;
                 }

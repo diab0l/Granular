@@ -241,17 +241,17 @@ namespace System.Windows.Data
             }
 
             object oldItem = e.OldItems.FirstOrDefault();
-            int oldIndex = Granular.Compatibility.Array.FindIndex(oldInnerCollection, item => Granular.Compatibility.EqualityComparer<object>.Default.Equals(item, oldItem));
+            int oldIndex = Granular.Compatibility.Array.FindIndex(oldInnerCollection, item => Granular.Compatibility.EqualityComparer.Default.Equals(item, oldItem));
 
             object newItem = e.NewItems.FirstOrDefault();
-            int newIndex = Granular.Compatibility.Array.FindIndex(innerCollection, item => Granular.Compatibility.EqualityComparer<object>.Default.Equals(item, newItem));
+            int newIndex = Granular.Compatibility.Array.FindIndex(innerCollection, item => Granular.Compatibility.EqualityComparer.Default.Equals(item, newItem));
 
             if (oldIndex == -1 && newIndex == -1 || oldItem == newItem && oldIndex == newIndex)
             {
                 return;
             }
 
-            if (Granular.Compatibility.EqualityComparer<object>.Default.Equals(oldItem, newItem))
+            if (Granular.Compatibility.EqualityComparer.Default.Equals(oldItem, newItem))
             {
                 CollectionChanged.Raise(this, NotifyCollectionChangedEventArgs.Move(newItem, oldIndex, newIndex));
             }

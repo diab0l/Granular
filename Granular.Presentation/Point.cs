@@ -47,8 +47,8 @@ namespace System.Windows
             Point other = obj as Point;
 
             return Object.ReferenceEquals(this, other) || !Object.ReferenceEquals(other, null) &&
-                Granular.Compatibility.EqualityComparer<double>.Default.Equals(this.X, other.X) &&
-                Granular.Compatibility.EqualityComparer<double>.Default.Equals(this.Y, other.Y);
+                Granular.Compatibility.EqualityComparer.Double.Equals(this.X, other.X) &&
+                Granular.Compatibility.EqualityComparer.Double.Equals(this.Y, other.Y);
         }
 
         public override int GetHashCode()

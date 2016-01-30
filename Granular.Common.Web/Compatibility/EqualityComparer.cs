@@ -2,13 +2,20 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 
 namespace Granular.Compatibility
 {
+    public static class EqualityComparer
+    {
+        public static readonly EqualityComparer<object> Default = new EqualityComparer<object>(System.Collections.Generic.EqualityComparer<object>.Default);
+        public static readonly EqualityComparer<double> Double = new EqualityComparer<double>(System.Collections.Generic.EqualityComparer<double>.Default);
+    }
+
     public class EqualityComparer<T> : IEqualityComparer<T>
     {
-        public static EqualityComparer<T> Default = new EqualityComparer<T>(System.Collections.Generic.EqualityComparer<T>.Default);
+        public static readonly EqualityComparer<T> Default = new EqualityComparer<T>(System.Collections.Generic.EqualityComparer<T>.Default);
 
         private IEqualityComparer<T> comparer;
 
@@ -19,14 +26,18 @@ namespace Granular.Compatibility
 
         public bool Equals(T x, T y)
         {
-            return x is double && System.Double.IsNaN((double)((object)x)) &&
-                   y is double && System.Double.IsNaN((double)((object)y)) ||
-                   comparer.Equals(x, y);
+            return comparer.Equals(x, y) || IsNaN(x) && IsNaN(y);
         }
 
         public int GetHashCode(T obj)
         {
             return comparer.GetHashCode(obj);
+        }
+
+        [InlineCode("{value} !== {value}")]
+        private static bool IsNaN(object value)
+        {
+            return false;
         }
 
         [System.Runtime.CompilerServices.Reflectable(false)]

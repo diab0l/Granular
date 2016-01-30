@@ -61,12 +61,12 @@ namespace System.Windows.Media
             Matrix other = obj as Matrix;
 
             return Object.ReferenceEquals(this, other) || !Object.ReferenceEquals(other, null) &&
-                Granular.Compatibility.EqualityComparer<double>.Default.Equals(this.M11, other.M11) &&
-                Granular.Compatibility.EqualityComparer<double>.Default.Equals(this.M12, other.M12) &&
-                Granular.Compatibility.EqualityComparer<double>.Default.Equals(this.M21, other.M21) &&
-                Granular.Compatibility.EqualityComparer<double>.Default.Equals(this.M22, other.M22) &&
-                Granular.Compatibility.EqualityComparer<double>.Default.Equals(this.OffsetX, other.OffsetX) &&
-                Granular.Compatibility.EqualityComparer<double>.Default.Equals(this.OffsetY, other.OffsetY);
+                Granular.Compatibility.EqualityComparer.Double.Equals(this.M11, other.M11) &&
+                Granular.Compatibility.EqualityComparer.Double.Equals(this.M12, other.M12) &&
+                Granular.Compatibility.EqualityComparer.Double.Equals(this.M21, other.M21) &&
+                Granular.Compatibility.EqualityComparer.Double.Equals(this.M22, other.M22) &&
+                Granular.Compatibility.EqualityComparer.Double.Equals(this.OffsetX, other.OffsetX) &&
+                Granular.Compatibility.EqualityComparer.Double.Equals(this.OffsetY, other.OffsetY);
         }
 
         public override int GetHashCode()

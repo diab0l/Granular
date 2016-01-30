@@ -43,8 +43,8 @@ namespace System.Windows
             Size other = obj as Size;
 
             return Object.ReferenceEquals(this, other) || !Object.ReferenceEquals(other, null) &&
-                Granular.Compatibility.EqualityComparer<double>.Default.Equals(this.Width, other.Width) &&
-                Granular.Compatibility.EqualityComparer<double>.Default.Equals(this.Height, other.Height);
+                Granular.Compatibility.EqualityComparer.Double.Equals(this.Width, other.Width) &&
+                Granular.Compatibility.EqualityComparer.Double.Equals(this.Height, other.Height);
         }
 
         public override int GetHashCode()

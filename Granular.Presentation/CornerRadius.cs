@@ -46,10 +46,10 @@ namespace System.Windows
             CornerRadius other = obj as CornerRadius;
 
             return Object.ReferenceEquals(this, other) || !Object.ReferenceEquals(other, null) &&
-                Granular.Compatibility.EqualityComparer<double>.Default.Equals(this.TopLeft, other.TopLeft) &&
-                Granular.Compatibility.EqualityComparer<double>.Default.Equals(this.TopRight, other.TopRight) &&
-                Granular.Compatibility.EqualityComparer<double>.Default.Equals(this.BottomRight, other.BottomRight) &&
-                Granular.Compatibility.EqualityComparer<double>.Default.Equals(this.BottomLeft, other.BottomLeft);
+                Granular.Compatibility.EqualityComparer.Double.Equals(this.TopLeft, other.TopLeft) &&
+                Granular.Compatibility.EqualityComparer.Double.Equals(this.TopRight, other.TopRight) &&
+                Granular.Compatibility.EqualityComparer.Double.Equals(this.BottomRight, other.BottomRight) &&
+                Granular.Compatibility.EqualityComparer.Double.Equals(this.BottomLeft, other.BottomLeft);
         }
 
         public override int GetHashCode()

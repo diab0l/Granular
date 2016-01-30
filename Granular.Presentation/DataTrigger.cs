@@ -70,7 +70,7 @@ namespace System.Windows
                 value = null;
             }
 
-            IsMatched = Granular.Compatibility.EqualityComparer<object>.Default.Equals(e.NewValue, resolvedValue);
+            IsMatched = Granular.Compatibility.EqualityComparer.Default.Equals(e.NewValue, resolvedValue);
         }
 
         private static object GetResolvedValue(object value, Type type)
