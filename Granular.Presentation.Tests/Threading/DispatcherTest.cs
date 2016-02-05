@@ -74,6 +74,35 @@ namespace Granular.Presentation.Tests.Threading
         }
 
         [TestMethod]
+        public void DispatcherInvokeBasicTest()
+        {
+            TestTaskScheduler scheduler = (TestTaskScheduler)ApplicationHost.Current.TaskScheduler;
+            using (scheduler.DisableImmediateProcessing())
+            {
+                Dispatcher dispatcher = Dispatcher.CurrentDispatcher;
+
+                int index = 1;
+                int task1 = 0;
+                int task2 = 0;
+                int task3 = 0;
+
+                dispatcher.InvokeAsync(() => task3 = index++, (DispatcherPriority)1);
+                dispatcher.InvokeAsync(() => task1 = index++, (DispatcherPriority)3);
+                dispatcher.Invoke(() => task2 = index++, (DispatcherPriority)2);
+
+                Assert.AreEqual(1, task1);
+                Assert.AreEqual(2, task2);
+                Assert.AreEqual(0, task3);
+
+                scheduler.ProcessDueOperations();
+
+                Assert.AreEqual(1, task1);
+                Assert.AreEqual(2, task2);
+                Assert.AreEqual(3, task3);
+            }
+        }
+
+        [TestMethod]
         public void DispatcherDisableProcessingTest()
         {
             TestTaskScheduler scheduler = (TestTaskScheduler)ApplicationHost.Current.TaskScheduler;

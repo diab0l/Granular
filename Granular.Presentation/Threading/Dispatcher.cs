@@ -41,6 +41,41 @@ namespace System.Windows.Threading
             queue = new PriorityQueue<DispatcherPriority, DispatcherOperation>();
         }
 
+        public void Invoke(Action callback, DispatcherPriority priority = DispatcherPriority.Normal)
+        {
+            Invoke(new DispatcherOperation(callback, priority));
+        }
+
+        public TResult Invoke<TResult>(Func<TResult> callback, DispatcherPriority priority = DispatcherPriority.Normal)
+        {
+            DispatcherOperation<TResult> dispatcherOperation = new DispatcherOperation<TResult>(callback, priority);
+            Invoke(dispatcherOperation);
+            return dispatcherOperation.Result;
+        }
+
+        private void Invoke(DispatcherOperation operation)
+        {
+            queue.Enqueue(operation.Priority, operation);
+
+            DispatcherOperation currentOperation;
+            while (TryDequeue(out currentOperation))
+            {
+                currentOperation.Invoke();
+
+                if (currentOperation == operation)
+                {
+                    return;
+                }
+            }
+
+            if (disableProcessingRequests > 0)
+            {
+                throw new Granular.Exception("Can't invoke an operation while the dispatcher processing is disabled");
+            }
+
+            throw new Granular.Exception("Can't invoke an inactive or aborted operation");
+        }
+
         public DispatcherOperation InvokeAsync(Action callback, DispatcherPriority priority = DispatcherPriority.Normal)
         {
             DispatcherOperation dispatcherOperation = new DispatcherOperation(callback, priority);
