@@ -7,6 +7,7 @@ using System.Windows.Media;
 using System.Windows.Threading;
 using Granular.Extensions;
 using Granular.Presentation.Tests.Media;
+using Granular.Presentation.Tests.Threading;
 
 namespace Granular.Presentation.Tests
 {
@@ -19,7 +20,7 @@ namespace Granular.Presentation.Tests
 
         public TestApplicationHost()
         {
-            TaskScheduler = new SendTaskScheduler();
+            TaskScheduler = new TestTaskScheduler();
             TextMeasurementService = new TestTextMeasurementService();
             RenderImageSourceFactory = new TestRenderImageSourceFactory();
         }
@@ -27,20 +28,6 @@ namespace Granular.Presentation.Tests
         public void Run(Action applicationEntryPoint)
         {
             applicationEntryPoint();
-        }
-    }
-
-    public class SendTaskScheduler : ITaskScheduler
-    {
-        public IDisposable ScheduleTask(TimeSpan timeSpan, Action action)
-        {
-            if (timeSpan > TimeSpan.Zero)
-            {
-                throw new Granular.Exception("SendTaskScheduler supports only immediate tasks");
-            }
-
-            action();
-            return Disposable.Empty;
         }
     }
 

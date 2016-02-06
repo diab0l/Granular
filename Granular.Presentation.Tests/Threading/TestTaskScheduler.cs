@@ -37,6 +37,8 @@ namespace Granular.Presentation.Tests.Threading
         public TimeSpan CurrentTime { get; private set; }
 
         private PriorityQueue<TimeSpan, CancellableAction> queue;
+        private bool isImmediateProcessingDisabled;
+        private bool isProcessing;
 
         public TestTaskScheduler()
         {
@@ -47,6 +49,12 @@ namespace Granular.Presentation.Tests.Threading
         {
             CancellableAction cancellableAction = new CancellableAction(action);
             queue.Enqueue(CurrentTime + timeSpan, cancellableAction);
+
+            if (timeSpan == TimeSpan.Zero && !isProcessing && !isImmediateProcessingDisabled)
+            {
+                ProcessDueOperations();
+            }
+
             return new Disposable(() => cancellableAction.Cancel());
         }
 
@@ -78,10 +86,29 @@ namespace Granular.Presentation.Tests.Threading
 
         private void DequeueDueOperations()
         {
+            isProcessing = true;
+
             while (queue.Count > 0 && queue.First().Key <= CurrentTime)
             {
                 queue.Dequeue().Invoke();
             }
+
+            isProcessing = false;
+        }
+
+        public IDisposable DisableImmediateProcessing()
+        {
+            if (isImmediateProcessingDisabled)
+            {
+                throw new Granular.Exception("Immediate processing is already disabled");
+            }
+
+            isImmediateProcessingDisabled = true;
+            return new Disposable(() =>
+            {
+                isImmediateProcessingDisabled = false;
+                ProcessDueOperations();
+            });
         }
     }
 }
