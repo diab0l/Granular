@@ -439,6 +439,16 @@ namespace System.Windows
             CoerceValue(IsVisibleProperty);
             CoerceValue(IsEnabledProperty);
             CoerceValue(IsHitTestVisibleProperty);
+
+            if (oldVisualParent != null)
+            {
+                ((UIElement)oldVisualParent).InvalidateMeasure();
+            }
+
+            if (newVisualParent != null)
+            {
+                ((UIElement)newVisualParent).InvalidateMeasure();
+            }
         }
 
         protected virtual void OnLogicalParentChanged(UIElement oldLogicalParent, UIElement newLogicalParent)

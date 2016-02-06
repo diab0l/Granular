@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Windows;
+using Granular.Presentation.Tests.Threading;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Granular.Presentation.Tests
@@ -118,6 +119,43 @@ namespace Granular.Presentation.Tests
 
             element2.RemoveVisualChild(element3);
             Assert.IsTrue(element3.IsHitTestVisible);
+        }
+
+        [TestMethod]
+        public void LayoutInvalidationTest()
+        {
+            TestTaskScheduler scheduler = (TestTaskScheduler)ApplicationHost.Current.TaskScheduler;
+            using (scheduler.DisableImmediateProcessing())
+            {
+                UIElement root = new UIElement();
+                UIElement child = new UIElement();
+
+                root.Measure(Size.Infinity);
+                root.Arrange(new Rect(root.DesiredSize));
+
+                Assert.IsTrue(root.IsMeasureValid);
+                Assert.IsTrue(root.IsArrangeValid);
+
+                root.AddVisualChild(child);
+
+                Assert.IsFalse(root.IsMeasureValid);
+                Assert.IsTrue(root.IsArrangeValid);
+
+                scheduler.ProcessDueOperations();
+
+                Assert.IsTrue(root.IsMeasureValid);
+                Assert.IsTrue(root.IsArrangeValid);
+
+                root.RemoveVisualChild(child);
+
+                Assert.IsFalse(root.IsMeasureValid);
+                Assert.IsTrue(root.IsArrangeValid);
+
+                scheduler.ProcessDueOperations();
+
+                Assert.IsTrue(root.IsMeasureValid);
+                Assert.IsTrue(root.IsArrangeValid);
+            }
         }
     }
 }
