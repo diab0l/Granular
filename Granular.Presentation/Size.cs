@@ -74,21 +74,51 @@ namespace System.Windows
 
         public static Size operator -(Size size)
         {
+            if (size == Size.Zero)
+            {
+                return size;
+            }
+
             return new Size(-size.Width, -size.Height);
         }
 
         public static Size operator +(Size size1, Size size2)
         {
+            if (size1 == Size.Zero)
+            {
+                return size2;
+            }
+
+            if (size2 == Size.Zero)
+            {
+                return size1;
+            }
+
             return new Size(size1.Width + size2.Width, size1.Height + size2.Height);
         }
 
         public static Size operator -(Size size1, Size size2)
         {
+            if (size1 == Size.Zero)
+            {
+                return -size2;
+            }
+
+            if (size2 == Size.Zero)
+            {
+                return size1;
+            }
+
             return new Size(size1.Width - size2.Width, size1.Height - size2.Height);
         }
 
         public static Size operator *(Size size, double factor)
         {
+            if (factor == 1 || ReferenceEquals(size, Size.Zero))
+            {
+                return size;
+            }
+
             return new Size(size.Width * factor, size.Height * factor);
         }
 
@@ -99,6 +129,11 @@ namespace System.Windows
 
         public static Size operator /(Size size, double factor)
         {
+            if (factor == 1 || ReferenceEquals(size, Size.Zero))
+            {
+                return size;
+            }
+
             return new Size(size.Width / factor, size.Height / factor);
         }
 
@@ -135,6 +170,11 @@ namespace System.Windows
 
         public static Size Combine(this Size size, Size fallback)
         {
+            if (!size.IsPartiallyEmpty)
+            {
+                return size;
+            }
+
             return new Size(
                 size.IsWidthEmpty ? fallback.Width : size.Width,
                 size.IsHeightEmpty ? fallback.Height : size.Height);

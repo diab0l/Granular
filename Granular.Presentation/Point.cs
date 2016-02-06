@@ -68,21 +68,51 @@ namespace System.Windows
 
         public static Point operator -(Point point)
         {
+            if (point == Point.Zero)
+            {
+                return point;
+            }
+
             return new Point(-point.X, -point.Y);
         }
 
         public static Point operator +(Point point1, Point point2)
         {
+            if (point1 == Point.Zero)
+            {
+                return point2;
+            }
+
+            if (point2 == Point.Zero)
+            {
+                return point1;
+            }
+
             return new Point(point1.X + point2.X, point1.Y + point2.Y);
         }
 
         public static Point operator -(Point point1, Point point2)
         {
+            if (point1 == Point.Zero)
+            {
+                return -point2;
+            }
+
+            if (point2 == Point.Zero)
+            {
+                return point1;
+            }
+
             return new Point(point1.X - point2.X, point1.Y - point2.Y);
         }
 
         public static Point operator *(Point point, double scalar)
         {
+            if (scalar == 1 || ReferenceEquals(point, Point.Zero))
+            {
+                return point;
+            }
+
             return new Point(point.X * scalar, point.Y * scalar);
         }
 

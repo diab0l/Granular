@@ -18,7 +18,7 @@ namespace System.Windows
         public Point Location { get; private set; }
         public Size Size { get; private set; }
 
-        public bool IsUniform { get; private set; }
+        public bool IsUniform { get { return Left == Top && Left == Right && Left == Bottom; } }
 
         public Thickness() :
             this(0, 0, 0, 0)
@@ -45,10 +45,8 @@ namespace System.Windows
             this.Right = right;
             this.Bottom = bottom;
 
-            this.Location = new Point(left, top);
-            this.Size = new Size(left + right, top + bottom);
-
-            this.IsUniform = Left == Top && Left == Right && Left == Bottom;
+            this.Location = left == 0 && top == 0 ? Point.Zero : new Point(left, top);
+            this.Size = left + right == 0 && top + bottom == 0 ? Size.Zero : new Size(left + right, top + bottom);
         }
 
         public override string ToString()
@@ -86,21 +84,51 @@ namespace System.Windows
 
         public static Thickness operator -(Thickness thickness)
         {
+            if (thickness == Thickness.Zero)
+            {
+                return thickness;
+            }
+
             return new Thickness(-thickness.Left, -thickness.Top, -thickness.Right, -thickness.Bottom);
         }
 
         public static Thickness operator +(Thickness thickness1, Thickness thickness2)
         {
+            if (thickness1 == Thickness.Zero)
+            {
+                return thickness2;
+            }
+
+            if (thickness2 == Thickness.Zero)
+            {
+                return thickness1;
+            }
+
             return new Thickness(thickness1.Left + thickness2.Left, thickness1.Top + thickness2.Top, thickness1.Right + thickness2.Right, thickness1.Bottom + thickness2.Bottom);
         }
 
         public static Thickness operator -(Thickness thickness1, Thickness thickness2)
         {
+            if (thickness1 == Thickness.Zero)
+            {
+                return -thickness2;
+            }
+
+            if (thickness2 == Thickness.Zero)
+            {
+                return thickness1;
+            }
+
             return new Thickness(thickness1.Left - thickness2.Left, thickness1.Top - thickness2.Top, thickness1.Right - thickness2.Right, thickness1.Bottom - thickness2.Bottom);
         }
 
         public static Thickness operator *(Thickness thickness, double scalar)
         {
+            if (scalar == 1 || ReferenceEquals(thickness, Thickness.Zero))
+            {
+                return thickness;
+            }
+
             return new Thickness(thickness.Left * scalar, thickness.Top * scalar, thickness.Right * scalar, thickness.Bottom * scalar);
         }
 
