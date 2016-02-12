@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 
 namespace System.Windows.Input
@@ -75,6 +76,7 @@ namespace System.Windows.Input
         }
     }
 
+    [DebuggerNonUserCode]
     public static class KeyEventHandlerExtensions
     {
         public static void Raise(this KeyEventHandler handler, object sender, KeyEventArgs e)

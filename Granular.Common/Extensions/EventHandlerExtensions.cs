@@ -10,7 +10,7 @@ namespace Granular.Extensions
     [DebuggerNonUserCode]
     public static class EventHandlerExtensions
     {
-        static public void Raise(this EventHandler handler, object sender)
+        public static void Raise(this EventHandler handler, object sender)
         {
             if (handler != null)
             {
@@ -18,7 +18,7 @@ namespace Granular.Extensions
             }
         }
 
-        static public void Raise(this EventHandler handler, object sender, EventArgs e)
+        public static void Raise(this EventHandler handler, object sender, EventArgs e)
         {
             if (handler != null)
             {
@@ -26,7 +26,7 @@ namespace Granular.Extensions
             }
         }
 
-        static public void Raise<T>(this EventHandler<T> handler, object sender, T e) where T : EventArgs
+        public static void Raise<T>(this EventHandler<T> handler, object sender, T e) where T : EventArgs
         {
             if (handler != null)
             {
@@ -34,12 +34,12 @@ namespace Granular.Extensions
             }
         }
 
-        static public void Raise(this PropertyChangedEventHandler handler, object sender, string propertyName)
+        public static void Raise(this PropertyChangedEventHandler handler, object sender, string propertyName)
         {
             handler.Raise(sender, new PropertyChangedEventArgs(propertyName));
         }
 
-        static public void Raise(this PropertyChangedEventHandler handler, object sender, PropertyChangedEventArgs e)
+        public static void Raise(this PropertyChangedEventHandler handler, object sender, PropertyChangedEventArgs e)
         {
             if (handler != null)
             {

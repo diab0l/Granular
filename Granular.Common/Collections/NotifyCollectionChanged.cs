@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 
 namespace Granular.Collections
@@ -83,9 +84,10 @@ namespace Granular.Collections
         }
     }
 
+    [DebuggerNonUserCode]
     public static class NotifyCollectionChangedEventHandlerExtensions
     {
-        static public void Raise(this NotifyCollectionChangedEventHandler handler, object sender, NotifyCollectionChangedEventArgs e)
+        public static void Raise(this NotifyCollectionChangedEventHandler handler, object sender, NotifyCollectionChangedEventArgs e)
         {
             if (handler != null)
             {

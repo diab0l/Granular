@@ -20,9 +20,10 @@ namespace System.Windows
         }
     }
 
+    [DebuggerNonUserCode]
     public static class DependencyPropertyChangedEventHandlerExtensions
     {
-        static public void Raise(this DependencyPropertyChangedEventHandler handler, object sender, DependencyPropertyChangedEventArgs e)
+        public static void Raise(this DependencyPropertyChangedEventHandler handler, object sender, DependencyPropertyChangedEventArgs e)
         {
             if (handler != null)
             {

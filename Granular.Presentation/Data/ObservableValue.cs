@@ -100,6 +100,7 @@ namespace System.Windows.Data
         }
     }
 
+    [DebuggerNonUserCode]
     public class ReadOnlyObservableValue : IObservableValue
     {
         public event EventHandler<ObservableValueChangedArgs> ValueChanged;
