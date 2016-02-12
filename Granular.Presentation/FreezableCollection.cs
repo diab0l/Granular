@@ -33,6 +33,16 @@ namespace System.Windows
         {
             this.collection = new ObservableCollection<T>(collection);
             this.collection.CollectionChanged += new NotifyCollectionChangedEventHandler(OnCollectionChanged);
+
+            foreach (T value in collection)
+            {
+                value.SetInheritanceParent(this);
+
+                if (value is INotifyChanged)
+                {
+                    ((INotifyChanged)value).Changed += OnItemChanged;
+                }
+            }
         }
 
         private void OnCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
@@ -41,9 +51,9 @@ namespace System.Windows
             {
                 value.SetInheritanceParent(null);
 
-                if (value is Freezable)
+                if (value is INotifyChanged)
                 {
-                    (value as Freezable).Changed -= OnItemChanged;
+                    ((INotifyChanged)value).Changed -= OnItemChanged;
                 }
             }
 
@@ -51,9 +61,9 @@ namespace System.Windows
             {
                 value.SetInheritanceParent(this);
 
-                if (value is Freezable)
+                if (value is INotifyChanged)
                 {
-                    (value as Freezable).Changed += OnItemChanged;
+                    ((INotifyChanged)value).Changed += OnItemChanged;
                 }
             }
 
@@ -64,11 +74,6 @@ namespace System.Windows
         private void OnItemChanged(object sender, EventArgs e)
         {
             RaiseChanged();
-        }
-
-        protected override void OnInheritanceParentChanged(DependencyObject oldInheritanceParent, DependencyObject newInheritanceParent)
-        {
-            base.OnInheritanceParentChanged(oldInheritanceParent, newInheritanceParent);
         }
 
         public void Add(T item)

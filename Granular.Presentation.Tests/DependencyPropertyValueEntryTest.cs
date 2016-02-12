@@ -17,6 +17,17 @@ namespace Granular.Presentation.Tests
         {
             public const int InvalidValue = 1234;
             public static readonly DependencyProperty ValueProperty = DependencyProperty.Register("Value", typeof(string), typeof(TestObject), new PropertyMetadata());
+            public static readonly DependencyProperty NotifyChangedValueProperty = DependencyProperty.Register("NotifyChangedValue", typeof(NotifyChangedValue), typeof(TestObject), new PropertyMetadata());
+        }
+
+        private class NotifyChangedValue : INotifyChanged
+        {
+            public event EventHandler Changed;
+
+            public void RaiseChanged()
+            {
+                Changed.Raise(this);
+            }
         }
 
         [TestMethod]
@@ -268,6 +279,24 @@ namespace Granular.Presentation.Tests
             Assert.AreEqual("value1", entry.Value);
             Assert.AreEqual(1, entry.ValuePriority);
             Assert.AreEqual(5, valueChangedCount);
+        }
+
+        [TestMethod]
+        public void SetNotifyChangedValueTest()
+        {
+            DependencyPropertyValueEntry entry = new DependencyPropertyValueEntry(new TestObject(), TestObject.NotifyChangedValueProperty, null);
+
+            int valueChangedCount = 0;
+            entry.ValueChanged += (sender, e) => valueChangedCount++;
+
+            NotifyChangedValue value = new NotifyChangedValue();
+            entry.SetValue(1, value);
+            Assert.AreEqual(value, entry.Value);
+            Assert.AreEqual(1, entry.ValuePriority);
+            Assert.AreEqual(1, valueChangedCount);
+
+            value.RaiseChanged();
+            Assert.AreEqual(2, valueChangedCount);
         }
     }
 }

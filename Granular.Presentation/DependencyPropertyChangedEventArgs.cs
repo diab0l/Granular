@@ -12,12 +12,26 @@ namespace System.Windows
         public DependencyProperty Property { get; private set; }
         public object NewValue { get; private set; }
         public object OldValue { get; private set; }
+        public bool IsSubPropertyChange { get; private set; }
 
-        public DependencyPropertyChangedEventArgs(DependencyProperty property, object oldValue, object newValue)
+        public DependencyPropertyChangedEventArgs(DependencyProperty property, object oldValue, object newValue) :
+            this(property, oldValue, newValue, false)
+        {
+            //
+        }
+
+        public DependencyPropertyChangedEventArgs(DependencyProperty property, object value) :
+            this(property, value, value, true)
+        {
+            //
+        }
+
+        private DependencyPropertyChangedEventArgs(DependencyProperty property, object oldValue, object newValue, bool isSubPropertyChange)
         {
             this.Property = property;
             this.OldValue = oldValue;
             this.NewValue = newValue;
+            this.IsSubPropertyChange = isSubPropertyChange;
         }
     }
 

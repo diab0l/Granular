@@ -270,23 +270,23 @@ namespace System.Windows
 
             if (isContained)
             {
-                entry.ValueChanged += (sender, e) => OnContainedEntryValueChanged(new DependencyPropertyChangedEventArgs(dependencyProperty, e.OldValue, e.NewValue));
+                entry.ValueChanged += OnContainedEntryValueChanged;
             }
             else
             {
-                entry.ValueChanged += (sender, e) => OnEntryValueChanged(new DependencyPropertyChangedEventArgs(dependencyProperty, e.OldValue, e.NewValue));
+                entry.ValueChanged += OnEntryValueChanged;
             }
 
             return entry;
         }
 
-        private void OnEntryValueChanged(DependencyPropertyChangedEventArgs e)
+        private void OnEntryValueChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
             OnPropertyChanged(e);
             PropertyChanged.Raise(this, e);
         }
 
-        private void OnContainedEntryValueChanged(DependencyPropertyChangedEventArgs e)
+        private void OnContainedEntryValueChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
             e.Property.RaiseMetadataPropertyChangedCallback(this, e);
             OnPropertyChanged(e);

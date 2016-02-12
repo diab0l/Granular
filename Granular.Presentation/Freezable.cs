@@ -6,12 +6,17 @@ using Granular.Extensions;
 
 namespace System.Windows
 {
+    public interface INotifyChanged
+    {
+        event EventHandler Changed;
+    }
+
     public interface IInheritableObject
     {
         void SetInheritanceContext(DependencyObject inheritanceContext);
     }
 
-    public class Freezable : DependencyObject, IResourceContainer, IInheritableObject
+    public class Freezable : DependencyObject, IResourceContainer, INotifyChanged, IInheritableObject
     {
         public event EventHandler Changed;
 
@@ -97,16 +102,6 @@ namespace System.Windows
             if (e.NewValue is IInheritableObject)
             {
                 ((IInheritableObject)e.NewValue).SetInheritanceContext(this);
-            }
-
-            if (e.OldValue is Freezable)
-            {
-                ((Freezable)e.OldValue).Changed -= OnSubPropertyChanged;
-            }
-
-            if (e.NewValue is Freezable)
-            {
-                ((Freezable)e.NewValue).Changed += OnSubPropertyChanged;
             }
 
             RaiseChanged();

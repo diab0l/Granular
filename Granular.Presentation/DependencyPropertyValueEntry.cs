@@ -8,8 +8,10 @@ using Granular.Extensions;
 
 namespace System.Windows
 {
-    public interface IDependencyPropertyValueEntry : IObservableValue
+    public interface IDependencyPropertyValueEntry
     {
+        event DependencyPropertyChangedEventHandler ValueChanged;
+        object Value { get; }
         int ValuePriority { get; }
 
         object GetValue(int priority, bool flattened);
@@ -40,8 +42,27 @@ namespace System.Windows
         public const int CurrentValuePriority = BaseValuePriorities;
         public const int AnimationValuePriority = BaseValuePriorities + 1;
 
-        public event ObservableValueChangedEventHandler ValueChanged;
-        public object Value { get; private set; }
+        public event DependencyPropertyChangedEventHandler ValueChanged;
+        private object value;
+        public object Value
+        {
+            get { return value; }
+            private set
+            {
+                if (this.value is INotifyChanged)
+                {
+                    ((INotifyChanged)this.value).Changed -= OnValueNotifyChanged;
+                }
+
+                this.value = value;
+
+                if (this.value is INotifyChanged)
+                {
+                    ((INotifyChanged)this.value).Changed += OnValueNotifyChanged;
+                }
+            }
+        }
+
         public int ValuePriority { get; private set; }
 
         // [base values, current value, animation value]
@@ -144,7 +165,7 @@ namespace System.Windows
             }
 
             Value = newValue;
-            ValueChanged.Raise(this, new ObservableValueChangedEventArgs(oldValue, newValue));
+            ValueChanged.Raise(this, new DependencyPropertyChangedEventArgs(dependencyProperty, oldValue, newValue));
         }
 
         private void OnIndexedObservableValueChanged(object sender, ObservableValueChangedEventArgs e)
@@ -170,7 +191,7 @@ namespace System.Windows
             if (ValuePriority == newValuePriority && isNewValueValid && coerceValueCallback == null)
             {
                 Value = newValue;
-                ValueChanged.Raise(this, new ObservableValueChangedEventArgs(oldValue, newValue)); // since this was already the value priority and there is no coercion, Value must have been changed here
+                ValueChanged.Raise(this, new DependencyPropertyChangedEventArgs(dependencyProperty, oldValue, newValue)); // since this was already the value priority and there is no coercion, Value must have been changed here
                 return;
             }
 
@@ -203,7 +224,12 @@ namespace System.Windows
             }
 
             Value = newValue;
-            ValueChanged.Raise(this, new ObservableValueChangedEventArgs(oldValue, newValue));
+            ValueChanged.Raise(this, new DependencyPropertyChangedEventArgs(dependencyProperty, oldValue, newValue));
+        }
+
+        private void OnValueNotifyChanged(object sender, EventArgs e)
+        {
+            ValueChanged.Raise(this, new DependencyPropertyChangedEventArgs(dependencyProperty, Value));
         }
 
         private bool IsValueValid(object newValue)
@@ -215,7 +241,7 @@ namespace System.Windows
     [DebuggerNonUserCode]
     public class ReadOnlyDependencyPropertyValueEntry : IDependencyPropertyValueEntry
     {
-        public event ObservableValueChangedEventHandler ValueChanged;
+        public event DependencyPropertyChangedEventHandler ValueChanged;
         public object Value { get { return source.Value; } }
         public int ValuePriority { get { return source.ValuePriority; } }
 

@@ -298,17 +298,20 @@ namespace System.Windows
                 }
             }
 
-            BaseValueSource baseValueSource = GetBaseValueSource(e.Property);
-            if (baseValueSource != BaseValueSource.Default && baseValueSource != BaseValueSource.Inherited)
+            if (!e.IsSubPropertyChange)
             {
-                if (e.OldValue is IInheritableObject)
+                BaseValueSource baseValueSource = GetBaseValueSource(e.Property);
+                if (baseValueSource != BaseValueSource.Default && baseValueSource != BaseValueSource.Inherited)
                 {
-                    ((IInheritableObject)e.OldValue).SetInheritanceContext(null);
-                }
+                    if (e.OldValue is IInheritableObject)
+                    {
+                        ((IInheritableObject)e.OldValue).SetInheritanceContext(null);
+                    }
 
-                if (e.NewValue is IInheritableObject)
-                {
-                    ((IInheritableObject)e.NewValue).SetInheritanceContext(this);
+                    if (e.NewValue is IInheritableObject)
+                    {
+                        ((IInheritableObject)e.NewValue).SetInheritanceContext(this);
+                    }
                 }
             }
         }
