@@ -19,7 +19,7 @@ namespace System.Windows.Data
 
     public class ClrPropertyObserver : IPropertyObserver, IDisposable
     {
-        public event EventHandler<ObservableValueChangedArgs> ValueChanged;
+        public event ObservableValueChangedEventHandler ValueChanged;
 
         public object Value { get { return observableValue.Value; } }
         public Type ValueType { get { return propertyInfo.PropertyType; } }
@@ -48,7 +48,7 @@ namespace System.Windows.Data
         {
             this.baseValue = baseValue;
             RegisterNotifiers();
-            observableValue.Value = GetValue();
+            observableValue.BaseValue = GetValue();
         }
 
         public bool TrySetValue(object value)
@@ -59,7 +59,7 @@ namespace System.Windows.Data
             }
 
             propertySetMethod.Invoke(baseValue, index.Concat(new object[] { value }).ToArray());
-            observableValue.Value = GetValue();
+            observableValue.BaseValue = GetValue();
             return true;
         }
 
@@ -107,13 +107,13 @@ namespace System.Windows.Data
         {
             if (e.PropertyName == propertyInfo.Name)
             {
-                observableValue.Value = GetValue();
+                observableValue.BaseValue = GetValue();
             }
         }
 
         private void OnNotifierCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
-            observableValue.Value = GetValue();
+            observableValue.BaseValue = GetValue();
         }
 
         public void Dispose()
@@ -127,7 +127,7 @@ namespace System.Windows.Data
 
     public class DependencyPropertyObserver : IPropertyObserver, IDisposable
     {
-        public event EventHandler<ObservableValueChangedArgs> ValueChanged;
+        public event ObservableValueChangedEventHandler ValueChanged;
 
         public object Value { get { return observableValue.Value; } }
         public Type ValueType { get { return dependencyProperty.PropertyType; } }
@@ -149,7 +149,7 @@ namespace System.Windows.Data
         {
             this.baseValue = baseValue;
             RegisterDependencyObject();
-            observableValue.Value = GetValue();
+            observableValue.BaseValue = GetValue();
         }
 
         public bool TrySetValue(object value)
@@ -162,7 +162,7 @@ namespace System.Windows.Data
             }
 
             dependencyObject.SetValue(dependencyProperty, value);
-            observableValue.Value = GetValue();
+            observableValue.BaseValue = GetValue();
             return true;
         }
 
@@ -191,7 +191,7 @@ namespace System.Windows.Data
         {
             if (e.Property == dependencyProperty)
             {
-                observableValue.Value = GetValue();
+                observableValue.BaseValue = GetValue();
             }
         }
 
@@ -206,7 +206,7 @@ namespace System.Windows.Data
 
     public class IndexPropertyObserver : IPropertyObserver, IDisposable
     {
-        public event EventHandler<ObservableValueChangedArgs> ValueChanged;
+        public event ObservableValueChangedEventHandler ValueChanged;
 
         public object Value { get { return indexerObserver.Value; } }
         public Type ValueType { get { return indexerObserver.ValueType; } }

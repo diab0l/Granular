@@ -71,7 +71,7 @@ namespace Granular.Presentation.Tests
 
         private class TestExpression : IExpressionProvider, IExpression
         {
-            public event EventHandler<ObservableValueChangedArgs> ValueChanged;
+            public event ObservableValueChangedEventHandler ValueChanged;
 
             public object Value { get { return observableValue.Value; } }
 
@@ -98,7 +98,7 @@ namespace Granular.Presentation.Tests
                     return false;
                 }
 
-                observableValue.Value = value;
+                observableValue.BaseValue = value;
                 return true;
             }
         }

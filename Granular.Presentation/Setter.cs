@@ -13,7 +13,7 @@ namespace System.Windows
     {
         private class ValueOverlapExpression : IExpressionProvider, IExpression
         {
-            public event EventHandler<ObservableValueChangedArgs> ValueChanged;
+            public event ObservableValueChangedEventHandler ValueChanged;
 
             public object Value { get { return observableValue.Value; } }
 
@@ -43,14 +43,14 @@ namespace System.Windows
                 values.Remove(values.FirstOrDefault(tuple => tuple.Item1 == owner));
                 values.Add(Tuple.Create(owner, value));
 
-                observableValue.Value = value;
+                observableValue.BaseValue = value;
             }
 
             public void ClearValue(object owner)
             {
                 values.Remove(values.FirstOrDefault(tuple => tuple.Item1 == owner));
 
-                observableValue.Value = values.Count > 0 ? values.Last().Item2 : ObservableValue.UnsetValue;
+                observableValue.BaseValue = values.Count > 0 ? values.Last().Item2 : ObservableValue.UnsetValue;
             }
         }
 

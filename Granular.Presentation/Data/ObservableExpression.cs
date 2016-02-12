@@ -7,7 +7,7 @@ namespace System.Windows.Data
 {
     public class ObservableExpression : IObservableValue, IDisposable
     {
-        public event EventHandler<ObservableValueChangedArgs> ValueChanged;
+        public event ObservableValueChangedEventHandler ValueChanged;
 
         public object Value { get { return observableValue.Value; } }
         public Type ValueType { get; private set; }
@@ -45,7 +45,7 @@ namespace System.Windows.Data
 
             if (propertyPath.IsEmpty)
             {
-                observableValue.Value = baseValue;
+                observableValue.BaseValue = baseValue;
                 ValueType = baseValue != null ? baseValue.GetType() : null;
             }
             else
@@ -67,7 +67,7 @@ namespace System.Windows.Data
             }
             else
             {
-                observableValue.Value = baseValue;
+                observableValue.BaseValue = baseValue;
                 ValueType = baseValue != null ? baseValue.GetType() : null;
             }
         }
@@ -105,13 +105,13 @@ namespace System.Windows.Data
             {
                 ValueType = delegateObserver.ValueType;
                 delegateObserver.SetBaseValue(baseValue);
-                delegateObserver.ValueChanged += (sender, e) => observableValue.Value = delegateObserver.Value;
-                observableValue.Value = delegateObserver.Value;
+                delegateObserver.ValueChanged += (sender, e) => observableValue.BaseValue = delegateObserver.Value;
+                observableValue.BaseValue = delegateObserver.Value;
             }
             else
             {
                 ValueType = null;
-                observableValue.Value = ObservableValue.UnsetValue;
+                observableValue.BaseValue = ObservableValue.UnsetValue;
             }
         }
 

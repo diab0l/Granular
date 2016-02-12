@@ -30,7 +30,7 @@ namespace System.Windows
     {
         private const int BaseValuePriorities = 12;
 
-        public event EventHandler<ObservableValueChangedArgs> ValueChanged;
+        public event ObservableValueChangedEventHandler ValueChanged;
 
         public object Value { get { return observableValue.Value; } }
 
@@ -167,7 +167,7 @@ namespace System.Windows
             SetValue();
         }
 
-        private void OnObservableValueChanged(object sender, ObservableValueChangedArgs e)
+        private void OnObservableValueChanged(object sender, ObservableValueChangedEventArgs e)
         {
             SetValue();
         }
@@ -191,7 +191,7 @@ namespace System.Windows
                 value = defaultValue;
             }
 
-            observableValue.Value = value;
+            observableValue.BaseValue = value;
         }
 
         // get the inner IObservableValue.Value
@@ -204,7 +204,7 @@ namespace System.Windows
 
     public class CoercedDependencyPropertyValueEntry : IDependencyPropertyValueEntry
     {
-        public event EventHandler<ObservableValueChangedArgs> ValueChanged;
+        public event ObservableValueChangedEventHandler ValueChanged;
 
         public object Value { get { return observableValue.Value; } }
 
@@ -230,7 +230,7 @@ namespace System.Windows
 
         public void CoerceValue()
         {
-            observableValue.Value = source.Value != ObservableValue.UnsetValue ? coerceValueCallback(dependencyObject, source.Value) : ObservableValue.UnsetValue;
+            observableValue.BaseValue = source.Value != ObservableValue.UnsetValue ? coerceValueCallback(dependencyObject, source.Value) : ObservableValue.UnsetValue;
         }
 
         public object GetBaseValue(bool flattened)
@@ -291,7 +291,7 @@ namespace System.Windows
 
     public class ReadOnlyDependencyPropertyValueEntry : IDependencyPropertyValueEntry
     {
-        public event EventHandler<ObservableValueChangedArgs> ValueChanged;
+        public event ObservableValueChangedEventHandler ValueChanged;
 
         public object Value { get { return source.Value; } }
 

@@ -7,12 +7,14 @@ using Granular.Extensions;
 
 namespace System.Windows.Data
 {
-    public class ObservableValueChangedArgs : EventArgs
+    public delegate void ObservableValueChangedEventHandler(object sender, ObservableValueChangedEventArgs e);
+
+    public class ObservableValueChangedEventArgs : EventArgs
     {
         public object NewValue { get; private set; }
         public object OldValue { get; private set; }
 
-        public ObservableValueChangedArgs(object oldValue, object newValue)
+        public ObservableValueChangedEventArgs(object oldValue, object newValue)
         {
             this.OldValue = oldValue;
             this.NewValue = newValue;
@@ -21,7 +23,7 @@ namespace System.Windows.Data
 
     public interface IObservableValue
     {
-        event EventHandler<ObservableValueChangedArgs> ValueChanged;
+        event ObservableValueChangedEventHandler ValueChanged;
         object Value { get; }
     }
 
@@ -45,36 +47,44 @@ namespace System.Windows.Data
     {
         public static readonly NamedObject UnsetValue = new NamedObject("ObservableValue.UnsetValue");
 
-        public event EventHandler<ObservableValueChangedArgs> ValueChanged;
+        public event ObservableValueChangedEventHandler ValueChanged;
+        public object Value { get; private set; }
 
-        private object value;
-        public object Value
+        private IObservableValue baseObservableValue;
+        private object baseValue;
+        public object BaseValue
         {
-            get { return value; }
+            get { return baseValue; }
             set
             {
-                if (Granular.Compatibility.EqualityComparer.Default.Equals(this.value, value))
+                if (baseValue == value)
                 {
                     return;
                 }
 
-                ObservableValueChangedArgs e = new ObservableValueChangedArgs(this.value, value);
-
-                IObservableValue oldObservableValue = this.value as IObservableValue;
-                if (oldObservableValue != null)
+                if (baseObservableValue != null)
                 {
-                    oldObservableValue.ValueChanged -= OnObservableValueChanged;
+                    baseObservableValue.ValueChanged -= OnBaseObservableValueChanged;
                 }
 
-                this.value = value;
+                baseValue = value;
+                baseObservableValue = value as IObservableValue;
 
-                IObservableValue newObservableValue = this.value as IObservableValue;
-                if (newObservableValue != null)
+                if (baseObservableValue != null)
                 {
-                    newObservableValue.ValueChanged += OnObservableValueChanged;
+                    baseObservableValue.ValueChanged += OnBaseObservableValueChanged;
                 }
 
-                ValueChanged.Raise(this, e);
+                object oldValue = Value;
+                object newValue = baseObservableValue != null ? baseObservableValue.Value : baseValue;
+
+                if (Granular.Compatibility.EqualityComparer.Default.Equals(oldValue, newValue))
+                {
+                    return;
+                }
+
+                Value = newValue;
+                ValueChanged.Raise(this, new ObservableValueChangedEventArgs(oldValue, newValue));
             }
         }
 
@@ -84,13 +94,14 @@ namespace System.Windows.Data
             //
         }
 
-        public ObservableValue(object value)
+        public ObservableValue(object baseValue)
         {
-            this.Value = value;
+            this.BaseValue = baseValue;
         }
 
-        private void OnObservableValueChanged(object sender, ObservableValueChangedArgs e)
+        private void OnBaseObservableValueChanged(object sender, ObservableValueChangedEventArgs e)
         {
+            Value = e.NewValue;
             ValueChanged.Raise(this, e);
         }
 
@@ -101,30 +112,14 @@ namespace System.Windows.Data
     }
 
     [DebuggerNonUserCode]
-    public class ReadOnlyObservableValue : IObservableValue
+    public static class ObservableValueChangedEventHandlerExtensions
     {
-        public event EventHandler<ObservableValueChangedArgs> ValueChanged;
-
-        public object Value { get { return source.Value; } }
-
-        private IObservableValue source;
-
-        public ReadOnlyObservableValue(IObservableValue source)
+        public static void Raise(this ObservableValueChangedEventHandler handler, object sender, ObservableValueChangedEventArgs e)
         {
-            this.source = source;
-            source.ValueChanged += (sender, e) => ValueChanged.Raise(this, e);
-        }
-    }
-
-    public class ConstantObservableValue : IObservableValue
-    {
-        public event EventHandler<ObservableValueChangedArgs> ValueChanged { add { } remove { } }
-
-        public object Value { get; private set; }
-
-        public ConstantObservableValue(object value)
-        {
-            this.Value = value;
+            if (handler != null)
+            {
+                handler(sender, e);
+            }
         }
     }
 }

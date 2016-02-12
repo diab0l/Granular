@@ -10,7 +10,7 @@ namespace System.Windows.Media.Animation
     // dependency property animated value, contains animation layers with clocks
     public class AnimationExpression : IExpression
     {
-        public event EventHandler<ObservableValueChangedArgs> ValueChanged;
+        public event ObservableValueChangedEventHandler ValueChanged;
         public object Value { get { return observableValue.Value; } }
 
         private AnimationLayerCollection layers;
@@ -54,7 +54,7 @@ namespace System.Windows.Media.Animation
 
         private void SetAnimationValue()
         {
-            observableValue.Value = layers.HasValue ? layers.GetValue(GetAnimationBaseValue()) : ObservableValue.UnsetValue;
+            observableValue.BaseValue = layers.HasValue ? layers.GetValue(GetAnimationBaseValue()) : ObservableValue.UnsetValue;
         }
 
         private object GetAnimationBaseValue()

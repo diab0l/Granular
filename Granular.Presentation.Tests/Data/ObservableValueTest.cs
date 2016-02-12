@@ -18,38 +18,51 @@ namespace Granular.Presentation.Tests.Data
             observableValue.ValueChanged += (sender, e) => valueChangedCount++;
 
             Assert.AreEqual(ObservableValue.UnsetValue, observableValue.Value);
+            Assert.IsTrue(ObservableValue.IsNullOrUnset(observableValue.Value));
 
-            observableValue.Value = "value1";
+            observableValue.BaseValue = "value1";
             Assert.AreEqual(1, valueChangedCount);
 
-            observableValue.Value = "value1";
+            observableValue.BaseValue = "value1";
             Assert.AreEqual(1, valueChangedCount);
 
-            observableValue.Value = "value1a";
+            observableValue.BaseValue = "value1a";
             Assert.AreEqual(2, valueChangedCount);
 
-            observableValue.Value = "value2";
+            observableValue.BaseValue = "value2";
             Assert.AreEqual(3, valueChangedCount);
+
+            Assert.IsFalse(ObservableValue.IsNullOrUnset(observableValue.Value));
         }
 
         [TestMethod]
-        public void ReadOnlyObservableValueChangedTest()
+        public void ObservableValueBaseChangedTest()
         {
             int valueChangedCount = 0;
             ObservableValue observableValue = new ObservableValue();
-            ReadOnlyObservableValue readOnlyObservableValue = new ReadOnlyObservableValue(observableValue);
-            readOnlyObservableValue.ValueChanged += (sender, e) => valueChangedCount++;
+            observableValue.ValueChanged += (sender, e) => valueChangedCount++;
 
-            Assert.AreEqual(ObservableValue.UnsetValue, readOnlyObservableValue.Value);
+            Assert.AreEqual(ObservableValue.UnsetValue, observableValue.Value);
+            Assert.IsTrue(ObservableValue.IsNullOrUnset(observableValue.Value));
 
-            observableValue.Value = "value1";
+            ObservableValue baseObservableValue = new ObservableValue();
+            observableValue.BaseValue = baseObservableValue;
+            Assert.AreEqual(0, valueChangedCount);
+
+            baseObservableValue.BaseValue = "value1";
             Assert.AreEqual(1, valueChangedCount);
 
-            observableValue.Value = "value1";
+            baseObservableValue.BaseValue = "value1";
             Assert.AreEqual(1, valueChangedCount);
 
-            observableValue.Value = "value2";
+            baseObservableValue.BaseValue = "value1a";
             Assert.AreEqual(2, valueChangedCount);
+
+            observableValue.BaseValue = "value2";
+            Assert.AreEqual(3, valueChangedCount);
+
+            baseObservableValue.BaseValue = "value1b";
+            Assert.AreEqual(3, valueChangedCount);
         }
     }
 }

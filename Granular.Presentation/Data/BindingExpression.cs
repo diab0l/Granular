@@ -42,7 +42,7 @@ namespace System.Windows.Data
     {
         public static readonly NamedObject DisconnectedItem = new NamedObject("BindingExpression.DisconnectedItem");
 
-        public event EventHandler<ObservableValueChangedArgs> ValueChanged;
+        public event ObservableValueChangedEventHandler ValueChanged;
 
         public object Value { get { return targetValue.Value; } }
 
@@ -161,7 +161,7 @@ namespace System.Windows.Data
 
         public bool SetValue(object value)
         {
-            targetValue.Value = value;
+            targetValue.BaseValue = value;
             return true;
         }
 
@@ -200,7 +200,7 @@ namespace System.Windows.Data
                 value = Converter.Convert(value, TargetProperty.PropertyType, ConverterParameter);
             }
 
-            targetValue.Value = value;
+            targetValue.BaseValue = value;
 
             Status = value != ObservableValue.UnsetValue ? BindingStatus.Active : BindingStatus.UpdateTargetError;
         }
@@ -232,7 +232,7 @@ namespace System.Windows.Data
             }
         }
 
-        private void OnTargetValueChanged(object sender, ObservableValueChangedArgs e)
+        private void OnTargetValueChanged(object sender, ObservableValueChangedEventArgs e)
         {
             if (UpdateSourceTrigger == UpdateSourceTrigger.Default && isSourceUpdateMode)
             {

@@ -66,7 +66,7 @@ namespace Granular.Presentation.Tests
             Assert.AreEqual(observableValue, dependencyPropertyValue.GetBaseValue(false));
             Assert.AreEqual(4, valueChangedCount);
 
-            observableValue.Value = "value3a";
+            observableValue.BaseValue = "value3a";
             Assert.AreEqual(observableValue, dependencyPropertyValue.GetBaseValue(false));
             Assert.AreEqual(5, valueChangedCount);
 
@@ -74,7 +74,7 @@ namespace Granular.Presentation.Tests
             Assert.AreEqual("value4", dependencyPropertyValue.GetBaseValue(false));
             Assert.AreEqual(6, valueChangedCount);
 
-            observableValue.Value = "value3b";
+            observableValue.BaseValue = "value3b";
             Assert.AreEqual("value4", dependencyPropertyValue.GetBaseValue(false));
             Assert.AreEqual(6, valueChangedCount);
         }

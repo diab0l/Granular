@@ -32,7 +32,7 @@ namespace System.Windows
 
     public class ResourceReferenceExpression : IExpression, IDisposable
     {
-        public event EventHandler<ObservableValueChangedArgs> ValueChanged;
+        public event ObservableValueChangedEventHandler ValueChanged;
 
         public object Value { get { return observableValue.Value; } }
 
@@ -50,14 +50,14 @@ namespace System.Windows
 
             observableValue = new ObservableValue();
             observableValue.ValueChanged += (sender, e) => ValueChanged.Raise(this, e);
-            observableValue.Value = GetResourceValue();
+            observableValue.BaseValue = GetResourceValue();
 
             resourceContainer.ResourcesChanged += OnResourcesChanged;
         }
 
         public void Dispose()
         {
-            observableValue.Value = ObservableValue.UnsetValue;
+            observableValue.BaseValue = ObservableValue.UnsetValue;
             resourceContainer.ResourcesChanged -= OnResourcesChanged;
         }
 
@@ -65,7 +65,7 @@ namespace System.Windows
         {
             if (e.Contains(resourceKey))
             {
-                observableValue.Value = GetResourceValue();
+                observableValue.BaseValue = GetResourceValue();
             }
         }
 
