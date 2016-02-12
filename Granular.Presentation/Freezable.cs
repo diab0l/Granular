@@ -24,13 +24,6 @@ namespace System.Windows
 
         public bool IsFrozen { get; private set; }
 
-        public static readonly DependencyProperty DataContextProperty = FrameworkElement.DataContextProperty.AddOwner(typeof(Freezable));
-        public object DataContext
-        {
-            get { return (object)GetValue(DataContextProperty); }
-            set { SetValue(DataContextProperty, value); }
-        }
-
         private IResourceContainer parentResourceContainer;
         private IResourceContainer ParentResourceContainer
         {
