@@ -10,38 +10,10 @@ namespace Granular.Collections
     {
         private static readonly TValue DefaultValue = default(TValue);
 
-        private class IndexedKey
-        {
-            public TKey Key { get; private set; }
-            public int Index { get; private set; }
+        public int Count { get { return items.Count; } }
 
-            public IndexedKey(TKey key, int index)
-            {
-                this.Key = key;
-                this.Index = index;
-            }
-        }
-
-        private class IndexedKeyComparer : IComparer<IndexedKey>
-        {
-            private IComparer<TKey> comparer;
-
-            public IndexedKeyComparer(IComparer<TKey> comparer)
-            {
-                this.comparer = comparer;
-            }
-
-            public int Compare(IndexedKey x, IndexedKey y)
-            {
-                int result = comparer.Compare(x.Key, y.Key);
-                return result != 0 ? result : Comparer<int>.Default.Compare(x.Index, y.Index);
-            }
-        }
-
-        public int Count { get { return list.Count; } }
-
-        private SortedList<IndexedKey, TValue> list;
-        private int currentIndex;
+        private IComparer<TKey> comparer;
+        private List<KeyValuePair<TKey, TValue>> items;
 
         public PriorityQueue() :
             this(Compatibility.Comparer<TKey>.Default)
@@ -51,12 +23,32 @@ namespace Granular.Collections
 
         public PriorityQueue(IComparer<TKey> comparer)
         {
-            this.list = new SortedList<IndexedKey, TValue>(new IndexedKeyComparer(comparer));
+            this.comparer = comparer;
+            this.items = new List<KeyValuePair<TKey, TValue>>();
         }
 
         public void Enqueue(TKey key, TValue value)
         {
-            list.Add(new IndexedKey(key, currentIndex++), value);
+            items.Insert(GetKeyIndex(key, 0, items.Count), new KeyValuePair<TKey, TValue>(key, value));
+        }
+
+        private int GetKeyIndex(TKey key, int startIndex, int endIndex)
+        {
+            if (endIndex - startIndex == 0)
+            {
+                return endIndex;
+            }
+
+            if (endIndex - startIndex == 1)
+            {
+                return comparer.Compare(key, items[startIndex].Key) > 0 ? startIndex : endIndex;
+            }
+
+            int middleIndex = (startIndex + endIndex) / 2;
+
+            return comparer.Compare(key, items[middleIndex].Key) > 0 ?
+                GetKeyIndex(key, startIndex, middleIndex) :
+                GetKeyIndex(key, middleIndex, endIndex);
         }
 
         public TValue Dequeue()
@@ -75,7 +67,7 @@ namespace Granular.Collections
         {
             if (TryPeek(out value))
             {
-                list.RemoveAt(0);
+                items.RemoveAt(0);
                 return true;
             }
 
@@ -97,9 +89,9 @@ namespace Granular.Collections
         [System.Runtime.CompilerServices.Reflectable(false)]
         public bool TryPeek(out TValue value)
         {
-            if (list.Count > 0)
+            if (items.Count > 0)
             {
-                value = list.GetValues().First();
+                value = items[0].Value;
                 return true;
             }
 
@@ -109,13 +101,13 @@ namespace Granular.Collections
 
         public IEnumerator<KeyValuePair<TKey, TValue>> GetEnumerator()
         {
-            return list.Select(pair => new KeyValuePair<TKey, TValue>(pair.Key.Key, pair.Value)).GetEnumerator();
+            return items.GetEnumerator();
         }
 
         [System.Runtime.CompilerServices.Reflectable(false)]
         IEnumerator IEnumerable.GetEnumerator()
         {
-            return GetEnumerator();
+            return items.GetEnumerator();
         }
     }
 }

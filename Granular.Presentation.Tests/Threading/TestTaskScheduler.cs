@@ -34,6 +34,21 @@ namespace Granular.Presentation.Tests.Threading
             }
         }
 
+        private class TimeSpanComparer : IComparer<TimeSpan>
+        {
+            public static readonly TimeSpanComparer Default = new TimeSpanComparer();
+
+            private TimeSpanComparer()
+            {
+                //
+            }
+
+            public int Compare(TimeSpan x, TimeSpan y)
+            {
+                return x.Ticks == y.Ticks ? 0 : (x.Ticks > y.Ticks ? -1 : 1);
+            }
+        }
+
         public TimeSpan CurrentTime { get; private set; }
 
         private PriorityQueue<TimeSpan, CancellableAction> queue;
@@ -42,7 +57,7 @@ namespace Granular.Presentation.Tests.Threading
 
         public TestTaskScheduler()
         {
-            this.queue = new PriorityQueue<TimeSpan, CancellableAction>();
+            this.queue = new PriorityQueue<TimeSpan, CancellableAction>(TimeSpanComparer.Default);
         }
 
         public IDisposable ScheduleTask(TimeSpan timeSpan, Action action)
