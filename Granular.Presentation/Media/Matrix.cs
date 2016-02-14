@@ -19,9 +19,23 @@ namespace System.Windows.Media
         public double OffsetX { get; private set; }
         public double OffsetY { get; private set; }
 
-        public bool IsIdentity { get { return M11 == 1 && M12 == 0 && M21 == 0 && M22 == 1 && OffsetX == 0 && OffsetY == 0; } }
+        public bool IsIdentity { get { return ReferenceEquals(this, Identity) || M11 == 1 && M12 == 0 && M21 == 0 && M22 == 1 && OffsetX == 0 && OffsetY == 0; } }
         public bool IsTranslation { get { return M11 == 1 && M12 == 0 && M21 == 0 && M22 == 1; } }
         public bool IsScaling { get { return M12 == 0 && M21 == 0 && OffsetX == 0 && OffsetY == 0; } }
+
+        private Matrix inverse;
+        public Matrix Inverse
+        {
+            get
+            {
+                if (inverse == null)
+                {
+                    inverse = GetInverseMatrix();
+                }
+
+                return inverse;
+            }
+        }
 
         // (m11 m12 0)
         // (m21 m22 0)
@@ -81,6 +95,13 @@ namespace System.Windows.Media
             return this.M11.IsClose(matrix.M11) && this.M12.IsClose(matrix.M12) &&
                 this.M21.IsClose(matrix.M21) && this.M22.IsClose(matrix.M22) &&
                 this.OffsetX.IsClose(matrix.OffsetX) && this.OffsetY.IsClose(matrix.OffsetY);
+        }
+
+        private Matrix GetInverseMatrix()
+        {
+            double determinant = M11 * M22 - M12 * M21;
+            return new Matrix(M22 / determinant, -M12 / determinant, -M21 / determinant, M11 / determinant,
+                              (M21 * OffsetY - M22 * OffsetX) / determinant, -(M11 * OffsetY - M12 * OffsetX) / determinant);
         }
 
         public static bool operator ==(Matrix matrix1, Matrix matrix2)
