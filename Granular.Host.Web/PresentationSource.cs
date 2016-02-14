@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Windows;
 using System.Windows.Input;
+using System.Windows.Threading;
 using Granular.Host.Render;
 
 namespace Granular.Host
@@ -115,7 +116,7 @@ namespace Granular.Host
 
             Key key = converter.ConvertBackKey(keyboardEvent.KeyCode, keyboardEvent.Location);
 
-            keyDownHandled = KeyboardDevice.ProcessRawEvent(new RawKeyboardEventArgs(key, KeyStates.Down, keyboardEvent.Repeat, GetTimestamp()));
+            keyDownHandled = ProcessKeyboardEvent(new RawKeyboardEventArgs(key, KeyStates.Down, keyboardEvent.Repeat, GetTimestamp()));
 
             if (keyDownHandled)
             {
@@ -129,7 +130,7 @@ namespace Granular.Host
 
             Key key = converter.ConvertBackKey(keyboardEvent.KeyCode, keyboardEvent.Location);
 
-            keyUpHandled = KeyboardDevice.ProcessRawEvent(new RawKeyboardEventArgs(key, KeyStates.None, keyboardEvent.Repeat, GetTimestamp()));
+            keyUpHandled = ProcessKeyboardEvent(new RawKeyboardEventArgs(key, KeyStates.None, keyboardEvent.Repeat, GetTimestamp()));
 
             if (keyDownHandled || keyUpHandled)
             {
@@ -152,7 +153,7 @@ namespace Granular.Host
             Point position = new Point(mouseEvent.PageX, mouseEvent.PageY);
             MouseButton button = converter.ConvertBackMouseButton(mouseEvent.Button);
 
-            mouseDownHandled = MouseDevice.ProcessRawEvent(new RawMouseButtonEventArgs(button, MouseButtonState.Pressed, position, GetTimestamp()));
+            mouseDownHandled = ProcessMouseEvent(new RawMouseButtonEventArgs(button, MouseButtonState.Pressed, position, GetTimestamp()));
 
             if (mouseDownHandled || MouseDevice.CaptureTarget != null)
             {
@@ -167,7 +168,7 @@ namespace Granular.Host
             Point position = new Point(mouseEvent.PageX, mouseEvent.PageY);
             MouseButton button = converter.ConvertBackMouseButton(mouseEvent.Button);
 
-            mouseUpHandled = MouseDevice.ProcessRawEvent(new RawMouseButtonEventArgs(button, MouseButtonState.Released, position, GetTimestamp()));
+            mouseUpHandled = ProcessMouseEvent(new RawMouseButtonEventArgs(button, MouseButtonState.Released, position, GetTimestamp()));
 
             if (mouseDownHandled || mouseMoveHandled || mouseUpHandled || MouseDevice.CaptureTarget != null)
             {
@@ -182,7 +183,7 @@ namespace Granular.Host
             Point position = new Point(wheelEvent.PageX, wheelEvent.PageY);
             int delta = wheelEvent.DeltaY > 0 ? -100 : 100;
 
-            if (MouseDevice.ProcessRawEvent(new RawMouseWheelEventArgs(delta, position, GetTimestamp())))
+            if (ProcessMouseEvent(new RawMouseWheelEventArgs(delta, position, GetTimestamp())))
             {
                 e.PreventDefault();
             }
@@ -199,7 +200,7 @@ namespace Granular.Host
 
             Point position = new Point(mouseEvent.PageX, mouseEvent.PageY);
 
-            mouseMoveHandled = MouseDevice.ProcessRawEvent(new RawMouseEventArgs(position, GetTimestamp()));
+            mouseMoveHandled = ProcessMouseEvent(new RawMouseEventArgs(position, GetTimestamp()));
 
             if (mouseDownHandled || mouseMoveHandled || MouseDevice.CaptureTarget != null)
             {
@@ -223,6 +224,16 @@ namespace Granular.Host
         public int GetTimestamp()
         {
             return 0;//(int)(DateTime.Now.GetTime());
+        }
+
+        private bool ProcessKeyboardEvent(RawKeyboardEventArgs keyboardEventArgs)
+        {
+            return Dispatcher.CurrentDispatcher.Invoke(() => KeyboardDevice.ProcessRawEvent(keyboardEventArgs), DispatcherPriority.Input);
+        }
+
+        private bool ProcessMouseEvent(RawMouseEventArgs mouseEventArgs)
+        {
+            return Dispatcher.CurrentDispatcher.Invoke(() => MouseDevice.ProcessRawEvent(mouseEventArgs), DispatcherPriority.Input);
         }
     }
 }

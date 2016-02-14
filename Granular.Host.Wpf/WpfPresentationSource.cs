@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Windows;
 using System.Windows.Input;
+using System.Windows.Threading;
 using Granular.Host.Wpf.Render;
 
 namespace Granular.Host.Wpf
@@ -73,7 +74,7 @@ namespace Granular.Host.Wpf
             container.PreviewMouseMove += OnContainerMouseMove;
             container.PreviewMouseDown += OnContainerMouseDown;
             container.PreviewMouseUp += OnContainerMouseUp;
-            container.PreviewMouseWheel += (sender, e) => e.Handled = MouseDevice.ProcessRawEvent(new RawMouseWheelEventArgs(e.Delta, converter.ConvertBack(e.GetPosition(container)), GetTimestamp()));
+            container.PreviewMouseWheel += (sender, e) => e.Handled = ProcessMouseEvent(new RawMouseWheelEventArgs(e.Delta, converter.ConvertBack(e.GetPosition(container)), GetTimestamp()));
 
             MouseDevice.CursorChanged += (sender, e) => container.Cursor = converter.Convert(MouseDevice.Cursor);
             container.Cursor = converter.Convert(MouseDevice.Cursor);
@@ -82,8 +83,8 @@ namespace Granular.Host.Wpf
             window.Activated += (sender, e) => MouseDevice.Activate();
             window.Deactivated += (sender, e) => MouseDevice.Deactivate();
             window.SizeChanged += (sender, e) => SetRootElementSize();
-            window.PreviewKeyDown += (sender, e) => e.Handled = KeyboardDevice.ProcessRawEvent(new RawKeyboardEventArgs(converter.ConvertBack(e.Key), converter.ConvertBack(e.KeyStates), e.IsRepeat, GetTimestamp()));
-            window.PreviewKeyUp += (sender, e) => e.Handled = KeyboardDevice.ProcessRawEvent(new RawKeyboardEventArgs(converter.ConvertBack(e.Key), converter.ConvertBack(e.KeyStates), e.IsRepeat, GetTimestamp()));
+            window.PreviewKeyDown += (sender, e) => e.Handled = ProcessKeyboardEvent(new RawKeyboardEventArgs(converter.ConvertBack(e.Key), converter.ConvertBack(e.KeyStates), e.IsRepeat, GetTimestamp()));
+            window.PreviewKeyUp += (sender, e) => e.Handled = ProcessKeyboardEvent(new RawKeyboardEventArgs(converter.ConvertBack(e.Key), converter.ConvertBack(e.KeyStates), e.IsRepeat, GetTimestamp()));
             window.Show();
 
             container.Children.Add(((IWpfRenderElement)rootElement.GetRenderElement(WpfRenderElementFactory.Default)).WpfElement);
@@ -102,7 +103,7 @@ namespace Granular.Host.Wpf
         private void OnContainerMouseDown(object sender, wpf::System.Windows.Input.MouseButtonEventArgs e)
         {
             e.MouseDevice.Capture(container);
-            e.Handled = MouseDevice.ProcessRawEvent(new RawMouseButtonEventArgs(converter.ConvertBack(e.ChangedButton), converter.ConvertBack(e.ButtonState), converter.ConvertBack(e.GetPosition(container)), GetTimestamp()));
+            e.Handled = ProcessMouseEvent(new RawMouseButtonEventArgs(converter.ConvertBack(e.ChangedButton), converter.ConvertBack(e.ButtonState), converter.ConvertBack(e.GetPosition(container)), GetTimestamp()));
 
             if (!e.Handled)
             {
@@ -112,7 +113,7 @@ namespace Granular.Host.Wpf
 
         private void OnContainerMouseUp(object sender, wpf::System.Windows.Input.MouseButtonEventArgs e)
         {
-            e.Handled = MouseDevice.ProcessRawEvent(new RawMouseButtonEventArgs(converter.ConvertBack(e.ChangedButton), converter.ConvertBack(e.ButtonState), converter.ConvertBack(e.GetPosition(container)), GetTimestamp()));
+            e.Handled = ProcessMouseEvent(new RawMouseButtonEventArgs(converter.ConvertBack(e.ChangedButton), converter.ConvertBack(e.ButtonState), converter.ConvertBack(e.GetPosition(container)), GetTimestamp()));
 
             if (e.MouseDevice.Captured == container)
             {
@@ -122,7 +123,7 @@ namespace Granular.Host.Wpf
 
         private void OnContainerMouseMove(object sender, wpf::System.Windows.Input.MouseEventArgs e)
         {
-            e.Handled = MouseDevice.ProcessRawEvent(new RawMouseEventArgs(converter.ConvertBack(e.GetPosition(container)), GetTimestamp()));
+            e.Handled = ProcessMouseEvent(new RawMouseEventArgs(converter.ConvertBack(e.GetPosition(container)), GetTimestamp()));
         }
 
         public IInputElement HitTest(Point position)
@@ -133,6 +134,16 @@ namespace Granular.Host.Wpf
         public int GetTimestamp()
         {
             return (int)(DateTime.Now.Ticks & 0xffffffff);
+        }
+
+        private bool ProcessKeyboardEvent(RawKeyboardEventArgs keyboardEventArgs)
+        {
+            return Dispatcher.CurrentDispatcher.Invoke(() => KeyboardDevice.ProcessRawEvent(keyboardEventArgs), DispatcherPriority.Input);
+        }
+
+        private bool ProcessMouseEvent(RawMouseEventArgs mouseEventArgs)
+        {
+            return Dispatcher.CurrentDispatcher.Invoke(() => MouseDevice.ProcessRawEvent(mouseEventArgs), DispatcherPriority.Input);
         }
     }
 }
