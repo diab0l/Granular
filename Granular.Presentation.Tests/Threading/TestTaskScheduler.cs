@@ -93,13 +93,13 @@ namespace Granular.Presentation.Tests.Threading
             while (queue.Count > 0 && queue.First().Key <= time)
             {
                 CurrentTime = queue.First().Key;
-                DequeueDueOperations();
+                ProcessDueOperations();
             }
 
             CurrentTime = time;
         }
 
-        private void DequeueDueOperations()
+        public void ProcessDueOperations()
         {
             isProcessing = true;
 

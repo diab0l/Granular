@@ -99,7 +99,7 @@ namespace System.Windows.Threading
 
             scheduledTask = scheduler.ScheduleTask(Interval, () =>
             {
-                dispatcher.BeginInvoke(Priority, () => Tick.Raise(this));
+                dispatcher.InvokeAsync(() => Tick.Raise(this), Priority);
                 ScheduleTask();
             });
         }

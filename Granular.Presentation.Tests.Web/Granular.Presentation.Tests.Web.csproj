@@ -262,6 +262,9 @@
     <Compile Include="..\Granular.Presentation.Tests\Threading\DispatcherOperationTest.cs">
       <Link>Threading\DispatcherOperationTest.cs</Link>
     </Compile>
+    <Compile Include="..\Granular.Presentation.Tests\Threading\DispatcherTest.cs">
+      <Link>Threading\DispatcherTest.cs</Link>
+    </Compile>
     <Compile Include="..\Granular.Presentation.Tests\Threading\DispatcherTimerTest.cs">
       <Link>Threading\DispatcherTimerTest.cs</Link>
     </Compile>

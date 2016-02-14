@@ -127,6 +127,7 @@
     <Compile Include="Input\TestPresentationSource.cs" />
     <Compile Include="TestApplicationHost.cs" />
     <Compile Include="Threading\DispatcherOperationTest.cs" />
+    <Compile Include="Threading\DispatcherTest.cs" />
     <Compile Include="Threading\DispatcherTimerTest.cs" />
     <Compile Include="Threading\TestSchedulerTest.cs" />
     <Compile Include="Threading\TestTaskScheduler.cs" />

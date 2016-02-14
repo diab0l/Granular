@@ -63,7 +63,7 @@ namespace Granular.Presentation.Tests.Collections
             CustomComparer<int> comparer = new CustomComparer<int>((a, b) => Comparer<int>.Default.Compare(a / 10, b / 10));
             PriorityQueue<int, int> queue = new PriorityQueue<int, int>(comparer);
             List<int> list = new List<int>();
-            Random random = new Random();
+            Random random = new Random(1021);
 
             for (int i = 0; i < 100; i++)
             {

@@ -11,16 +11,16 @@ namespace System.Windows.Threading
     {
         Invalid = -1,
         Inactive = 0,
-        SystemIdle,
-        ApplicationIdle,
-        ContextIdle,
-        Background,
-        Input,
-        Loaded,
-        Render,
-        DataBind,
-        Normal,
-        Send
+        SystemIdle = 1,
+        ApplicationIdle = 2,
+        ContextIdle = 3,
+        Background = 4,
+        Input = 5,
+        Loaded = 6,
+        Render = 7,
+        DataBind = 8,
+        Normal = 9,
+        Send = 10,
     }
 
     // ranges:
@@ -34,46 +34,62 @@ namespace System.Windows.Threading
 
         private PriorityQueue<DispatcherPriority, DispatcherOperation> queue;
         private int disableProcessingRequests;
+        private bool isProcessQueueScheduled;
 
         public Dispatcher()
         {
             queue = new PriorityQueue<DispatcherPriority, DispatcherOperation>();
         }
 
-        public DispatcherOperation BeginInvoke(Action action)
+        public DispatcherOperation InvokeAsync(Action callback, DispatcherPriority priority = DispatcherPriority.Normal)
         {
-            return BeginInvoke(DispatcherPriority.Background, action);
+            DispatcherOperation dispatcherOperation = new DispatcherOperation(callback, priority);
+            InvokeAsync(dispatcherOperation);
+            return dispatcherOperation;
         }
 
-        public DispatcherOperation BeginInvoke(Func<object> action)
+        public DispatcherOperation<TResult> InvokeAsync<TResult>(Func<TResult> callback, DispatcherPriority priority = DispatcherPriority.Normal)
         {
-            return BeginInvoke(DispatcherPriority.Background, action);
+            DispatcherOperation<TResult> dispatcherOperation = new DispatcherOperation<TResult>(callback, priority);
+            InvokeAsync(dispatcherOperation);
+            return dispatcherOperation;
         }
 
-        public DispatcherOperation BeginInvoke(DispatcherPriority priority, Func<object> action)
-        {
-            DispatcherOperation operation = new DispatcherOperation(priority, action);
-            BeginInvoke(operation);
-            return operation;
-        }
-
-        public DispatcherOperation BeginInvoke(DispatcherPriority priority, Action action)
-        {
-            DispatcherOperation operation = new DispatcherOperation(priority, action);
-            BeginInvoke(operation);
-            return operation;
-        }
-
-        public void BeginInvoke(DispatcherOperation operation)
+        private void InvokeAsync(DispatcherOperation operation)
         {
             queue.Enqueue(operation.Priority, operation);
-            ProcessQueue();
+            ProcessQueueAsync();
         }
 
-        public void ProcessQueue()
+        private void ProcessQueueAsync()
         {
-            DispatcherOperation operation;
+            if (isProcessQueueScheduled)
+            {
+                return;
+            }
 
+            isProcessQueueScheduled = true;
+            ApplicationHost.Current.TaskScheduler.ScheduleTask(() =>
+            {
+                isProcessQueueScheduled = false;
+
+                DispatcherOperation operation;
+                if (!TryDequeue(out operation))
+                {
+                    return;
+                }
+
+                if (operation.Status == DispatcherOperationStatus.Pending)
+                {
+                    operation.Invoke();
+                    ProcessQueueAsync();
+                }
+            });
+        }
+
+        [System.Runtime.CompilerServices.Reflectable(false)]
+        private bool TryDequeue(out DispatcherOperation operation)
+        {
             while (disableProcessingRequests == 0 && queue.TryPeek(out operation) && operation.Priority != DispatcherPriority.Inactive)
             {
                 queue.Dequeue();
@@ -83,26 +99,25 @@ namespace System.Windows.Threading
                     continue;
                 }
 
-                IDisposable token = ApplicationHost.Current.TaskScheduler.ScheduleTask(operation.Invoke);
-
-                if (operation.Status == DispatcherOperationStatus.Pending) // "send" schedulers may invoke the operation immediately
-                {
-                    operation.Completed += (sender, e) => ProcessQueue();
-                    operation.Aborted += (sender, e) =>
-                    {
-                        token.Dispose();
-                        ProcessQueue();
-                    };
-
-                    return;
-                }
+                return true;
             }
+
+            operation = null;
+            return false;
         }
 
         public IDisposable DisableProcessing()
         {
             disableProcessingRequests++;
-            return new Disposable(() => { disableProcessingRequests--; ProcessQueue(); });
+            return new Disposable(() =>
+            {
+                disableProcessingRequests--;
+
+                if (disableProcessingRequests == 0)
+                {
+                    ProcessQueueAsync();
+                }
+            });
         }
     }
 }

@@ -20,7 +20,7 @@ namespace Granular.Host.Wpf
         {
             if (timeSpan == TimeSpan.Zero)
             {
-                wpf::System.Windows.Threading.Dispatcher.CurrentDispatcher.BeginInvoke(action);
+                wpf::System.Windows.Threading.Dispatcher.CurrentDispatcher.InvokeAsync(action);
                 return Disposable.Empty;
             }
 

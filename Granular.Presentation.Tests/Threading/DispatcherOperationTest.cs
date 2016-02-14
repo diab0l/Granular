@@ -15,7 +15,7 @@ namespace Granular.Presentation.Tests.Threading
         {
             int value = 0;
 
-            DispatcherOperation operation0 = new DispatcherOperation(() => value = 1);
+            DispatcherOperation operation0 = new DispatcherOperation(() => value = 1, DispatcherPriority.Normal);
             operation0.Invoke();
             Assert.AreEqual(1, value);
         }
@@ -23,7 +23,7 @@ namespace Granular.Presentation.Tests.Threading
         [TestMethod]
         public void InvokeResultTest()
         {
-            DispatcherOperation operation0 = new DispatcherOperation(() => "operation-result");
+            DispatcherOperation operation0 = new DispatcherOperation(() => "operation-result", DispatcherPriority.Normal);
             operation0.Invoke();
             Assert.AreEqual("operation-result", operation0.Result);
         }

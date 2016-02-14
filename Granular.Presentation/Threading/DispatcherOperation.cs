@@ -25,28 +25,16 @@ namespace System.Windows.Threading
 
         private Func<object> action;
 
-        public DispatcherOperation(Action action) :
-            this(DispatcherPriority.Background, action)
+        public DispatcherOperation(Action action, DispatcherPriority priority) :
+            this(() => { action(); return null; }, priority)
         {
             //
         }
 
-        public DispatcherOperation(Func<object> action) :
-            this(DispatcherPriority.Background, action)
+        public DispatcherOperation(Func<object> action, DispatcherPriority priority)
         {
-            //
-        }
-
-        public DispatcherOperation(DispatcherPriority priority, Action action) :
-            this(priority, () => { action(); return null; })
-        {
-            //
-        }
-
-        public DispatcherOperation(DispatcherPriority priority, Func<object> action)
-        {
-            this.Priority = priority;
             this.action = action;
+            this.Priority = priority;
         }
 
         public void Abort()
@@ -71,6 +59,17 @@ namespace System.Windows.Threading
             Result = action();
             Status = DispatcherOperationStatus.Completed;
             Completed.Raise(this);
+        }
+    }
+
+    public class DispatcherOperation<TResult> : DispatcherOperation
+    {
+        public new TResult Result { get { return (TResult)base.Result; } }
+
+        public DispatcherOperation(Func<TResult> action, DispatcherPriority priority) :
+            base(() => action(), priority)
+        {
+            //
         }
     }
 }

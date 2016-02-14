@@ -21,31 +21,25 @@ namespace Granular.Presentation.Tests.Threading
             timer.Tick += (sender, e) => ticksCount++;
 
             scheduler.AdvanceBy(TimeSpan.FromMilliseconds(10));
-            Dispatcher.CurrentDispatcher.ProcessQueue();
             Assert.AreEqual(0, ticksCount);
 
             timer.Start();
 
             scheduler.AdvanceBy(TimeSpan.FromMilliseconds(10));
-            Dispatcher.CurrentDispatcher.ProcessQueue();
             Assert.AreEqual(1, ticksCount);
 
             scheduler.AdvanceBy(TimeSpan.FromMilliseconds(5));
-            Dispatcher.CurrentDispatcher.ProcessQueue();
             Assert.AreEqual(1, ticksCount);
 
             scheduler.AdvanceBy(TimeSpan.FromMilliseconds(5));
-            Dispatcher.CurrentDispatcher.ProcessQueue();
             Assert.AreEqual(2, ticksCount);
 
             scheduler.AdvanceBy(TimeSpan.FromMilliseconds(20));
-            Dispatcher.CurrentDispatcher.ProcessQueue();
             Assert.AreEqual(4, ticksCount);
 
             timer.Stop();
 
             scheduler.AdvanceBy(TimeSpan.FromMilliseconds(10));
-            Dispatcher.CurrentDispatcher.ProcessQueue();
             Assert.AreEqual(4, ticksCount);
         }
     }
