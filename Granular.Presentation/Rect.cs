@@ -209,6 +209,17 @@ namespace System.Windows
             return new Point(rect.Right, rect.Bottom);
         }
 
+        public static IEnumerable<Point> GetCorners(this Rect rect)
+        {
+            return new[]
+            {
+                rect.GetTopLeft(),
+                rect.GetTopRight(),
+                rect.GetBottomLeft(),
+                rect.GetBottomRight()
+            };
+        }
+
         public static Rect AddOffset(this Rect rect, Point offset)
         {
             if (offset == Point.Zero)

@@ -191,4 +191,106 @@ namespace System.Windows.Media
             return Matrix.Parse(value.ToString().Trim());
         }
     }
+
+    public static class MatrixExtensions
+    {
+        public static bool IsNullOrIdentity(this Matrix matrix)
+        {
+            return ReferenceEquals(matrix, null) || matrix.IsIdentity;
+        }
+
+        public static Rect GetContainingRect(this Matrix matrix, Rect rect)
+        {
+            IEnumerable<Point> vertices = rect.GetCorners().Select(corner => corner * matrix).ToArray();
+
+            double left = vertices.Select(vertex => vertex.X).Min();
+            double right = vertices.Select(vertex => vertex.X).Max();
+            double top = vertices.Select(vertex => vertex.Y).Min();
+            double bottom = vertices.Select(vertex => vertex.Y).Max();
+
+            return new Rect(left, top, right - left, bottom - top);
+        }
+
+        public static Rect GetApproximatedRect(this Matrix matrix, Size size)
+        {
+            return matrix.GetApproximatedRect(new Rect(size));
+        }
+
+        public static Rect GetApproximatedRect(this Matrix matrix, Rect rect)
+        {
+            IEnumerable<Point> vertices = rect.GetCorners().Select(corner => corner * matrix).ToArray();
+
+            double[] verticesX = vertices.Select(vertex => vertex.X).OrderBy(x => x).ToArray();
+            double[] verticesY = vertices.Select(vertex => vertex.Y).OrderBy(y => y).ToArray();
+
+            double left = (verticesX[0] + verticesX[1]) / 2;
+            double right = (verticesX[2] + verticesX[3]) / 2;
+            double top = (verticesY[0] + verticesY[1]) / 2;
+            double bottom = (verticesY[2] + verticesY[3]) / 2;
+
+            return new Rect(left, top, right - left, bottom - top);
+        }
+
+        public static Size GetContainingSize(this Matrix matrix, Size size)
+        {
+            return matrix.GetContainingRect(new Rect(size)).Size;
+        }
+
+        public static Size GetContainedSize(this Matrix matrix, Size containerSize)
+        {
+            double w = containerSize.Width;
+            double h = containerSize.Height;
+
+            // Each width unit of the contained size, will add "a" units to the transformed width and "b" units to the transformed height
+            Point transformedWidth = (new Point(1, 0) * matrix).Abs();
+            double a = transformedWidth.X;
+            double b = transformedWidth.Y;
+
+            // Each height unit of the contained size, will add "c" units to the transformed width and "d" units to the transformed height
+            Point transformedHeight = (new Point(0, 1) * matrix).Abs();
+            double c = transformedHeight.X;
+            double d = transformedHeight.Y;
+
+            if (a == 0 && c == 0 || b == 0 && d == 0)
+            {
+                return Size.Zero;
+            }
+
+            // Find a contained size (x, y) with maximum area (x * y) where
+            //      w >= a * x + c * y
+            //      h >= b * x + d * y
+            //
+            // The solution is on one of these constrains egeds (where the area derivative is zero) or in the intersection
+            //
+            // The area on the first constrain edge is:
+            //      area1(x) = x * (w - a * x) / c
+            //
+            // The maximum is at:
+            //      area1'(x) = (w - 2 * a * x) / c = 0
+            //      x = w / (2 * a)
+            //      y = Min((w - a * x) / c, (h - b * x) / d)
+
+            double determinant = a * d - b * c;
+
+            // Intersection size
+            Size size0 = determinant != 0 ?
+                new Size(((w * d - h * c) / determinant).Max(0), ((h * a - w * b) / determinant).Max(0)) :
+                new Size(0, 0);
+
+            Func<double, double> GetConstrainedY = x => Math.Min(c > 0 ? (w - a * x) / c : Double.PositiveInfinity, d > 0 ? (h - b * x) / d : Double.PositiveInfinity);
+            Func<double, double> GetConstrainedX = y => Math.Min(a > 0 ? (w - c * y) / a : Double.PositiveInfinity, b > 0 ? (h - d * y) / b : Double.PositiveInfinity);
+
+            // Maximum size on the first constrain edge
+            Size size1 = a > c ?
+                new Size(w / (2 * a), GetConstrainedY(w / (2 * a)).Max(0)) :
+                new Size(GetConstrainedX(w / (2 * c)).Max(0), w / (2 * c));
+
+            // Maximum size on the second constrain edge
+            Size size2 = b > d ?
+                new Size(h / (2 * b), GetConstrainedY(h / (2 * b)).Max(0)) :
+                new Size(GetConstrainedX(h / (2 * d)).Max(0), h / (2 * d));
+
+            return size0.MaxArea(size1).MaxArea(size2);
+        }
+    }
 }

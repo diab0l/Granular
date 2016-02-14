@@ -264,6 +264,11 @@ namespace System.Windows
         {
             return 0 <= point.X && point.X < size.Width && 0 <= point.Y && point.Y < size.Height;
         }
+
+        public static Size MaxArea(this Size @this, Size size)
+        {
+            return @this.Width * @this.Height > size.Width * size.Height ? @this : size;
+        }
     }
 
     public class SizeTypeConverter : ITypeConverter

@@ -230,6 +230,11 @@ namespace System.Windows
         {
             return point.X * point.X + point.Y * point.Y;
         }
+
+        public static Point Abs(this Point point)
+        {
+            return point.X >= 0 && point.Y >= 0 ? point : new Point(point.X.Abs(), point.Y.Abs());
+        }
     }
 
     public class PointTypeConverter : ITypeConverter
