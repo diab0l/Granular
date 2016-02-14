@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Windows.Threading;
 
 namespace Granular.Host
 {
@@ -19,6 +20,7 @@ namespace Granular.Host
         public static readonly RenderQueue Default = new RenderQueue();
 
         private List<IRenderItem> items;
+        private bool isRenderScheduled;
 
         private RenderQueue()
         {
@@ -29,18 +31,24 @@ namespace Granular.Host
         {
             items.Add(item);
 
-            if (items.Count == 1)
+            if (!isRenderScheduled)
             {
-                System.Html.Window.RequestAnimationFrame(time => Render());
+                isRenderScheduled = true;
+                Dispatcher.CurrentDispatcher.InvokeAsync(() =>
+                {
+                    isRenderScheduled = false;
+
+                    IEnumerable<IRenderItem> currentItems = items.ToArray();
+                    items.Clear();
+
+                    System.Html.Window.RequestAnimationFrame(time => Render(currentItems));
+                }, DispatcherPriority.Render);
             }
         }
 
-        private void Render()
+        private static void Render(IEnumerable<IRenderItem> items)
         {
-            IEnumerable<IRenderItem> currentItems = items.ToArray();
-            items.Clear();
-
-            foreach (IRenderItem item in currentItems)
+            foreach (IRenderItem item in items)
             {
                 item.Render();
             }
