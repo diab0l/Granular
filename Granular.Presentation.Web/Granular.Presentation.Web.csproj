@@ -565,6 +565,9 @@
     <Compile Include="..\Granular.Presentation\Media\Matrix.cs">
       <Link>Media\Matrix.cs</Link>
     </Compile>
+    <Compile Include="..\Granular.Presentation\Media\MatrixTransform.cs">
+      <Link>Media\MatrixTransform.cs</Link>
+    </Compile>
     <Compile Include="..\Granular.Presentation\Media\RadialGradientBrush.cs">
       <Link>Media\RadialGradientBrush.cs</Link>
     </Compile>
@@ -594,6 +597,12 @@
     </Compile>
     <Compile Include="..\Granular.Presentation\Media\Transform.cs">
       <Link>Media\Transform.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\Media\TransformGroup.cs">
+      <Link>Media\TransformGroup.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\Media\TranslateTransform.cs">
+      <Link>Media\TranslateTransform.cs</Link>
     </Compile>
     <Compile Include="..\Granular.Presentation\Media\Typeface.cs">
       <Link>Media\Typeface.cs</Link>

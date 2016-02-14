@@ -71,6 +71,9 @@
     <Compile Include="FrameworkContentElement.cs" />
     <Compile Include="Input\KeyboardNavigation.cs" />
     <Compile Include="Input\KeyboardNavigationTarget.cs" />
+    <Compile Include="Media\MatrixTransform.cs" />
+    <Compile Include="Media\TransformGroup.cs" />
+    <Compile Include="Media\TranslateTransform.cs" />
     <Compile Include="MultiDataTrigger.cs" />
     <Compile Include="EmbeddedResourceLoader.cs" />
     <Compile Include="Input\Cursor.cs" />
