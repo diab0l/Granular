@@ -185,7 +185,9 @@ namespace System.Windows
         public Size PreviousAvailableSize { get; private set; }
         public Rect PreviousFinalRect { get; private set; }
 
-        private int measureInvalidationDisabled;
+        private int disableMeasureInvalidationRequests;
+        private IDisposable disableMeasureInvalidationToken;
+
         private ListDictionary<RoutedEvent, RoutedEventHandlerItem> routedEventHandlers;
         private CacheDictionary<RoutedEvent, IEnumerable<RoutedEventHandlerItem>> routedEventHandlersCache;
         private Size previousDesiredSize;
@@ -205,6 +207,8 @@ namespace System.Windows
             VisualIsHitTestVisible = IsHitTestVisible;
             VisualIsVisible = IsVisible;
             VisualOpacity = Opacity;
+
+            disableMeasureInvalidationToken = new Disposable(() => disableMeasureInvalidationRequests--);
         }
 
         public void AddLogicalChild(object child)
@@ -357,7 +361,7 @@ namespace System.Windows
 
         public void InvalidateMeasure()
         {
-            if (measureInvalidationDisabled > 0 || !IsMeasureValid && !PreviousAvailableSize.IsEmpty)
+            if (disableMeasureInvalidationRequests > 0 || !IsMeasureValid && !PreviousAvailableSize.IsEmpty)
             {
                 return;
             }
@@ -417,8 +421,8 @@ namespace System.Windows
 
         private IDisposable DisableMeasureInvalidation()
         {
-            measureInvalidationDisabled++;
-            return new Disposable(() => measureInvalidationDisabled--);
+            disableMeasureInvalidationRequests++;
+            return disableMeasureInvalidationToken;
         }
 
         internal void RaiseLayoutUpdated()
