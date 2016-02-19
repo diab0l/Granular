@@ -51,14 +51,14 @@ namespace System.Windows
             {
                 if (this.value is INotifyChanged)
                 {
-                    ((INotifyChanged)this.value).Changed -= OnValueNotifyChanged;
+                    ((INotifyChanged)this.value).Changed -= notifyValueChangedEventHandler;
                 }
 
                 this.value = value;
 
                 if (this.value is INotifyChanged)
                 {
-                    ((INotifyChanged)this.value).Changed += OnValueNotifyChanged;
+                    ((INotifyChanged)this.value).Changed += notifyValueChangedEventHandler ?? (notifyValueChangedEventHandler = OnValueNotifyChanged);
                 }
             }
         }
@@ -74,6 +74,9 @@ namespace System.Windows
         private DependencyObject dependencyObject;
         private DependencyProperty dependencyProperty;
         private CoerceValueCallback coerceValueCallback;
+
+        private EventHandler notifyValueChangedEventHandler;
+        private ObservableValueChangedEventHandler indexedObservableValueChangedEventHandler;
 
         public DependencyPropertyValueEntry(DependencyObject dependencyObject, DependencyProperty dependencyProperty, CoerceValueCallback coerceValueCallback = null) // 
         {
@@ -116,7 +119,7 @@ namespace System.Windows
                 }
 
                 IndexedObservableValue indexedObservableValue = new IndexedObservableValue(priority, oldValue);
-                indexedObservableValue.ValueChanged += OnIndexedObservableValueChanged;
+                indexedObservableValue.ValueChanged += indexedObservableValueChangedEventHandler ?? (indexedObservableValueChangedEventHandler = OnIndexedObservableValueChanged);
 
                 observableValues[priority] = indexedObservableValue;
                 values[priority] = ObservableValue.UnsetValue;
