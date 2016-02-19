@@ -52,7 +52,7 @@ namespace System.Windows.Data
 
                 if (baseObservableValue != null)
                 {
-                    baseObservableValue.ValueChanged -= OnBaseObservableValueChanged;
+                    baseObservableValue.ValueChanged -= baseObservableValueChangedEventHandler;
                 }
 
                 baseValue = value;
@@ -60,7 +60,7 @@ namespace System.Windows.Data
 
                 if (baseObservableValue != null)
                 {
-                    baseObservableValue.ValueChanged += OnBaseObservableValueChanged;
+                    baseObservableValue.ValueChanged += baseObservableValueChangedEventHandler ?? (baseObservableValueChangedEventHandler = OnBaseObservableValueChanged);
                 }
 
                 object oldValue = Value;
@@ -75,6 +75,8 @@ namespace System.Windows.Data
                 ValueChanged.Raise(this, oldValue, newValue);
             }
         }
+
+        private ObservableValueChangedEventHandler baseObservableValueChangedEventHandler;
 
         public ObservableValue() :
             this(UnsetValue)
