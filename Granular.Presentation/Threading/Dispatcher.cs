@@ -35,10 +35,12 @@ namespace System.Windows.Threading
         private PriorityQueue<DispatcherPriority, DispatcherOperation> queue;
         private int disableProcessingRequests;
         private bool isProcessQueueScheduled;
+        private IDisposable disableProcessingToken;
 
         public Dispatcher()
         {
             queue = new PriorityQueue<DispatcherPriority, DispatcherOperation>();
+            disableProcessingToken = new Disposable(EnableProcessing);
         }
 
         public void Invoke(Action callback, DispatcherPriority priority = DispatcherPriority.Normal)
@@ -144,15 +146,17 @@ namespace System.Windows.Threading
         public IDisposable DisableProcessing()
         {
             disableProcessingRequests++;
-            return new Disposable(() =>
-            {
-                disableProcessingRequests--;
+            return disableProcessingToken;
+        }
 
-                if (disableProcessingRequests == 0)
-                {
-                    ProcessQueueAsync();
-                }
-            });
+        private void EnableProcessing()
+        {
+            disableProcessingRequests--;
+
+            if (disableProcessingRequests == 0)
+            {
+                ProcessQueueAsync();
+            }
         }
     }
 }
