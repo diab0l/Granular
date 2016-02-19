@@ -111,12 +111,12 @@ namespace System.Windows.Data
             // try to update the target (or the source on OneWayToSource)
             if (isTargetUpdateMode)
             {
-                sourceExpression.ValueChanged += (sender, e) => UpdateTargetOnSourceChanged();
+                sourceExpression.ValueChanged += (sender, oldValue, newValue) => UpdateTargetOnSourceChanged();
                 UpdateTargetOnSourceChanged();
             }
             else if (isSourceUpdateMode)
             {
-                sourceExpression.ValueChanged += (sender, e) =>
+                sourceExpression.ValueChanged += (sender, oldValue, newValue) =>
                 {
                     if (Status == BindingStatus.UpdateSourceError && sourceExpression.Value != ObservableValue.UnsetValue && !disableTargetUpdate)
                     {
@@ -232,14 +232,14 @@ namespace System.Windows.Data
             }
         }
 
-        private void OnTargetValueChanged(object sender, ObservableValueChangedEventArgs e)
+        private void OnTargetValueChanged(object sender, object oldValue, object newValue)
         {
             if (UpdateSourceTrigger == UpdateSourceTrigger.Default && isSourceUpdateMode)
             {
                 UpdateSourceOnTargetChanged();
             }
 
-            ValueChanged.Raise(this, e);
+            ValueChanged.Raise(this, oldValue, newValue);
         }
 
         private void OnLostFocus(object sender, RoutedEventArgs e)

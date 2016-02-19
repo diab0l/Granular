@@ -25,7 +25,7 @@ namespace System.Windows
                 values = new List<Tuple<object, object>>();
 
                 observableValue = new ObservableValue();
-                observableValue.ValueChanged += (sender, e) => ValueChanged.Raise(this, e);
+                observableValue.ValueChanged += (sender, oldValue, newValue) => ValueChanged.Raise(this, oldValue, newValue);
             }
 
             public IExpression CreateExpression(DependencyObject dependencyObject, DependencyProperty dependencyProperty)

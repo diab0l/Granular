@@ -165,7 +165,7 @@ namespace Granular.Presentation.Tests.Data
             int valueChangedCount = 0;
 
             ObservableExpression observableExpression = new ObservableExpression(root, "Child.Value");
-            observableExpression.ValueChanged += (sender, e) => valueChangedCount++;
+            observableExpression.ValueChanged += (sender, oldValue, newValue) => valueChangedCount++;
 
             Assert.AreEqual(ObservableValue.UnsetValue, observableExpression.Value);
 
@@ -221,7 +221,7 @@ namespace Granular.Presentation.Tests.Data
             int valueChangedCount = 0;
 
             ObservableExpression observableExpression = new ObservableExpression(root, "Child.Value");
-            observableExpression.ValueChanged += (sender, e) => valueChangedCount++;
+            observableExpression.ValueChanged += (sender, oldValue, newValue) => valueChangedCount++;
 
             Assert.AreEqual(ObservableValue.UnsetValue, observableExpression.Value);
 
@@ -277,7 +277,7 @@ namespace Granular.Presentation.Tests.Data
             int valueChangedCount = 0;
 
             ObservableExpression observer = new ObservableExpression(root, "Child.ObservableChild.Value");
-            observer.ValueChanged += (sender, e) => valueChangedCount++;
+            observer.ValueChanged += (sender, oldValue, newValue) => valueChangedCount++;
 
             Assert.AreEqual(ObservableValue.UnsetValue, observer.Value);
 
@@ -346,7 +346,7 @@ namespace Granular.Presentation.Tests.Data
             int valueChanged = 0;
 
             ObservableExpression observableExpression = new ObservableExpression(root, "Children[0].Value");
-            observableExpression.ValueChanged += (sender, e) => valueChanged++;
+            observableExpression.ValueChanged += (sender, oldValue, newValue) => valueChanged++;
 
             Assert.AreEqual(1, observableExpression.Value);
             Assert.AreEqual(0, valueChanged);
@@ -393,8 +393,8 @@ namespace Granular.Presentation.Tests.Data
             ObservableExpression observableExpression1 = new ObservableExpression(root, "Item[3]");
             ObservableExpression observableExpression2 = new ObservableExpression(root, "[4]");
 
-            observableExpression1.ValueChanged += (sender, e) => valueChanged++;
-            observableExpression2.ValueChanged += (sender, e) => valueChanged++;
+            observableExpression1.ValueChanged += (sender, oldValue, newValue) => valueChanged++;
+            observableExpression2.ValueChanged += (sender, oldValue, newValue) => valueChanged++;
 
             Assert.AreEqual(6, observableExpression1.Value);
             Assert.AreEqual(8, observableExpression2.Value);

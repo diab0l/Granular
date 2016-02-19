@@ -171,9 +171,9 @@ namespace System.Windows
             ValueChanged.Raise(this, new DependencyPropertyChangedEventArgs(dependencyProperty, oldValue, newValue));
         }
 
-        private void OnIndexedObservableValueChanged(object sender, ObservableValueChangedEventArgs e)
+        private void OnIndexedObservableValueChanged(object sender, object oldValue, object newValue)
         {
-            OnValueChanged(((IndexedObservableValue)sender).Index, e.NewValue);
+            OnValueChanged(((IndexedObservableValue)sender).Index, newValue);
         }
 
         private void OnValueChanged(int newValuePriority, object newValue)

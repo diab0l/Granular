@@ -7,19 +7,7 @@ using Granular.Extensions;
 
 namespace System.Windows.Data
 {
-    public delegate void ObservableValueChangedEventHandler(object sender, ObservableValueChangedEventArgs e);
-
-    public class ObservableValueChangedEventArgs : EventArgs
-    {
-        public object NewValue { get; private set; }
-        public object OldValue { get; private set; }
-
-        public ObservableValueChangedEventArgs(object oldValue, object newValue)
-        {
-            this.OldValue = oldValue;
-            this.NewValue = newValue;
-        }
-    }
+    public delegate void ObservableValueChangedEventHandler(object sender, object oldValue, object newValue);
 
     public interface IObservableValue
     {
@@ -84,7 +72,7 @@ namespace System.Windows.Data
                 }
 
                 Value = newValue;
-                ValueChanged.Raise(this, new ObservableValueChangedEventArgs(oldValue, newValue));
+                ValueChanged.Raise(this, oldValue, newValue);
             }
         }
 
@@ -99,10 +87,10 @@ namespace System.Windows.Data
             this.BaseValue = baseValue;
         }
 
-        private void OnBaseObservableValueChanged(object sender, ObservableValueChangedEventArgs e)
+        private void OnBaseObservableValueChanged(object sender, object oldValue, object newValue)
         {
-            Value = e.NewValue;
-            ValueChanged.Raise(this, e);
+            Value = newValue;
+            ValueChanged.Raise(this, oldValue, newValue);
         }
 
         public static bool IsNullOrUnset(object value)
@@ -114,11 +102,11 @@ namespace System.Windows.Data
     [DebuggerNonUserCode]
     public static class ObservableValueChangedEventHandlerExtensions
     {
-        public static void Raise(this ObservableValueChangedEventHandler handler, object sender, ObservableValueChangedEventArgs e)
+        public static void Raise(this ObservableValueChangedEventHandler handler, object sender, object oldValue, object newValue)
         {
             if (handler != null)
             {
-                handler(sender, e);
+                handler(sender, oldValue, newValue);
             }
         }
     }

@@ -41,7 +41,7 @@ namespace System.Windows.Data
         public ObservableExpression(object baseValue, PropertyPath propertyPath)
         {
             observableValue = new ObservableValue();
-            observableValue.ValueChanged += (sender, e) => ValueChanged.Raise(this, e);
+            observableValue.ValueChanged += (sender, oldValue, newValue) => ValueChanged.Raise(this, oldValue, newValue);
 
             if (propertyPath.IsEmpty)
             {
@@ -53,7 +53,7 @@ namespace System.Windows.Data
                 propertyPathElement = propertyPath.Elements.Last();
 
                 baseObserver = new ObservableExpression(baseValue, propertyPath.GetBasePropertyPath());
-                baseObserver.ValueChanged += (sender, e) => SetDelegateObserverBaseValue();
+                baseObserver.ValueChanged += (sender, oldValue, newValue) => SetDelegateObserverBaseValue();
 
                 SetDelegateObserverBaseValue();
             }
@@ -105,7 +105,7 @@ namespace System.Windows.Data
             {
                 ValueType = delegateObserver.ValueType;
                 delegateObserver.SetBaseValue(baseValue);
-                delegateObserver.ValueChanged += (sender, e) => observableValue.BaseValue = delegateObserver.Value;
+                delegateObserver.ValueChanged += (sender, oldValue, newValue) => observableValue.BaseValue = delegateObserver.Value;
                 observableValue.BaseValue = delegateObserver.Value;
             }
             else

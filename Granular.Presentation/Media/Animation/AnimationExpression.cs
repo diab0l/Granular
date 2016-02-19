@@ -24,7 +24,7 @@ namespace System.Windows.Media.Animation
             this.dependencyProperty = dependencyProperty;
 
             observableValue = new ObservableValue();
-            observableValue.ValueChanged += (sender, e) => ValueChanged.Raise(this, e);
+            observableValue.ValueChanged += (sender, oldValue, newValue) => ValueChanged.Raise(this, oldValue, newValue);
 
             layers = new AnimationLayerCollection();
             layers.LayerInvalidated += OnLayerInvalidated;

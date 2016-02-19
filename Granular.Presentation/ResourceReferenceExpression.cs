@@ -49,7 +49,7 @@ namespace System.Windows
             this.resourceKey = resourceKey;
 
             observableValue = new ObservableValue();
-            observableValue.ValueChanged += (sender, e) => ValueChanged.Raise(this, e);
+            observableValue.ValueChanged += (sender, oldValue, newValue) => ValueChanged.Raise(this, oldValue, newValue);
             observableValue.BaseValue = GetResourceValue();
 
             resourceContainer.ResourcesChanged += OnResourcesChanged;

@@ -41,7 +41,7 @@ namespace System.Windows.Data
             this.index = index;
 
             observableValue = new ObservableValue();
-            observableValue.ValueChanged += (sender, e) => ValueChanged.Raise(this, e);
+            observableValue.ValueChanged += (sender, oldValue, newValue) => ValueChanged.Raise(this, oldValue, newValue);
         }
 
         public void SetBaseValue(object baseValue)
@@ -142,7 +142,7 @@ namespace System.Windows.Data
             this.dependencyProperty = dependencyProperty;
 
             observableValue = new ObservableValue();
-            observableValue.ValueChanged += (sender, e) => ValueChanged.Raise(this, e);
+            observableValue.ValueChanged += (sender, oldValue, newValue) => ValueChanged.Raise(this, oldValue, newValue);
         }
 
         public void SetBaseValue(object baseValue)
@@ -232,11 +232,11 @@ namespace System.Windows.Data
             }
 
             indexerObserver = new ClrPropertyObserver(indexPropertyInfo, propertyPathElement.ParseIndexValues(indexPropertyInfo));
-            indexerObserver.ValueChanged += (sender, e) => ValueChanged.Raise(this, e);
+            indexerObserver.ValueChanged += (sender, oldValue, newValue) => ValueChanged.Raise(this, oldValue, newValue);
 
             if (baseObserver != null)
             {
-                baseObserver.ValueChanged += (sender, e) => indexerObserver.SetBaseValue(baseObserver.Value);
+                baseObserver.ValueChanged += (sender, oldValue, newValue) => indexerObserver.SetBaseValue(baseObserver.Value);
                 indexerObserver.SetBaseValue(baseObserver.Value);
             }
         }

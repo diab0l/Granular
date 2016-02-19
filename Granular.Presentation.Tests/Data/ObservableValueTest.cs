@@ -15,7 +15,7 @@ namespace Granular.Presentation.Tests.Data
         {
             int valueChangedCount = 0;
             ObservableValue observableValue = new ObservableValue();
-            observableValue.ValueChanged += (sender, e) => valueChangedCount++;
+            observableValue.ValueChanged += (sender, oldValue, newValue) => valueChangedCount++;
 
             Assert.AreEqual(ObservableValue.UnsetValue, observableValue.Value);
             Assert.IsTrue(ObservableValue.IsNullOrUnset(observableValue.Value));
@@ -40,7 +40,7 @@ namespace Granular.Presentation.Tests.Data
         {
             int valueChangedCount = 0;
             ObservableValue observableValue = new ObservableValue();
-            observableValue.ValueChanged += (sender, e) => valueChangedCount++;
+            observableValue.ValueChanged += (sender, oldValue, newValue) => valueChangedCount++;
 
             Assert.AreEqual(ObservableValue.UnsetValue, observableValue.Value);
             Assert.IsTrue(ObservableValue.IsNullOrUnset(observableValue.Value));

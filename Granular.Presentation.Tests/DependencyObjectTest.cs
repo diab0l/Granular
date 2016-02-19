@@ -81,7 +81,7 @@ namespace Granular.Presentation.Tests
             public TestExpression(object value, bool isReadOnly = false)
             {
                 observableValue = new ObservableValue(value);
-                observableValue.ValueChanged += (sender, e) => ValueChanged.Raise(this, e);
+                observableValue.ValueChanged += (sender, oldValue, newValue) => ValueChanged.Raise(this, oldValue, newValue);
 
                 this.isReadOnly = isReadOnly;
             }
