@@ -95,7 +95,7 @@ namespace Granular.Presentation.Tests.Input
         }
 
         [TestMethod]
-        public void KeyboardDirectionalNavigationCanvasTest()
+        public void KeyboardDirectionalNavigationBasicTest()
         {
             Control child1 = new Control { Name = "child1", Width = 100, Height = 100 };
             Control child2 = new Control { Name = "child2", Width = 100, Height = 100 };
@@ -129,32 +129,91 @@ namespace Granular.Presentation.Tests.Input
             canvas.Measure(new Size(1000, 1000));
             canvas.Arrange(new Rect(1000, 1000));
 
-            KeyboardNavigation.SetTabNavigation(canvas, KeyboardNavigationMode.Contained);
+            KeyboardNavigation.SetDirectionalNavigation(canvas, KeyboardNavigationMode.Contained);
 
-            Assert.AreEqual(child1, KeyboardNavigationTarget.FindTarget(child1, FocusNavigationDirection.Left, KeyboardNavigation.TabNavigationProperty));
-            Assert.AreEqual(child3, KeyboardNavigationTarget.FindTarget(child1, FocusNavigationDirection.Right, KeyboardNavigation.TabNavigationProperty));
-            Assert.AreEqual(child1, KeyboardNavigationTarget.FindTarget(child1, FocusNavigationDirection.Up, KeyboardNavigation.TabNavigationProperty));
-            Assert.AreEqual(child3, KeyboardNavigationTarget.FindTarget(child1, FocusNavigationDirection.Down, KeyboardNavigation.TabNavigationProperty));
+            Assert.AreEqual(child1, KeyboardNavigationTarget.FindTarget(child1, FocusNavigationDirection.Left, KeyboardNavigation.DirectionalNavigationProperty));
+            Assert.AreEqual(child3, KeyboardNavigationTarget.FindTarget(child1, FocusNavigationDirection.Right, KeyboardNavigation.DirectionalNavigationProperty));
+            Assert.AreEqual(child1, KeyboardNavigationTarget.FindTarget(child1, FocusNavigationDirection.Up, KeyboardNavigation.DirectionalNavigationProperty));
+            Assert.AreEqual(child3, KeyboardNavigationTarget.FindTarget(child1, FocusNavigationDirection.Down, KeyboardNavigation.DirectionalNavigationProperty));
 
-            Assert.AreEqual(child3, KeyboardNavigationTarget.FindTarget(child2, FocusNavigationDirection.Left, KeyboardNavigation.TabNavigationProperty));
-            Assert.AreEqual(child2, KeyboardNavigationTarget.FindTarget(child2, FocusNavigationDirection.Right, KeyboardNavigation.TabNavigationProperty));
-            Assert.AreEqual(child2, KeyboardNavigationTarget.FindTarget(child2, FocusNavigationDirection.Up, KeyboardNavigation.TabNavigationProperty));
-            Assert.AreEqual(child3, KeyboardNavigationTarget.FindTarget(child2, FocusNavigationDirection.Down, KeyboardNavigation.TabNavigationProperty));
+            Assert.AreEqual(child3, KeyboardNavigationTarget.FindTarget(child2, FocusNavigationDirection.Left, KeyboardNavigation.DirectionalNavigationProperty));
+            Assert.AreEqual(child2, KeyboardNavigationTarget.FindTarget(child2, FocusNavigationDirection.Right, KeyboardNavigation.DirectionalNavigationProperty));
+            Assert.AreEqual(child2, KeyboardNavigationTarget.FindTarget(child2, FocusNavigationDirection.Up, KeyboardNavigation.DirectionalNavigationProperty));
+            Assert.AreEqual(child3, KeyboardNavigationTarget.FindTarget(child2, FocusNavigationDirection.Down, KeyboardNavigation.DirectionalNavigationProperty));
 
-            Assert.AreEqual(child4, KeyboardNavigationTarget.FindTarget(child3, FocusNavigationDirection.Left, KeyboardNavigation.TabNavigationProperty));
-            Assert.AreEqual(child2, KeyboardNavigationTarget.FindTarget(child3, FocusNavigationDirection.Right, KeyboardNavigation.TabNavigationProperty));
-            Assert.AreEqual(child2, KeyboardNavigationTarget.FindTarget(child3, FocusNavigationDirection.Up, KeyboardNavigation.TabNavigationProperty));
-            Assert.AreEqual(child4, KeyboardNavigationTarget.FindTarget(child3, FocusNavigationDirection.Down, KeyboardNavigation.TabNavigationProperty));
+            Assert.AreEqual(child4, KeyboardNavigationTarget.FindTarget(child3, FocusNavigationDirection.Left, KeyboardNavigation.DirectionalNavigationProperty));
+            Assert.AreEqual(child2, KeyboardNavigationTarget.FindTarget(child3, FocusNavigationDirection.Right, KeyboardNavigation.DirectionalNavigationProperty));
+            Assert.AreEqual(child2, KeyboardNavigationTarget.FindTarget(child3, FocusNavigationDirection.Up, KeyboardNavigation.DirectionalNavigationProperty));
+            Assert.AreEqual(child4, KeyboardNavigationTarget.FindTarget(child3, FocusNavigationDirection.Down, KeyboardNavigation.DirectionalNavigationProperty));
 
-            Assert.AreEqual(child4, KeyboardNavigationTarget.FindTarget(child4, FocusNavigationDirection.Left, KeyboardNavigation.TabNavigationProperty));
-            Assert.AreEqual(child3, KeyboardNavigationTarget.FindTarget(child4, FocusNavigationDirection.Right, KeyboardNavigation.TabNavigationProperty));
-            Assert.AreEqual(child3, KeyboardNavigationTarget.FindTarget(child4, FocusNavigationDirection.Up, KeyboardNavigation.TabNavigationProperty));
-            Assert.AreEqual(child4, KeyboardNavigationTarget.FindTarget(child4, FocusNavigationDirection.Down, KeyboardNavigation.TabNavigationProperty));
+            Assert.AreEqual(child4, KeyboardNavigationTarget.FindTarget(child4, FocusNavigationDirection.Left, KeyboardNavigation.DirectionalNavigationProperty));
+            Assert.AreEqual(child3, KeyboardNavigationTarget.FindTarget(child4, FocusNavigationDirection.Right, KeyboardNavigation.DirectionalNavigationProperty));
+            Assert.AreEqual(child3, KeyboardNavigationTarget.FindTarget(child4, FocusNavigationDirection.Up, KeyboardNavigation.DirectionalNavigationProperty));
+            Assert.AreEqual(child4, KeyboardNavigationTarget.FindTarget(child4, FocusNavigationDirection.Down, KeyboardNavigation.DirectionalNavigationProperty));
 
-            Assert.AreEqual(child3, KeyboardNavigationTarget.FindTarget(child5, FocusNavigationDirection.Left, KeyboardNavigation.TabNavigationProperty));
-            Assert.AreEqual(child5, KeyboardNavigationTarget.FindTarget(child5, FocusNavigationDirection.Right, KeyboardNavigation.TabNavigationProperty));
-            Assert.AreEqual(child3, KeyboardNavigationTarget.FindTarget(child5, FocusNavigationDirection.Up, KeyboardNavigation.TabNavigationProperty));
-            Assert.AreEqual(child5, KeyboardNavigationTarget.FindTarget(child5, FocusNavigationDirection.Down, KeyboardNavigation.TabNavigationProperty));
+            Assert.AreEqual(child3, KeyboardNavigationTarget.FindTarget(child5, FocusNavigationDirection.Left, KeyboardNavigation.DirectionalNavigationProperty));
+            Assert.AreEqual(child5, KeyboardNavigationTarget.FindTarget(child5, FocusNavigationDirection.Right, KeyboardNavigation.DirectionalNavigationProperty));
+            Assert.AreEqual(child3, KeyboardNavigationTarget.FindTarget(child5, FocusNavigationDirection.Up, KeyboardNavigation.DirectionalNavigationProperty));
+            Assert.AreEqual(child5, KeyboardNavigationTarget.FindTarget(child5, FocusNavigationDirection.Down, KeyboardNavigation.DirectionalNavigationProperty));
+        }
+
+        [TestMethod]
+        public void KeyboardDirectionalNavigationTransformTest()
+        {
+            Control child1 = new Control { Name = "child1", Width = 100, Height = 100, RenderTransform = new TranslateTransform(-300, 200) };
+            Control child2 = new Control { Name = "child2", Width = 100, Height = 100, RenderTransform = new TranslateTransform(-290, -200) };
+            Control child3 = new Control { Name = "child3", Width = 100, Height = 100, RenderTransform = new TranslateTransform(-100, 0) };
+            Control child4 = new Control { Name = "child4", Width = 100, Height = 100, RenderTransform = new TranslateTransform(100, 190) };
+            Control child5 = new Control { Name = "child5", Width = 100, Height = 100, RenderTransform = new TranslateTransform(110, -210) };
+
+            Grid grid = new Grid
+            {
+                Margin = new Thickness(100, 200, 0, 0),
+                RenderTransform = new RotateTransform { Angle = 90 }
+            };
+
+            grid.Children.Add(child1);
+            grid.Children.Add(child2);
+            grid.Children.Add(child3);
+            grid.Children.Add(child4);
+            grid.Children.Add(child5);
+
+            Decorator root = new Decorator
+            {
+                IsRootElement = true,
+                Child = grid,
+                Margin = new Thickness(200, 100, 0, 0),
+            };
+
+            root.Measure(Size.Infinity);
+            root.Arrange(new Rect(root.DesiredSize));
+
+            KeyboardNavigation.SetDirectionalNavigation(root, KeyboardNavigationMode.Contained);
+
+            Assert.AreEqual(child1, KeyboardNavigationTarget.FindTarget(child1, FocusNavigationDirection.Left, KeyboardNavigation.DirectionalNavigationProperty));
+            Assert.AreEqual(child3, KeyboardNavigationTarget.FindTarget(child1, FocusNavigationDirection.Right, KeyboardNavigation.DirectionalNavigationProperty));
+            Assert.AreEqual(child1, KeyboardNavigationTarget.FindTarget(child1, FocusNavigationDirection.Up, KeyboardNavigation.DirectionalNavigationProperty));
+            Assert.AreEqual(child3, KeyboardNavigationTarget.FindTarget(child1, FocusNavigationDirection.Down, KeyboardNavigation.DirectionalNavigationProperty));
+
+            Assert.AreEqual(child3, KeyboardNavigationTarget.FindTarget(child2, FocusNavigationDirection.Left, KeyboardNavigation.DirectionalNavigationProperty));
+            Assert.AreEqual(child2, KeyboardNavigationTarget.FindTarget(child2, FocusNavigationDirection.Right, KeyboardNavigation.DirectionalNavigationProperty));
+            Assert.AreEqual(child2, KeyboardNavigationTarget.FindTarget(child2, FocusNavigationDirection.Up, KeyboardNavigation.DirectionalNavigationProperty));
+            Assert.AreEqual(child3, KeyboardNavigationTarget.FindTarget(child2, FocusNavigationDirection.Down, KeyboardNavigation.DirectionalNavigationProperty));
+
+            Assert.AreEqual(child4, KeyboardNavigationTarget.FindTarget(child3, FocusNavigationDirection.Left, KeyboardNavigation.DirectionalNavigationProperty));
+            Assert.AreEqual(child2, KeyboardNavigationTarget.FindTarget(child3, FocusNavigationDirection.Right, KeyboardNavigation.DirectionalNavigationProperty));
+            Assert.AreEqual(child2, KeyboardNavigationTarget.FindTarget(child3, FocusNavigationDirection.Up, KeyboardNavigation.DirectionalNavigationProperty));
+            Assert.AreEqual(child4, KeyboardNavigationTarget.FindTarget(child3, FocusNavigationDirection.Down, KeyboardNavigation.DirectionalNavigationProperty));
+
+            Assert.AreEqual(child4, KeyboardNavigationTarget.FindTarget(child4, FocusNavigationDirection.Left, KeyboardNavigation.DirectionalNavigationProperty));
+            Assert.AreEqual(child3, KeyboardNavigationTarget.FindTarget(child4, FocusNavigationDirection.Right, KeyboardNavigation.DirectionalNavigationProperty));
+            Assert.AreEqual(child3, KeyboardNavigationTarget.FindTarget(child4, FocusNavigationDirection.Up, KeyboardNavigation.DirectionalNavigationProperty));
+            Assert.AreEqual(child4, KeyboardNavigationTarget.FindTarget(child4, FocusNavigationDirection.Down, KeyboardNavigation.DirectionalNavigationProperty));
+
+            Assert.AreEqual(child3, KeyboardNavigationTarget.FindTarget(child5, FocusNavigationDirection.Left, KeyboardNavigation.DirectionalNavigationProperty));
+            Assert.AreEqual(child5, KeyboardNavigationTarget.FindTarget(child5, FocusNavigationDirection.Right, KeyboardNavigation.DirectionalNavigationProperty));
+            Assert.AreEqual(child3, KeyboardNavigationTarget.FindTarget(child5, FocusNavigationDirection.Up, KeyboardNavigation.DirectionalNavigationProperty));
+            Assert.AreEqual(child5, KeyboardNavigationTarget.FindTarget(child5, FocusNavigationDirection.Down, KeyboardNavigation.DirectionalNavigationProperty));
         }
 
         private void KeyboardNavigationInnerScopeTest(KeyboardNavigationMode innerScopeMode, Orientation orientation, int[] childrenTabIndex, FocusNavigationDirection direction, int[] expectedTargetChildrenIndex)

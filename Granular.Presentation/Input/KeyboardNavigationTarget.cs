@@ -566,7 +566,7 @@ namespace System.Windows.Input
 
         private static Rect GetAbsoluteBounds(Visual element)
         {
-            return new Rect(element.PointToRoot(Point.Zero), element.VisualSize);
+            return element.TransformToAncestor(null).GetApproximatedRect(element.VisualBounds.Size);
         }
 
         private static Point GetLeftBoundPosition(Rect bounds)
