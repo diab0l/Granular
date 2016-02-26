@@ -74,6 +74,16 @@ namespace System.Windows
             return Left.GetHashCode() ^ Top.GetHashCode() ^ Right.GetHashCode() ^ Bottom.GetHashCode();
         }
 
+        public static bool operator ==(Thickness thickness1, Thickness thickness2)
+        {
+            return Object.Equals(thickness1, thickness2);
+        }
+
+        public static bool operator !=(Thickness thickness1, Thickness thickness2)
+        {
+            return !(thickness1 == thickness2);
+        }
+
         public static Thickness operator -(Thickness thickness)
         {
             return new Thickness(-thickness.Left, -thickness.Top, -thickness.Right, -thickness.Bottom);
