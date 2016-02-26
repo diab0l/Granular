@@ -10,290 +10,214 @@ namespace System.Windows
 {
     public interface IDependencyPropertyValueEntry : IObservableValue
     {
-        object GetBaseValue(bool flattened);
-        object GetBaseValue(int priority, bool flattened);
-        void SetBaseValue(int priority, object value);
-        void ClearBaseValue(int priority);
+        int ValuePriority { get; }
+
+        object GetValue(int priority, bool flattened);
+        void SetValue(int priority, object value);
+
         int GetBaseValuePriority();
-
-        object GetCurrentValue(bool flattened);
-        void SetCurrentValue(object value);
-        void ClearCurrentValue();
-
-        object GetAnimationValue(bool flattened);
-        void SetAnimationValue(object value);
-        void ClearAnimationValue();
+        void CoerceValue();
     }
 
     [DebuggerNonUserCode]
     public class DependencyPropertyValueEntry : IDependencyPropertyValueEntry
     {
-        private const int BaseValuePriorities = 12;
+        private class IndexedObservableValue : ObservableValue
+        {
+            public int Index { get; private set; }
+
+            public IndexedObservableValue(int index, object baseValue) :
+                base(baseValue)
+            {
+                this.Index = index;
+            }
+        }
+
+        public const int BaseValuePriorities = 12;
+        public const int ValuePriorities = BaseValuePriorities + 2;
+
+        public const int BaseValueHighestPriority = BaseValuePriorities - 1;
+        public const int CurrentValuePriority = BaseValuePriorities;
+        public const int AnimationValuePriority = BaseValuePriorities + 1;
 
         public event ObservableValueChangedEventHandler ValueChanged;
+        public object Value { get; private set; }
+        public int ValuePriority { get; private set; }
 
-        public object Value { get { return observableValue.Value; } }
+        // [base values, current value, animation value]
+        private IndexedObservableValue[] observableValues;
+        private object[] values;
 
-        private ObservableValue observableValue;
-        private object[] baseValues;
-        private object currentValue;
-        private object animationValue;
+        private int baseValuePriority;
+
+        private DependencyObject dependencyObject;
         private DependencyProperty dependencyProperty;
-        private object defaultValue;
+        private CoerceValueCallback coerceValueCallback;
 
-        public DependencyPropertyValueEntry(DependencyObject dependencyObject, DependencyProperty dependencyProperty)
+        public DependencyPropertyValueEntry(DependencyObject dependencyObject, DependencyProperty dependencyProperty, CoerceValueCallback coerceValueCallback = null) // 
         {
+            this.dependencyObject = dependencyObject;
             this.dependencyProperty = dependencyProperty;
-            this.defaultValue = dependencyProperty.GetMetadata(dependencyObject.GetType()).DefaultValue;
+            this.coerceValueCallback = coerceValueCallback;
 
-            observableValue = new ObservableValue();
-            observableValue.ValueChanged += (sender, e) => ValueChanged.Raise(this, e);
-
-            baseValues = new object[BaseValuePriorities];
-
-            for (int i = 0; i < baseValues.Length; i++)
+            values = new object[BaseValuePriorities + 2];
+            for (int i = 0; i < values.Length; i++)
             {
-                baseValues[i] = ObservableValue.UnsetValue;
+                values[i] = ObservableValue.UnsetValue;
             }
-
-            currentValue = ObservableValue.UnsetValue;
-            animationValue = ObservableValue.UnsetValue;
         }
 
-        public object GetBaseValue(bool flattened)
+        public object GetValue(int priority, bool flattened)
         {
-            for (int i = baseValues.Length - 1; i >= 0; i--)
+            if (observableValues != null && observableValues[priority] != null)
             {
-                object flattenedValue = GetFlattenedValue(baseValues[i]);
-                if (flattenedValue != ObservableValue.UnsetValue)
+                return flattened ? observableValues[priority].Value : observableValues[priority].BaseValue;
+            }
+
+            return values[priority];
+        }
+
+        public void SetValue(int priority, object value)
+        {
+            if (observableValues != null && observableValues[priority] != null)
+            {
+                observableValues[priority].BaseValue = value;
+                return;
+            }
+
+            object oldValue = values[priority];
+
+            if (value is IObservableValue)
+            {
+                if (observableValues == null)
                 {
-                    return flattened ? flattenedValue : baseValues[i];
+                    observableValues = new IndexedObservableValue[BaseValuePriorities + 2];
                 }
+
+                IndexedObservableValue indexedObservableValue = new IndexedObservableValue(priority, oldValue);
+                indexedObservableValue.ValueChanged += OnIndexedObservableValueChanged;
+
+                observableValues[priority] = indexedObservableValue;
+                values[priority] = ObservableValue.UnsetValue;
+
+                indexedObservableValue.BaseValue = value;
+                return;
             }
 
-            return ObservableValue.UnsetValue;
-        }
-
-        public object GetBaseValue(int priority, bool flattened)
-        {
-            return flattened ? GetFlattenedValue(baseValues[priority]) : baseValues[priority];
-        }
-
-        public void SetBaseValue(int priority, object value)
-        {
-            IObservableValue oldObservableValue = baseValues[priority] as IObservableValue;
-            if (oldObservableValue != null)
+            if (Granular.Compatibility.EqualityComparer.Default.Equals(oldValue, value))
             {
-                oldObservableValue.ValueChanged -= OnObservableValueChanged;
+                return;
             }
 
-            baseValues[priority] = value;
-
-            IObservableValue newObservableValue = baseValues[priority] as IObservableValue;
-            if (newObservableValue != null)
-            {
-                newObservableValue.ValueChanged += OnObservableValueChanged;
-            }
-
-            SetValue();
-        }
-
-        public void ClearBaseValue(int priority)
-        {
-            SetBaseValue(priority, ObservableValue.UnsetValue);
+            values[priority] = value;
+            OnValueChanged(priority, value);
         }
 
         public int GetBaseValuePriority()
         {
-            return Granular.Compatibility.Array.FindLastIndex(baseValues, value => GetFlattenedValue(value) != ObservableValue.UnsetValue);
-        }
-
-        public object GetCurrentValue(bool flattened)
-        {
-            return flattened ? GetFlattenedValue(currentValue) : currentValue;
-        }
-
-        public void SetCurrentValue(object value)
-        {
-            IObservableValue oldObservableValue = currentValue as IObservableValue;
-            if (oldObservableValue != null)
+            if (baseValuePriority > BaseValueHighestPriority)
             {
-                oldObservableValue.ValueChanged -= OnObservableValueChanged;
+                baseValuePriority = BaseValueHighestPriority;
+
+                while (baseValuePriority > 0 && !IsValueValid(GetValue(baseValuePriority, true)))
+                {
+                    baseValuePriority--;
+                }
             }
 
-            currentValue = value;
-
-            IObservableValue newObservableValue = currentValue as IObservableValue;
-            if (newObservableValue != null)
-            {
-                newObservableValue.ValueChanged += OnObservableValueChanged;
-            }
-
-            SetValue();
-        }
-
-        public void ClearCurrentValue()
-        {
-            SetCurrentValue(ObservableValue.UnsetValue);
-        }
-
-        public object GetAnimationValue(bool flattened)
-        {
-            return flattened ? GetFlattenedValue(animationValue) : animationValue;
-        }
-
-        public void SetAnimationValue(object value)
-        {
-            IObservableValue oldObservableValue = animationValue as IObservableValue;
-            if (oldObservableValue != null)
-            {
-                oldObservableValue.ValueChanged -= OnObservableValueChanged;
-            }
-
-            animationValue = value;
-
-            IObservableValue newObservableValue = animationValue as IObservableValue;
-            if (newObservableValue != null)
-            {
-                newObservableValue.ValueChanged += OnObservableValueChanged;
-            }
-
-            SetValue();
-        }
-
-        public void ClearAnimationValue()
-        {
-            animationValue = ObservableValue.UnsetValue;
-            SetValue();
-        }
-
-        private void OnObservableValueChanged(object sender, ObservableValueChangedEventArgs e)
-        {
-            SetValue();
-        }
-
-        private void SetValue()
-        {
-            object value = GetAnimationValue(true);
-
-            if (value == ObservableValue.UnsetValue)
-            {
-                value = GetCurrentValue(true);
-            }
-
-            if (value == ObservableValue.UnsetValue)
-            {
-                value = GetBaseValue(true);
-            }
-
-            if (value == ObservableValue.UnsetValue || !dependencyProperty.IsValidValue(value))
-            {
-                value = defaultValue;
-            }
-
-            observableValue.BaseValue = value;
-        }
-
-        // get the inner IObservableValue.Value
-        private static object GetFlattenedValue(object value)
-        {
-            IObservableValue observableValue = value as IObservableValue;
-            return observableValue != null ? GetFlattenedValue(observableValue.Value) : value;
-        }
-    }
-
-    public class CoercedDependencyPropertyValueEntry : IDependencyPropertyValueEntry
-    {
-        public event ObservableValueChangedEventHandler ValueChanged;
-
-        public object Value { get { return observableValue.Value; } }
-
-        public bool IsCoerced { get { return !Granular.Compatibility.EqualityComparer.Default.Equals(this.Value, source.Value); } }
-
-        private IDependencyPropertyValueEntry source;
-        private CoerceValueCallback coerceValueCallback;
-        private DependencyObject dependencyObject;
-        private ObservableValue observableValue;
-
-        public CoercedDependencyPropertyValueEntry(IDependencyPropertyValueEntry source, DependencyObject dependencyObject, CoerceValueCallback coerceValueCallback)
-        {
-            this.source = source;
-            this.dependencyObject = dependencyObject;
-            this.coerceValueCallback = coerceValueCallback;
-
-            observableValue = new ObservableValue();
-            observableValue.ValueChanged += (sender, e) => ValueChanged.Raise(this, e);
-
-            source.ValueChanged += (sender, e) => CoerceValue();
-            CoerceValue();
+            return baseValuePriority;
         }
 
         public void CoerceValue()
         {
-            observableValue.BaseValue = source.Value != ObservableValue.UnsetValue ? coerceValueCallback(dependencyObject, source.Value) : ObservableValue.UnsetValue;
+            if (coerceValueCallback == null)
+            {
+                return;
+            }
+
+            object oldValue = Value;
+            object newValue = coerceValueCallback(dependencyObject, GetValue(ValuePriority, true));
+
+            if (Granular.Compatibility.EqualityComparer.Default.Equals(oldValue, newValue))
+            {
+                return;
+            }
+
+            Value = newValue;
+            ValueChanged.Raise(this, new ObservableValueChangedEventArgs(oldValue, newValue));
         }
 
-        public object GetBaseValue(bool flattened)
+        private void OnIndexedObservableValueChanged(object sender, ObservableValueChangedEventArgs e)
         {
-            return source.GetBaseValue(flattened);
+            OnValueChanged(((IndexedObservableValue)sender).Index, e.NewValue);
         }
 
-        public object GetBaseValue(int priority, bool flattened)
+        private void OnValueChanged(int newValuePriority, object newValue)
         {
-            return source.GetBaseValue(priority, flattened);
+            if (ValuePriority > newValuePriority) // a higher priority value is hiding the new value
+            {
+                if (baseValuePriority <= newValuePriority && newValuePriority <= BaseValueHighestPriority)
+                {
+                    baseValuePriority = BaseValueHighestPriority + 1; // invalidate baseValuePriority
+                }
+
+                return;
+            }
+
+            object oldValue = Value;
+            bool isNewValueValid = IsValueValid(newValue);
+
+            if (ValuePriority == newValuePriority && isNewValueValid && coerceValueCallback == null)
+            {
+                Value = newValue;
+                ValueChanged.Raise(this, new ObservableValueChangedEventArgs(oldValue, newValue)); // since this was already the value priority and there is no coercion, Value must have been changed here
+                return;
+            }
+
+            if (ValuePriority < newValuePriority && !isNewValueValid) // a higher priority value was changed but it's not valid, so it can be ignored
+            {
+                return;
+            }
+
+            while (!isNewValueValid && newValuePriority > 0) // try to find the highest priority value that is valid
+            {
+                newValuePriority--;
+                newValue = GetValue(newValuePriority, true);
+                isNewValueValid = IsValueValid(newValue);
+            }
+
+            if (ValuePriority != newValuePriority)
+            {
+                ValuePriority = newValuePriority;
+                baseValuePriority = newValuePriority; // possible invalidation of baseValuePriority
+            }
+
+            if (coerceValueCallback != null)
+            {
+                newValue = coerceValueCallback(dependencyObject, newValue);
+            }
+
+            if (Granular.Compatibility.EqualityComparer.Default.Equals(oldValue, newValue))
+            {
+                return;
+            }
+
+            Value = newValue;
+            ValueChanged.Raise(this, new ObservableValueChangedEventArgs(oldValue, newValue));
         }
 
-        public void SetBaseValue(int priority, object value)
+        private bool IsValueValid(object newValue)
         {
-            source.SetBaseValue(priority, value);
-        }
-
-        public void ClearBaseValue(int priority)
-        {
-            source.ClearBaseValue(priority);
-        }
-
-        public int GetBaseValuePriority()
-        {
-            return source.GetBaseValuePriority();
-        }
-
-        public object GetCurrentValue(bool flattened)
-        {
-            return source.GetCurrentValue(flattened);
-        }
-
-        public void SetCurrentValue(object value)
-        {
-            source.SetCurrentValue(value);
-        }
-
-        public void ClearCurrentValue()
-        {
-            source.ClearCurrentValue();
-        }
-
-        public object GetAnimationValue(bool flattened)
-        {
-            return source.GetAnimationValue(flattened);
-        }
-
-        public void SetAnimationValue(object value)
-        {
-            source.SetAnimationValue(value);
-        }
-
-        public void ClearAnimationValue()
-        {
-            source.ClearAnimationValue();
+            return newValue != ObservableValue.UnsetValue && dependencyProperty.IsValidValue(newValue);
         }
     }
 
+    [DebuggerNonUserCode]
     public class ReadOnlyDependencyPropertyValueEntry : IDependencyPropertyValueEntry
     {
         public event ObservableValueChangedEventHandler ValueChanged;
-
         public object Value { get { return source.Value; } }
+        public int ValuePriority { get { return source.ValuePriority; } }
 
         private IDependencyPropertyValueEntry source;
 
@@ -304,24 +228,19 @@ namespace System.Windows
             source.ValueChanged += (sender, e) => ValueChanged.Raise(this, e);
         }
 
-        public object GetBaseValue(bool flattened)
+        public object GetValue(bool flattened)
         {
-            return source.GetBaseValue(flattened);
+            return source.GetValue(source.ValuePriority, flattened);
         }
 
-        public object GetBaseValue(int priority, bool flattened)
+        public object GetValue(int priority, bool flattened)
         {
-            return source.GetBaseValue(priority, flattened);
+            return source.GetValue(priority, flattened);
         }
 
-        public void SetBaseValue(int priority, object value)
+        public void SetValue(int priority, object value)
         {
-            ThrowReadOnlyException();
-        }
-
-        public void ClearBaseValue(int priority)
-        {
-            ThrowReadOnlyException();
+            throw new Granular.Exception("Can't modify a readonly dependency property value");
         }
 
         public int GetBaseValuePriority()
@@ -329,39 +248,63 @@ namespace System.Windows
             return source.GetBaseValuePriority();
         }
 
-        public object GetCurrentValue(bool flattened)
+        public void CoerceValue()
         {
-            return source.GetCurrentValue(flattened);
+            source.CoerceValue();
+        }
+    }
+
+    [DebuggerNonUserCode]
+    public static class DependencyPropertyValueEntryExtensions
+    {
+        public static object GetBaseValue(this IDependencyPropertyValueEntry entry, bool flattened)
+        {
+            return entry.GetValue(entry.GetBaseValuePriority(), flattened);
         }
 
-        public void SetCurrentValue(object value)
+        public static object GetBaseValue(this IDependencyPropertyValueEntry entry, int priority, bool flattened)
         {
-            ThrowReadOnlyException();
+            return entry.GetValue(priority, flattened);
         }
 
-        public void ClearCurrentValue()
+        public static void SetBaseValue(this IDependencyPropertyValueEntry entry, int priority, object value)
         {
-            ThrowReadOnlyException();
+            entry.SetValue(priority, value);
         }
 
-        public object GetAnimationValue(bool flattened)
+        public static void ClearBaseValue(this IDependencyPropertyValueEntry entry, int priority)
         {
-            return source.GetAnimationValue(flattened);
+            entry.SetValue(priority, ObservableValue.UnsetValue);
         }
 
-        public void SetAnimationValue(object value)
+        public static object GetCurrentValue(this IDependencyPropertyValueEntry entry, bool flattened)
         {
-            ThrowReadOnlyException();
+            return entry.GetValue(DependencyPropertyValueEntry.CurrentValuePriority, flattened);
         }
 
-        public void ClearAnimationValue()
+        public static void SetCurrentValue(this IDependencyPropertyValueEntry entry, object value)
         {
-            ThrowReadOnlyException();
+            entry.SetValue(DependencyPropertyValueEntry.CurrentValuePriority, value);
         }
 
-        private static void ThrowReadOnlyException()
+        public static void ClearCurrentValue(this IDependencyPropertyValueEntry entry)
         {
-            throw new Granular.Exception("Can't modify a read-only dependency property value");
+            entry.SetValue(DependencyPropertyValueEntry.CurrentValuePriority, ObservableValue.UnsetValue);
+        }
+
+        public static object GetAnimationValue(this IDependencyPropertyValueEntry entry, bool flattened)
+        {
+            return entry.GetValue(DependencyPropertyValueEntry.AnimationValuePriority, flattened);
+        }
+
+        public static void SetAnimationValue(this IDependencyPropertyValueEntry entry, object value)
+        {
+            entry.SetValue(DependencyPropertyValueEntry.AnimationValuePriority, value);
+        }
+
+        public static void ClearAnimationValue(this IDependencyPropertyValueEntry entry)
+        {
+            entry.SetValue(DependencyPropertyValueEntry.AnimationValuePriority, ObservableValue.UnsetValue);
         }
     }
 }

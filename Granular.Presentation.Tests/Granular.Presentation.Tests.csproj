@@ -61,6 +61,7 @@
     <Compile Include="Controls\ScrollViewerTest.cs" />
     <Compile Include="Controls\TextBoxTest.cs" />
     <Compile Include="DependencyPropertyCallbackTest.cs" />
+    <Compile Include="DependencyPropertyValueEntryTest.cs" />
     <Compile Include="Input\KeyboardNavigationTargetTest.cs" />
     <Compile Include="Markup\LexerTest.cs" />
     <Compile Include="Media\Animation\AnimatableRootClockTest.cs" />
@@ -97,7 +98,6 @@
     <Compile Include="Data\TemplateBindingExtensionTest.cs" />
     <Compile Include="DependencyObjectTest.cs" />
     <Compile Include="DependencyPropertyTest.cs" />
-    <Compile Include="DependencyPropertyValueTest.cs" />
     <Compile Include="Markup\DynamicResourceExtensionTest.cs" />
     <Compile Include="FrameworkElementTest.cs" />
     <Compile Include="FrameworkTemplateTest.cs" />

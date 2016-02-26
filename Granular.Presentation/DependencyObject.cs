@@ -189,11 +189,7 @@ namespace System.Windows
 
         public void CoerceValue(DependencyProperty dependencyProperty)
         {
-            IDependencyPropertyValueEntry entry = GetInitializedValueEntry(dependencyProperty);
-            if (entry is CoercedDependencyPropertyValueEntry)
-            {
-                ((CoercedDependencyPropertyValueEntry)entry).CoerceValue();
-            }
+            GetInitializedValueEntry(dependencyProperty).CoerceValue();
         }
 
         public ValueSource GetValueSource(DependencyProperty dependencyProperty)
@@ -206,7 +202,7 @@ namespace System.Windows
                     entry.GetBaseValue(false) is IExpression || entry.GetCurrentValue(false) is IExpression,
                     entry.GetCurrentValue(true) != ObservableValue.UnsetValue,
                     entry.GetAnimationValue(true) != ObservableValue.UnsetValue,
-                    (entry is CoercedDependencyPropertyValueEntry) && ((CoercedDependencyPropertyValueEntry)entry).IsCoerced);
+                    !Granular.Compatibility.EqualityComparer.Default.Equals(entry.Value, entry.GetValue(entry.ValuePriority, true)));
             }
 
             PropertyMetadata propertyMetadata = dependencyProperty.GetMetadata(GetType());
@@ -267,16 +263,13 @@ namespace System.Windows
         // create dependency property entry and set its default and initial inherited value
         private IDependencyPropertyValueEntry CreateDependencyPropertyValueEntry(DependencyProperty dependencyProperty, PropertyMetadata propertyMetadata)
         {
-            IDependencyPropertyValueEntry entry = new DependencyPropertyValueEntry(this, dependencyProperty);
+            bool isContained = dependencyProperty.IsAttached || dependencyProperty.IsContainedBy(GetType());
+
+            IDependencyPropertyValueEntry entry = new DependencyPropertyValueEntry(this, dependencyProperty, isContained ? propertyMetadata.CoerceValueCallback : null);
             entry.SetBaseValue((int)BaseValueSource.Default, propertyMetadata.DefaultValue);
 
-            if (dependencyProperty.IsAttached || dependencyProperty.IsContainedBy(GetType()))
+            if (isContained)
             {
-                if (propertyMetadata.CoerceValueCallback != null)
-                {
-                    entry = new CoercedDependencyPropertyValueEntry(entry, this, propertyMetadata.CoerceValueCallback);
-                }
-
                 entry.ValueChanged += (sender, e) => OnContainedEntryValueChanged(new DependencyPropertyChangedEventArgs(dependencyProperty, e.OldValue, e.NewValue));
             }
             else
@@ -379,7 +372,7 @@ namespace System.Windows
             if (dependencyProperty.IsReadOnly &&
                 (dependencyPropertyKey == null || dependencyPropertyKey.DependencyProperty != dependencyProperty || !DependencyProperty.IsValidReadOnlyKey(dependencyPropertyKey)))
             {
-                throw new Granular.Exception("Can't modify the read-only dependency property \"{0}\" without its key", dependencyProperty);
+                throw new Granular.Exception("Can't modify the readonly dependency property \"{0}\" without its key", dependencyProperty);
             }
         }
     }

@@ -136,8 +136,8 @@
     <Compile Include="..\Granular.Presentation.Tests\DependencyPropertyTest.cs">
       <Link>DependencyPropertyTest.cs</Link>
     </Compile>
-    <Compile Include="..\Granular.Presentation.Tests\DependencyPropertyValueTest.cs">
-      <Link>DependencyPropertyValueTest.cs</Link>
+    <Compile Include="..\Granular.Presentation.Tests\DependencyPropertyValueEntryTest.cs">
+      <Link>DependencyPropertyValueEntryTest.cs</Link>
     </Compile>
     <Compile Include="..\Granular.Presentation.Tests\FrameworkElementTest.cs">
       <Link>FrameworkElementTest.cs</Link>
