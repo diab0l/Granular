@@ -119,6 +119,16 @@ namespace System.Windows.Media
         // (ofx ofy 1)   (ofx ofy 1)
         public static Matrix operator *(Matrix matrix1, Matrix matrix2)
         {
+            if (matrix1.IsIdentity)
+            {
+                return matrix2;
+            }
+
+            if (matrix2.IsIdentity)
+            {
+                return matrix1;
+            }
+
             double m11 = matrix1.M11 * matrix2.M11 + matrix1.M12 * matrix2.M21;
             double m12 = matrix1.M11 * matrix2.M12 + matrix1.M12 * matrix2.M22;
             double m21 = matrix1.M21 * matrix2.M11 + matrix1.M22 * matrix2.M21;
@@ -134,6 +144,11 @@ namespace System.Windows.Media
         //             (ofx ofy 1)
         public static Point operator *(Point point, Matrix matrix)
         {
+            if (matrix.IsIdentity)
+            {
+                return point;
+            }
+
             double x = point.X * matrix.M11 + point.Y * matrix.M21 + matrix.OffsetX;
             double y = point.X * matrix.M12 + point.Y * matrix.M22 + matrix.OffsetY;
 
