@@ -416,6 +416,16 @@ namespace System.Windows.Media
             VisualTransformChanged.Raise(this);
         }
 
+        protected void InvalidateVisualTransform()
+        {
+            VisualTransform = GetVisualTransformOverride();
+        }
+
+        protected virtual Transform GetVisualTransformOverride()
+        {
+            return Transform.Identity;
+        }
+
         public Point PointToRoot(Point point)
         {
             return point * TransformToAncestor(null);
