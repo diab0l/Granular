@@ -463,7 +463,7 @@ namespace System.Windows.Media
 
         protected virtual Rect GetHitTestBoundsOverride()
         {
-            Rect bounds = VisualBounds;
+            Rect bounds = new Rect(VisualBounds.Size);
 
             if (!VisualClipToBounds)
             {
@@ -473,7 +473,7 @@ namespace System.Windows.Media
                 }
             }
 
-            return bounds;
+            return bounds.Transform(VisualTransform.Value).AddOffset(VisualBounds.Location);
         }
     }
 
