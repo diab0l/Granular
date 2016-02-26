@@ -380,22 +380,36 @@ namespace System.Windows.Media
 
         public Point PointToRoot(Point point)
         {
-            if (VisualParent != null)
+            if (!VisualTransform.IsNullOrIdentity())
             {
-                return VisualParent.PointToRoot(point + VisualOffset);
+                point = point * VisualTransform.Value;
             }
 
-            return point + VisualOffset;
+            point = point + VisualOffset;
+
+            if (VisualParent != null)
+            {
+                point = VisualParent.PointToRoot(point);
+            }
+
+            return point;
         }
 
         public Point PointFromRoot(Point point)
         {
             if (VisualParent != null)
             {
-                return VisualParent.PointFromRoot(point - VisualOffset);
+                point = VisualParent.PointFromRoot(point);
             }
 
-            return point - VisualOffset;
+            point = point - VisualOffset;
+
+            if (!VisualTransform.IsNullOrIdentity())
+            {
+                point = point * VisualTransform.Value.Inverse;
+            }
+
+            return point;
         }
 
         protected void InvalidateHitTestBounds()
