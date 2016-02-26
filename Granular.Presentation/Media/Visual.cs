@@ -178,23 +178,39 @@ namespace System.Windows.Media
             }
         }
 
+        public event EventHandler VisualTransformChanged;
         private Transform visualTransform;
-        protected Transform VisualTransform
+        public Transform VisualTransform
         {
             get { return visualTransform; }
-            set
+            private set
             {
                 if (visualTransform == value)
                 {
                     return;
                 }
 
+                if (visualTransform != null)
+                {
+                    visualTransform.Changed -= OnVisualTransformValueChanged;
+                }
+
                 visualTransform = value;
+
+                if (visualTransform != null)
+                {
+                    visualTransform.Changed += OnVisualTransformValueChanged;
+                }
 
                 foreach (IVisualRenderElement visualRenderElement in visualRenderElements.Values)
                 {
                     visualRenderElement.Transform = visualTransform;
                 }
+
+                InvalidateHitTestBounds();
+
+                OnVisualTransformChanged();
+                VisualTransformChanged.Raise(this);
             }
         }
 
@@ -385,6 +401,19 @@ namespace System.Windows.Media
         protected virtual void OnVisualBoundsChanged()
         {
             //
+        }
+
+        protected virtual void OnVisualTransformChanged()
+        {
+            //
+        }
+
+        private void OnVisualTransformValueChanged(object sender, EventArgs e)
+        {
+            InvalidateHitTestBounds();
+
+            OnVisualTransformChanged();
+            VisualTransformChanged.Raise(this);
         }
 
         public Point PointToRoot(Point point)
