@@ -70,11 +70,12 @@ namespace System.Windows.Media
             }
         }
 
+        public event EventHandler VisualBoundsChanged;
         private Rect visualBounds;
-        protected Rect VisualBounds
+        public Rect VisualBounds
         {
             get { return visualBounds; }
-            set
+            protected set
             {
                 if (visualBounds == value)
                 {
@@ -89,6 +90,9 @@ namespace System.Windows.Media
                 }
 
                 InvalidateHitTestBounds();
+
+                OnVisualBoundsChanged();
+                VisualBoundsChanged.Raise(this);
             }
         }
 
@@ -376,6 +380,11 @@ namespace System.Windows.Media
         protected virtual object CreateContentRenderElementOverride(IRenderElementFactory factory)
         {
             return null;
+        }
+
+        protected virtual void OnVisualBoundsChanged()
+        {
+            //
         }
 
         public Point PointToRoot(Point point)
