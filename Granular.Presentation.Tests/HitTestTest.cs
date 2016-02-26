@@ -51,5 +51,32 @@ namespace Granular.Presentation.Tests
             Assert.AreEqual(stackPanel1, stackPanel1.HitTest(new Point(50, 250)));
             Assert.AreEqual(stackPanel1, stackPanel1.HitTest(new Point(150, 250)));
         }
+
+        [TestMethod]
+        public void HitTestRenderTransformTest()
+        {
+            Border parent = new Border { Name = "parent", Background = Brushes.Transparent, Height = 400, Width = 400, IsRootElement = true };
+            Border child = new Border { Name = "child", Background = Brushes.Transparent, Height = 200, Width = 200 };
+
+            parent.Child = child;
+
+            parent.Measure(Size.Infinity);
+            parent.Arrange(new Rect(parent.DesiredSize));
+
+            Assert.AreEqual(parent, parent.HitTest(new Point(350, 50)));
+            Assert.AreEqual(child, parent.HitTest(new Point(250, 150)));
+            Assert.AreEqual(child, parent.HitTest(new Point(150, 250)));
+            Assert.AreEqual(parent, parent.HitTest(new Point(50, 350)));
+
+            child.RenderTransform = new ScaleTransform { ScaleX = -0.5, ScaleY = 1.5 };
+            child.RenderTransformOrigin = new Point(0.5, 0);
+
+            // Rect(100, 100, 200, 200) * (RenderTransform, RenderTransformOrigin) = Rect(150, 100, 100, 250)
+
+            Assert.AreEqual(parent, parent.HitTest(new Point(100, 50)));
+            Assert.AreEqual(child, parent.HitTest(new Point(200, 150)));
+            Assert.AreEqual(child, parent.HitTest(new Point(200, 350)));
+            Assert.AreEqual(parent, parent.HitTest(new Point(300, 350)));
+        }
     }
 }
