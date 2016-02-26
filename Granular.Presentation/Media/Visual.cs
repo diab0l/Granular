@@ -503,6 +503,21 @@ namespace System.Windows.Media
 
             return false;
         }
+
+        public static IEnumerable<Visual> GetVisualPath(this Visual visual, Visual ancestor)
+        {
+            Visual currentVisual = visual;
+            while (currentVisual != ancestor)
+            {
+                if (currentVisual == null)
+                {
+                    throw new Granular.Exception("Visual \"{0}\" is not an ancestor of \"{1}\"", ancestor, visual);
+                }
+
+                yield return currentVisual;
+                currentVisual = currentVisual.VisualParent;
+            }
+        }
     }
 
     // hold a reference to a Visual as long as it's a descendant of ancestor
