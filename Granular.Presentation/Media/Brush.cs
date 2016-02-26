@@ -30,7 +30,12 @@ namespace System.Windows.Media
 
         public object ConvertFrom(XamlNamespaces namespaces, object value)
         {
-            return new SolidColorBrush((Color)colorTypeConverter.ConvertFrom(namespaces, value));
+            if (value is string)
+            {
+                return new SolidColorBrush((Color)colorTypeConverter.ConvertFrom(namespaces, value));
+            }
+
+            throw new Granular.Exception("Can't convert \"{0}\" to Color", value);
         }
     }
 }
