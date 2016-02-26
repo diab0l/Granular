@@ -55,7 +55,7 @@ namespace System.Windows.Controls.Primitives
             if (e.ChangedButton == Input.MouseButton.Left)
             {
                 e.MouseDevice.Capture(this);
-                dragStartPosition = e.AbsolutePosition;
+                dragStartPosition = e.GetPosition((IInputElement)VisualParent);
 
                 IsDragging = true;
 
@@ -70,7 +70,7 @@ namespace System.Windows.Controls.Primitives
         {
             if (IsDragging)
             {
-                DragDeltaEventArgs DragDeltaEventArgs = new DragDeltaEventArgs(DragDeltaEvent, this, e.AbsolutePosition - dragStartPosition);
+                DragDeltaEventArgs DragDeltaEventArgs = new DragDeltaEventArgs(DragDeltaEvent, this, e.GetPosition((IInputElement)VisualParent) - dragStartPosition);
                 RaiseEvent(DragDeltaEventArgs);
 
                 e.Handled = DragDeltaEventArgs.Handled;
