@@ -59,15 +59,15 @@ namespace System.Windows.Media
 
             if (IsTranslation)
             {
-                return String.Format("TranslationMatrix({0}, {1})", OffsetX, OffsetY);
+                return String.Format("TranslationMatrix({0}, {1})", Math.Round(OffsetX, 2), Math.Round(OffsetY, 2));
             }
 
             if (IsScaling)
             {
-                return String.Format("ScalingMatrix({0}, {1})", M11, M22);
+                return String.Format("ScalingMatrix({0}, {1})", Math.Round(M11, 2), Math.Round(M22, 2));
             }
 
-            return String.Format("Matrix({0}, {1}, {2}, {3}, {4}, {5})", M11, M12, M21, M22, OffsetX, OffsetY);
+            return String.Format("Matrix({0}, {1}, {2}, {3}, {4}, {5})", Math.Round(M11, 2), Math.Round(M12, 2), Math.Round(M21, 2), Math.Round(M22, 2), Math.Round(OffsetX, 2), Math.Round(OffsetY, 2));
         }
 
         public override bool Equals(object obj)
