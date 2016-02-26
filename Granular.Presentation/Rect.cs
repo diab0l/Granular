@@ -143,7 +143,7 @@ namespace System.Windows
     {
         public static bool IsNullOrEmpty(this Rect rect)
         {
-            return rect == null || rect.IsEmpty;
+            return ReferenceEquals(rect, null) || rect.IsEmpty;
         }
 
         public static Rect DefaultIfNullOrEmpty(this Rect rect, Rect defaultValue = null)
@@ -158,15 +158,25 @@ namespace System.Windows
 
         public static bool Contains(this Rect rect, Point point)
         {
-            return rect.Left <= point.X && point.X < rect.Right && rect.Top <= point.Y && point.Y < rect.Bottom;
+            return point.IsEmpty || !rect.IsEmpty && rect.Left <= point.X && point.X < rect.Right && rect.Top <= point.Y && point.Y < rect.Bottom;
+        }
+
+        public static bool Contains(this Rect @this, Rect rect)
+        {
+            return rect.IsEmpty || !@this.IsEmpty && @this.Left <= rect.Left && @this.Top <= rect.Top && @this.Right >= rect.Right && @this.Bottom >= rect.Bottom;
         }
 
         public static Rect Transform(this Rect rect, Matrix matrix)
         {
-            Point topLeft = rect.Location * matrix;
-            Point topRight = new Point(rect.Left + rect.Width, rect.Top) * matrix;
-            Point bottomLeft = new Point(rect.Left, rect.Top + rect.Height) * matrix;
-            Point bottomRight = new Point(rect.Left + rect.Width, rect.Top + rect.Height) * matrix;
+            if (matrix.IsIdentity)
+            {
+                return rect;
+            }
+
+            Point topLeft = rect.GetTopLeft() * matrix;
+            Point topRight = rect.GetTopRight() * matrix;
+            Point bottomLeft = rect.GetBottomLeft() * matrix;
+            Point bottomRight = rect.GetBottomRight() * matrix;
 
             Point location = new Point(
                 topLeft.X.Min(topRight.X).Min(bottomLeft.X).Min(bottomRight.X),
@@ -186,26 +196,36 @@ namespace System.Windows
 
         public static Point GetTopRight(this Rect rect)
         {
-            return new Point(rect.Location.X + rect.Size.Width, rect.Location.Y);
+            return new Point(rect.Right, rect.Top);
         }
 
         public static Point GetBottomLeft(this Rect rect)
         {
-            return new Point(rect.Location.X, rect.Location.Y + rect.Size.Height);
+            return new Point(rect.Left, rect.Bottom);
         }
 
         public static Point GetBottomRight(this Rect rect)
         {
-            return new Point(rect.Location.X + rect.Size.Width, rect.Location.Y + rect.Size.Height);
+            return new Point(rect.Right, rect.Bottom);
         }
 
         public static Rect AddOffset(this Rect rect, Point offset)
         {
-            return new Rect(rect.Left + offset.X, rect.Top + offset.Y, rect.Width, rect.Height);
+            if (offset == Point.Zero)
+            {
+                return rect;
+            }
+
+            return new Rect(rect.Location + offset, rect.Size);
         }
 
         public static Rect AddMargin(this Rect rect, Thickness margin)
         {
+            if (margin == Thickness.Zero)
+            {
+                return rect;
+            }
+
             return new Rect(rect.Location - margin.Location, rect.Size + margin.Size);
         }
 
