@@ -208,6 +208,26 @@ namespace System.Windows
         {
             return new Rect(rect.Location - margin.Location, rect.Size + margin.Size);
         }
+
+        public static Rect Union(this Rect @this, Rect rect)
+        {
+            if (@this.Contains(rect))
+            {
+                return @this;
+            }
+
+            if (rect.Contains(@this))
+            {
+                return rect;
+            }
+
+            double left = @this.Left.Min(rect.Left);
+            double top = @this.Top.Min(rect.Top);
+            double right = @this.Right.Max(rect.Right);
+            double bottom = @this.Bottom.Max(rect.Bottom);
+
+            return new Rect(left, top, right - left, bottom - top);
+        }
     }
 
     public class RectTypeConverter : ITypeConverter
