@@ -248,13 +248,20 @@ namespace System.Windows
             set { SetValue(ForceCursorProperty, value); }
         }
 
+        public static readonly DependencyProperty LayoutTransformProperty = DependencyProperty.Register("LayoutTransform", typeof(Transform), typeof(FrameworkElement), new FrameworkPropertyMetadata(Transform.Identity, affectsMeasure: true, propertyChangedCallback: (sender, e) => ((FrameworkElement)sender).OnLayoutTransformChanged(e)));
+        public Transform LayoutTransform
+        {
+            get { return (Transform)GetValue(LayoutTransformProperty); }
+            set { SetValue(LayoutTransformProperty, value); }
+        }
+
         public ObservableCollection<ITrigger> Triggers { get; private set; }
 
         public string Name { get; set; }
 
         private IFrameworkTemplate appliedTemplate;
-
         private CacheDictionary<object, object> resourcesCache;
+        private Matrix layoutTransformValue;
 
         public FrameworkElement()
         {
@@ -319,11 +326,23 @@ namespace System.Windows
         protected sealed override Size MeasureCore(Size availableSize)
         {
             availableSize -= Margin.Size;
+
+            if (!layoutTransformValue.IsNullOrIdentity())
+            {
+                availableSize = layoutTransformValue.GetContainedSize(availableSize);
+            }
+
             availableSize = Size.Combine(availableSize).Bounds(MinSize, MaxSize);
 
             Size measuredSize = MeasureOverride(availableSize);
 
             measuredSize = Size.Combine(measuredSize).Bounds(MinSize, MaxSize);
+
+            if (!layoutTransformValue.IsNullOrIdentity())
+            {
+                measuredSize = layoutTransformValue.GetContainingSize(measuredSize);
+            }
+
             measuredSize += Margin.Size;
 
             return measuredSize;
@@ -342,19 +361,28 @@ namespace System.Windows
 
             finalSize -= Margin.Size;
 
+            if (!layoutTransformValue.IsNullOrIdentity())
+            {
+                finalSize = layoutTransformValue.GetContainedSize(finalSize);
+            }
+
             finalSize = Size.Combine(finalSize).Bounds(MinSize, MaxSize);
 
-            Size arrangedSize = ArrangeOverride(finalSize);
+            Rect arrangedRect = new Rect(ArrangeOverride(finalSize));
 
-            Point alignedOffset = GetAlignmentOffset(finalRect, arrangedSize + Margin.Size, HorizontalAlignment, VerticalAlignment);
+            Rect containingRect = layoutTransformValue.IsNullOrIdentity() ? arrangedRect : layoutTransformValue.GetContainingRect(arrangedRect);
 
-            Point visualOffset = alignedOffset + Margin.Location;
+            containingRect = containingRect.AddMargin(Margin);
 
-            VisualBounds = new Rect(visualOffset, arrangedSize);
+            Point alignedOffset = GetAlignmentOffset(finalRect, containingRect.Size, HorizontalAlignment, VerticalAlignment);
 
-            ActualWidth = arrangedSize.Width;
-            ActualHeight = arrangedSize.Height;
-            ActualSize = arrangedSize;
+            Point visualOffset = alignedOffset - containingRect.Location;
+
+            VisualBounds = new Rect(visualOffset, arrangedRect.Size);
+
+            ActualWidth = arrangedRect.Width;
+            ActualHeight = arrangedRect.Height;
+            ActualSize = arrangedRect.Size;
         }
 
         protected virtual Size ArrangeOverride(Size finalSize)
@@ -558,6 +586,28 @@ namespace System.Windows
                 e.Cursor = Cursor;
                 e.Handled = true;
             }
+        }
+
+        private void OnLayoutTransformChanged(DependencyPropertyChangedEventArgs e)
+        {
+            Transform newLayoutTransform = (Transform)e.NewValue;
+            layoutTransformValue = newLayoutTransform.IsNullOrIdentity() ? null : newLayoutTransform.Value;
+            InvalidateVisualTransform();
+        }
+
+        protected override Transform GetVisualTransformOverride()
+        {
+            if (LayoutTransform.IsNullOrIdentity())
+            {
+                return base.GetVisualTransformOverride();
+            }
+
+            TransformGroup layoutTransformGroup = new TransformGroup();
+
+            layoutTransformGroup.Children.Add(LayoutTransform);
+            layoutTransformGroup.Children.Add(base.GetVisualTransformOverride());
+
+            return layoutTransformGroup;
         }
 
         private void SetSize()
