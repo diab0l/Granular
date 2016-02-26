@@ -668,15 +668,7 @@ namespace System.Windows
 
         Point IInputElement.GetRelativePosition(Point absolutePosition)
         {
-            Visual element = this;
-
-            while (element != null)
-            {
-                absolutePosition -= element.VisualOffset;
-                element = element.VisualParent;
-            }
-
-            return absolutePosition;
+            return PointFromRoot(absolutePosition);
         }
 
         public static void AddHandler(DependencyObject element, RoutedEvent routedEvent, Delegate handler, bool handledEventsToo = false)

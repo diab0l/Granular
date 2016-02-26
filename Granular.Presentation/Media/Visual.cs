@@ -418,36 +418,22 @@ namespace System.Windows.Media
 
         public Point PointToRoot(Point point)
         {
-            if (!VisualTransform.IsNullOrIdentity())
-            {
-                point = point * VisualTransform.Value;
-            }
-
-            point = point + VisualOffset;
-
-            if (VisualParent != null)
-            {
-                point = VisualParent.PointToRoot(point);
-            }
-
-            return point;
+            return point * TransformToAncestor(null);
         }
 
         public Point PointFromRoot(Point point)
         {
-            if (VisualParent != null)
-            {
-                point = VisualParent.PointFromRoot(point);
-            }
+            return point * TransformToAncestor(null).Inverse;
+        }
 
-            point = point - VisualOffset;
+        public Matrix TransformToAncestor(Visual ancestor)
+        {
+            Matrix transformMatrix = !VisualTransform.IsNullOrIdentity() ? VisualTransform.Value : Matrix.Identity;
+            Matrix offsetMatrix = VisualOffset != Point.Zero ? Matrix.TranslationMatrix(VisualOffset.X, VisualOffset.Y) : Matrix.Identity;
+            Matrix parentMatrix = VisualParent != null && VisualParent != ancestor ? VisualParent.TransformToAncestor(ancestor) : Matrix.Identity;
 
-            if (!VisualTransform.IsNullOrIdentity())
-            {
-                point = point * VisualTransform.Value.Inverse;
-            }
-
-            return point;
+            Matrix value = transformMatrix * offsetMatrix * parentMatrix;
+            return value;
         }
 
         protected void InvalidateHitTestBounds()
