@@ -43,6 +43,7 @@ namespace Granular.Host
         string ToBooleanString(bool value);
         string ToMimeTypeString(RenderImageType renderImageType);
         string ToCursorString(Cursor cursor);
+        string ToTransformString(Matrix matrix);
 
         MouseButton ConvertBackMouseButton(short buttonIndex);
         Key ConvertBackKey(int keyCode, int location);
@@ -388,6 +389,17 @@ namespace Granular.Host
             }
 
             throw new Granular.Exception("Unexpected CursorType \"{0}\"", cursor.CursorType);
+        }
+
+        public string ToTransformString(Matrix matrix)
+        {
+            return String.Format("matrix({0}, {1}, {2}, {3}, {4}, {5}",
+                Math.Round(matrix.M11, 2),
+                Math.Round(matrix.M12, 2),
+                Math.Round(matrix.M21, 2),
+                Math.Round(matrix.M22, 2),
+                Math.Round(matrix.OffsetX, 2),
+                Math.Round(matrix.OffsetY, 2));
         }
 
         public MouseButton ConvertBackMouseButton(short buttonIndex)

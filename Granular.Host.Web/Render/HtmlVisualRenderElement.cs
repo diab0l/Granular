@@ -128,8 +128,18 @@ namespace Granular.Host.Render
                     return;
                 }
 
+                if (transform != null)
+                {
+                    transform.Changed -= OnTransformChanged;
+                }
+
                 transform = value;
                 Style.SetTransform(transform, converter);
+
+                if (transform != null)
+                {
+                    transform.Changed += OnTransformChanged;
+                }
             }
         }
 
@@ -214,6 +224,11 @@ namespace Granular.Host.Render
         private void OnBackgroundChanged(object sender, EventArgs e)
         {
             Style.SetBackground(Background, converter);
+        }
+
+        private void OnTransformChanged(object sender, EventArgs e)
+        {
+            Style.SetTransform(Transform, converter);
         }
 
         private static string GetElementTagName(object target)

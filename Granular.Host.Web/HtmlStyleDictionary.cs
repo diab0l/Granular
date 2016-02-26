@@ -293,10 +293,12 @@ namespace Granular.Host
             if (transform == Transform.Identity)
             {
                 style.ClearValue("transform");
+                style.ClearValue("transform-origin");
             }
             else
             {
-                style.SetValue("transform", transform.Value.ToString());
+                style.SetValue("transform", converter.ToTransformString(transform.Value));
+                style.SetValue("transform-origin", "0 0");
             }
         }
 

@@ -77,7 +77,31 @@ namespace Granular.Host.Wpf.Render
             set { container.Opacity = value; }
         }
 
-        public System.Windows.Media.Transform Transform { get; set; }
+        private System.Windows.Media.Transform transform;
+        public System.Windows.Media.Transform Transform
+        {
+            get { return transform; }
+            set
+            {
+                if (transform == value)
+                {
+                    return;
+                }
+
+                if (transform != null)
+                {
+                    transform.Changed -= OnTransformChanged;
+                }
+
+                transform = value;
+                container.RenderTransform = converter.Convert(transform);
+
+                if (transform != null)
+                {
+                    transform.Changed += OnTransformChanged;
+                }
+            }
+        }
 
         private List<object> children;
         public IEnumerable<object> Children { get { return children; } }
@@ -109,6 +133,11 @@ namespace Granular.Host.Wpf.Render
         private void OnBackgroundChanged(object sender, EventArgs e)
         {
             container.Background = converter.Convert(Background);
+        }
+
+        private void OnTransformChanged(object sender, EventArgs e)
+        {
+            container.RenderTransform = converter.Convert(transform);
         }
     }
 }

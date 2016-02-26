@@ -152,6 +152,20 @@ namespace System.Windows
             private set { SetValue(IsKeyboardFocusWithinPropertyKey, value); }
         }
 
+        public static readonly DependencyProperty RenderTransformProperty = DependencyProperty.Register("RenderTransform", typeof(Transform), typeof(UIElement), new FrameworkPropertyMetadata(Transform.Identity, (sender, e) => ((UIElement)sender).OnRenderTransformChanged(e)));
+        public Transform RenderTransform
+        {
+            get { return (Transform)GetValue(RenderTransformProperty); }
+            set { SetValue(RenderTransformProperty, value); }
+        }
+
+        public static readonly DependencyProperty RenderTransformOriginProperty = DependencyProperty.Register("RenderTransformOrigin", typeof(Point), typeof(UIElement), new FrameworkPropertyMetadata(Point.Zero, (sender, e) => ((UIElement)sender).OnRenderTransformOriginChanged(e)));
+        public Point RenderTransformOrigin
+        {
+            get { return (Point)GetValue(RenderTransformOriginProperty); }
+            set { SetValue(RenderTransformOriginProperty, value); }
+        }
+
         private bool isRootElement;
         public bool IsRootElement
         {
@@ -192,6 +206,8 @@ namespace System.Windows
         private CacheDictionary<RoutedEvent, IEnumerable<RoutedEventHandlerItem>> routedEventHandlersCache;
         private Size previousDesiredSize;
         private IDisposable focus;
+
+        private TransformGroup renderTransformGroup;
 
         public UIElement()
         {
@@ -515,7 +531,7 @@ namespace System.Windows
                 return null;
             }
 
-            Point relativePosition = position - VisualOffset;
+            Point relativePosition = VisualTransform.IsNullOrIdentity() ? position - VisualOffset : (position - VisualOffset) * VisualTransform.Value.Inverse;
 
             for (int i = VisualChildren.Count - 1; i >= 0; i--)
             {
@@ -629,6 +645,71 @@ namespace System.Windows
         private bool CoerceIsVisible(bool value)
         {
             return value && (VisualParent != null ? ((UIElement)VisualParent).IsVisible : IsRootElement);
+        }
+
+        private void OnRenderTransformChanged(DependencyPropertyChangedEventArgs e)
+        {
+            if (renderTransformGroup != null)
+            {
+                renderTransformGroup.Children[1] = RenderTransform;
+            }
+            else
+            {
+                InvalidateVisualTransform();
+            }
+        }
+
+        private void OnRenderTransformOriginChanged(DependencyPropertyChangedEventArgs e)
+        {
+            if (renderTransformGroup != null)
+            {
+                double offsetX = ((Point)e.NewValue).X * RenderSize.Width;
+                double offsetY = ((Point)e.NewValue).Y * RenderSize.Height;
+
+                ((TranslateTransform)renderTransformGroup.Children[0]).X = -offsetX;
+                ((TranslateTransform)renderTransformGroup.Children[0]).Y = -offsetY;
+                ((TranslateTransform)renderTransformGroup.Children[2]).X = offsetX;
+                ((TranslateTransform)renderTransformGroup.Children[2]).Y = offsetY;
+            }
+            else
+            {
+                InvalidateVisualTransform();
+            }
+        }
+
+        protected override Transform GetVisualTransformOverride()
+        {
+            if (RenderTransform.IsNullOrIdentity())
+            {
+                return Transform.Identity;
+            }
+
+            if (renderTransformGroup == null)
+            {
+                double offsetX = RenderTransformOrigin.X * RenderSize.Width;
+                double offsetY = RenderTransformOrigin.Y * RenderSize.Height;
+
+                renderTransformGroup = new TransformGroup();
+                renderTransformGroup.Children.Add(new TranslateTransform(-offsetX, -offsetY));
+                renderTransformGroup.Children.Add(RenderTransform);
+                renderTransformGroup.Children.Add(new TranslateTransform(offsetX, offsetY));
+            }
+
+            return renderTransformGroup;
+        }
+
+        protected override void OnVisualBoundsChanged()
+        {
+            if (renderTransformGroup != null)
+            {
+                double offsetX = RenderTransformOrigin.X * RenderSize.Width;
+                double offsetY = RenderTransformOrigin.Y * RenderSize.Height;
+
+                ((TranslateTransform)renderTransformGroup.Children[0]).X = -offsetX;
+                ((TranslateTransform)renderTransformGroup.Children[0]).Y = -offsetY;
+                ((TranslateTransform)renderTransformGroup.Children[2]).X = offsetX;
+                ((TranslateTransform)renderTransformGroup.Children[2]).Y = offsetY;
+            }
         }
 
         private bool CoerceInheritedValue(DependencyProperty dependencyProperty, bool value)
