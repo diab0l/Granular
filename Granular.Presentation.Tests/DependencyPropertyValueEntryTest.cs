@@ -24,6 +24,8 @@ namespace Granular.Presentation.Tests
         {
             public event EventHandler Changed;
 
+            public bool CanChange { get { return true; } }
+
             public void RaiseChanged()
             {
                 Changed.Raise(this);

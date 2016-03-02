@@ -43,22 +43,29 @@ namespace System.Windows
         public const int AnimationValuePriority = BaseValuePriorities + 1;
 
         public event DependencyPropertyChangedEventHandler ValueChanged;
+        private bool isValueNotifyChangedRegistered;
         private object value;
         public object Value
         {
             get { return value; }
             private set
             {
-                if (this.value is INotifyChanged)
+                if (isValueNotifyChangedRegistered)
                 {
-                    ((INotifyChanged)this.value).Changed -= notifyValueChangedEventHandler;
+                    ((INotifyChanged)this.value).Changed -= NotifyValueChangedEventHandler;
                 }
 
                 this.value = value;
 
-                if (this.value is INotifyChanged)
+                INotifyChanged valueNotifyChanged = this.value as INotifyChanged;
+                if (valueNotifyChanged != null && valueNotifyChanged.CanChange)
                 {
-                    ((INotifyChanged)this.value).Changed += notifyValueChangedEventHandler ?? (notifyValueChangedEventHandler = OnValueNotifyChanged);
+                    valueNotifyChanged.Changed += NotifyValueChangedEventHandler;
+                    isValueNotifyChangedRegistered = true;
+                }
+                else
+                {
+                    isValueNotifyChangedRegistered = false;
                 }
             }
         }
@@ -119,7 +126,7 @@ namespace System.Windows
                 }
 
                 IndexedObservableValue indexedObservableValue = new IndexedObservableValue(priority, oldValue);
-                indexedObservableValue.ValueChanged += indexedObservableValueChangedEventHandler ?? (indexedObservableValueChangedEventHandler = OnIndexedObservableValueChanged);
+                indexedObservableValue.ValueChanged += IndexedObservableValueChangedEventHandler;
 
                 observableValues[priority] = indexedObservableValue;
                 values[priority] = ObservableValue.UnsetValue;

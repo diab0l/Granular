@@ -9,6 +9,7 @@ namespace System.Windows
     public interface INotifyChanged
     {
         event EventHandler Changed;
+        bool CanChange { get; }
     }
 
     public interface IInheritableObject
@@ -50,6 +51,8 @@ namespace System.Windows
                 ResourcesChanged.Raise(this, ResourcesChangedEventArgs.Reset);
             }
         }
+
+        bool INotifyChanged.CanChange { get { return !IsFrozen; } }
 
         private void OnParentResourcesChanged(object sender, ResourcesChangedEventArgs e)
         {
