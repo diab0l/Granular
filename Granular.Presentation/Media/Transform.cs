@@ -15,9 +15,16 @@ namespace System.Windows.Media
             public override Matrix Value { get { return Matrix.Identity; } }
         }
 
-        public static readonly Transform Identity = new IdentityTransform();
+        public static readonly Transform Identity = CreateIdentityTransform();
 
         public abstract Matrix Value { get; }
+
+        private static Transform CreateIdentityTransform()
+        {
+            Transform identityTransform = new IdentityTransform();
+            identityTransform.Freeze();
+            return identityTransform;
+        }
     }
 
     public class TransformTypeConverter : ITypeConverter
