@@ -11,16 +11,16 @@ namespace System.Windows.Controls
     {
         private class UIElementTemplate : IFrameworkTemplate
         {
-            private UIElement content;
+            public UIElement Content { get; private set; }
 
             public UIElementTemplate(UIElement content)
             {
-                this.content = content;
+                this.Content = content;
             }
 
             public void Attach(FrameworkElement element)
             {
-                element.TemplateChild = content;
+                element.TemplateChild = Content;
             }
 
             public void Detach(FrameworkElement element)
@@ -181,12 +181,12 @@ namespace System.Windows.Controls
         {
             if (Content == null)
             {
-                return FrameworkTemplate.Empty;
+                return null;
             }
 
             if (Content is UIElement)
             {
-                return new UIElementTemplate((UIElement)Content);
+                return Template is UIElementTemplate && ((UIElementTemplate)Template).Content == Content ? Template : new UIElementTemplate((UIElement)Content);
             }
 
             if (ContentTemplate != null)
