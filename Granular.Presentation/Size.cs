@@ -175,6 +175,11 @@ namespace System.Windows
                 return size;
             }
 
+            if (size.IsEmpty)
+            {
+                return fallback;
+            }
+
             return new Size(
                 size.IsWidthEmpty ? fallback.Width : size.Width,
                 size.IsHeightEmpty ? fallback.Height : size.Height);

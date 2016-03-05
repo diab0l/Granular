@@ -39,14 +39,14 @@ namespace System.Windows
             remove { RemoveHandler(InitializedEvent, value); }
         }
 
-        public static readonly DependencyProperty HorizontalAlignmentProperty = DependencyProperty.Register("HorizontalAlignment", typeof(HorizontalAlignment), typeof(FrameworkElement), new FrameworkPropertyMetadata(HorizontalAlignment.Stretch, affectsMeasure: true));
+        public static readonly DependencyProperty HorizontalAlignmentProperty = DependencyProperty.Register("HorizontalAlignment", typeof(HorizontalAlignment), typeof(FrameworkElement), new FrameworkPropertyMetadata(HorizontalAlignment.Stretch, affectsMeasure: true, propertyChangedCallback: (sender, e) => ((FrameworkElement)sender).OnAlignmentChanged(e)));
         public HorizontalAlignment HorizontalAlignment
         {
             get { return (HorizontalAlignment)GetValue(HorizontalAlignmentProperty); }
             set { SetValue(HorizontalAlignmentProperty, value); }
         }
 
-        public static readonly DependencyProperty VerticalAlignmentProperty = DependencyProperty.Register("VerticalAlignment", typeof(VerticalAlignment), typeof(FrameworkElement), new FrameworkPropertyMetadata(VerticalAlignment.Stretch, affectsMeasure: true));
+        public static readonly DependencyProperty VerticalAlignmentProperty = DependencyProperty.Register("VerticalAlignment", typeof(VerticalAlignment), typeof(FrameworkElement), new FrameworkPropertyMetadata(VerticalAlignment.Stretch, affectsMeasure: true, propertyChangedCallback: (sender, e) => ((FrameworkElement)sender).OnAlignmentChanged(e)));
         public VerticalAlignment VerticalAlignment
         {
             get { return (VerticalAlignment)GetValue(VerticalAlignmentProperty); }
@@ -262,6 +262,7 @@ namespace System.Windows
         private IFrameworkTemplate appliedTemplate;
         private CacheDictionary<object, object> resourcesCache;
         private Matrix layoutTransformValue;
+        private bool isDefaultAlignment;
 
         public FrameworkElement()
         {
@@ -277,6 +278,8 @@ namespace System.Windows
             Size = Size.Empty;
             MinSize = Size.Zero;
             MaxSize = Size.Infinity;
+
+            isDefaultAlignment = true;
         }
 
         public override string ToString()
@@ -355,7 +358,7 @@ namespace System.Windows
 
         protected sealed override void ArrangeCore(Rect finalRect)
         {
-            Size finalSize = new Size(
+            Size finalSize = isDefaultAlignment ? finalRect.Size : new Size(
                 HorizontalAlignment != HorizontalAlignment.Stretch ? DesiredSize.Width : finalRect.Width,
                 VerticalAlignment != VerticalAlignment.Stretch ? DesiredSize.Height : finalRect.Height);
 
@@ -368,21 +371,21 @@ namespace System.Windows
 
             finalSize = Size.Combine(finalSize).Bounds(MinSize, MaxSize);
 
-            Rect arrangedRect = new Rect(ArrangeOverride(finalSize));
+            Size arrangedSize = ArrangeOverride(finalSize);
 
-            Rect containingRect = layoutTransformValue.IsNullOrIdentity() ? arrangedRect : layoutTransformValue.GetContainingRect(arrangedRect);
+            Size containingSize = layoutTransformValue.IsNullOrIdentity() ? arrangedSize : layoutTransformValue.GetContainingRect(new Rect(arrangedSize)).Size;
 
-            containingRect = containingRect.AddMargin(Margin);
+            containingSize = containingSize + Margin.Size;
 
-            Point alignedOffset = GetAlignmentOffset(finalRect, containingRect.Size, HorizontalAlignment, VerticalAlignment);
+            Point alignedOffset = GetAlignmentOffset(finalRect, containingSize, HorizontalAlignment, VerticalAlignment);
 
-            Point visualOffset = alignedOffset - containingRect.Location;
+            Point visualOffset = alignedOffset + Margin.Location;
 
-            VisualBounds = new Rect(visualOffset, arrangedRect.Size);
+            VisualBounds = new Rect(visualOffset, arrangedSize);
 
-            ActualWidth = arrangedRect.Width;
-            ActualHeight = arrangedRect.Height;
-            ActualSize = arrangedRect.Size;
+            ActualWidth = arrangedSize.Width;
+            ActualHeight = arrangedSize.Height;
+            ActualSize = arrangedSize;
         }
 
         protected virtual Size ArrangeOverride(Size finalSize)
@@ -595,6 +598,11 @@ namespace System.Windows
             InvalidateVisualTransform();
         }
 
+        private void OnAlignmentChanged(DependencyPropertyChangedEventArgs e)
+        {
+            isDefaultAlignment = HorizontalAlignment == HorizontalAlignment.Stretch && VerticalAlignment == VerticalAlignment.Stretch;
+        }
+
         protected override Transform GetVisualTransformOverride()
         {
             if (LayoutTransform.IsNullOrIdentity())
@@ -650,7 +658,7 @@ namespace System.Windows
                 alignedTop = container.Top + (container.Height - alignedRectSize.Height) / 2;
             }
 
-            return new Point(alignedLeft, alignedTop);
+            return alignedLeft == 0 && alignedTop == 0 ? Point.Zero : new Point(alignedLeft, alignedTop);
         }
     }
 }
