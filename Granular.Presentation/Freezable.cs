@@ -90,14 +90,17 @@ namespace System.Windows
 
             VerifyNotFrozen(e.Property);
 
-            if (e.OldValue is IInheritableObject)
+            if (!e.IsSubPropertyChange)
             {
-                ((IInheritableObject)e.OldValue).SetInheritanceContext(null);
-            }
+                if (e.OldValue is IInheritableObject)
+                {
+                    ((IInheritableObject)e.OldValue).SetInheritanceContext(null);
+                }
 
-            if (e.NewValue is IInheritableObject)
-            {
-                ((IInheritableObject)e.NewValue).SetInheritanceContext(this);
+                if (e.NewValue is IInheritableObject)
+                {
+                    ((IInheritableObject)e.NewValue).SetInheritanceContext(this);
+                }
             }
 
             RaiseChanged();
