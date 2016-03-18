@@ -26,8 +26,8 @@ namespace Granular.Host.Render
                 }
 
                 background = value;
-                Style.SetBackground(background, new Rect(BorderThickness.Location, (Bounds.Size - BorderThickness.Size).Max(Size.Zero)), converter);
-                Style.SetIsHitTestVisible(IsHitTestVisible && background != null);
+                SetBackground();
+                SetIsHitTestVisible();
 
                 if (background != null)
                 {
@@ -49,8 +49,8 @@ namespace Granular.Host.Render
 
                 borderThickness = value;
                 Style.SetBorderThickness(borderThickness, converter);
-                Style.SetBounds(new Rect(Bounds.Location, (Bounds.Size - BorderThickness.Size).Max(Size.Zero)), converter);
-                Style.SetBackground(background, new Rect(BorderThickness.Location, (Bounds.Size - BorderThickness.Size).Max(Size.Zero)), converter);
+                SetBounds();
+                SetBackground();
                 SetCornerRadius();
             }
         }
@@ -72,7 +72,7 @@ namespace Granular.Host.Render
                 }
 
                 borderBrush = value;
-                Style.SetBorderBrush(BorderBrush, Bounds.Size, converter);
+                SetBorderBrush();
 
                 if (borderBrush != null)
                 {
@@ -93,9 +93,9 @@ namespace Granular.Host.Render
                 }
 
                 bounds = value;
-                Style.SetBounds(new Rect(Bounds.Location, (Bounds.Size - BorderThickness.Size).Max(Size.Zero)), converter);
-                Style.SetBackground(background, new Rect(BorderThickness.Location, (Bounds.Size - BorderThickness.Size).Max(Size.Zero)), converter);
-                Style.SetBorderBrush(BorderBrush, Bounds.Size, converter);
+                SetBounds();
+                SetBackground();
+                SetBorderBrush();
             }
         }
 
@@ -127,7 +127,7 @@ namespace Granular.Host.Render
                 }
 
                 isHitTestVisible = value;
-                Style.SetIsHitTestVisible(isHitTestVisible && Background != null);
+                SetIsHitTestVisible();
             }
         }
 
@@ -143,10 +143,37 @@ namespace Granular.Host.Render
             cornerRadius = CornerRadius.Zero;
 
             Style.SetValue("background-clip", "content-box");
-            Style.SetBorderThickness(BorderThickness, converter);
+
+            SetBackground();
+            SetBorderBrush();
+            SetBounds();
+            SetCornerRadius();
+            SetIsHitTestVisible();
+        }
+
+        private void OnBackgroundChanged(object sender, EventArgs e)
+        {
+            SetBackground();
+        }
+
+        private void OnBorderBrushChanged(object sender, EventArgs e)
+        {
+            SetBorderBrush();
+        }
+
+        private void SetBackground()
+        {
+            Style.SetBackground(background, new Rect(BorderThickness.Location, (Bounds.Size - BorderThickness.Size).Max(Size.Zero)), converter);
+        }
+
+        private void SetBorderBrush()
+        {
+            Style.SetBorderBrush(BorderBrush, Bounds.Size, converter);
+        }
+
+        private void SetBounds()
+        {
             Style.SetBounds(new Rect(Bounds.Location, (Bounds.Size - BorderThickness.Size).Max(Size.Zero)), converter);
-            Style.SetCornerRadius(cornerRadius, converter);
-            Style.SetIsHitTestVisible(IsHitTestVisible && Background != null);
         }
 
         private void SetCornerRadius()
@@ -161,14 +188,9 @@ namespace Granular.Host.Render
             Style.SetCornerRadius(borderOutlineCornerRadius, converter);
         }
 
-        private void OnBackgroundChanged(object sender, EventArgs e)
+        private void SetIsHitTestVisible()
         {
-            Style.SetBackground(background, new Rect(BorderThickness.Location, (Bounds.Size - BorderThickness.Size).Max(Size.Zero)), converter);
-        }
-
-        private void OnBorderBrushChanged(object sender, EventArgs e)
-        {
-            Style.SetBorderBrush(BorderBrush, Bounds.Size, converter);
+            Style.SetIsHitTestVisible(IsHitTestVisible && Background != null);
         }
     }
 }
