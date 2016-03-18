@@ -152,7 +152,7 @@ namespace Granular.Host.Render
         private void SetCornerRadius()
         {
             // CornerRadius is relative to the center of the border line, interpolate the outline radius
-            CornerRadius borderOutlineCornerRadius = new CornerRadius(
+            CornerRadius borderOutlineCornerRadius = CornerRadius == CornerRadius.Zero ? CornerRadius.Zero : new CornerRadius(
                 CornerRadius.TopLeft + (BorderThickness.Top + BorderThickness.Left) / 4,
                 CornerRadius.TopRight + (BorderThickness.Top + BorderThickness.Right) / 4,
                 CornerRadius.BottomRight + (BorderThickness.Bottom + BorderThickness.Right) / 4,
