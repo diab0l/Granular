@@ -104,7 +104,7 @@ namespace Granular.Host
 
     internal static class HtmlStyleDictionaryExtensions
     {
-        public static void SetBackground(this HtmlStyleDictionary style, Brush background, IHtmlValueConverter converter)
+        public static void SetBackground(this HtmlStyleDictionary style, Brush background, Rect targetRect, IHtmlValueConverter converter)
         {
             style.ClearValue("background-color");
             style.ClearValue("background-image");
@@ -115,7 +115,7 @@ namespace Granular.Host
             }
             else if (background != null)
             {
-                style.SetValue("background-image", converter.ToImageString(background));
+                style.SetValue("background-image", converter.ToImageString(background, targetRect));
             }
         }
 
@@ -165,7 +165,7 @@ namespace Granular.Host
             }
         }
 
-        public static void SetBorderBrush(this HtmlStyleDictionary style, Brush borderBrush, IHtmlValueConverter converter)
+        public static void SetBorderBrush(this HtmlStyleDictionary style, Brush borderBrush, Size targetSize, IHtmlValueConverter converter)
         {
             style.ClearValue("border-color");
             style.ClearValue("border-image-source");
@@ -176,7 +176,7 @@ namespace Granular.Host
             }
             else if (borderBrush != null)
             {
-                style.SetValue("border-image-source", converter.ToImageString(borderBrush));
+                style.SetValue("border-image-source", converter.ToImageString(borderBrush, new Rect(targetSize)));
             }
         }
 

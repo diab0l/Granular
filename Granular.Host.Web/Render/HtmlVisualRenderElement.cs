@@ -27,7 +27,7 @@ namespace Granular.Host.Render
                 }
 
                 background = value;
-                Style.SetBackground(background, converter);
+                Style.SetBackground(background, new Rect(Bounds.Size), converter);
                 Style.SetIsHitTestVisible(IsHitTestVisible && background != null);
 
                 if (background != null)
@@ -50,6 +50,7 @@ namespace Granular.Host.Render
 
                 bounds = value;
                 Style.SetBounds(bounds, converter);
+                Style.SetBackground(background, new Rect(Bounds.Size), converter);
             }
         }
 
@@ -163,7 +164,6 @@ namespace Granular.Host.Render
             opacity = 1;
             transform = Transform.Identity;
 
-            Style.SetBackground(Background, converter);
             Style.SetBounds(Bounds, converter);
             Style.SetClipToBounds(ClipToBounds);
             Style.SetIsHitTestVisible(IsHitTestVisible && Background != null);
@@ -223,7 +223,7 @@ namespace Granular.Host.Render
 
         private void OnBackgroundChanged(object sender, EventArgs e)
         {
-            Style.SetBackground(Background, converter);
+            Style.SetBackground(background, new Rect(Bounds.Size), converter);
         }
 
         private void OnTransformChanged(object sender, EventArgs e)

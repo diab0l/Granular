@@ -24,11 +24,11 @@ namespace Granular.Host
         string ToPixelString(Thickness thickness);
         string ToImplicitValueString(Thickness thickness);
         string ToUrlString(string url);
-        string ToLinearGradientString(LinearGradientBrush brush);
+        string ToLinearGradientString(LinearGradientBrush brush, Rect targetRect);
         string ToRadialGradientString(RadialGradientBrush brush);
         string ToColorStopsString(IEnumerable<GradientStop> gradientStops);
         string ToColorString(SolidColorBrush brush);
-        string ToImageString(LinearGradientBrush brush);
+        string ToImageString(LinearGradientBrush brush, Rect targetRect);
         string ToImageString(RadialGradientBrush brush);
         string ToImageString(ImageBrush brush);
         string ToFontStyleString(FontStyle fontStyle);
@@ -51,11 +51,11 @@ namespace Granular.Host
 
     public static class HtmlValueConverterExtensions
     {
-        public static string ToImageString(this IHtmlValueConverter converter, Brush brush)
+        public static string ToImageString(this IHtmlValueConverter converter, Brush brush, Rect targetRect)
         {
             if (brush is LinearGradientBrush)
             {
-                return converter.ToImageString((LinearGradientBrush)brush);
+                return converter.ToImageString((LinearGradientBrush)brush, targetRect);
             }
 
             if (brush is RadialGradientBrush)
@@ -158,20 +158,47 @@ namespace Granular.Host
             return String.Format("url({0})", url);
         }
 
-        public string ToLinearGradientString(LinearGradientBrush brush)
+        public string ToLinearGradientString(LinearGradientBrush brush, Rect targetRect)
         {
-            IEnumerable<GradientStop> gradientStops = brush.SpreadMethod == GradientSpreadMethod.Reflect ? GetReflectedGradientStops(brush.GradientStops) : brush.GradientStops;
-            string repeatingPrefix = brush.SpreadMethod == GradientSpreadMethod.Repeat ? "repeating-" : String.Empty;
+            if (targetRect.Size == Size.Zero)
+            {
+                return String.Empty;
+            }
 
-            return String.Format("{0}linear-gradient({1}, {2})", repeatingPrefix, ToDegreesString(brush.Angle + 90), ToColorStopsString(gradientStops));
+            IEnumerable<GradientStop> gradientStops = brush.GradientStops;
+
+            if (brush.SpreadMethod == GradientSpreadMethod.Reflect)
+            {
+                gradientStops = GetReflectedGradientStops(brush.GradientStops);
+            }
+
+            Point startPoint = brush.StartPoint;
+            Point endPoint = brush.EndPoint;
+
+            if (brush.MappingMode == BrushMappingMode.Absolute)
+            {
+                startPoint -= targetRect.Location;
+                endPoint -= targetRect.Location;
+            }
+            else
+            {
+                startPoint *= targetRect.Size;
+                endPoint *= targetRect.Size;
+            }
+
+            gradientStops = ScaleGradientStops(gradientStops, startPoint, endPoint, targetRect.Size);
+
+            double angle = (endPoint - startPoint).GetAngle();
+            string gradientType = brush.SpreadMethod == GradientSpreadMethod.Repeat ? "repeating-linear-gradient" : "linear-gradient";
+            return String.Format("{0}({1}, {2})", gradientType, ToDegreesString(90 + 180 * (angle / Math.PI)), ToColorStopsString(gradientStops));
         }
 
         public string ToRadialGradientString(RadialGradientBrush brush)
         {
             IEnumerable<GradientStop> gradientStops = brush.SpreadMethod == GradientSpreadMethod.Reflect ? GetReflectedGradientStops(brush.GradientStops) : brush.GradientStops;
-            string repeatingPrefix = brush.SpreadMethod == GradientSpreadMethod.Repeat ? "repeating-" : String.Empty;
 
-            return String.Format("{0}radial-gradient(ellipse {1} {2} at {3}, {4})", repeatingPrefix, ToPercentString(brush.RadiusX), ToPercentString(brush.RadiusY), ToPercentString(brush.GradientOrigin), ToColorStopsString(gradientStops));
+            string gradientType = brush.SpreadMethod == GradientSpreadMethod.Repeat ? "repeating-radial-gradient" : "radial-gradient";
+            return String.Format("{0}(ellipse {1} {2} at {3}, {4})", gradientType, ToPercentString(brush.RadiusX), ToPercentString(brush.RadiusY), ToPercentString(brush.GradientOrigin), ToColorStopsString(gradientStops));
         }
 
         public string ToColorStopsString(IEnumerable<GradientStop> gradientStops)
@@ -184,9 +211,9 @@ namespace Granular.Host
             return ToColorString(brush.Color.ApplyOpacity(brush.Opacity));
         }
 
-        public string ToImageString(LinearGradientBrush brush)
+        public string ToImageString(LinearGradientBrush brush, Rect targetRect)
         {
-            return ToLinearGradientString(brush);
+            return ToLinearGradientString(brush, targetRect);
         }
 
         public string ToImageString(RadialGradientBrush brush)
@@ -199,10 +226,54 @@ namespace Granular.Host
             return ToUrlString(brush.ImageSource);
         }
 
+        private static IEnumerable<GradientStop> ScaleGradientStops(IEnumerable<GradientStop> gradientStops, Point startPoint, Point endPoint, Size targetSize)
+        {
+            if (startPoint.X == endPoint.X)
+            {
+                return startPoint.Y < endPoint.Y ?
+                    ScaleGradientStops(gradientStops, startPoint.Y / targetSize.Height, endPoint.Y / targetSize.Height) :
+                    ScaleGradientStops(gradientStops, 1 - startPoint.Y / targetSize.Height, 1 - endPoint.Y / targetSize.Height);
+            }
+
+            if (startPoint.Y == endPoint.Y)
+            {
+                return startPoint.X < endPoint.X ?
+                    ScaleGradientStops(gradientStops, startPoint.X / targetSize.Width, endPoint.X / targetSize.Width) :
+                    ScaleGradientStops(gradientStops, 1 - startPoint.X / targetSize.Width, 1 - endPoint.X / targetSize.Width);
+            }
+
+            Point direction = endPoint - startPoint;
+            double directionLength = direction.GetLength();
+
+            double sin = direction.Y / directionLength;
+            double cos = direction.X / directionLength;
+
+            // generated gradient image size
+            double generatedImageWidth = cos.Abs() * targetSize.Width + sin.Abs() * targetSize.Height;
+            double generatedImageHeight = sin.Abs() * targetSize.Width + cos.Abs() * targetSize.Height;
+
+            // transformation from a unit square to the generated gradient image rectangle
+            Matrix matrix =
+                Matrix.TranslationMatrix(-0.5, -0.5) * // translate the unit square center to the origin
+                Matrix.ScalingMatrix(generatedImageWidth, generatedImageHeight) * // scale to the generated gradient image size
+                new Matrix(cos, sin, -sin, cos, 0, 0) * // rotate to the generated gradient image angle
+                Matrix.TranslationMatrix(targetSize.Width / 2, targetSize.Height / 2); // translate to the target rectangle center
+
+            Point relativeStart = startPoint * matrix.Inverse;
+            Point relativeEnd = endPoint * matrix.Inverse;
+
+            return ScaleGradientStops(gradientStops, relativeStart.X, relativeEnd.X);
+        }
+
+        private static IEnumerable<GradientStop> ScaleGradientStops(IEnumerable<GradientStop> gradientStops, double start, double end)
+        {
+            return gradientStops.Select(gradientStop => new GradientStop(gradientStop.Color, start + gradientStop.Offset * (end - start))).ToArray();
+        }
+
         private static IEnumerable<GradientStop> GetReflectedGradientStops(IEnumerable<GradientStop> gradientStops)
         {
             return gradientStops.Select(gradientStop => new GradientStop(gradientStop.Color, gradientStop.Offset / 2)).
-                Concat(gradientStops.Select(gradientStop => new GradientStop(gradientStop.Color, 1.0 - gradientStop.Offset / 2)).Reverse());
+                Concat(gradientStops.Select(gradientStop => new GradientStop(gradientStop.Color, 1.0 - gradientStop.Offset / 2)).Reverse()).ToArray();
         }
 
         public string ToFontStyleString(FontStyle fontStyle)

@@ -26,7 +26,7 @@ namespace Granular.Host.Render
                 }
 
                 background = value;
-                Style.SetBackground(background, converter);
+                Style.SetBackground(background, new Rect(BorderThickness.Location, (Bounds.Size - BorderThickness.Size).Max(Size.Zero)), converter);
                 Style.SetIsHitTestVisible(IsHitTestVisible && background != null);
 
                 if (background != null)
@@ -50,6 +50,7 @@ namespace Granular.Host.Render
                 borderThickness = value;
                 Style.SetBorderThickness(borderThickness, converter);
                 Style.SetBounds(new Rect(Bounds.Location, (Bounds.Size - BorderThickness.Size).Max(Size.Zero)), converter);
+                Style.SetBackground(background, new Rect(BorderThickness.Location, (Bounds.Size - BorderThickness.Size).Max(Size.Zero)), converter);
                 SetCornerRadius();
             }
         }
@@ -71,7 +72,7 @@ namespace Granular.Host.Render
                 }
 
                 borderBrush = value;
-                Style.SetBorderBrush(BorderBrush, converter);
+                Style.SetBorderBrush(BorderBrush, Bounds.Size, converter);
 
                 if (borderBrush != null)
                 {
@@ -80,7 +81,7 @@ namespace Granular.Host.Render
             }
         }
 
-        private Rect bounds = Rect.Zero;
+        private Rect bounds;
         public Rect Bounds
         {
             get { return bounds; }
@@ -93,6 +94,8 @@ namespace Granular.Host.Render
 
                 bounds = value;
                 Style.SetBounds(new Rect(Bounds.Location, (Bounds.Size - BorderThickness.Size).Max(Size.Zero)), converter);
+                Style.SetBackground(background, new Rect(BorderThickness.Location, (Bounds.Size - BorderThickness.Size).Max(Size.Zero)), converter);
+                Style.SetBorderBrush(BorderBrush, Bounds.Size, converter);
             }
         }
 
@@ -140,10 +143,8 @@ namespace Granular.Host.Render
             cornerRadius = CornerRadius.Zero;
 
             Style.SetValue("background-clip", "content-box");
-            Style.SetBackground(Background, converter);
             Style.SetBorderThickness(BorderThickness, converter);
             Style.SetBounds(new Rect(Bounds.Location, (Bounds.Size - BorderThickness.Size).Max(Size.Zero)), converter);
-            Style.SetBorderBrush(BorderBrush, converter);
             Style.SetCornerRadius(cornerRadius, converter);
             Style.SetIsHitTestVisible(IsHitTestVisible && Background != null);
         }
@@ -162,12 +163,12 @@ namespace Granular.Host.Render
 
         private void OnBackgroundChanged(object sender, EventArgs e)
         {
-            Style.SetBackground(Background, converter);
+            Style.SetBackground(background, new Rect(BorderThickness.Location, (Bounds.Size - BorderThickness.Size).Max(Size.Zero)), converter);
         }
 
         private void OnBorderBrushChanged(object sender, EventArgs e)
         {
-            Style.SetBorderBrush(BorderBrush, converter);
+            Style.SetBorderBrush(BorderBrush, Bounds.Size, converter);
         }
     }
 }

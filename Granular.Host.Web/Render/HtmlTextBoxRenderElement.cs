@@ -460,7 +460,7 @@ namespace Granular.Host.Render
             ContentElement.Style.SetValue("border", "0px solid transparent");
             ContentElement.Style.SetValue("outline", "1px solid transparent");
             ContentElement.Style.SetValue("cursor", "inherit");
-            ContentElement.Style.SetBackground(Brushes.Transparent, converter);
+            ContentElement.Style.SetBackground(Brushes.Transparent, System.Windows.Rect.Zero, converter);
             ContentElement.Style.SetLocation(Point.Zero, converter);
 
             ContentElement.Style.SetSize(Bounds.Size, converter);
