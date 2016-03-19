@@ -66,6 +66,13 @@ namespace System.Windows.Media
             set { SetValue(SpreadMethodProperty, value); }
         }
 
+        public static readonly DependencyProperty MappingModeProperty = DependencyProperty.Register("MappingMode", typeof(BrushMappingMode), typeof(GradientBrush), new FrameworkPropertyMetadata(BrushMappingMode.RelativeToBoundingBox));
+        public BrushMappingMode MappingMode
+        {
+            get { return (BrushMappingMode)GetValue(MappingModeProperty); }
+            set { SetValue(MappingModeProperty, value); }
+        }
+
         public static readonly DependencyProperty GradientStopsProperty = DependencyProperty.Register("GradientStops", typeof(GradientStopCollection), typeof(GradientBrush), new FrameworkPropertyMetadata());
         public GradientStopCollection GradientStops
         {

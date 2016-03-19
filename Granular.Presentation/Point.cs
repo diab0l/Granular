@@ -39,7 +39,7 @@ namespace System.Windows
 
         public override string ToString()
         {
-            return String.Format("Point({0}, {1})", X, Y);
+            return String.Format("Point({0}, {1})", Math.Round(X, 2), Math.Round(Y, 2));
         }
 
         public override bool Equals(object obj)
@@ -119,6 +119,16 @@ namespace System.Windows
         public static Point operator *(double scalar, Point point)
         {
             return point * scalar;
+        }
+
+        public static Point operator *(Point point, Size size)
+        {
+            return new Point(point.X * size.Width, point.Y * size.Height);
+        }
+
+        public static Point operator *(Size size, Point point)
+        {
+            return point * size;
         }
 
         public static Point operator /(Point point, double scalar)
@@ -234,6 +244,21 @@ namespace System.Windows
         public static Point Abs(this Point point)
         {
             return point.X >= 0 && point.Y >= 0 ? point : new Point(point.X.Abs(), point.Y.Abs());
+        }
+
+        public static double GetAngle(this Point point)
+        {
+            if (point.Y == 0)
+            {
+                return point.X < 0 ? Math.PI : 0;
+            }
+
+            if (point.X == 0)
+            {
+                return point.Y < 0 ? -Math.PI / 2 : Math.PI / 2;
+            }
+
+            return Math.Sign(point.Y) * Math.Acos(point.X / point.GetLength());
         }
     }
 
