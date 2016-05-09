@@ -43,17 +43,24 @@ namespace System.Windows
 
     public class DependencyObject
     {
-        public event EventHandler<DependencyPropertyChangedEventArgs> PropertyChanged;
+        public event DependencyPropertyChangedEventHandler PropertyChanged;
 
         private Dictionary<DependencyProperty, IDependencyPropertyValueEntry> entries;
         private Dictionary<DependencyProperty, IDependencyPropertyValueEntry> readOnlyEntries;
 
         private DependencyObject inheritanceParent;
+        private DependencyPropertyChangedEventHandler entryValueChangedEventHandler;
+        private DependencyPropertyChangedEventHandler containedEntryValueChangedEventHandler;
+        private DependencyPropertyChangedEventHandler parentPropertyChangedEventHandler;
 
         public DependencyObject()
         {
             this.entries = new Dictionary<DependencyProperty, IDependencyPropertyValueEntry>();
             this.readOnlyEntries = new Dictionary<DependencyProperty, IDependencyPropertyValueEntry>();
+
+            this.entryValueChangedEventHandler = OnEntryValueChanged;
+            this.containedEntryValueChangedEventHandler = OnContainedEntryValueChanged;
+            this.parentPropertyChangedEventHandler = OnParentPropertyChanged;
         }
 
         public bool ContainsValue(DependencyProperty dependencyProperty)
@@ -270,11 +277,11 @@ namespace System.Windows
 
             if (isContained)
             {
-                entry.ValueChanged += OnContainedEntryValueChanged;
+                entry.ValueChanged += containedEntryValueChangedEventHandler;
             }
             else
             {
-                entry.ValueChanged += OnEntryValueChanged;
+                entry.ValueChanged += entryValueChangedEventHandler;
             }
 
             return entry;
@@ -309,14 +316,14 @@ namespace System.Windows
 
             if (inheritanceParent != null)
             {
-                inheritanceParent.PropertyChanged -= OnParentPropertyChanged;
+                inheritanceParent.PropertyChanged -= parentPropertyChangedEventHandler;
             }
 
             this.inheritanceParent = parent;
 
             if (inheritanceParent != null)
             {
-                inheritanceParent.PropertyChanged += OnParentPropertyChanged;
+                inheritanceParent.PropertyChanged += parentPropertyChangedEventHandler;
             }
 
             if (inheritanceParent == null)
