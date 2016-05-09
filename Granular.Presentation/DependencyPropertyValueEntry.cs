@@ -72,6 +72,34 @@ namespace System.Windows
 
         public int ValuePriority { get; private set; }
 
+        private EventHandler notifyValueChangedEventHandler;
+        private EventHandler NotifyValueChangedEventHandler
+        {
+            get
+            {
+                if (notifyValueChangedEventHandler == null)
+                {
+                    notifyValueChangedEventHandler = OnValueNotifyChanged;
+                }
+
+                return notifyValueChangedEventHandler;
+            }
+        }
+
+        private ObservableValueChangedEventHandler indexedObservableValueChangedEventHandler;
+        private ObservableValueChangedEventHandler IndexedObservableValueChangedEventHandler
+        {
+            get
+            {
+                if (indexedObservableValueChangedEventHandler == null)
+                {
+                    indexedObservableValueChangedEventHandler = OnIndexedObservableValueChanged;
+                }
+
+                return indexedObservableValueChangedEventHandler;
+            }
+        }
+
         // [base values, current value, animation value]
         private IndexedObservableValue[] observableValues;
         private object[] values;
@@ -81,9 +109,6 @@ namespace System.Windows
         private DependencyObject dependencyObject;
         private DependencyProperty dependencyProperty;
         private CoerceValueCallback coerceValueCallback;
-
-        private EventHandler notifyValueChangedEventHandler;
-        private ObservableValueChangedEventHandler indexedObservableValueChangedEventHandler;
 
         public DependencyPropertyValueEntry(DependencyObject dependencyObject, DependencyProperty dependencyProperty, CoerceValueCallback coerceValueCallback = null) // 
         {
