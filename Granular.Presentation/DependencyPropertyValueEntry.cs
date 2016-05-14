@@ -43,29 +43,22 @@ namespace System.Windows
         public const int AnimationValuePriority = BaseValuePriorities + 1;
 
         public event DependencyPropertyChangedEventHandler ValueChanged;
-        private bool isValueNotifyChangedRegistered;
         private object value;
         public object Value
         {
             get { return value; }
             private set
             {
-                if (isValueNotifyChangedRegistered)
+                if (this.value is INotifyChanged)
                 {
                     ((INotifyChanged)this.value).Changed -= NotifyValueChangedEventHandler;
                 }
 
                 this.value = value;
 
-                INotifyChanged valueNotifyChanged = this.value as INotifyChanged;
-                if (valueNotifyChanged != null && valueNotifyChanged.CanChange)
+                if (this.value is INotifyChanged)
                 {
-                    valueNotifyChanged.Changed += NotifyValueChangedEventHandler;
-                    isValueNotifyChangedRegistered = true;
-                }
-                else
-                {
-                    isValueNotifyChangedRegistered = false;
+                    ((INotifyChanged)this.value).Changed += NotifyValueChangedEventHandler;
                 }
             }
         }

@@ -9,7 +9,6 @@ namespace System.Windows
     public interface INotifyChanged
     {
         event EventHandler Changed;
-        bool CanChange { get; }
     }
 
     public interface IInheritableObject
@@ -19,7 +18,28 @@ namespace System.Windows
 
     public class Freezable : DependencyObject, IResourceContainer, INotifyChanged, IInheritableObject
     {
-        public event EventHandler Changed;
+        private EventHandler changed;
+        public event EventHandler Changed
+        {
+            add
+            {
+                if (IsFrozen)
+                {
+                    return;
+                }
+
+                changed += value;
+            }
+            remove
+            {
+                if (IsFrozen)
+                {
+                    return;
+                }
+
+                changed -= value;
+            }
+        }
 
         public event EventHandler<ResourcesChangedEventArgs> ResourcesChanged;
 
@@ -52,8 +72,6 @@ namespace System.Windows
             }
         }
 
-        bool INotifyChanged.CanChange { get { return !IsFrozen; } }
-
         private void OnParentResourcesChanged(object sender, ResourcesChangedEventArgs e)
         {
             ResourcesChanged.Raise(this, e);
@@ -74,6 +92,7 @@ namespace System.Windows
         public void Freeze()
         {
             IsFrozen = true;
+            changed = null;
         }
 
         protected override void OnInheritanceParentChanged(DependencyObject oldInheritanceParent, DependencyObject newInheritanceParent)
@@ -115,7 +134,7 @@ namespace System.Windows
 
         protected void RaiseChanged()
         {
-            Changed.Raise(this);
+            changed.Raise(this);
         }
 
         void IInheritableObject.SetInheritanceContext(DependencyObject inheritanceContext)
