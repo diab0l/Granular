@@ -157,12 +157,19 @@ namespace Granular.Presentation.Tests
             freezable.Freeze();
             Assert.IsTrue(freezable.IsFrozen);
 
-            freezable.SetValue(AttachedValueProperty, 3);
-            Assert.AreEqual(3, freezable.GetValue(AttachedValueProperty));
-
             try
             {
                 freezable.Value = 4;
+                Assert.Fail();
+            }
+            catch
+            {
+                //
+            }
+
+            try
+            {
+                freezable.SetValue(AttachedValueProperty, 3);
                 Assert.Fail();
             }
             catch

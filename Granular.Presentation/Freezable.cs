@@ -102,11 +102,6 @@ namespace System.Windows
 
         protected override void OnPropertyChanged(DependencyPropertyChangedEventArgs e)
         {
-            if (!e.Property.IsContainedBy(GetType()))
-            {
-                return;
-            }
-
             VerifyNotFrozen(e.Property);
 
             if (!e.IsSubPropertyChange)
