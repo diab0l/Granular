@@ -60,7 +60,7 @@ namespace System.Windows.Media.Animation
                 }
 
                 parent = value;
-                SetInheritanceParent(value);
+                TrySetContextParent(value);
             }
         }
 

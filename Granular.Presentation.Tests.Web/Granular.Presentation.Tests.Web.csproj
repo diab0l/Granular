@@ -58,6 +58,9 @@
     <Compile Include="..\Granular.Presentation.Tests\Collections\PriorityQueueTest.cs">
       <Link>Collections\PriorityQueueTest.cs</Link>
     </Compile>
+    <Compile Include="..\Granular.Presentation.Tests\ContextElementTest.cs">
+      <Link>ContextElementTest.cs</Link>
+    </Compile>
     <Compile Include="..\Granular.Presentation.Tests\Controls\BorderTest.cs">
       <Link>Controls\BorderTest.cs</Link>
     </Compile>

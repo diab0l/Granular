@@ -54,6 +54,7 @@
     </CodeAnalysisDependentAssemblyPaths>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ContextElementTest.cs" />
     <Compile Include="Controls\ImageTest.cs" />
     <Compile Include="Controls\Primitives\ButtonBaseTest.cs" />
     <Compile Include="Controls\Primitives\RelayCommand.cs" />

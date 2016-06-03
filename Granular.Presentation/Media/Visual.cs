@@ -7,7 +7,7 @@ using Granular.Extensions;
 
 namespace System.Windows.Media
 {
-    public class Visual : DependencyObject
+    public class Visual : DependencyObject, IContextElement
     {
         public event EventHandler VisualAncestorChanged;
 
@@ -43,6 +43,14 @@ namespace System.Windows.Media
                 VisualAncestorChanged.Raise(this);
             }
         }
+
+        event EventHandler IContextElement.ContextParentChanged
+        {
+            add { VisualAncestorChanged += value; }
+            remove { VisualAncestorChanged -= value; }
+        }
+
+        IContextElement IContextElement.ContextParent { get { return VisualParent; } }
 
         private List<Visual> visualChildren;
         public ReadOnlyCollection<Visual> VisualChildren { get; private set; }
@@ -484,6 +492,11 @@ namespace System.Windows.Media
             }
 
             return bounds.Transform(VisualTransform.Value).AddOffset(VisualBounds.Location);
+        }
+
+        bool IContextElement.TrySetContextParent(IContextElement contextParent)
+        {
+            return false;
         }
     }
 

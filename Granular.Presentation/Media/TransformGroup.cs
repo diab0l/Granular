@@ -21,6 +21,7 @@ namespace System.Windows.Media
             this.matrix = Matrix.Identity;
 
             this.Children = new FreezableCollection<Transform>();
+            this.Children.TrySetContextParent(this);
             this.Children.Changed += OnChildChanged;
         }
 

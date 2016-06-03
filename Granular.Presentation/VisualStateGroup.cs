@@ -25,10 +25,10 @@ namespace System.Windows
         public VisualStateGroup()
         {
             States = new FreezableCollection<VisualState>();
-            States.SetInheritanceParent(this);
+            States.TrySetContextParent(this);
 
             Transitions = new FreezableCollection<VisualTransition>();
-            Transitions.SetInheritanceParent(this);
+            Transitions.TrySetContextParent(this);
         }
 
         public void SetContainer(FrameworkElement container)

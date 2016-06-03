@@ -64,10 +64,10 @@ namespace System.Windows.Controls
         public Grid()
         {
             RowDefinitions = new FreezableCollection<RowDefinition>();
-            RowDefinitions.SetInheritanceParent(this);
+            RowDefinitions.TrySetContextParent(this);
 
             ColumnDefinitions = new FreezableCollection<ColumnDefinition>();
-            ColumnDefinitions.SetInheritanceParent(this);
+            ColumnDefinitions.TrySetContextParent(this);
 
             defaultRowDefinitions = new [] { new RowDefinition() };
             defaultColumnDefinitions = new [] { new ColumnDefinition() };

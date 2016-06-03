@@ -128,9 +128,9 @@ namespace System.Windows.Data
                 UpdateSourceOnTargetChanged();
             }
 
-            if (((RelativeSource != null && RelativeSource.Mode != RelativeSourceMode.Self) || !ElementName.IsNullOrEmpty()) && Target is Visual)
+            if (((RelativeSource != null && RelativeSource.Mode != RelativeSourceMode.Self) || !ElementName.IsNullOrEmpty()) && Target is IContextElement)
             {
-                ((Visual)Target).VisualAncestorChanged += OnTargetVisualAncestorChanged;
+                ((IContextElement)Target).ContextParentChanged += OnContextParentChanged;
             }
 
             if (UpdateSourceTrigger == UpdateSourceTrigger.LostFocus && isSourceUpdateMode && Target is UIElement)
@@ -143,9 +143,9 @@ namespace System.Windows.Data
         {
             sourceExpression.Dispose();
 
-            if (Target is Visual)
+            if (Target is IContextElement)
             {
-                ((Visual)Target).VisualAncestorChanged -= OnTargetVisualAncestorChanged;
+                ((IContextElement)Target).ContextParentChanged -= OnContextParentChanged;
             }
 
             if (Target is UIElement)
@@ -165,7 +165,7 @@ namespace System.Windows.Data
             return true;
         }
 
-        private void OnTargetVisualAncestorChanged(object sender, EventArgs e)
+        private void OnContextParentChanged(object sender, EventArgs e)
         {
             sourceExpression.SetBaseValue(Source ?? GetRelativeSource(Target, RelativeSource, ElementName));
         }

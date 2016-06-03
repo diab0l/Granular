@@ -46,14 +46,14 @@ namespace System.Windows
 
         private void Register()
         {
-            SetInheritanceParent(element);
+            TrySetContextParent(element);
             SetValue(ValueProperty, expressionProvider);
         }
 
         public void Dispose()
         {
             isDisposed = true;
-            SetInheritanceParent(null);
+            TrySetContextParent(null);
             ClearValue(ValueProperty);
         }
 

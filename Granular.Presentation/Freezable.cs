@@ -11,13 +11,44 @@ namespace System.Windows
         event EventHandler Changed;
     }
 
-    public interface IInheritableObject
+    public interface IContextElement
     {
-        void SetInheritanceContext(DependencyObject inheritanceContext);
+        event EventHandler ContextParentChanged;
+        IContextElement ContextParent { get; }
+
+        bool TrySetContextParent(IContextElement ContextParent);
     }
 
-    public class Freezable : DependencyObject, IResourceContainer, INotifyChanged, IInheritableObject
+    public class Freezable : DependencyObject, IResourceContainer, INotifyChanged, IContextElement
     {
+        public event EventHandler ContextParentChanged;
+        private IContextElement contextParent;
+        public IContextElement ContextParent
+        {
+            get { return contextParent; }
+            set
+            {
+                if (contextParent == value)
+                {
+                    return;
+                }
+
+                if (contextParent != null)
+                {
+                    contextParent.ContextParentChanged -= OnContextParentAncestorChanged;
+                }
+
+                contextParent = value;
+
+                if (contextParent != null)
+                {
+                    contextParent.ContextParentChanged += OnContextParentAncestorChanged;
+                }
+
+                ContextParentChanged.Raise(this);
+            }
+        }
+
         private EventHandler changed;
         public event EventHandler Changed
         {
@@ -93,11 +124,7 @@ namespace System.Windows
         {
             IsFrozen = true;
             changed = null;
-        }
-
-        protected override void OnInheritanceParentChanged(DependencyObject oldInheritanceParent, DependencyObject newInheritanceParent)
-        {
-            ParentResourceContainer = newInheritanceParent as IResourceContainer;
+            ParentResourceContainer = null;
         }
 
         protected override void OnPropertyChanged(DependencyPropertyChangedEventArgs e)
@@ -106,14 +133,14 @@ namespace System.Windows
 
             if (!e.IsSubPropertyChange)
             {
-                if (e.OldValue is IInheritableObject)
+                if (e.OldValue is IContextElement)
                 {
-                    ((IInheritableObject)e.OldValue).SetInheritanceContext(null);
+                    ((IContextElement)e.OldValue).TrySetContextParent(null);
                 }
 
-                if (e.NewValue is IInheritableObject)
+                if (e.NewValue is IContextElement)
                 {
-                    ((IInheritableObject)e.NewValue).SetInheritanceContext(this);
+                    ((IContextElement)e.NewValue).TrySetContextParent(this);
                 }
             }
 
@@ -132,9 +159,21 @@ namespace System.Windows
             changed.Raise(this);
         }
 
-        void IInheritableObject.SetInheritanceContext(DependencyObject inheritanceContext)
+        public bool TrySetContextParent(IContextElement contextParent)
         {
-            base.SetInheritanceParent(inheritanceContext);
+            if (IsFrozen)
+            {
+                return false;
+            }
+
+            this.ContextParent = contextParent;
+            ParentResourceContainer = contextParent as IResourceContainer;
+            return true;
+        }
+
+        private void OnContextParentAncestorChanged(object sender, EventArgs e)
+        {
+            ContextParentChanged.Raise(this);
         }
 
         private void VerifyNotFrozen()

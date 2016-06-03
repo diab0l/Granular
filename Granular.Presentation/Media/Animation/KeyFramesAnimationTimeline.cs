@@ -21,7 +21,7 @@ namespace System.Windows.Media.Animation
             this.isAccumulable = isAccumulable;
 
             KeyFrames = new FreezableCollection<KeyFrame<T>>();
-            KeyFrames.SetInheritanceParent(this);
+            KeyFrames.TrySetContextParent(this);
         }
 
         public override object GetCurrentValue(object defaultOriginValue, object defaultDestinationValue, AnimationTimelineClock animationClock)

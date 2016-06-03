@@ -313,14 +313,14 @@ namespace System.Windows
                 BaseValueSource baseValueSource = GetBaseValueSource(e.Property);
                 if (baseValueSource != BaseValueSource.Default && baseValueSource != BaseValueSource.Inherited)
                 {
-                    if (e.OldValue is IInheritableObject)
+                    if (e.OldValue is IContextElement)
                     {
-                        ((IInheritableObject)e.OldValue).SetInheritanceContext(null);
+                        ((IContextElement)e.OldValue).TrySetContextParent(null);
                     }
 
-                    if (e.NewValue is IInheritableObject)
+                    if (e.NewValue is IContextElement)
                     {
-                        ((IInheritableObject)e.NewValue).SetInheritanceContext(this);
+                        ((IContextElement)e.NewValue).TrySetContextParent(this);
                     }
                 }
             }
@@ -552,17 +552,17 @@ namespace System.Windows
             {
                 trigger.Detach(this, BaseValueSource.Local);
 
-                if (trigger is DependencyObject)
+                if (trigger is IContextElement)
                 {
-                    ((DependencyObject)trigger).SetInheritanceParent(null);
+                    ((IContextElement)trigger).TrySetContextParent(null);
                 }
             }
 
             foreach (ITrigger trigger in e.NewItems)
             {
-                if (trigger is DependencyObject)
+                if (trigger is IContextElement)
                 {
-                    ((DependencyObject)trigger).SetInheritanceParent(this);
+                    ((IContextElement)trigger).TrySetContextParent(this);
                 }
 
                 trigger.Attach(this, BaseValueSource.Local);

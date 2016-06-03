@@ -33,10 +33,8 @@ namespace Granular.Presentation.Tests
             }
         }
 
-        public static readonly DependencyProperty ValueProperty = DependencyProperty.RegisterAttached("Value", typeof(object), typeof(FreezableTest), new FrameworkPropertyMetadata());
-
         [TestMethod]
-        public void FreezableBasicTest()
+        public void FreezableResourceContainerTest()
         {
             int resourcesChangedCount = 0;
             object resourceValue;
@@ -45,15 +43,12 @@ namespace Granular.Presentation.Tests
             freezable.ResourcesChanged += (sender, e) => resourcesChangedCount++;
 
             FrameworkElement element = new FrameworkElement();
-            element.DataContext = "data-context";
             element.Resources = new ResourceDictionary();
             element.Resources.Add("key1", "value1");
 
-            Assert.AreNotEqual("data-context", freezable.GetValue(FrameworkElement.DataContextProperty));
             Assert.IsFalse(freezable.TryGetResource("key1", out resourceValue));
 
-            element.SetValue(ValueProperty, freezable);
-            Assert.AreEqual("data-context", freezable.GetValue(FrameworkElement.DataContextProperty));
+            freezable.TrySetContextParent(element);
             Assert.AreEqual(1, resourcesChangedCount);
             Assert.IsTrue(freezable.TryGetResource("key1", out resourceValue));
             Assert.AreEqual("value1", resourceValue);
@@ -76,35 +71,29 @@ namespace Granular.Presentation.Tests
             FreezableCollection<Freezable> freezableCollection = new FreezableCollection<Freezable> { freezable1 };
 
             FrameworkElement element = new FrameworkElement();
-            element.DataContext = "data-context";
             element.Resources = new ResourceDictionary();
             element.Resources.Add("key1", "value1");
 
-            Assert.IsNull(freezable1.GetValue(FrameworkElement.DataContextProperty));
             Assert.IsFalse(freezable1.TryGetResource("key1", out resourceValue));
 
-            element.SetValue(ValueProperty, freezableCollection);
-            Assert.AreEqual("data-context", freezable1.GetValue(FrameworkElement.DataContextProperty));
+            freezableCollection.TrySetContextParent(element);
             Assert.AreEqual(2, resources1ChangedCount);
             Assert.IsTrue(freezable1.TryGetResource("key1", out resourceValue));
             Assert.AreEqual("value1", resourceValue);
 
             Freezable freezable2 = new Freezable();
             freezableCollection.Add(freezable2);
-            Assert.AreEqual("data-context", freezable2.GetValue(FrameworkElement.DataContextProperty));
             Assert.IsTrue(freezable2.TryGetResource("key1", out resourceValue));
             Assert.AreEqual("value1", resourceValue);
 
             freezableCollection.Clear();
-            Assert.AreNotEqual("data-context", freezable1.GetValue(FrameworkElement.DataContextProperty));
-            Assert.AreNotEqual("data-context", freezable2.GetValue(FrameworkElement.DataContextProperty));
             Assert.AreEqual(3, resources1ChangedCount);
             Assert.IsFalse(freezable1.TryGetResource("key1", out resourceValue));
             Assert.IsFalse(freezable2.TryGetResource("key1", out resourceValue));
         }
 
         [TestMethod]
-        public void FreezableInheritanceParentTest()
+        public void FreezableResourceReferenceExpressionTest()
         {
             string styleResource = @"
 <Style xmlns='http://schemas.microsoft.com/winfx/2006/xaml/presentation' xmlns:x='http://schemas.microsoft.com/winfx/2006/xaml'>

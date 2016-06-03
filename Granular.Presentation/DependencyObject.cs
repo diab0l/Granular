@@ -305,7 +305,7 @@ namespace System.Windows
             //
         }
 
-        protected internal void SetInheritanceParent(DependencyObject parent)
+        protected void SetInheritanceParent(DependencyObject parent)
         {
             if (inheritanceParent == parent)
             {

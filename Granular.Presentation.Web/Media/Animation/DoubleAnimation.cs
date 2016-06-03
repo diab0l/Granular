@@ -154,7 +154,7 @@ namespace System.Windows.Media.Animation
             this.isAccumulable = true;
 
             KeyFrames = new FreezableCollection<DoubleKeyFrame>();
-            KeyFrames.SetInheritanceParent(this);
+            KeyFrames.TrySetContextParent(this);
         }
 
         public override object GetCurrentValue(object defaultOriginValue, object defaultDestinationValue, AnimationTimelineClock animationClock)

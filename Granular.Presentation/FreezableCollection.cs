@@ -36,7 +36,10 @@ namespace System.Windows
 
             foreach (T value in collection)
             {
-                value.SetInheritanceParent(this);
+                if (value is IContextElement)
+                {
+                    ((IContextElement)value).TrySetContextParent(this);
+                }
 
                 if (value is INotifyChanged)
                 {
@@ -49,7 +52,10 @@ namespace System.Windows
         {
             foreach (T value in e.OldItems)
             {
-                value.SetInheritanceParent(null);
+                if (value is IContextElement)
+                {
+                    ((IContextElement)value).TrySetContextParent(null);
+                }
 
                 if (value is INotifyChanged)
                 {
@@ -59,7 +65,10 @@ namespace System.Windows
 
             foreach (T value in e.NewItems)
             {
-                value.SetInheritanceParent(this);
+                if (value is IContextElement)
+                {
+                    ((IContextElement)value).TrySetContextParent(this);
+                }
 
                 if (value is INotifyChanged)
                 {
