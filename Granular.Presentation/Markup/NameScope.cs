@@ -77,12 +77,18 @@ namespace System.Windows.Markup
                     return nameScope;
                 }
 
-                if (!(element is UIElement))
+                if (element is UIElement)
+                {
+                    element = ((UIElement)element).LogicalParent;
+                }
+                else if (element is IContextElement)
+                {
+                    element = ((IContextElement)element).ContextParent as DependencyObject;
+                }
+                else
                 {
                     return null;
                 }
-
-                element = ((UIElement)element).LogicalParent;
             }
 
             return null;

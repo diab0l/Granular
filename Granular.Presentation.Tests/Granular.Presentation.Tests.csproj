@@ -65,6 +65,7 @@
     <Compile Include="DependencyPropertyValueEntryTest.cs" />
     <Compile Include="Input\KeyboardNavigationTargetTest.cs" />
     <Compile Include="Markup\LexerTest.cs" />
+    <Compile Include="Markup\NameScopeTest.cs" />
     <Compile Include="Media\Animation\AnimatableRootClockTest.cs" />
     <Compile Include="Media\Animation\ColorAnimationTest.cs" />
     <Compile Include="Media\Animation\DoubleAnimationTest.cs" />

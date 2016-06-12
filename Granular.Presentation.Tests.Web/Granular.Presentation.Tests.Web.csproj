@@ -175,6 +175,9 @@
     <Compile Include="..\Granular.Presentation.Tests\Markup\MarkupExtensionParserTest.cs">
       <Link>Markup\MarkupExtensionParserTest.cs</Link>
     </Compile>
+    <Compile Include="..\Granular.Presentation.Tests\Markup\NameScopeTest.cs">
+      <Link>Markup\NameScopeTest.cs</Link>
+    </Compile>
     <Compile Include="..\Granular.Presentation.Tests\Markup\StaticResourceExtensionTest.cs">
       <Link>Markup\StaticResourceExtensionTest.cs</Link>
     </Compile>
