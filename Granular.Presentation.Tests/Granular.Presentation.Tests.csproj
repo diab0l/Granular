@@ -61,6 +61,7 @@
     <Compile Include="Controls\ScrollContentPresenterTest.cs" />
     <Compile Include="Controls\ScrollViewerTest.cs" />
     <Compile Include="Controls\TextBoxTest.cs" />
+    <Compile Include="Data\BindingSourceObserverTest.cs" />
     <Compile Include="DependencyPropertyCallbackTest.cs" />
     <Compile Include="DependencyPropertyValueEntryTest.cs" />
     <Compile Include="Input\KeyboardNavigationTargetTest.cs" />

@@ -118,6 +118,9 @@
     <Compile Include="..\Granular.Presentation.Tests\Data\BindingExtensionTest.cs">
       <Link>Data\BindingExtensionTest.cs</Link>
     </Compile>
+    <Compile Include="..\Granular.Presentation.Tests\Data\BindingSourceObserverTest.cs">
+      <Link>Data\BindingSourceObserverTest.cs</Link>
+    </Compile>
     <Compile Include="..\Granular.Presentation.Tests\Data\CollectionViewTest.cs">
       <Link>Data\CollectionViewTest.cs</Link>
     </Compile>

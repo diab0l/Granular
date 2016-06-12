@@ -114,6 +114,20 @@ namespace System.Windows.Data
     }
 
     [DebuggerNonUserCode]
+    public class StaticObservableValue : IObservableValue
+    {
+        public event ObservableValueChangedEventHandler ValueChanged { add { } remove { } }
+        public object Value { get { return value; } }
+
+        private object value;
+
+        public StaticObservableValue(object value)
+        {
+            this.value = value;
+        }
+    }
+
+    [DebuggerNonUserCode]
     public static class ObservableValueChangedEventHandlerExtensions
     {
         public static void Raise(this ObservableValueChangedEventHandler handler, object sender, object oldValue, object newValue)

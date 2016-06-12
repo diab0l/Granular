@@ -55,7 +55,7 @@ namespace System.Windows.Data
             return new BindingExpression(
                 target: dependencyObject,
                 targetProperty: dependencyProperty,
-                path: GetDataContextRelativePath(Path ?? PropertyPath.Empty, Source, RelativeSource, ElementName),
+                path: Path,
                 source: Source,
                 relativeSource: RelativeSource,
                 elementName: ElementName,
@@ -65,16 +65,6 @@ namespace System.Windows.Data
                 converterParameter: ConverterParameter,
                 fallbackValue: FallbackValue,
                 targetNullValue: TargetNullValue);
-        }
-
-        private static PropertyPath GetDataContextRelativePath(PropertyPath path, object source, RelativeSource relativeSource, string elementName)
-        {
-            if (source != null || relativeSource != null || !elementName.IsNullOrEmpty())
-            {
-                return path;
-            }
-
-            return path.Insert(0, new DependencyPropertyPathElement(FrameworkElement.DataContextProperty));
         }
 
         private static IValueConverter GetStringFormatConverter(string format)

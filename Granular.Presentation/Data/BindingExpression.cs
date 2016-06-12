@@ -65,6 +65,7 @@ namespace System.Windows.Data
 
         public BindingStatus Status { get; private set; }
 
+        private IObservableValue sourceObserver;
         private ObservableExpression sourceExpression;
         private ObservableValue targetValue;
 
@@ -105,8 +106,8 @@ namespace System.Windows.Data
             isSourceUpdateMode = resolvedBindingMode == BindingMode.TwoWay || resolvedBindingMode == BindingMode.OneWayToSource;
             isTargetUpdateMode = resolvedBindingMode == BindingMode.TwoWay || resolvedBindingMode == BindingMode.OneWay;
 
-            object resolvedSource = Source ?? GetRelativeSource(Target, RelativeSource, ElementName);
-            sourceExpression = new ObservableExpression(resolvedSource, Path);
+            sourceObserver = CreateSourceObserver(Target, Source, RelativeSource, ElementName);
+            sourceExpression = new ObservableExpression(sourceObserver, Path ?? PropertyPath.Empty);
 
             // try to update the target (or the source on OneWayToSource)
             if (isTargetUpdateMode)
@@ -128,11 +129,6 @@ namespace System.Windows.Data
                 UpdateSourceOnTargetChanged();
             }
 
-            if (((RelativeSource != null && RelativeSource.Mode != RelativeSourceMode.Self) || !ElementName.IsNullOrEmpty()) && Target is IContextElement)
-            {
-                ((IContextElement)Target).ContextParentChanged += OnContextParentChanged;
-            }
-
             if (UpdateSourceTrigger == UpdateSourceTrigger.LostFocus && isSourceUpdateMode && Target is UIElement)
             {
                 ((UIElement)Target).LostFocus += OnLostFocus;
@@ -143,12 +139,12 @@ namespace System.Windows.Data
         {
             sourceExpression.Dispose();
 
-            if (Target is IContextElement)
+            if (sourceObserver is IDisposable)
             {
-                ((IContextElement)Target).ContextParentChanged -= OnContextParentChanged;
+                ((IDisposable)sourceObserver).Dispose();
             }
 
-            if (Target is UIElement)
+            if (UpdateSourceTrigger == UpdateSourceTrigger.LostFocus && isSourceUpdateMode && Target is UIElement)
             {
                 ((UIElement)Target).LostFocus -= OnLostFocus;
             }
@@ -163,11 +159,6 @@ namespace System.Windows.Data
         {
             targetValue.BaseValue = value;
             return true;
-        }
-
-        private void OnContextParentChanged(object sender, EventArgs e)
-        {
-            sourceExpression.SetBaseValue(Source ?? GetRelativeSource(Target, RelativeSource, ElementName));
         }
 
         private void UpdateTargetOnSourceChanged()
@@ -247,48 +238,24 @@ namespace System.Windows.Data
             UpdateSourceOnTargetChanged();
         }
 
-        private static object GetRelativeSource(DependencyObject target, RelativeSource relativeSource, string elementName)
+        private static IObservableValue CreateSourceObserver(DependencyObject target, object source, RelativeSource relativeSource, string elementName)
         {
+            if (source != null)
+            {
+                return new StaticObservableValue(source);
+            }
+
+            if (relativeSource != null)
+            {
+                return relativeSource.CreateSourceObserver(target);
+            }
+
             if (!elementName.IsNullOrEmpty())
             {
-                INameScope nameScope = NameScope.GetContainingNameScope(target);
-                return nameScope != null ? nameScope.FindName(elementName) : null;
+                return new ScopeElementSourceObserver(target, elementName);
             }
 
-            if (relativeSource == null || relativeSource.Mode == RelativeSourceMode.Self)
-            {
-                return target;
-            }
-
-            if (relativeSource.Mode == RelativeSourceMode.TemplatedParent)
-            {
-                return target is FrameworkElement ? ((FrameworkElement)target).TemplatedParent : null;
-            }
-
-            if (relativeSource.Mode == RelativeSourceMode.FindAncestor)
-            {
-                if (!(target is Visual))
-                {
-                    return null;
-                }
-
-                Visual visual = (target as Visual).VisualParent;
-                int level = relativeSource.AncestorLevel - 1;
-
-                while (visual != null && (level > 0 || relativeSource.AncestorType != null && !relativeSource.AncestorType.IsInstanceOfType(visual)))
-                {
-                    if (relativeSource.AncestorType == null || relativeSource.AncestorType.IsInstanceOfType(visual))
-                    {
-                        level--;
-                    }
-
-                    visual = visual.VisualParent;
-                }
-
-                return visual;
-            }
-
-            throw new Granular.Exception("RelativeSourceMode \"{0}\" is unexpected", relativeSource.Mode);
+            return new DataContextSourceObserver(target);
         }
 
         private static BindingMode GetDefaultBindingMode(DependencyObject dependencyObject, DependencyProperty dependencyProperty)

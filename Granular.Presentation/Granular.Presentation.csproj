@@ -63,6 +63,7 @@
     <Compile Include="Controls\SpellCheck.cs" />
     <Compile Include="Controls\TextBoxView.cs" />
     <Compile Include="Controls\TextChangedEventArgs.cs" />
+    <Compile Include="Data\BindingSourceObserver.cs" />
     <Compile Include="Documents\Block.cs" />
     <Compile Include="Documents\Inline.cs" />
     <Compile Include="Documents\Paragraph.cs" />

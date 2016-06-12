@@ -250,6 +250,9 @@
     <Compile Include="..\Granular.Presentation\Data\BindingExpression.cs">
       <Link>Data\BindingExpression.cs</Link>
     </Compile>
+    <Compile Include="..\Granular.Presentation\Data\BindingSourceObserver.cs">
+      <Link>Data\BindingSourceObserver.cs</Link>
+    </Compile>
     <Compile Include="..\Granular.Presentation\Data\CollectionView.cs">
       <Link>Data\CollectionView.cs</Link>
     </Compile>
