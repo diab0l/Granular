@@ -373,13 +373,18 @@ namespace System.Windows
 
             Size arrangedSize = ArrangeOverride(finalSize);
 
-            Size containingSize = layoutTransformValue.IsNullOrIdentity() ? arrangedSize : layoutTransformValue.GetContainingRect(new Rect(arrangedSize)).Size;
+            Rect containingRect = new Rect(arrangedSize);
 
-            containingSize = containingSize + Margin.Size;
+            if (!layoutTransformValue.IsNullOrIdentity())
+            {
+                containingRect = layoutTransformValue.GetContainingRect(containingRect);
+            }
 
-            Point alignedOffset = GetAlignmentOffset(finalRect, containingSize, HorizontalAlignment, VerticalAlignment);
+            containingRect = containingRect.AddMargin(Margin);
 
-            Point visualOffset = alignedOffset + Margin.Location;
+            Point alignedOffset = GetAlignmentOffset(finalRect, containingRect.Size, HorizontalAlignment, VerticalAlignment);
+
+            Point visualOffset = alignedOffset - containingRect.Location;
 
             VisualBounds = new Rect(visualOffset, arrangedSize);
 
