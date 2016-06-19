@@ -14,8 +14,8 @@ namespace Granular.Presentation.Tests.Media
     {
         private class TestVisual : Visual
         {
-            private Transform transform;
-            public Transform Transform
+            private Matrix transform;
+            public Matrix Transform
             {
                 get { return transform; }
                 set
@@ -31,7 +31,7 @@ namespace Granular.Presentation.Tests.Media
                 set { VisualBounds = value; }
             }
 
-            protected override Transform GetVisualTransformOverride()
+            protected override Matrix GetVisualTransformOverride()
             {
                 return transform;
             }
@@ -82,8 +82,8 @@ namespace Granular.Presentation.Tests.Media
             child1.Bounds = new Rect(50, 100, 400, 200);
             child2.Bounds = new Rect(100, 50, 200, 100);
 
-            child1.Transform = new RotateTransform { Angle = 90, CenterX = 200, CenterY = 100 };
-            child2.Transform = new ScaleTransform { ScaleX = 2, ScaleY = 0.5, CenterX = 100, CenterY = 50 };
+            child1.Transform = Matrix.RotationMatrix(Math.PI / 2, 200, 100);
+            child2.Transform = Matrix.ScalingMatrix(2, 0.5, 100, 50);
 
             Assert.IsTrue(parent.PointToRoot(new Point(0, 0)).IsClose(new Point(100, 50)));
             Assert.IsTrue(child1.PointToRoot(new Point(0, 0)).IsClose(new Point(450, 50)));

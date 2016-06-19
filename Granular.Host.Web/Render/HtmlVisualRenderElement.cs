@@ -118,8 +118,8 @@ namespace Granular.Host.Render
             }
         }
 
-        private Transform transform;
-        public Transform Transform
+        private Matrix transform;
+        public Matrix Transform
         {
             get { return transform; }
             set
@@ -129,18 +129,8 @@ namespace Granular.Host.Render
                     return;
                 }
 
-                if (transform != null)
-                {
-                    transform.Changed -= OnTransformChanged;
-                }
-
                 transform = value;
                 Style.SetTransform(transform, converter);
-
-                if (transform != null)
-                {
-                    transform.Changed += OnTransformChanged;
-                }
             }
         }
 
@@ -162,7 +152,7 @@ namespace Granular.Host.Render
             bounds = Rect.Zero;
             isVisible = true;
             opacity = 1;
-            transform = Transform.Identity;
+            transform = Matrix.Identity;
 
             Style.SetBounds(Bounds, converter);
             Style.SetClipToBounds(ClipToBounds);
@@ -224,11 +214,6 @@ namespace Granular.Host.Render
         private void OnBackgroundChanged(object sender, EventArgs e)
         {
             Style.SetBackground(background, new Rect(Bounds.Size), converter);
-        }
-
-        private void OnTransformChanged(object sender, EventArgs e)
-        {
-            Style.SetTransform(Transform, converter);
         }
 
         private static string GetElementTagName(object target)

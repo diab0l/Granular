@@ -207,8 +207,6 @@ namespace System.Windows
         private Size previousDesiredSize;
         private IDisposable focus;
 
-        private TransformGroup renderTransformGroup;
-
         public UIElement()
         {
             logicalChildren = new List<object>();
@@ -531,7 +529,7 @@ namespace System.Windows
                 return null;
             }
 
-            Point relativePosition = VisualTransform.IsNullOrIdentity() ? position - VisualOffset : (position - VisualOffset) * VisualTransform.Value.Inverse;
+            Point relativePosition = VisualTransform.IsNullOrIdentity() ? position - VisualOffset : (position - VisualOffset) * VisualTransform.Inverse;
 
             for (int i = VisualChildren.Count - 1; i >= 0; i--)
             {
@@ -649,67 +647,40 @@ namespace System.Windows
 
         private void OnRenderTransformChanged(DependencyPropertyChangedEventArgs e)
         {
-            if (renderTransformGroup != null)
-            {
-                renderTransformGroup.Children[1] = RenderTransform;
-            }
-            else
-            {
-                InvalidateVisualTransform();
-            }
+            InvalidateVisualTransform();
         }
 
         private void OnRenderTransformOriginChanged(DependencyPropertyChangedEventArgs e)
         {
-            if (renderTransformGroup != null)
-            {
-                double offsetX = ((Point)e.NewValue).X * RenderSize.Width;
-                double offsetY = ((Point)e.NewValue).Y * RenderSize.Height;
-
-                ((TranslateTransform)renderTransformGroup.Children[0]).X = -offsetX;
-                ((TranslateTransform)renderTransformGroup.Children[0]).Y = -offsetY;
-                ((TranslateTransform)renderTransformGroup.Children[2]).X = offsetX;
-                ((TranslateTransform)renderTransformGroup.Children[2]).Y = offsetY;
-            }
-            else
-            {
-                InvalidateVisualTransform();
-            }
-        }
-
-        protected override Transform GetVisualTransformOverride()
-        {
             if (RenderTransform.IsNullOrIdentity())
             {
-                return Transform.Identity;
+                return;
             }
 
-            if (renderTransformGroup == null)
-            {
-                double offsetX = RenderTransformOrigin.X * RenderSize.Width;
-                double offsetY = RenderTransformOrigin.Y * RenderSize.Height;
-
-                renderTransformGroup = new TransformGroup();
-                renderTransformGroup.Children.Add(new TranslateTransform(-offsetX, -offsetY));
-                renderTransformGroup.Children.Add(RenderTransform);
-                renderTransformGroup.Children.Add(new TranslateTransform(offsetX, offsetY));
-            }
-
-            return renderTransformGroup;
+            InvalidateVisualTransform();
         }
 
         protected override void OnVisualBoundsChanged()
         {
-            if (renderTransformGroup != null)
+            if (RenderTransform.IsNullOrIdentity())
             {
-                double offsetX = RenderTransformOrigin.X * RenderSize.Width;
-                double offsetY = RenderTransformOrigin.Y * RenderSize.Height;
-
-                ((TranslateTransform)renderTransformGroup.Children[0]).X = -offsetX;
-                ((TranslateTransform)renderTransformGroup.Children[0]).Y = -offsetY;
-                ((TranslateTransform)renderTransformGroup.Children[2]).X = offsetX;
-                ((TranslateTransform)renderTransformGroup.Children[2]).Y = offsetY;
+                return;
             }
+
+            InvalidateVisualTransform();
+        }
+
+        protected override Matrix GetVisualTransformOverride()
+        {
+            if (RenderTransform.IsNullOrIdentity())
+            {
+                return Matrix.Identity;
+            }
+
+            double offsetX = RenderTransformOrigin.X * RenderSize.Width;
+            double offsetY = RenderTransformOrigin.Y * RenderSize.Height;
+
+            return Matrix.TranslationMatrix(-offsetX, -offsetY) * RenderTransform.Value * Matrix.TranslationMatrix(offsetX, offsetY);
         }
 
         private bool CoerceInheritedValue(DependencyProperty dependencyProperty, bool value)

@@ -14,7 +14,7 @@ namespace System.Windows.Media
         bool IsHitTestVisible { get; set; }
         bool IsVisible { get; set; }
         double Opacity { get; set; }
-        Transform Transform { get; set; }
+        Matrix Transform { get; set; }
 
         IEnumerable<object> Children { get; }
         void InsertChild(int index, object child);

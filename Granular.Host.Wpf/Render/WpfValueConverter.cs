@@ -34,7 +34,6 @@ namespace Granular.Host.Wpf.Render
         wpf::System.Windows.Input.Cursor Convert(Cursor cursor);
         wpf::System.Windows.Input.Key Convert(Key key);
         wpf::System.Windows.Input.KeyStates Convert(KeyStates keyStates);
-        wpf::System.Windows.Media.Transform Convert(Transform transform);
         wpf::System.Windows.Media.Matrix Convert(Matrix matrix);
 
         MouseButton ConvertBack(wpf::System.Windows.Input.MouseButton mouseButton);
@@ -312,11 +311,6 @@ namespace Granular.Host.Wpf.Render
         public wpf::System.Windows.Input.KeyStates Convert(KeyStates keyStates)
         {
             return (wpf::System.Windows.Input.KeyStates)((int)keyStates);
-        }
-
-        public wpf::System.Windows.Media.Transform Convert(Transform transform)
-        {
-            return new wpf::System.Windows.Media.MatrixTransform(Convert(transform.Value));
         }
 
         public wpf::System.Windows.Media.Matrix Convert(Matrix matrix)

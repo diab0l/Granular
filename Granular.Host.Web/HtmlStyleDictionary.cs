@@ -288,16 +288,16 @@ namespace Granular.Host
             }
         }
 
-        public static void SetTransform(this HtmlStyleDictionary style, Transform transform, IHtmlValueConverter converter)
+        public static void SetTransform(this HtmlStyleDictionary style, Matrix transform, IHtmlValueConverter converter)
         {
-            if (transform == Transform.Identity)
+            if (transform == Matrix.Identity)
             {
                 style.ClearValue("transform");
                 style.ClearValue("transform-origin");
             }
             else
             {
-                style.SetValue("transform", converter.ToTransformString(transform.Value));
+                style.SetValue("transform", converter.ToTransformString(transform));
                 style.SetValue("transform-origin", "0 0");
             }
         }

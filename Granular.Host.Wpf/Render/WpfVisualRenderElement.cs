@@ -77,8 +77,8 @@ namespace Granular.Host.Wpf.Render
             set { container.Opacity = value; }
         }
 
-        private System.Windows.Media.Transform transform;
-        public System.Windows.Media.Transform Transform
+        private System.Windows.Media.Matrix transform;
+        public System.Windows.Media.Matrix Transform
         {
             get { return transform; }
             set
@@ -88,18 +88,8 @@ namespace Granular.Host.Wpf.Render
                     return;
                 }
 
-                if (transform != null)
-                {
-                    transform.Changed -= OnTransformChanged;
-                }
-
                 transform = value;
-                container.RenderTransform = converter.Convert(transform);
-
-                if (transform != null)
-                {
-                    transform.Changed += OnTransformChanged;
-                }
+                container.RenderTransform = new wpf::System.Windows.Media.MatrixTransform(converter.Convert(transform));
             }
         }
 
@@ -133,11 +123,6 @@ namespace Granular.Host.Wpf.Render
         private void OnBackgroundChanged(object sender, EventArgs e)
         {
             container.Background = converter.Convert(Background);
-        }
-
-        private void OnTransformChanged(object sender, EventArgs e)
-        {
-            container.RenderTransform = converter.Convert(transform);
         }
     }
 }

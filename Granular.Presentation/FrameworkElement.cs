@@ -608,19 +608,14 @@ namespace System.Windows
             isDefaultAlignment = HorizontalAlignment == HorizontalAlignment.Stretch && VerticalAlignment == VerticalAlignment.Stretch;
         }
 
-        protected override Transform GetVisualTransformOverride()
+        protected override Matrix GetVisualTransformOverride()
         {
-            if (LayoutTransform.IsNullOrIdentity())
+            if (layoutTransformValue.IsNullOrIdentity())
             {
                 return base.GetVisualTransformOverride();
             }
 
-            TransformGroup layoutTransformGroup = new TransformGroup();
-
-            layoutTransformGroup.Children.Add(LayoutTransform);
-            layoutTransformGroup.Children.Add(base.GetVisualTransformOverride());
-
-            return layoutTransformGroup;
+            return layoutTransformValue * base.GetVisualTransformOverride();
         }
 
         private void SetSize()

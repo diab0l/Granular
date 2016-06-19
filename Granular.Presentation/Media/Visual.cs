@@ -187,8 +187,8 @@ namespace System.Windows.Media
         }
 
         public event EventHandler VisualTransformChanged;
-        private Transform visualTransform;
-        public Transform VisualTransform
+        private Matrix visualTransform;
+        public Matrix VisualTransform
         {
             get { return visualTransform; }
             private set
@@ -198,17 +198,7 @@ namespace System.Windows.Media
                     return;
                 }
 
-                if (visualTransform != null)
-                {
-                    visualTransform.Changed -= OnVisualTransformValueChanged;
-                }
-
                 visualTransform = value;
-
-                if (visualTransform != null)
-                {
-                    visualTransform.Changed += OnVisualTransformValueChanged;
-                }
 
                 foreach (IVisualRenderElement visualRenderElement in visualRenderElements.Values)
                 {
@@ -255,7 +245,7 @@ namespace System.Windows.Media
             VisualIsHitTestVisible = true;
             VisualIsVisible = true;
             VisualOpacity = 1;
-            VisualTransform = Transform.Identity;
+            VisualTransform = Matrix.Identity;
 
             visualLevel = -1;
         }
@@ -429,9 +419,9 @@ namespace System.Windows.Media
             VisualTransform = GetVisualTransformOverride();
         }
 
-        protected virtual Transform GetVisualTransformOverride()
+        protected virtual Matrix GetVisualTransformOverride()
         {
-            return Transform.Identity;
+            return Matrix.Identity;
         }
 
         public Point PointToRoot(Point point)
@@ -446,7 +436,7 @@ namespace System.Windows.Media
 
         public Matrix TransformToAncestor(Visual ancestor)
         {
-            Matrix transformMatrix = !VisualTransform.IsNullOrIdentity() ? VisualTransform.Value : Matrix.Identity;
+            Matrix transformMatrix = !VisualTransform.IsNullOrIdentity() ? VisualTransform : Matrix.Identity;
             Matrix offsetMatrix = VisualOffset != Point.Zero ? Matrix.TranslationMatrix(VisualOffset.X, VisualOffset.Y) : Matrix.Identity;
             Matrix parentMatrix = VisualParent != null && VisualParent != ancestor ? VisualParent.TransformToAncestor(ancestor) : Matrix.Identity;
 
@@ -491,7 +481,7 @@ namespace System.Windows.Media
                 }
             }
 
-            return bounds.Transform(VisualTransform.Value).AddOffset(VisualBounds.Location);
+            return bounds.Transform(VisualTransform).AddOffset(VisualBounds.Location);
         }
 
         bool IContextElement.TrySetContextParent(IContextElement contextParent)
