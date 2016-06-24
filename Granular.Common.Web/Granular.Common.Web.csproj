@@ -157,10 +157,10 @@
       <HintPath>$(SolutionDir)packages\Saltarelle.Runtime.2.6.2\tools\Assemblies\mscorlib.dll</HintPath>
     </Reference>
     <Reference Include="Saltarelle.Linq">
-      <HintPath>..\packages\Saltarelle.Linq.2.4.0\lib\Saltarelle.Linq.dll</HintPath>
+      <HintPath>$(SolutionDir)packages\Saltarelle.Linq.2.4.0\lib\Saltarelle.Linq.dll</HintPath>
     </Reference>
     <Reference Include="Saltarelle.Web">
-      <HintPath>..\packages\Saltarelle.Web.3.1.0\lib\Saltarelle.Web.dll</HintPath>
+      <HintPath>$(SolutionDir)packages\Saltarelle.Web.3.1.0\lib\Saltarelle.Web.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup />
