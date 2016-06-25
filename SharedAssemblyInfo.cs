@@ -7,7 +7,7 @@
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("Granular")]
-[assembly: AssemblyCopyright("Copyright ☺ 2015")]
+[assembly: AssemblyCopyright("Copyright ☺ 2016")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -24,5 +24,5 @@
 
 [assembly: AssemblyVersion("0.1.0.0")]
 
-[assembly: AssemblyInformationalVersion("0.1.3.0")]
-[assembly: AssemblyFileVersion("0.1.3.0")]
+[assembly: AssemblyInformationalVersion("0.1.4.0")]
+[assembly: AssemblyFileVersion("0.1.4.0")]

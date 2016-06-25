@@ -1,6 +1,16 @@
 What's new
 ==========
 
+**0.1.4**
+- Button - Support ICommand (contributed by Miha Markič <miha@rthand.com>)
+- ColorTypeConverter - Support three character color codes (contributed by Suchiman <robinsue@live.de>)
+- Dispatcher - Rewrite
+- RenderTransform, LayoutTransform 
+- Freezable - ContextParent
+- UniformGrid
+- Html linear gradient stops scaling
+- Optimizations
+
 **0.1.3**
 - DependencyObject - CurrentValue
 - KeyboardNavigation
