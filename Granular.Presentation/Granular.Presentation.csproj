@@ -54,6 +54,7 @@
     <Compile Include="Controls\ListBoxItem.cs" />
     <Compile Include="Controls\PasswordBox.cs" />
     <Compile Include="Controls\Primitives\Selector.cs" />
+    <Compile Include="Controls\Primitives\UniformGrid.cs" />
     <Compile Include="Controls\ProgressBar.cs" />
     <Compile Include="Controls\RadioButton.cs" />
     <Compile Include="Controls\Image.cs" />

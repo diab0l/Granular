@@ -181,6 +181,9 @@
     <Compile Include="..\Granular.Presentation\Controls\Primitives\Track.cs">
       <Link>Controls\Primitives\Track.cs</Link>
     </Compile>
+    <Compile Include="..\Granular.Presentation\Controls\Primitives\UniformGrid.cs">
+      <Link>Controls\Primitives\UniformGrid.cs</Link>
+    </Compile>
     <Compile Include="..\Granular.Presentation\Controls\ProgressBar.cs">
       <Link>Controls\ProgressBar.cs</Link>
     </Compile>

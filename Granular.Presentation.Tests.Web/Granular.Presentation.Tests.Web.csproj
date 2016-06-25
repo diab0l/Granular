@@ -97,6 +97,9 @@
     <Compile Include="..\Granular.Presentation.Tests\Controls\Primitives\RelayCommand.cs">
       <Link>Controls\Primitives\RelayCommand.cs</Link>
     </Compile>
+    <Compile Include="..\Granular.Presentation.Tests\Controls\Primitives\UniformGridTest.cs">
+      <Link>Controls\Primitives\UniformGridTest.cs</Link>
+    </Compile>
     <Compile Include="..\Granular.Presentation.Tests\Controls\ScrollContentPresenterTest.cs">
       <Link>Controls\ScrollContentPresenterTest.cs</Link>
     </Compile>

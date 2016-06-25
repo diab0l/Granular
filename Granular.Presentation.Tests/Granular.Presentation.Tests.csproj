@@ -58,6 +58,7 @@
     <Compile Include="Controls\ImageTest.cs" />
     <Compile Include="Controls\Primitives\ButtonBaseTest.cs" />
     <Compile Include="Controls\Primitives\RelayCommand.cs" />
+    <Compile Include="Controls\Primitives\UniformGridTest.cs" />
     <Compile Include="Controls\ScrollContentPresenterTest.cs" />
     <Compile Include="Controls\ScrollViewerTest.cs" />
     <Compile Include="Controls\TextBoxTest.cs" />
