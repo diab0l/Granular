@@ -292,8 +292,8 @@ namespace System.Windows.Media
                 new Size(((w * d - h * c) / determinant).Max(0), ((h * a - w * b) / determinant).Max(0)) :
                 new Size(0, 0);
 
-            Func<double, double> GetConstrainedY = x => Math.Min(c > 0 ? (w - a * x) / c : Double.PositiveInfinity, d > 0 ? (h - b * x) / d : Double.PositiveInfinity);
-            Func<double, double> GetConstrainedX = y => Math.Min(a > 0 ? (w - c * y) / a : Double.PositiveInfinity, b > 0 ? (h - d * y) / b : Double.PositiveInfinity);
+            Func<double, double> GetConstrainedX = y => Math.Min(a.IsClose(0) ? 0 : (w - c * y) / a, b.IsClose(0) ? 0 : (h - d * y) / b);
+            Func<double, double> GetConstrainedY = x => Math.Min(c.IsClose(0) ? 0 : (w - a * x) / c, d.IsClose(0) ? 0 : (h - b * x) / d);
 
             // Maximum size on the first constrain edge
             Size size1 = a > c ?
