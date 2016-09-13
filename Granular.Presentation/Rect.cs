@@ -152,12 +152,12 @@ namespace System.Windows
 
         public static bool Contains(this Rect rect, Point point)
         {
-            return point.IsEmpty || !rect.IsEmpty && rect.Left <= point.X && point.X < rect.Right && rect.Top <= point.Y && point.Y < rect.Bottom;
+            return point.IsNullOrEmpty() || !rect.IsNullOrEmpty() && rect.Left <= point.X && point.X < rect.Right && rect.Top <= point.Y && point.Y < rect.Bottom;
         }
 
         public static bool Contains(this Rect @this, Rect rect)
         {
-            return rect.IsEmpty || !@this.IsEmpty && @this.Left <= rect.Left && @this.Top <= rect.Top && @this.Right >= rect.Right && @this.Bottom >= rect.Bottom;
+            return rect.IsNullOrEmpty() || !@this.IsNullOrEmpty() && @this.Left <= rect.Left && @this.Top <= rect.Top && @this.Right >= rect.Right && @this.Bottom >= rect.Bottom;
         }
 
         public static Rect Transform(this Rect rect, Matrix matrix)
