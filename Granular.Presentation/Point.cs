@@ -136,6 +136,11 @@ namespace System.Windows
             return new Point(point.X / scalar, point.Y / scalar);
         }
 
+        public static explicit operator Point(Size size)
+        {
+            return new Point(size.Width, size.Height);
+        }
+
         public static Point Parse(string value)
         {
             double[] values = value.Split(',').Select(v => Double.Parse(v)).ToArray();
