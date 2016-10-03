@@ -8,46 +8,25 @@ namespace Granular.Host
 {
     public static class ElementExtensions
     {
-        [InlineCode("{element}.setSelectionRange({index}, {index})")]
-        public static void SetCaretIndex(this Element element, int index)
-        {
-            //
-        }
+        [Bridge.Template("{element}.setSelectionRange({index}, {index})")]
+        public static extern void SetCaretIndex(this HTMLElement element, int index);
 
-        [InlineCode("{element}.selectionStart")]
-        public static int GetSelectionStart(this Element element)
-        {
-            return 0;
-        }
+        [Bridge.Template("{element}.selectionStart")]
+        public static extern int GetSelectionStart(this HTMLElement element);
 
-        [InlineCode("{element}.selectionStart = {value}")]
-        public static void SetSelectionStart(this Element element, int value)
-        {
-            //
-        }
+        [Bridge.Template("{element}.selectionStart = {value}")]
+        public static extern void SetSelectionStart(this HTMLElement element, int value);
 
-        [InlineCode("{element}.selectionEnd")]
-        public static int GetSelectionEnd(this Element element)
-        {
-            return 0;
-        }
+        [Bridge.Template("{element}.selectionEnd")]
+        public static extern int GetSelectionEnd(this HTMLElement element);
 
-        [InlineCode("{element}.selectionEnd = {value}")]
-        public static void SetSelectionEnd(this Element element, int value)
-        {
-            //
-        }
+        [Bridge.Template("{element}.selectionEnd = {value}")]
+        public static extern void SetSelectionEnd(this HTMLElement element, int value);
 
-        [InlineCode("{element}.value")]
-        public static string GetValue(this Element element)
-        {
-            return null;
-        }
+        [Bridge.Template("{element}.value")]
+        public static extern string GetValue(this HTMLElement element);
 
-        [InlineCode("{element}.value = {value}")]
-        public static void SetValue(this Element element, string value)
-        {
-            //
-        }
+        [Bridge.Template("{element}.value = {value}")]
+        public static extern void SetValue(this HTMLElement element, string value);
     }
 }

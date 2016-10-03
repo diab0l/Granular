@@ -67,17 +67,11 @@ namespace Granular.Host
             return CreateObjectUrl(CreateBlob(imageData, mimeType));
         }
 
-        [System.Runtime.CompilerServices.InlineCode("new Blob([new Uint8Array({data})], {{type: {mimeType}}})")]
-        private static object CreateBlob(byte[] data, string mimeType)
-        {
-            return null;
-        }
+        [Bridge.Template("new Blob([new Uint8Array({data})], {type: {mimeType}})")]
+        private static extern object CreateBlob(byte[] data, string mimeType);
 
-        [System.Runtime.CompilerServices.InlineCode("URL.createObjectURL({blob})")]
-        public static string CreateObjectUrl(object blob)
-        {
-            return null;
-        }
+        [Bridge.Template("URL.createObjectURL({blob})")]
+        public static extern string CreateObjectUrl(object blob);
 
         private static bool IsUrl(string uri)
         {

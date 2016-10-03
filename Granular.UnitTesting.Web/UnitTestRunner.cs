@@ -152,28 +152,16 @@ namespace Granular.UnitTesting
             return testClass.GetMethods(BindingFlags.Instance | BindingFlags.Public).Where(methodInfo => methodInfo.GetCustomAttributes(true).OfType<TestMethodAttribute>().Any());
         }
 
-        [System.Runtime.CompilerServices.InlineCode("console.error({message})")]
-        private static void WriteError(string message)
-        {
-            //
-        }
+        [Bridge.Template("console.error({message})")]
+        private static extern void WriteError(string message);
 
-        [System.Runtime.CompilerServices.InlineCode("console.info({message})")]
-        private static void WriteInfo(string message)
-        {
-            //
-        }
+        [Bridge.Template("console.info({message})")]
+        private static extern void WriteInfo(string message);
 
-        [System.Runtime.CompilerServices.InlineCode("console.log({message})")]
-        private static void WriteLog(string message)
-        {
-            //
-        }
+        [Bridge.Template("console.log({message})")]
+        private static extern void WriteLog(string message);
 
-        [System.Runtime.CompilerServices.InlineCode("console.warn({message})")]
-        private static void WriteWarning(string message)
-        {
-            //
-        }
+        [Bridge.Template("console.warn({message})")]
+        private static extern void WriteWarning(string message);
     }
 }

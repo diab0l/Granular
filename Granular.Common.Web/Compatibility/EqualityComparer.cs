@@ -2,7 +2,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using System.Text;
 
 namespace Granular.Compatibility
@@ -34,10 +33,7 @@ namespace Granular.Compatibility
             return comparer.GetHashCode(obj);
         }
 
-        [InlineCode("{value} !== {value}")]
-        private static bool IsNaN(object value)
-        {
-            return false;
-        }
+        [Bridge.Template("{value} !== {value}")]
+        private static extern bool IsNaN(object value);
     }
 }

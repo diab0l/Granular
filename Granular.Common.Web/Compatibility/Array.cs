@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using System.Text;
 
 namespace Granular.Compatibility
@@ -49,10 +48,7 @@ namespace Granular.Compatibility
             return lastIndex;
         }
 
-        [InlineCode("{array}")]
-        public static T[] ImplicitCast<T>(object array)
-        {
-            return null;
-        }
+        [Bridge.Template("{array}")]
+        public static extern T[] ImplicitCast<T>(object array);
     }
 }
