@@ -92,7 +92,6 @@ namespace System.Windows
             ResourcesChanged.Raise(this, e);
         }
 
-        [System.Runtime.CompilerServices.Reflectable(false)]
         public bool TryGetResource(object resourceKey, out object value)
         {
             if (Resources != null && Resources.TryGetValue(resourceKey, out value))

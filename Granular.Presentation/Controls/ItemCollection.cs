@@ -208,7 +208,6 @@ namespace System.Windows.Controls
             return delegateView.GetEnumerator();
         }
 
-        [System.Runtime.CompilerServices.Reflectable(false)]
         IEnumerator IEnumerable.GetEnumerator()
         {
             return GetEnumerator();

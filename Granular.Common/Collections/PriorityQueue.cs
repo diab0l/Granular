@@ -62,7 +62,6 @@ namespace Granular.Collections
             throw new InvalidOperationException("Queue is empty");
         }
 
-        [System.Runtime.CompilerServices.Reflectable(false)]
         public bool TryDequeue(out TValue value)
         {
             if (TryPeek(out value))
@@ -86,7 +85,6 @@ namespace Granular.Collections
             throw new InvalidOperationException("Queue is empty");
         }
 
-        [System.Runtime.CompilerServices.Reflectable(false)]
         public bool TryPeek(out TValue value)
         {
             if (items.Count > 0)
@@ -104,7 +102,6 @@ namespace Granular.Collections
             return items.GetEnumerator();
         }
 
-        [System.Runtime.CompilerServices.Reflectable(false)]
         IEnumerator IEnumerable.GetEnumerator()
         {
             return items.GetEnumerator();

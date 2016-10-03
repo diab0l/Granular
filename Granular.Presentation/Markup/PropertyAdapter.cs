@@ -63,7 +63,6 @@ namespace System.Windows.Markup
             return adaptersCache.TryGetValue(new TypeMemberKey(targetType, propertyName), out propertyAdapter) ? propertyAdapter : null;
         }
 
-        [System.Runtime.CompilerServices.Reflectable(false)]
         private static bool TryCreateAdapter(TypeMemberKey key, out IPropertyAdapter adapter)
         {
             adapter = null;

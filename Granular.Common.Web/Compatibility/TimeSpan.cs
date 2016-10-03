@@ -21,7 +21,6 @@ namespace Granular.Compatibility
         private const int TimeSpanFormatMillisecondsGroupIndex = 11;
         private const int TimeSpanFormatDaysAlternativeGroupIndex = 12;
 
-        [System.Runtime.CompilerServices.Reflectable(false)]
         public static bool TryParse(string s, out System.TimeSpan result)
         {
             int days = 0;

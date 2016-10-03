@@ -101,7 +101,6 @@ namespace System.Windows
             return XamlLoader.Load(XamlParser.Parse(resourceString));
         }
 
-        [System.Runtime.CompilerServices.Reflectable(false)]
         private static void ParseResourceUri(string resourceUri, out string assemblyName, out string resourcePath)
         {
             Match match = ResourceUriRegex.Match(resourceUri);

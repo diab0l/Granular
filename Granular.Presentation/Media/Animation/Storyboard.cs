@@ -179,7 +179,6 @@ namespace System.Windows.Media.Animation
             return targets;
         }
 
-        [System.Runtime.CompilerServices.Reflectable(false)]
         private void GetAnimationClocksTargets(TimelineClock clock, FrameworkElement containingObject, INameScope nameScope, ref ListDictionary<TargetKey, AnimationTimelineClock> targets)
         {
             AnimationTimelineClock animationClock = clock as AnimationTimelineClock;
@@ -232,7 +231,6 @@ namespace System.Windows.Media.Animation
             return TryGetPropertyPathTarget(root, propertyPath, out target, out targetProperty) && target is IAnimatable ? new TargetKey((IAnimatable)target, targetProperty) : null;
         }
 
-        [System.Runtime.CompilerServices.Reflectable(false)]
         private static bool TryGetPropertyPathTarget(DependencyObject root, PropertyPath propertyPath, out DependencyObject target, out DependencyProperty targetProperty)
         {
             object baseValue;

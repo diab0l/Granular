@@ -8,7 +8,6 @@ namespace System.Windows
     {
         event EventHandler<ResourcesChangedEventArgs> ResourcesChanged;
 
-        [System.Runtime.CompilerServices.Reflectable(false)]
         bool TryGetResource(object resourceKey, out object value);
     }
 

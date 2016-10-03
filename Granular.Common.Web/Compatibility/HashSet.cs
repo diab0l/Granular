@@ -43,7 +43,6 @@ namespace System.Collections.Generic
             return dictionary.Keys.GetEnumerator();
         }
 
-        [System.Runtime.CompilerServices.Reflectable(false)]
         IEnumerator IEnumerable.GetEnumerator()
         {
             return GetEnumerator();

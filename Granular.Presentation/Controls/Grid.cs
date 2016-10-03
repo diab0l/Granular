@@ -211,7 +211,6 @@ namespace System.Windows.Controls
             return finalSize;
         }
 
-        [System.Runtime.CompilerServices.Reflectable(false)]
         private static void GetChildPosition(FrameworkElement child, int rowsCount, int columnsCount, out int row, out int column, out int rowSpan, out int columnSpan)
         {
             row = GetRow(child).Bounds(0, rowsCount - 1);
@@ -248,7 +247,6 @@ namespace System.Windows.Controls
             return allAbsolute ? absoluteLength : Math.Max(0, remainingLength);
         }
 
-        [System.Runtime.CompilerServices.Reflectable(false)]
         private static void SetBoundedValues(IDefinitionBase[] definitionBases, ref double[] lengths)
         {
             for (int i = 0; i < lengths.Length; i++)
@@ -257,7 +255,6 @@ namespace System.Windows.Controls
             }
         }
 
-        [System.Runtime.CompilerServices.Reflectable(false)]
         private static void SetStarLengths(IDefinitionBase[] definitionBases, double starLength, ref double[] lengths)
         {
             for (int i = 0; i < definitionBases.Length; i++)

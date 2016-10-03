@@ -97,7 +97,6 @@ namespace Granular.Collections
             return dictionary.SelectMany(pair => pair.Value.Select(value => new KeyValuePair<TKey, TValue>(pair.Key, value))).GetEnumerator();
         }
 
-        [System.Runtime.CompilerServices.Reflectable(false)]
         IEnumerator IEnumerable.GetEnumerator()
         {
             return GetEnumerator();

@@ -208,7 +208,6 @@ namespace System.Windows.Controls
             return DefaultContentTemplate.Default;
         }
 
-        [System.Runtime.CompilerServices.Reflectable(false)]
         private bool TryFindDataTemplate(Type type, out DataTemplate dataTemplate)
         {
             object value;

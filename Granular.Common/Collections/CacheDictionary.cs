@@ -50,7 +50,6 @@ namespace Granular.Collections
             throw new Granular.Exception("Key \"{0}\" was not found", key);
         }
 
-        [System.Runtime.CompilerServices.Reflectable(false)]
         public bool TryGetValue(TKey key, out TValue value)
         {
             if (dictionary.TryGetValue(key, out value))

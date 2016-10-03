@@ -130,7 +130,6 @@ namespace System.Windows
             return collection.GetEnumerator();
         }
 
-        [System.Runtime.CompilerServices.Reflectable(false)]
         IEnumerator IEnumerable.GetEnumerator()
         {
             return ((IEnumerable)collection).GetEnumerator();

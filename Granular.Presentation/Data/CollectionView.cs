@@ -52,7 +52,6 @@ namespace System.Windows.Data
                 return (new object[0]).Cast<object>().GetEnumerator();
             }
 
-            [System.Runtime.CompilerServices.Reflectable(false)]
             IEnumerator IEnumerable.GetEnumerator()
             {
                 return GetEnumerator();
@@ -278,7 +277,6 @@ namespace System.Windows.Data
             return innerCollection.Cast<object>().GetEnumerator();
         }
 
-        [System.Runtime.CompilerServices.Reflectable(false)]
         IEnumerator IEnumerable.GetEnumerator()
         {
             return GetEnumerator();

@@ -77,7 +77,6 @@ namespace System.Windows
             return value;
         }
 
-        [System.Runtime.CompilerServices.Reflectable(false)]
         public bool TryGetValue(object key, out object value)
         {
             if (dictionary.TryGetValue(key, out value))
@@ -126,7 +125,6 @@ namespace System.Windows
             return false;
         }
 
-        [System.Runtime.CompilerServices.Reflectable(false)]
         IEnumerator IEnumerable.GetEnumerator()
         {
             return dictionary.GetEnumerator();
@@ -166,7 +164,6 @@ namespace System.Windows
             return Application.LoadComponent(source) as ResourceDictionary;
         }
 
-        [System.Runtime.CompilerServices.Reflectable(false)]
         bool IResourceContainer.TryGetResource(object resourceKey, out object value)
         {
             return TryGetValue(resourceKey, out value);

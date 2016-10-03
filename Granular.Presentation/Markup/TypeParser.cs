@@ -22,7 +22,6 @@ namespace System.Windows.Markup
             return ParseType(XamlName.FromPrefixedName(prefixedTypeName, namespaces));
         }
 
-        [System.Runtime.CompilerServices.Reflectable(false)]
         public static bool TryParseType(string prefixedTypeName, XamlNamespaces namespaces, out Type type)
         {
             return TryParseType(XamlName.FromPrefixedName(prefixedTypeName, namespaces), out type);
@@ -40,13 +39,11 @@ namespace System.Windows.Markup
             return type;
         }
 
-        [System.Runtime.CompilerServices.Reflectable(false)]
         public static bool TryParseType(XamlName name, out Type type)
         {
             return resolvedTypesCache.TryGetValue(name, out type);
         }
 
-        [System.Runtime.CompilerServices.Reflectable(false)]
         public static bool TryResolveType(XamlName name, out Type type)
         {
             if (XamlTypes.TryParseXamlType(name, out type))
@@ -59,7 +56,6 @@ namespace System.Windows.Markup
             return TryGetType(name, out type) || TryGetType(extensionName, out type);
         }
 
-        [System.Runtime.CompilerServices.Reflectable(false)]
         private static bool TryGetType(XamlName xamlName, out Type type)
         {
             if (xamlName.NamespaceName.StartsWith(ClrNamespacePrefix))
@@ -88,7 +84,6 @@ namespace System.Windows.Markup
             return false;
         }
 
-        [System.Runtime.CompilerServices.Reflectable(false)]
         private static bool TryGetType(string localName, string clrNamespace, string assemblyName, out Type type)
         {
             if (!assemblyName.IsNullOrEmpty())
@@ -113,7 +108,6 @@ namespace System.Windows.Markup
             return false;
         }
 
-        [System.Runtime.CompilerServices.Reflectable(false)]
         private static bool TryGetType(string qualifiedTypeName, out Type type)
         {
             type = Granular.Compatibility.Type.GetType(qualifiedTypeName);

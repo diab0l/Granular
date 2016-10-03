@@ -32,7 +32,6 @@ namespace System.Windows.Markup
             { XamlLanguage.TypeTypeName,  typeof(TypeProvider) },
         };
 
-        [System.Runtime.CompilerServices.Reflectable(false)]
         public static bool TryParseXamlType(XamlName name, out Type type)
         {
             return TypeProviders.TryGetValue(name, out type);

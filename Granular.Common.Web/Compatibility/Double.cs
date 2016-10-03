@@ -11,7 +11,6 @@ namespace Granular.Compatibility
         //[ws][$][sign][integral-digits[,]]integral-digits[.[fractional-digits]][E[sign]exponential-digits][ws]
         private static readonly Regex DoubleFormat = new Regex(@"[+-]?([0-9]*,)*[0-9]*(\.([0-9]*))?([eE]([+-]?)[0-9]*)?");
 
-        [System.Runtime.CompilerServices.Reflectable(false)]
         public static bool TryParse(string s, out double result)
         {
             if (!DoubleFormat.Match(s).Success)

@@ -153,7 +153,6 @@ namespace System.Windows.Controls
             return innerCollection.GetEnumerator();
         }
 
-        [System.Runtime.CompilerServices.Reflectable(false)]
         IEnumerator IEnumerable.GetEnumerator()
         {
             return GetEnumerator();

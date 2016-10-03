@@ -25,7 +25,6 @@ namespace System.Windows.Markup
             return adaptersCache.TryGetValue(new TypeMemberKey(targetType, eventName), out eventAdapter) ? eventAdapter : null;
         }
 
-        [System.Runtime.CompilerServices.Reflectable(false)]
         private static bool TryCreateAdapter(TypeMemberKey key, out IEventAdapter adapter)
         {
             adapter = null;

@@ -99,7 +99,6 @@ namespace System.Windows.Markup
             return parent != null ? parent.Concat(items).GetEnumerator() : items.GetEnumerator();
         }
 
-        [System.Runtime.CompilerServices.Reflectable(false)]
         IEnumerator IEnumerable.GetEnumerator()
         {
             return GetEnumerator();

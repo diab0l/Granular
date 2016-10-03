@@ -13,10 +13,8 @@ namespace System.Windows
     [TypeConverter(typeof(PropertyPathElementTypeConverter))]
     public interface IPropertyPathElement
     {
-        [System.Runtime.CompilerServices.Reflectable(false)]
         bool TryGetValue(object target, out object value);
 
-        [System.Runtime.CompilerServices.Reflectable(false)]
         bool TryGetDependencyProperty(Type containingType, out DependencyProperty dependencyProperty);
 
         IPropertyObserver CreatePropertyObserver(Type baseValueType);
@@ -63,13 +61,11 @@ namespace System.Windows
             return PropertyName.IsMemberName ? String.Format("({0})", PropertyName.LocalName) : PropertyName.LocalName;
         }
 
-        [System.Runtime.CompilerServices.Reflectable(false)]
         public bool TryGetValue(object target, out object value)
         {
             return TryGetValue(target, PropertyName, out value);
         }
 
-        [System.Runtime.CompilerServices.Reflectable(false)]
         public bool TryGetDependencyProperty(Type containingType, out DependencyProperty dependencyProperty)
         {
             dependencyProperty = DependencyProperty.GetProperty(containingType, PropertyName);
@@ -95,7 +91,6 @@ namespace System.Windows
             return null;
         }
 
-        [System.Runtime.CompilerServices.Reflectable(false)]
         public static bool TryGetValue(object target, XamlName propertyName, out object value)
         {
             DependencyProperty dependencyProperty = DependencyProperty.GetProperty(target.GetType(), propertyName);
@@ -155,7 +150,6 @@ namespace System.Windows
             return String.Format("{0}[{1}]", propertyName, indexRawValues);
         }
 
-        [System.Runtime.CompilerServices.Reflectable(false)]
         public bool TryGetValue(object target, out object value)
         {
             Type propertyContainingType = PropertyName.IsMemberName ? TypeParser.ParseType(PropertyName.ContainingTypeName) : target.GetType();
@@ -191,7 +185,6 @@ namespace System.Windows
             return true;
         }
 
-        [System.Runtime.CompilerServices.Reflectable(false)]
         public bool TryGetDependencyProperty(Type containingType, out DependencyProperty dependencyProperty)
         {
             dependencyProperty = null;
@@ -241,7 +234,6 @@ namespace System.Windows
             return String.Format("({0})", DependencyProperty);
         }
 
-        [System.Runtime.CompilerServices.Reflectable(false)]
         public bool TryGetDependencyProperty(Type containingType, out DependencyProperty dependencyProperty)
         {
             dependencyProperty = this.DependencyProperty;
@@ -253,7 +245,6 @@ namespace System.Windows
             return new DependencyPropertyObserver(DependencyProperty);
         }
 
-        [System.Runtime.CompilerServices.Reflectable(false)]
         public bool TryGetValue(object target, out object value)
         {
             if (target is DependencyObject)
@@ -327,7 +318,6 @@ namespace System.Windows
             return new PropertyPath(elements);
         }
 
-        [System.Runtime.CompilerServices.Reflectable(false)]
         public static bool TryGetValue(this PropertyPath propertyPath, object root, out object value)
         {
             if (propertyPath.IsEmpty)

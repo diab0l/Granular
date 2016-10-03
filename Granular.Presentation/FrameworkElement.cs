@@ -478,13 +478,11 @@ namespace System.Windows
             }
         }
 
-        [System.Runtime.CompilerServices.Reflectable(false)]
         public bool TryGetResource(object resourceKey, out object value)
         {
             return resourcesCache.TryGetValue(resourceKey, out value);
         }
 
-        [System.Runtime.CompilerServices.Reflectable(false)]
         private bool TryResolveResource(object resourceKey, out object value)
         {
             if (Resources != null && Resources.TryGetValue(resourceKey, out value))

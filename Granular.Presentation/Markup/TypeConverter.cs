@@ -32,7 +32,6 @@ namespace System.Windows.Markup
 
         public static ITypeConverter Empty = new EmptyTypeConverter();
 
-        [System.Runtime.CompilerServices.Reflectable(false)]
         public static bool TryGetTypeConverter(Type sourceType, Type targetType, out ITypeConverter typeConverter)
         {
             if (targetType.IsAssignableFrom(sourceType))
@@ -57,7 +56,6 @@ namespace System.Windows.Markup
             return typeConverter;
         }
 
-        [System.Runtime.CompilerServices.Reflectable(false)]
         public static bool TryConvertValue(object value, Type type, XamlNamespaces namespaces, out object result)
         {
             ITypeConverter typeConverter;

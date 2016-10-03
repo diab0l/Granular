@@ -124,7 +124,6 @@ namespace System.Windows.Threading
             });
         }
 
-        [System.Runtime.CompilerServices.Reflectable(false)]
         private bool TryDequeue(out DispatcherOperation operation)
         {
             while (disableProcessingRequests == 0 && queue.TryPeek(out operation) && operation.Priority != DispatcherPriority.Inactive)

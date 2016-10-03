@@ -31,7 +31,6 @@ namespace System.Windows.Controls
             count = (count + 1).Min(capacity);
         }
 
-        [System.Runtime.CompilerServices.Reflectable(false)]
         public bool TryGetMeasure(Size availableSize, out Size measuredSize)
         {
             for (int i = 0; i < count; i++)

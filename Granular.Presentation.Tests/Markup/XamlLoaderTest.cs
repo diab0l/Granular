@@ -140,7 +140,6 @@ namespace Granular.Presentation.Tests.Markup
             return list.GetEnumerator();
         }
 
-        [System.Runtime.CompilerServices.Reflectable(false)]
         IEnumerator IEnumerable.GetEnumerator()
         {
             return GetEnumerator();

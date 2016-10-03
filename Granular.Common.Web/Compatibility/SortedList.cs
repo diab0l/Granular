@@ -106,7 +106,6 @@ namespace System.Collections.Generic
             return true;
         }
 
-        [System.Runtime.CompilerServices.Reflectable(false)]
         public bool TryGetValue(TKey key, out TValue value)
         {
             int index;
@@ -126,13 +125,11 @@ namespace System.Collections.Generic
             values.Clear();
         }
 
-        [System.Runtime.CompilerServices.Reflectable(false)]
         private bool FindItem(TKey key, out int closestIndex)
         {
             return FindItem(key, 0, keys.Count - 1, out closestIndex);
         }
 
-        [System.Runtime.CompilerServices.Reflectable(false)]
         private bool FindItem(TKey key, int firstIndex, int lastIndex, out int closestIndex)
         {
             if (firstIndex > lastIndex)
@@ -163,7 +160,6 @@ namespace System.Collections.Generic
             return keys.Zip(values, (key, value) => new KeyValuePair<TKey, TValue>(key, value)).GetEnumerator();
         }
 
-        [System.Runtime.CompilerServices.Reflectable(false)]
         IEnumerator IEnumerable.GetEnumerator()
         {
             return GetEnumerator();
