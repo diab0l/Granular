@@ -228,7 +228,7 @@ namespace System.Windows.Controls
         {
             if (scrollContentPresenter != null)
             {
-                VerticalOffset = (VerticalOffset - Math.Sign(e.Delta) * ScrollInfoExtensions.MouseWheelDelta).Bounds(0, ScrollableHeight);
+                VerticalOffset = (VerticalOffset - Math.Sign((double)e.Delta) * ScrollInfoExtensions.MouseWheelDelta).Bounds(0, ScrollableHeight);
                 e.Handled = true;
             }
         }
