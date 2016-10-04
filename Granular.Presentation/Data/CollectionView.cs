@@ -49,7 +49,7 @@ namespace System.Windows.Data
 
             public IEnumerator<object> GetEnumerator()
             {
-                return (new object[0]).Cast<object>().GetEnumerator();
+                return Enumerable.Empty<object>().GetEnumerator();
             }
 
             IEnumerator IEnumerable.GetEnumerator()
