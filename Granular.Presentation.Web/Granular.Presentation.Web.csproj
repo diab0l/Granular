@@ -481,11 +481,23 @@
     <Compile Include="..\Granular.Presentation\Media\Animation\Clock.cs">
       <Link>Media\Animation\Clock.cs</Link>
     </Compile>
+    <Compile Include="..\Granular.Presentation\Media\Animation\ColorAnimation.cs">
+      <Link>Media\Animation\ColorAnimation.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\Media\Animation\DoubleAnimation.cs">
+      <Link>Media\Animation\DoubleAnimation.cs</Link>
+    </Compile>
     <Compile Include="..\Granular.Presentation\Media\Animation\DurationClock.cs">
       <Link>Media\Animation\DurationClock.cs</Link>
     </Compile>
     <Compile Include="..\Granular.Presentation\Media\Animation\EasingFunction.cs">
       <Link>Media\Animation\EasingFunction.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\Media\Animation\KeyFrame.cs">
+      <Link>Media\Animation\KeyFrame.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\Media\Animation\KeyFramesAnimationTimeline.cs">
+      <Link>Media\Animation\KeyFramesAnimationTimeline.cs</Link>
     </Compile>
     <Compile Include="..\Granular.Presentation\Media\Animation\KeyTime.cs">
       <Link>Media\Animation\KeyTime.cs</Link>
@@ -501,6 +513,9 @@
     </Compile>
     <Compile Include="..\Granular.Presentation\Media\Animation\ParallelTimelineClock.cs">
       <Link>Media\Animation\ParallelTimelineClock.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\Media\Animation\RectAnimation.cs">
+      <Link>Media\Animation\RectAnimation.cs</Link>
     </Compile>
     <Compile Include="..\Granular.Presentation\Media\Animation\RepeatBehavior.cs">
       <Link>Media\Animation\RepeatBehavior.cs</Link>
@@ -528,6 +543,9 @@
     </Compile>
     <Compile Include="..\Granular.Presentation\Media\Animation\StoryboardAction.cs">
       <Link>Media\Animation\StoryboardAction.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\Media\Animation\ThicknessAnimation.cs">
+      <Link>Media\Animation\ThicknessAnimation.cs</Link>
     </Compile>
     <Compile Include="..\Granular.Presentation\Media\Animation\Timeline.cs">
       <Link>Media\Animation\Timeline.cs</Link>
@@ -736,10 +754,6 @@
     <Compile Include="..\Granular.Presentation\Window.cs">
       <Link>Window.cs</Link>
     </Compile>
-    <Compile Include="Media\Animation\ColorAnimation.cs" />
-    <Compile Include="Media\Animation\RectAnimation.cs" />
-    <Compile Include="Media\Animation\ThicknessAnimation.cs" />
-    <Compile Include="Media\Animation\DoubleAnimation.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="..\SharedAssemblyInfo.cs">
       <Link>Properties\SharedAssemblyInfo.cs</Link>
