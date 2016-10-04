@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Html;
+using Bridge.Html5;
 using System.Linq;
 using System.Text;
 using System.Windows;
@@ -14,7 +14,7 @@ namespace Granular.Host
         public static readonly TextMeasurementService Default = new TextMeasurementService(HtmlValueConverter.Default);
 
         private IHtmlValueConverter converter;
-        private Element htmlElement;
+        private HTMLElement htmlElement;
         private HtmlStyleDictionary style;
 
         private TextMeasurementService(IHtmlValueConverter converter)

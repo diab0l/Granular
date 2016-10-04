@@ -24,7 +24,7 @@ namespace Granular.Host
 
         public void Run(Action applicationEntryPoint)
         {
-            System.Html.Window.OnLoad += e => applicationEntryPoint();
+            Bridge.Html5.Window.OnLoad += e => applicationEntryPoint();
         }
     }
 }

@@ -41,7 +41,7 @@ namespace Granular.Host
                     IEnumerable<IRenderItem> currentItems = items.ToArray();
                     items.Clear();
 
-                    System.Html.Window.RequestAnimationFrame(time => Render(currentItems));
+                    Bridge.Html5.Window.RequestAnimationFrame(time => Render(currentItems));
                 }, DispatcherPriority.Render);
             }
         }

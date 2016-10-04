@@ -17,9 +17,9 @@ namespace Granular.UnitTesting
             int testsCount;
             int testsPassed;
 
-            if (!System.Html.Window.Location.Hash.IsNullOrEmpty())
+            if (!Bridge.Html5.Window.Location.Hash.IsNullOrEmpty())
             {
-                string testName = System.Html.Window.Location.Hash.TrimStart('#');
+                string testName = Bridge.Html5.Window.Location.Hash.TrimStart('#');
                 RunTest(testAssembly, testName, false, out testsCount, out testsPassed);
             }
             else

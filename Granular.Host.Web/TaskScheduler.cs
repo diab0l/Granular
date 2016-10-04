@@ -17,8 +17,8 @@ namespace Granular.Host
 
         public IDisposable ScheduleTask(TimeSpan timeSpan, Action action)
         {
-            int token = System.Html.Window.SetTimeout(action, (int)timeSpan.TotalMilliseconds);
-            return new Disposable(() => System.Html.Window.ClearTimeout(token));
+            int token = Bridge.Html5.Window.SetTimeout(action, (int)timeSpan.TotalMilliseconds);
+            return new Disposable(() => Bridge.Html5.Window.ClearTimeout(token));
         }
     }
 }

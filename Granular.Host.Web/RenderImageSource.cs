@@ -12,20 +12,20 @@ namespace Granular.Host
     {
         public static readonly IRenderImageSourceFactory Default = new RenderImageSourceFactory(HtmlValueConverter.Default);
 
-        private System.Html.Element container;
-        private System.Html.Element Container
+        private Bridge.Html5.HTMLElement container;
+        private Bridge.Html5.HTMLElement Container
         {
             get
             {
                 if (container == null)
                 {
-                    container = System.Html.Document.CreateElement("div");
-                    container.Style.Visibility = "hidden";
-                    container.Style.Overflow = "hidden";
+                    container = Bridge.Html5.Document.CreateElement("div");
+                    container.Style.SetProperty("visibility", "hidden");
+                    container.Style.SetProperty("overflow", "hidden");
                     container.Style.Width = "0px";
                     container.Style.Height = "0px";
 
-                    System.Html.Document.Body.AppendChild(container);
+                    Bridge.Html5.Document.Body.AppendChild(container);
                 }
 
                 return container;
@@ -121,10 +121,10 @@ namespace Granular.Host
         public Rect SourceRect { get; private set; }
         public Size ImageSize { get; private set; }
 
-        private System.Html.Element container;
-        private System.Html.Element image;
+        private Bridge.Html5.HTMLElement container;
+        private Bridge.Html5.HTMLElement image;
 
-        public RenderImageSource(System.Html.Element container, string url, bool isLocalUrl, Rect sourceRect)
+        public RenderImageSource(Bridge.Html5.HTMLElement container, string url, bool isLocalUrl, Rect sourceRect)
         {
             this.container = container;
 
@@ -132,7 +132,7 @@ namespace Granular.Host
             this.SourceRect = sourceRect;
             this.State = isLocalUrl ? RenderImageState.Idle : RenderImageState.DownloadProgress;
 
-            image = System.Html.Document.CreateElement("img");
+            image = Bridge.Html5.Document.CreateElement("img");
             container.AppendChild(image);
 
             image.AddEventListener("load", OnImageLoad);

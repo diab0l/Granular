@@ -45,7 +45,7 @@ namespace Granular.Host
         string ToCursorString(Cursor cursor);
         string ToTransformString(Matrix matrix);
 
-        MouseButton ConvertBackMouseButton(short buttonIndex);
+        MouseButton ConvertBackMouseButton(int buttonIndex);
         Key ConvertBackKey(int keyCode, int location);
     }
 
@@ -473,7 +473,7 @@ namespace Granular.Host
                 Math.Round(matrix.OffsetY, 2));
         }
 
-        public MouseButton ConvertBackMouseButton(short buttonIndex)
+        public MouseButton ConvertBackMouseButton(int buttonIndex)
         {
             switch (buttonIndex)
             {

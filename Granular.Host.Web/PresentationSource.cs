@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Html;
+using Bridge.Html5;
 using System.Linq;
 using System.Text;
 using System.Windows;
@@ -51,13 +51,13 @@ namespace Granular.Host
 
         public string Title
         {
-            get { return System.Html.Window.Document.Title; }
-            set { System.Html.Window.Document.Title = value; }
+            get { return Bridge.Html5.Window.Document.Title; }
+            set { Bridge.Html5.Window.Document.Title = value; }
         }
 
         private IHtmlValueConverter converter;
 
-        private System.Html.WindowInstance window;
+        private Bridge.Html5.WindowInstance window;
 
         private bool mouseDownHandled;
         private bool mouseMoveHandled;
@@ -76,29 +76,29 @@ namespace Granular.Host
             MouseDevice = new MouseDevice(this);
             KeyboardDevice = new KeyboardDevice(this);
 
-            window = System.Html.Window.Instance;
+            window = Bridge.Html5.Window.Instance;
 
-            MouseDevice.CursorChanged += (sender, e) => System.Html.Window.Document.Body.Style.Cursor = converter.ToCursorString(MouseDevice.Cursor);
-            System.Html.Window.Document.Body.Style.Cursor = converter.ToCursorString(MouseDevice.Cursor);
+            MouseDevice.CursorChanged += (sender, e) => Bridge.Html5.Window.Document.Body.Style.SetProperty("cursor", converter.ToCursorString(MouseDevice.Cursor));
+            Bridge.Html5.Window.Document.Body.Style.SetProperty("cursor", converter.ToCursorString(MouseDevice.Cursor));
 
-            System.Html.Window.OnKeydown = OnKeyDown;
-            System.Html.Window.OnKeyup = OnKeyUp;
-            System.Html.Window.OnKeypress = PreventKeyboardHandled;
-            System.Html.Window.OnMousemove = OnMouseMove;
-            System.Html.Window.OnMousedown = OnMouseDown;
-            System.Html.Window.OnMouseup = OnMouseUp;
-            System.Html.Window.OnScroll = OnMouseWheel;
-            System.Html.Window.OnFocus = e => MouseDevice.Activate();
-            System.Html.Window.OnBlur = e => MouseDevice.Deactivate();
-            System.Html.Window.OnResize = e => SetRootElementSize();
-            System.Html.Window.OnClick = PreventMouseHandled;
-            System.Html.Window.OnDblclick = PreventMouseHandled;
-            System.Html.Window.OnContextmenu = PreventMouseHandled;
-            System.Html.Window.AddEventListener("wheel", OnMouseWheel);
+            Bridge.Html5.Window.OnKeyDown = OnKeyDown;
+            Bridge.Html5.Window.OnKeyUp = OnKeyUp;
+            Bridge.Html5.Window.OnKeyPress = PreventKeyboardHandled;
+            Bridge.Html5.Window.OnMouseMove = OnMouseMove;
+            Bridge.Html5.Window.OnMouseDown = OnMouseDown;
+            Bridge.Html5.Window.OnMouseUp = OnMouseUp;
+            Bridge.Html5.Window.OnScroll = OnMouseWheel;
+            Bridge.Html5.Window.OnFocus = e => MouseDevice.Activate();
+            Bridge.Html5.Window.OnBlur = e => MouseDevice.Deactivate();
+            Bridge.Html5.Window.OnResize = e => SetRootElementSize();
+            Bridge.Html5.Window.OnClick = PreventMouseHandled;
+            Bridge.Html5.Window.OnContextMenu = PreventMouseHandled;
+            Bridge.Html5.Window.AddEventListener("ondblclick", PreventMouseHandled);
+            Bridge.Html5.Window.AddEventListener("wheel", OnMouseWheel);
 
             SetRootElementSize();
-            System.Html.Window.Document.Body.Style.Overflow = "hidden";
-            System.Html.Window.Document.Body.AppendChild(((HtmlRenderElement)RootElement.GetRenderElement(HtmlRenderElementFactory.Default)).HtmlElement);
+            Bridge.Html5.Window.Document.Body.Style.Overflow = Overflow.Hidden;
+            Bridge.Html5.Window.Document.Body.AppendChild(((HtmlRenderElement)RootElement.GetRenderElement(HtmlRenderElementFactory.Default)).HtmlElement);
 
             MouseDevice.Activate();
             KeyboardDevice.Activate();
@@ -114,7 +114,7 @@ namespace Granular.Host
         {
             KeyboardEvent keyboardEvent = (KeyboardEvent)e;
 
-            Key key = converter.ConvertBackKey(keyboardEvent.KeyCode, keyboardEvent.Location);
+            Key key = converter.ConvertBackKey(keyboardEvent.KeyCode, (int)keyboardEvent.Location);
 
             keyDownHandled = ProcessKeyboardEvent(new RawKeyboardEventArgs(key, KeyStates.Down, keyboardEvent.Repeat, GetTimestamp()));
 
@@ -128,7 +128,7 @@ namespace Granular.Host
         {
             KeyboardEvent keyboardEvent = (KeyboardEvent)e;
 
-            Key key = converter.ConvertBackKey(keyboardEvent.KeyCode, keyboardEvent.Location);
+            Key key = converter.ConvertBackKey(keyboardEvent.KeyCode, (int)keyboardEvent.Location);
 
             keyUpHandled = ProcessKeyboardEvent(new RawKeyboardEventArgs(key, KeyStates.None, keyboardEvent.Repeat, GetTimestamp()));
 
@@ -178,10 +178,11 @@ namespace Granular.Host
 
         private void OnMouseWheel(Event e)
         {
+            UIEvent uiEvent = (UIEvent)e;
             WheelEvent wheelEvent = (WheelEvent)e;
 
-            Point position = new Point(wheelEvent.PageX, wheelEvent.PageY);
-            int delta = wheelEvent.DeltaY > 0 ? -100 : 100;
+            Point position = new Point(uiEvent.PageX, uiEvent.PageY);
+            int delta = (wheelEvent).DeltaY > 0 ? -100 : 100;
 
             if (ProcessMouseEvent(new RawMouseWheelEventArgs(delta, position, GetTimestamp())))
             {

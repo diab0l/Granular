@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Html;
 using System.Linq;
 using System.Text;
 using System.Windows;
@@ -426,7 +425,7 @@ namespace Granular.Host.Render
             this.bounds = System.Windows.Rect.Empty;
             this.fontFamily = FontFamily.Default;
 
-            Element styleElement = Document.CreateElement("style");
+            Bridge.Html5.HTMLElement styleElement = Bridge.Html5.Document.CreateElement("style");
             styleElement.TextContent = "::-ms-clear { width: 0px; height: 0px; }";
 
             HtmlElement.AppendChild(styleElement);
@@ -477,10 +476,10 @@ namespace Granular.Host.Render
             ContentElement.Style.SetVerticalScrollBarVisibility(VerticalScrollBarVisibility, converter);
 
             ContentElement.HtmlElement.OnInput += e => this.Text = ContentElement.HtmlElement.GetValue();
-            ContentElement.HtmlElement.OnKeydown += OnContentElementKeyDown;
+            ContentElement.HtmlElement.OnKeyDown += OnContentElementKeyDown;
             ContentElement.HtmlElement.OnSelect += e => GetContentElementSelection();
-            ContentElement.HtmlElement.OnKeyup += e => GetContentElementSelection();
-            ContentElement.HtmlElement.OnMouseup += e => GetContentElementSelection();
+            ContentElement.HtmlElement.OnKeyUp += e => GetContentElementSelection();
+            ContentElement.HtmlElement.OnMouseUp += e => GetContentElementSelection();
         }
 
         public void Focus()
@@ -500,9 +499,9 @@ namespace Granular.Host.Render
             ContentElement.Style.SetForeground(Foreground, converter);
         }
 
-        private void OnContentElementKeyDown(Event e)
+        private void OnContentElementKeyDown(Bridge.Html5.Event e)
         {
-            if (!IsReadOnly && AcceptsTab && ((KeyboardEvent)e).KeyCode == 9)
+            if (!IsReadOnly && AcceptsTab && ((Bridge.Html5.KeyboardEvent)e).KeyCode == 9)
             {
                 int selectionStart = SelectionStart;
 

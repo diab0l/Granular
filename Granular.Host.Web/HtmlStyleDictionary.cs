@@ -32,13 +32,13 @@ namespace Granular.Host
             }
         }
 
-        private System.Html.Element element;
+        private Bridge.Html5.HTMLElement element;
 
         private Dictionary<string, string> dictionary;
         private Dictionary<string, string> setProperties;
         private HashSet<string> clearProperties;
 
-        public HtmlStyleDictionary(System.Html.Element element)
+        public HtmlStyleDictionary(Bridge.Html5.HTMLElement element)
         {
             this.element = element;
 

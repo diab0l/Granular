@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Html;
+using Bridge.Html5;
 using System.Linq;
 using System.Text;
 using Granular.Extensions;
@@ -9,7 +9,7 @@ namespace Granular.Host.Render
 {
     public class HtmlRenderElement : IRenderItem
     {
-        public Element HtmlElement { get; private set; }
+        public HTMLElement HtmlElement { get; private set; }
         public HtmlStyleDictionary Style { get; private set; }
 
         private bool isRenderValid;
