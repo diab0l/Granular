@@ -260,7 +260,7 @@ namespace Granular.Presentation.Tests
 
             CollectionAssert.AreEqual(elementAProperties, DependencyProperty.GetProperties(typeof(ElementA)).ToArray());
             CollectionAssert.AreEqual(elementBProperties, DependencyProperty.GetProperties(typeof(ElementB)).ToArray());
-            CollectionAssert.AreEqual(elementAProperties.Concat(elementBProperties).ToArray(), DependencyProperty.GetFlattenedProperties(typeof(ElementB)).ToArray());
+            CollectionAssert.AreEqual(elementAProperties.Concat(elementBProperties).Cast<object>().ToArray(), DependencyProperty.GetFlattenedProperties(typeof(ElementB)).ToArray());
 
             try
             {
