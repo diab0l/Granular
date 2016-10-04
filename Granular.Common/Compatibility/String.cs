@@ -8,11 +8,6 @@ namespace Granular.Compatibility
 {
     public static class String
     {
-        public static bool IsNullOrWhitespace(string value)
-        {
-            return System.String.IsNullOrWhiteSpace(value);
-        }
-
         public static string FromByteArray(byte[] data)
         {
             using (MemoryStream memoryStream = new MemoryStream(data))

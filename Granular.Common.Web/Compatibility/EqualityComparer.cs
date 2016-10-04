@@ -39,19 +39,5 @@ namespace Granular.Compatibility
         {
             return false;
         }
-
-        [System.Runtime.CompilerServices.Reflectable(false)]
-        [System.Runtime.CompilerServices.NonScriptable]
-        bool IEqualityComparer.Equals(object x, object y)
-        {
-            return false;
-        }
-
-        [System.Runtime.CompilerServices.Reflectable(false)]
-        [System.Runtime.CompilerServices.NonScriptable]
-        int IEqualityComparer.GetHashCode(object obj)
-        {
-            return 0;
-        }
     }
 }

@@ -8,16 +8,12 @@ namespace Granular.Compatibility
 {
     public static class String
     {
-        private static Regex StringWhitespaceFormat = new Regex("^[ \t\r\n]*$");
-
-        public static bool IsNullOrWhitespace(string value)
-        {
-            return StringWhitespaceFormat.Exec(value) != null;
-        }
-
         public static string FromByteArray(byte[] data)
         {
-            return System.String.DecodeUriComponent(System.String.Escape(new System.String(Granular.Compatibility.Array.ImplicitCast<char>(data))));
+            return DecodeBase64(data);
         }
+
+        [Bridge.Template("decodeURIComponent(escape(String.fromCharCode.apply(null, {data})))")]
+        private static extern string DecodeBase64(byte[] data);
     }
 }

@@ -12,9 +12,9 @@ namespace Granular.Extensions
             return String.IsNullOrEmpty(@this);
         }
 
-        public static bool IsNullOrWhitespace(this string @this)
+        public static bool IsNullOrWhiteSpace(this string @this)
         {
-            return Granular.Compatibility.String.IsNullOrWhitespace(@this);
+            return String.IsNullOrWhiteSpace(@this);
         }
 
         public static string DefaultIfNullOrEmpty(this string @this, string defaultValue = null)
