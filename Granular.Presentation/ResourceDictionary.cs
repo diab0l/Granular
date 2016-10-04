@@ -111,7 +111,7 @@ namespace System.Windows
 
         public bool Contains(object key)
         {
-            return dictionary.Keys.Contains(key) || MergedDictionaries.SelectMany(d => d.GetKeys().Cast<object>()).Contains(key);
+            return dictionary.Keys.Contains(key) || MergedDictionaries.SelectMany(d => d.GetKeys()).Contains(key);
         }
 
         public bool Remove(object key)
@@ -156,7 +156,7 @@ namespace System.Windows
 
         private static IEnumerable<object> GetMergedDictionariesKeys(ResourceDictionary dictionary)
         {
-            return dictionary.GetKeys().Cast<object>().Concat(dictionary.MergedDictionaries.SelectMany(GetMergedDictionariesKeys));
+            return dictionary.GetKeys().Concat(dictionary.MergedDictionaries.SelectMany(GetMergedDictionariesKeys));
         }
 
         private static ResourceDictionary LoadResourceDictionary(string source)

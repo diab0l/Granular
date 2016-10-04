@@ -121,7 +121,7 @@ namespace System.Windows.Controls
             {
                 delegateView.CollectionChanged -= OnDelegateViewCollectionChanged;
                 delegateView.CurrentChanged -= OnDelegateViewCurrentChanged;
-                oldItems = delegateView.Cast<object>();
+                oldItems = delegateView;
             }
             else
             {
@@ -133,7 +133,7 @@ namespace System.Windows.Controls
             delegateView.CollectionChanged += OnDelegateViewCollectionChanged;
             delegateView.CurrentChanged += OnDelegateViewCurrentChanged;
 
-            CollectionChanged.Raise(this, NotifyCollectionChangedEventArgs.Reset(oldItems, delegateView.Cast<object>()));
+            CollectionChanged.Raise(this, NotifyCollectionChangedEventArgs.Reset(oldItems, delegateView));
             CurrentChanged.Raise(this);
         }
 
@@ -167,7 +167,7 @@ namespace System.Windows.Controls
 
         public int IndexOf(object value)
         {
-            return Granular.Compatibility.Array.IndexOf(delegateView.Cast<object>().ToArray(), value);
+            return Granular.Compatibility.Array.IndexOf(delegateView.ToArray(), value);
         }
 
         public void Insert(int index, object value)
