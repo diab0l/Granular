@@ -497,7 +497,7 @@ namespace System.Windows.Markup
                 throw new Granular.Exception("Can't add a value of type \"{0}\" to a dictionary, as it cannot have a key", values.First(value => !(value is XamlElement)).GetType().Name);
             }
 
-            IEnumerable<XamlElement> valuesElements = values.Cast<XamlElement>();
+            IEnumerable<XamlElement> valuesElements =  Enumerable.Cast<XamlElement>(values);
 
             List<KeyValueElementFactory> list = new List<KeyValueElementFactory>();
 

@@ -274,7 +274,7 @@ namespace System.Windows.Data
 
         public IEnumerator<object> GetEnumerator()
         {
-            return innerCollection.Cast<object>().GetEnumerator();
+            return Enumerable.Cast<object>(innerCollection).GetEnumerator();
         }
 
         IEnumerator IEnumerable.GetEnumerator()
