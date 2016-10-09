@@ -39,8 +39,8 @@ namespace System.Windows.Markup
             elementType = element.GetElementType();
             namespaces = element.Namespaces;
 
-            memberInitializers = CreateMemberInitializers(element);
-            contentInitializer = CreateContentInitializer(element);
+            memberInitializers = CreateMemberInitializers(element, elementType);
+            contentInitializer = CreateContentInitializer(element, elementType);
 
             nameDirectiveValue = GetNameDirectiveValue(element);
             nameProperty = GetNameProperty(element.GetElementType());
@@ -107,9 +107,12 @@ namespace System.Windows.Markup
             }
         }
 
-        private static IElementInitializer CreateContentInitializer(XamlElement element)
+        private static IElementInitializer CreateContentInitializer(XamlElement element, Type elementType)
         {
-            Type elementType = element.GetElementType();
+            if (!element.Values.Any())
+            {
+                return null;
+            }
 
             string contentPropertyName = PropertyAttribute.GetPropertyName<ContentPropertyAttribute>(elementType);
             if (!contentPropertyName.IsNullOrEmpty())
@@ -122,13 +125,11 @@ namespace System.Windows.Markup
                 return ElementCollectionContentInitailizer.Create(element.Values, elementType);
             }
 
-            return null;
+            throw new Granular.Exception("Cannot add content to element of type \"{0}\" as it's not a collection type and does not declare ContentProperty", elementType.Name);
         }
 
-        private static IEnumerable<IElementInitializer> CreateMemberInitializers(XamlElement element)
+        private static IEnumerable<IElementInitializer> CreateMemberInitializers(XamlElement element, Type elementType)
         {
-            Type elementType = element.GetElementType();
-
             List<IElementInitializer> list = new List<IElementInitializer>();
 
             int index = 0;

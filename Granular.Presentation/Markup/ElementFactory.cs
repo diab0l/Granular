@@ -45,7 +45,7 @@ namespace System.Windows.Markup
         {
             Type elementType = element.GetElementType();
 
-            if (elementType.GetDefaultConstructor() == null)
+            if (element.Values.Any() && PropertyAttribute.GetPropertyName<ContentPropertyAttribute>(elementType).IsNullOrEmpty() && !ElementCollectionContentInitailizer.IsCollectionType(elementType))
             {
                 return FromElementFactory(FromXamlElementContent(element), targetType, element.Namespaces);
             }
@@ -60,17 +60,12 @@ namespace System.Windows.Markup
         {
             if (element.Members.Any())
             {
-                throw new Granular.Exception("Element \"{0}\" can't have members, as its type doesn't have a default constructor and it can only be converted from its content", element.Name);
-            }
-
-            if (!element.Values.Any())
-            {
-                throw new Granular.Exception("Element \"{0}\" must have a value, as its type doesn't have a default constructor and it can only be converted from its content", element.Name);
+                throw new Granular.Exception("Element \"{0}\" can't have members, as it's not a collection type and does not declare ContentProperty and can only be converted from its content", element.Name);
             }
 
             if (element.Values.Count() > 1)
             {
-                throw new Granular.Exception("Element \"{0}\" can't have multiple children, as its type doesn't have a default constructor and it can only be converted from its content", element.Name);
+                throw new Granular.Exception("Element \"{0}\" can't have multiple children, as it's not a collection type and does not declare ContentProperty and can only be converted from its content", element.Name);
             }
 
             return FromValue(element.Values.First(), element.GetElementType(), element.Namespaces);
