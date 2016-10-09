@@ -58,7 +58,7 @@ namespace System.Windows.Markup
             string eventMemberName = eventName.MemberName;
             Type eventContainingType = eventName.IsMemberName ? TypeParser.ParseType(eventName.ContainingTypeName) : containingType;
 
-            return EventManager.GetOwnedRoutedEvent(containingType, eventMemberName);
+            return EventManager.FindRoutedEvent(containingType, eventMemberName);
         }
 
         private static EventInfo GetClrEvent(Type containingType, XamlName eventName)
