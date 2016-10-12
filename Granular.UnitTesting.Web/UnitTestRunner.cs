@@ -29,7 +29,7 @@ namespace Granular.UnitTesting
 
             if (testsCount > 0)
             {
-                Console.WriteLine("");
+                WriteLog("");
 
                 string summary = String.Format("Test run completed - {0}/{1} passed", testsPassed, testsCount);
                 if (testsPassed == testsCount)
@@ -39,7 +39,7 @@ namespace Granular.UnitTesting
                 else
                 {
                     WriteWarning(summary);
-                    Console.WriteLine("");
+                    WriteLog("");
                     WriteLog("Append a #TestName to the url to run and debug a specific test");
                 }
             }
