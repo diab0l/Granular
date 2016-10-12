@@ -202,11 +202,11 @@ namespace Granular.Presentation.Tests.Data
         public void BindingExtensionRelativeSourceSelfTest()
         {
             string text = @"<TextBlock xmlns='http://schemas.microsoft.com/winfx/2006/xaml/presentation' xmlns:x='http://schemas.microsoft.com/winfx/2006/xaml'
-                                       Name='textBlock' Text=""{Binding RelativeSource={RelativeSource Self}, Path=Name, StringFormat='Self name is {0}'}""/>";
+                                       DataContext='DataContextValue' Text=""{Binding RelativeSource={RelativeSource Self}, Path=DataContext, StringFormat='Self value is {0}'}""/>";
 
             TextBlock textBlock = XamlLoader.Load(XamlParser.Parse(text)) as TextBlock;
 
-            Assert.AreEqual("Self name is textBlock", textBlock.Text);
+            Assert.AreEqual("Self value is DataContextValue", textBlock.Text);
         }
     }
 }
