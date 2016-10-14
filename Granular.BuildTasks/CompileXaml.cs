@@ -45,11 +45,18 @@ namespace Granular.BuildTasks
         [Required]
         public ITaskItem[] ReferenceAssemblies { get; set; }
 
+        public bool AttachDebugger { get; set; }
+
         [Output]
         public ITaskItem[] GeneratedCodeFiles { get; private set; }
 
         public override bool Execute()
         {
+            if (AttachDebugger)
+            {
+                System.Diagnostics.Debugger.Launch();
+            }
+
             if (XamlApplications.Length > 1)
             {
                 Log.LogError("More than one file has a GranularApplicationDefinition build action");

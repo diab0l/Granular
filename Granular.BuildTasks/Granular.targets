@@ -31,7 +31,8 @@
       RootNamespace="$(RootNamespace)"
       XamlApplications="@(GranularApplicationDefinition)"
       XamlPages="@(GranularPage)"
-      ReferenceAssemblies ="@(ReferencePath)">
+      ReferenceAssemblies ="@(ReferencePath)"
+      AttachDebugger="False">
 
       <Output ItemName="FileWrites" TaskParameter="GeneratedCodeFiles" />
       <Output ItemName="GranularXamlGeneratedCodeFiles" TaskParameter="GeneratedCodeFiles" />
