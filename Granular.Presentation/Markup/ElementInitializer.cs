@@ -272,7 +272,7 @@ namespace System.Windows.Markup
             {
                 object contentTarget = propertyAdapter.GetValue(element);
 
-                if (contentTarget == null && propertyAdapter.PropertyType.GetDefaultConstructor() != null)
+                if (contentTarget == null)
                 {
                     contentTarget = Activator.CreateInstance(propertyAdapter.PropertyType);
                     propertyAdapter.SetValue(element, contentTarget, context.ValueSource);
