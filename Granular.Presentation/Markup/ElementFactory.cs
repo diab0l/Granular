@@ -73,7 +73,7 @@ namespace System.Windows.Markup
 
         private static IElementFactory FromElementFactory(IElementFactory elementFactory, Type targetType, XamlNamespaces namespaces)
         {
-            if (elementFactory.ElementType.GetInterfaces().Contains(typeof(IMarkupExtension)))
+            if (typeof(IMarkupExtension).IsAssignableFrom(elementFactory.ElementType))
             {
                 return new MarkupExtensionElementFactory(elementFactory);
             }
