@@ -63,6 +63,7 @@
     <None Include="packages.config" />
     <None Include="Granular.targets">
       <SubType>Designer</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
   <ItemGroup>
