@@ -61,9 +61,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
-    <None Include="Resources.targets">
-      <SubType>Designer</SubType>
-    </None>
     <None Include="Granular.targets">
       <SubType>Designer</SubType>
     </None>
