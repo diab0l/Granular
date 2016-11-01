@@ -50,6 +50,7 @@
   <ItemGroup>
     <Compile Include="ClassDefinition.cs" />
     <Compile Include="CompileXaml.cs" />
+    <Compile Include="ProjectLinkTask.cs" />
     <Compile Include="ReflectionTypeParser.cs" />
     <Compile Include="TypeParser.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -63,6 +64,9 @@
     <None Include="packages.config" />
     <None Include="Granular.targets">
       <SubType>Designer</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="ProjectLink.targets">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
