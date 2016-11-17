@@ -1,0 +1,22 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <!-- Add links to the source project files at compile time -->
+    <ProjectLinkSource>ProjectLinkSourcePath</ProjectLinkSource>
+
+    <!-- Save the added links -->
+    <ProjectLinkRewriteProject>False</ProjectLinkRewriteProject>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!--
+    Exclude a folder
+    <ProjectLinkExcludeItem Include="Folder1\"/>
+
+    Exclude a file
+    <ProjectLinkExcludeItem Include="Folder2\File1.cs"/>
+    -->
+
+    <ProjectLinkExcludeItem Include="Compatibility\"/>
+    <ProjectLinkExcludeItem Include="Properties\"/>
+  </ItemGroup>
+</Project>

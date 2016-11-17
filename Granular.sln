@@ -41,10 +41,16 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Granular.Common", "Granular
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Granular.Common.Web", "Granular.Common.Web\Granular.Common.Web.csproj", "{F79EE440-E0C4-43A9-8DDC-33D9ED53E570}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NuGet", "NuGet", "{B1977ABA-D71A-4677-B413-E40B86CBF1CB}"
+	ProjectSection(SolutionItems) = preProject
+		NuGet\Application.html.template = NuGet\Application.html.template
+		NuGet\CreatePackages.bat = NuGet\CreatePackages.bat
+		NuGet\Granular.nuspec = NuGet\Granular.nuspec
+		NuGet\install.ps1 = NuGet\install.ps1
+		NuGet\ProjectLink.targets.template = NuGet\ProjectLink.targets.template
+	EndProjectSection
+EndProject
 Global
-	GlobalSection(TestCaseManagementSettings) = postSolution
-		CategoryFile = Granular.vsmdi
-	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
@@ -109,5 +115,11 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{B1977ABA-D71A-4677-B413-E40B86CBF1CB} = {9B88B295-4071-43DC-9EE8-53DB2BAD0C88}
+	EndGlobalSection
+	GlobalSection(TestCaseManagementSettings) = postSolution
+		CategoryFile = Granular.vsmdi
 	EndGlobalSection
 EndGlobal

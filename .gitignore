@@ -1,10 +1,11 @@
 # files
 *.suo
 *.csproj.*
+nuget.exe
 
 # folders
 bin/
 obj/
 /TestResults/
 /packages/
-/Output*/
+Output*/
