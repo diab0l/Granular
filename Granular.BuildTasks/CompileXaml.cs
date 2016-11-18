@@ -60,7 +60,7 @@ namespace Granular.BuildTasks
 
             if (XamlApplications.Length > 1)
             {
-                Log.LogError("More than one file has a GranularApplicationDefinition build action");
+                Log.LogError("More than one file has an ApplicationDefinition build action");
 
                 foreach (ITaskItem xamlApplication in XamlApplications)
                 {
