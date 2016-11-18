@@ -1,5 +1,4 @@
 ﻿using System.Reflection;
-using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Markup;
 
@@ -9,8 +8,7 @@ using System.Windows.Markup;
 [assembly: AssemblyTitle("Granular.Presentation.Web")]
 [assembly: AssemblyDescription("")]
 
-[assembly: DefaultMemberReflectability(MemberReflectability.PublicAndProtected)]
-[assembly: PreserveMemberCase(true)]
+[assembly: Bridge.Reflectable]
 
 [assembly: ThemeInfoAttribute(ResourceDictionaryLocation.ExternalAssembly)]
 

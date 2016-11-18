@@ -9,7 +9,6 @@ using Granular.Presentation.Tests;
 [assembly: AssemblyTitle("Granular.Presentation.Tests.Web")]
 [assembly: AssemblyDescription("")]
 
-[assembly: DefaultMemberReflectability(MemberReflectability.All)]
-[assembly: PreserveMemberCase(true)]
+[assembly: Bridge.Reflectable]
 
 [assembly: ApplicationHost(typeof(TestApplicationHost))]

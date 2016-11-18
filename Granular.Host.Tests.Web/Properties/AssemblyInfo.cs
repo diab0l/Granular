@@ -7,5 +7,4 @@ using System.Runtime.CompilerServices;
 [assembly: AssemblyTitle("Granular.Host.Tests.Web")]
 [assembly: AssemblyDescription("")]
 
-[assembly: DefaultMemberReflectability(MemberReflectability.All)]
-[assembly: PreserveMemberCase(true)]
+[assembly: Bridge.Reflectable]

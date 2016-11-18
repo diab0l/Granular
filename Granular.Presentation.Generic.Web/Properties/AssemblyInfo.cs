@@ -9,7 +9,6 @@ using System.Windows;
 [assembly: AssemblyTitle("Granular.Presentation.Generic.Web")]
 [assembly: AssemblyDescription("")]
 
-[assembly: DefaultMemberReflectability(MemberReflectability.PublicAndProtected)]
-[assembly: PreserveMemberCase(true)]
+[assembly: Bridge.Reflectable]
 
 [assembly: ThemeInfo(ResourceDictionaryLocation.SourceAssembly)]

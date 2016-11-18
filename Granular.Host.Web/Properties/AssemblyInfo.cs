@@ -6,5 +6,3 @@ using System.Runtime.CompilerServices;
 // associated with an assembly.
 [assembly: AssemblyTitle("Granular.Host")]
 [assembly: AssemblyDescription("")]
-
-[assembly: PreserveMemberCase(true)]

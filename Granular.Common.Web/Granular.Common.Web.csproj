@@ -1,21 +1,25 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>8.0.30703</ProductVersion>
-    <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{F79EE440-E0C4-43A9-8DDC-33D9ED53E570}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Granular</RootNamespace>
+    <RootNamespace>Granular.Common</RootNamespace>
     <AssemblyName>Granular.Common</AssemblyName>
-    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <NoStdLib>True</NoStdLib>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <TargetFrameworkProfile />
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+    <NoStdLib>true</NoStdLib>
+    <NoWarn>0626</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -25,12 +29,16 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="..\Granular.Common\Collections\CacheDictionary.cs">
@@ -135,10 +143,7 @@
     <Compile Include="Compatibility\EventInfoExtensions.cs" />
     <Compile Include="Compatibility\HashSet.cs" />
     <Compile Include="Compatibility\ICommand.cs" />
-    <Compile Include="Compatibility\NotifyPropertyChanged.cs" />
-    <Compile Include="Compatibility\ParameterInfoExtensions.cs" />
     <Compile Include="Compatibility\PropertyInfoExtensions.cs" />
-    <Compile Include="Compatibility\RegexExtensions.cs" />
     <Compile Include="Compatibility\RuntimeHelpers.cs" />
     <Compile Include="Compatibility\SortedList.cs" />
     <Compile Include="Compatibility\STAThreadAttribute.cs" />
@@ -153,26 +158,27 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
+    <Reference Include="Bridge, Version=15.5.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>$(SolutionDir)packages\Bridge.Core.15.5.0\lib\net40\Bridge.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Bridge.Html5, Version=15.5.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>$(SolutionDir)packages\Bridge.Html5.15.5.0\lib\net40\Bridge.Html5.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="mscorlib">
-      <HintPath>$(SolutionDir)packages\Saltarelle.Runtime.2.6.2\tools\Assemblies\mscorlib.dll</HintPath>
-    </Reference>
-    <Reference Include="Saltarelle.Linq">
-      <HintPath>$(SolutionDir)packages\Saltarelle.Linq.2.4.0\lib\Saltarelle.Linq.dll</HintPath>
-    </Reference>
-    <Reference Include="Saltarelle.Web">
-      <HintPath>$(SolutionDir)packages\Saltarelle.Web.3.1.0\lib\Saltarelle.Web.dll</HintPath>
-    </Reference>
+    <None Include="bridge.json" />
+    <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" Condition="!Exists('$(SolutionDir)packages\Saltarelle.Compiler.2.6.2\tools\Saltarelle.Compiler.targets')" />
-  <Import Project="$(SolutionDir)packages\Saltarelle.Compiler.2.6.2\tools\Saltarelle.Compiler.targets" Condition="Exists('$(SolutionDir)packages\Saltarelle.Compiler.2.6.2\tools\Saltarelle.Compiler.targets')" />
-  <PropertyGroup>
-    <PostBuildEvent>xcopy /Y "$(TargetDir)$(TargetName).js" "$(SolutionDir)Output.Web\"
-xcopy /Y "$(TargetDir)$(TargetName).dll" "$(SolutionDir)Output.Web\"</PostBuildEvent>
-  </PropertyGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(SolutionDir)packages\Bridge.Min.15.5.0\build\Bridge.Min.targets" Condition="Exists('$(SolutionDir)packages\Bridge.Min.15.5.0\build\Bridge.Min.targets')" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('$(SolutionDir)packages\Bridge.Min.15.5.0\build\Bridge.Min.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)packages\Bridge.Min.15.5.0\build\Bridge.Min.targets'))" />
+  </Target>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

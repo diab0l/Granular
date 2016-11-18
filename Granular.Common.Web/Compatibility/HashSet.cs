@@ -9,6 +9,8 @@ namespace System.Collections.Generic
     {
         public int Count { get { return dictionary.Count; } }
 
+        public bool IsReadOnly { get { return false; } }
+
         private Dictionary<T, object> dictionary;
 
         public HashSet()
@@ -45,6 +47,11 @@ namespace System.Collections.Generic
         IEnumerator IEnumerable.GetEnumerator()
         {
             return GetEnumerator();
+        }
+
+        public void CopyTo(T[] array, int arrayIndex)
+        {
+            //
         }
     }
 }
