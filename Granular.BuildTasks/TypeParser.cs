@@ -31,30 +31,6 @@ namespace Granular.BuildTasks
         }
     }
 
-    public class TypeParserCollection : ITypeParser
-    {
-        private IEnumerable<ITypeParser> parsers;
-
-        public TypeParserCollection(params ITypeParser[] parsers)
-        {
-            this.parsers = parsers.ToArray();
-        }
-
-        public bool TryParseTypeName(string localName, string namespaceName, out string typeName)
-        {
-            foreach (ITypeParser parser in parsers)
-            {
-                if (parser.TryParseTypeName(localName, namespaceName, out typeName))
-                {
-                    return true;
-                }
-            }
-
-            typeName = String.Empty;
-            return false;
-        }
-    }
-
     public class MarkupExtensionTypeParser : ITypeParser
     {
         private ITypeParser typeParser;

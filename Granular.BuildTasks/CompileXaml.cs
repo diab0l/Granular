@@ -70,58 +70,48 @@ namespace Granular.BuildTasks
                 return false;
             }
 
-            AppDomain appDomain = AppDomain.CreateDomain("CompileXaml");
+            List<ITaskItem> generatedCodeFiles = new List<ITaskItem>();
 
-            try
+            ReflectionTypeParser reflectionTypeParser = new ReflectionTypeParser(ReferenceAssemblies.Select(referenceAssembly => referenceAssembly.GetMetadata("FullPath")).ToArray());
+
+            ITypeParser typeParser = new MarkupExtensionTypeParser(reflectionTypeParser);
+
+            if (XamlApplications.Length == 1)
             {
-                List<ITaskItem> generatedCodeFiles = new List<ITaskItem>();
-
-                ReflectionTypeParser reflectionTypeParser = (ReflectionTypeParser)appDomain.CreateInstanceFromAndUnwrap(typeof(ReflectionTypeParser).Assembly.Location, typeof(ReflectionTypeParser).FullName);
-                reflectionTypeParser.LoadAssemblies(ReferenceAssemblies.Select(referenceAssembly => referenceAssembly.GetMetadata("FullPath")).ToArray());
-
-                ITypeParser typeParser = new MarkupExtensionTypeParser(new TypeParserCollection(new KnownTypesParser(), reflectionTypeParser));
-
-                if (XamlApplications.Length == 1)
+                try
                 {
-                    try
+                    ITaskItem generatedCodeFile = GenerateCodeFile(XamlApplications[0], typeParser, XamlItemType.XamlApplicationDefinition);
+                    if (generatedCodeFile != null)
                     {
-                        ITaskItem generatedCodeFile = GenerateCodeFile(XamlApplications[0], typeParser, XamlItemType.XamlApplicationDefinition);
-                        if (generatedCodeFile != null)
-                        {
-                            generatedCodeFiles.Add(generatedCodeFile);
-                        }
-                    }
-                    catch (Exception e)
-                    {
-                        Log.LogError(String.Empty, String.Empty, String.Empty, XamlApplications[0].GetRelativePath(), 0, 0, 0, 0, e.Message);
-                        return false;
+                        generatedCodeFiles.Add(generatedCodeFile);
                     }
                 }
-
-                foreach (ITaskItem xamlPage in XamlPages)
+                catch (Exception e)
                 {
-                    try
+                    Log.LogError(String.Empty, String.Empty, String.Empty, XamlApplications[0].GetRelativePath(), 0, 0, 0, 0, e.Message);
+                    return false;
+                }
+            }
+
+            foreach (ITaskItem xamlPage in XamlPages)
+            {
+                try
+                {
+                    ITaskItem generatedCodeFile = GenerateCodeFile(xamlPage, typeParser, XamlItemType.XamlPage);
+                    if (generatedCodeFile != null)
                     {
-                        ITaskItem generatedCodeFile = GenerateCodeFile(xamlPage, typeParser, XamlItemType.XamlPage);
-                        if (generatedCodeFile != null)
-                        {
-                            generatedCodeFiles.Add(generatedCodeFile);
-                        }
-                    }
-                    catch (Exception e)
-                    {
-                        Log.LogError(String.Empty, String.Empty, String.Empty, xamlPage.GetRelativePath(), 0, 0, 0, 0, e.Message);
-                        return false;
+                        generatedCodeFiles.Add(generatedCodeFile);
                     }
                 }
+                catch (Exception e)
+                {
+                    Log.LogError(String.Empty, String.Empty, String.Empty, xamlPage.GetRelativePath(), 0, 0, 0, 0, e.Message);
+                    return false;
+                }
+            }
 
-                GeneratedCodeFiles = generatedCodeFiles.ToArray();
-                return true;
-            }
-            finally
-            {
-                AppDomain.Unload(appDomain);
-            }
+            GeneratedCodeFiles = generatedCodeFiles.ToArray();
+            return true;
         }
 
         private ITaskItem GenerateCodeFile(ITaskItem item, ITypeParser typeParser, XamlItemType itemType)
