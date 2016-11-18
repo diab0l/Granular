@@ -374,7 +374,7 @@ namespace System.Windows
 
         private static IEnumerable<DependencyProperty> ResolveTypeFlattenedProperties(Type containingType)
         {
-            Granular.Compatibility.RuntimeHelpers.RunClassConstructor(containingType);
+            System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(containingType.GetTypeHandle());
 
             return containingType.BaseType != null ?
                 GetFlattenedProperties(containingType.BaseType).Concat(GetProperties(containingType)).ToArray() :
@@ -396,7 +396,7 @@ namespace System.Windows
 
         public static DependencyProperty GetOwnedProperty(Type ownerType, string propertyName)
         {
-            Granular.Compatibility.RuntimeHelpers.RunClassConstructor(ownerType);
+            System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(ownerType.GetTypeHandle());
 
             DependencyProperty property;
             return registeredProperties.TryGetValue(new DependencyPropertyHashKey(ownerType, propertyName), out property) ? property : null;

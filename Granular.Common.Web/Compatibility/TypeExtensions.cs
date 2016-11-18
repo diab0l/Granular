@@ -27,5 +27,10 @@ namespace System
         {
             return type.GetConstructors().FirstOrDefault(constructorInfo => constructorInfo.Name == ".ctor" && constructorInfo.ParameterTypes.Length == 0);
         }
+
+        public static Type GetTypeHandle(this Type type)
+        {
+            return type;
+        }
     }
 }

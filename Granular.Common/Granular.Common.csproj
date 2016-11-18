@@ -60,7 +60,6 @@
     <Compile Include="Compatibility\EventInfoExtensions.cs" />
     <Compile Include="Compatibility\PropertyInfoExtensions.cs" />
     <Compile Include="Compatibility\ReflectableAttribute.cs" />
-    <Compile Include="Compatibility\RuntimeHelpers.cs" />
     <Compile Include="Compatibility\String.cs" />
     <Compile Include="Compatibility\TimeSpan.cs" />
     <Compile Include="Compatibility\Type.cs" />

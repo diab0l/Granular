@@ -123,7 +123,7 @@ namespace System.Windows
 
         public static IEnumerable<RoutedEvent> GetRoutedEvents(Type containingType, bool flattenHierarchy)
         {
-            Granular.Compatibility.RuntimeHelpers.RunClassConstructor(containingType);
+            System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(containingType.GetTypeHandle());
             return registeredRoutedEvents.Keys.
                 Where(key => key.Owner == containingType || flattenHierarchy && key.Owner.IsAssignableFrom(containingType)).
                 Select(key => registeredRoutedEvents[key]);
@@ -131,7 +131,7 @@ namespace System.Windows
 
         public static IEnumerable<RoutedEvent> GetRoutedEvents(Type containingType, string eventName, bool flattenHierarchy)
         {
-            Granular.Compatibility.RuntimeHelpers.RunClassConstructor(containingType);
+            System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(containingType.GetTypeHandle());
             return registeredRoutedEvents.Keys.
                 Where(key => key.Name == eventName && (key.Owner == containingType || flattenHierarchy && key.Owner.IsAssignableFrom(containingType))).
                 Select(key => registeredRoutedEvents[key]);

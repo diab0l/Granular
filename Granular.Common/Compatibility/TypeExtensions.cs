@@ -27,5 +27,10 @@ namespace System
         {
             return type.GetConstructor(new Type[0]);
         }
+
+        public static RuntimeTypeHandle GetTypeHandle(this Type type)
+        {
+            return type.TypeHandle;
+        }
     }
 }
