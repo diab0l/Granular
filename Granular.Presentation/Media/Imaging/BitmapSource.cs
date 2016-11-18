@@ -6,6 +6,7 @@ using Granular.Extensions;
 
 namespace System.Windows.Media.Imaging
 {
+    [Bridge.Reflectable(Bridge.MemberAccessibility.PublicInstanceProperty)]
     public class BitmapSource : ImageSource
     {
         public event EventHandler DownloadProgress;

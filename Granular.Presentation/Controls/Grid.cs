@@ -5,6 +5,7 @@ using Granular.Extensions;
 
 namespace System.Windows.Controls
 {
+    [Bridge.Reflectable(Bridge.MemberAccessibility.PublicInstanceProperty)]
     public class Grid : Panel
     {
         public static readonly DependencyProperty RowProperty = DependencyProperty.RegisterAttached("Row", typeof(int), typeof(Grid), new FrameworkPropertyMetadata());

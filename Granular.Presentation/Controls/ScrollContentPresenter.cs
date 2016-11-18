@@ -6,6 +6,7 @@ using System.Windows.Controls.Primitives;
 
 namespace System.Windows.Controls
 {
+    [Bridge.Reflectable(Bridge.MemberAccessibility.PublicInstanceProperty)]
     public class ScrollContentPresenter : ContentPresenter, IScrollInfo, IAdornerLayerHost
     {
         private class InnerScrollInfo : IScrollInfo

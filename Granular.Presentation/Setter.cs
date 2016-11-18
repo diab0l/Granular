@@ -9,6 +9,7 @@ using System.Windows.Data;
 
 namespace System.Windows
 {
+    [Bridge.Reflectable(Bridge.MemberAccessibility.PublicInstanceProperty)]
     public class Setter : ITriggerAction
     {
         private class ValueOverlapExpression : IExpressionProvider, IExpression

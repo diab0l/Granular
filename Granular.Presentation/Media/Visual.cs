@@ -7,6 +7,7 @@ using Granular.Extensions;
 
 namespace System.Windows.Media
 {
+    [Bridge.Reflectable(Bridge.MemberAccessibility.PublicInstanceProperty)]
     public class Visual : DependencyObject, IContextElement
     {
         public event EventHandler VisualAncestorChanged;

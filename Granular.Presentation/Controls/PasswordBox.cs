@@ -8,6 +8,7 @@ using System.Windows.Input;
 namespace System.Windows.Controls
 {
     [TemplatePart("PART_ContentHost", typeof(FrameworkElement))]
+    [Bridge.Reflectable(Bridge.MemberAccessibility.PublicInstanceProperty)]
     public sealed class PasswordBox : Control
     {
         public static readonly RoutedEvent PasswordChangedEvent = EventManager.RegisterRoutedEvent("PasswordChanged", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(PasswordBox));

@@ -7,6 +7,7 @@ using Granular.Extensions;
 
 namespace System.Windows.Controls
 {
+    [Bridge.Reflectable(Bridge.MemberAccessibility.PublicInstanceProperty)]
     public class Adorner : FrameworkElement
     {
         private class VisualPathTransform : Transform, IDisposable

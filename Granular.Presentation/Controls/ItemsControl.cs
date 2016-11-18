@@ -15,6 +15,7 @@ namespace System.Windows.Controls
     }
 
     [ContentProperty("Items")]
+    [Bridge.Reflectable(Bridge.MemberAccessibility.PublicInstanceProperty)]
     public class ItemsControl : Control, IGeneratorHost
     {
         private class DefaultItemsPanelTemplate : IFrameworkTemplate

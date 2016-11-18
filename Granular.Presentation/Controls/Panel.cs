@@ -10,6 +10,7 @@ using Granular.Extensions;
 namespace System.Windows.Controls
 {
     [ContentProperty("Children")]
+    [Bridge.Reflectable(Bridge.MemberAccessibility.PublicInstanceProperty)]
     public abstract class Panel : FrameworkElement
     {
         public UIElementCollection Children { get; private set; }

@@ -19,8 +19,11 @@ namespace Granular.Collections
         public event PropertyChangedEventHandler PropertyChanged;
 
         private static readonly PropertyChangedEventArgs CountPropertyChangedEventArgs = new PropertyChangedEventArgs("Count");
+
+        [Bridge.Reflectable]
         public int Count { get { return items.Count; } }
 
+        [Bridge.Reflectable]
         public T this[int index]
         {
             get { return items[index]; }

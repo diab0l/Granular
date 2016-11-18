@@ -7,6 +7,7 @@ using System.Windows.Markup;
 namespace System.Windows
 {
     [MarkupExtensionParameter("ResourceKey")]
+    [Bridge.Reflectable(Bridge.MemberAccessibility.PublicInstanceProperty)]
     public class StaticResourceExtension : IMarkupExtension
     {
         public object ResourceKey { get; set; }

@@ -98,6 +98,7 @@ namespace System.Windows
     }
 
     [ContentProperty("Setters")]
+    [Bridge.Reflectable(Bridge.MemberAccessibility.PublicInstanceProperty)]
     public class DataTrigger : DataTriggerBase
     {
         public Binding Binding { get; set; }

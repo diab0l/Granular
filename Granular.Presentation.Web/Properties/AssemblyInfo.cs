@@ -8,8 +8,6 @@ using System.Windows.Markup;
 [assembly: AssemblyTitle("Granular.Presentation.Web")]
 [assembly: AssemblyDescription("")]
 
-[assembly: Bridge.Reflectable]
-
 [assembly: ThemeInfoAttribute(ResourceDictionaryLocation.ExternalAssembly)]
 
 [assembly: XmlnsDefinition("http://schemas.microsoft.com/winfx/2006/xaml/presentation", "System.Windows", "Granular.Presentation")]

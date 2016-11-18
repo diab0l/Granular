@@ -5,6 +5,7 @@ using Granular.Extensions;
 
 namespace System.Windows.Controls.Primitives
 {
+    [Bridge.Reflectable(Bridge.MemberAccessibility.PublicInstanceProperty)]
     public class Track : FrameworkElement
     {
         public static readonly DependencyProperty OrientationProperty = DependencyProperty.Register("Orientation", typeof(Orientation), typeof(Track), new FrameworkPropertyMetadata(affectsMeasure: true));

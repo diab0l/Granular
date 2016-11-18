@@ -6,6 +6,7 @@ using System.Windows.Input;
 
 namespace System.Windows
 {
+    [Bridge.Reflectable(Bridge.MemberAccessibility.PublicInstanceProperty)]
     public partial class UIElement
     {
         #region Mouse

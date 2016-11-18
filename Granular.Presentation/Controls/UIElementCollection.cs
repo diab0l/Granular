@@ -7,6 +7,7 @@ using Granular.Collections;
 
 namespace System.Windows.Controls
 {
+    [Bridge.Reflectable(Bridge.MemberAccessibility.PublicInstanceProperty)]
     public class UIElementCollection : IList<UIElement>, INotifyCollectionChanged
     {
         public event NotifyCollectionChangedEventHandler CollectionChanged;

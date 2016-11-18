@@ -13,6 +13,7 @@ namespace System.Windows.Controls
         PopupLayer PopupLayer { get; }
     }
 
+    [Bridge.Reflectable(Bridge.MemberAccessibility.PublicInstanceProperty)]
     public class PopupLayer : FrameworkElement
     {
         public event EventHandler ClosePopupRequest;

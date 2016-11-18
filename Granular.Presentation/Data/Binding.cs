@@ -8,6 +8,7 @@ using Granular.Extensions;
 namespace System.Windows.Data
 {
     [MarkupExtensionParameter("Path")]
+    [Bridge.Reflectable(Bridge.MemberAccessibility.PublicInstanceProperty)]
     public class Binding : IMarkupExtension, IExpressionProvider
     {
         private class StringFormatConverter : IValueConverter

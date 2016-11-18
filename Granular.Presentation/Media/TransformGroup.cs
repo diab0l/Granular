@@ -9,6 +9,7 @@ using System.Windows.Markup;
 namespace System.Windows.Media
 {
     [ContentProperty("Children")]
+    [Bridge.Reflectable(Bridge.MemberAccessibility.PublicInstanceProperty)]
     public class TransformGroup : Transform
     {
         private Matrix matrix;

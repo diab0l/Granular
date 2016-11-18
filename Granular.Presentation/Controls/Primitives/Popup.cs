@@ -9,6 +9,7 @@ using Granular.Extensions;
 namespace System.Windows.Controls.Primitives
 {
     [ContentProperty("Child")]
+    [Bridge.Reflectable(Bridge.MemberAccessibility.PublicInstanceProperty)]
     public class Popup : FrameworkElement
     {
         private class PopupContainer : FrameworkElement, IAdornerLayerHost

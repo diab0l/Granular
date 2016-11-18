@@ -14,6 +14,7 @@ namespace System.Windows
     }
 
     [ContentProperty("FrameworkElementFactory")]
+    [Bridge.Reflectable(Bridge.MemberAccessibility.PublicInstanceProperty)]
     public class FrameworkTemplate : DependencyObject, IFrameworkTemplate
     {
         public static readonly IFrameworkTemplate Empty = new EmptyFrameworkTemplate();

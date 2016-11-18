@@ -10,6 +10,7 @@ namespace System.Windows
 {
     [ContentProperty("Setters")]
     [DictionaryKeyProperty("Key")]
+    [Bridge.Reflectable(Bridge.MemberAccessibility.PublicInstanceProperty)]
     public class Style
     {
         private Type targetType;

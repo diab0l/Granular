@@ -8,6 +8,7 @@ using System.Xaml;
 namespace System.Windows
 {
     [TypeConverter(typeof(PointTypeConverter))]
+    [Bridge.Reflectable(Bridge.MemberAccessibility.PublicInstanceProperty)]
     public sealed class Point
     {
         public static readonly Point Empty = new Point();

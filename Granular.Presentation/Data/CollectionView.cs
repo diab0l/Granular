@@ -32,6 +32,7 @@ namespace System.Windows.Data
     }
 
     // ICollectionView adapter for an IEnumerable source
+    [Bridge.Reflectable(Bridge.MemberAccessibility.PublicInstanceProperty)]
     public class CollectionView : ICollectionView, IDisposable
     {
         private class EmptyCollectionView : ICollectionView

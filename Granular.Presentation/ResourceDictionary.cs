@@ -8,6 +8,7 @@ using Granular.Extensions;
 
 namespace System.Windows
 {
+    [Bridge.Reflectable(Bridge.MemberAccessibility.PublicInstanceProperty)]
     public class ResourceDictionary : IDictionary<object, object>, IResourceContainer
     {
         public event EventHandler<ResourcesChangedEventArgs> ResourcesChanged;

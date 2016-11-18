@@ -5,6 +5,7 @@ using System.Text;
 
 namespace System.Windows.Media
 {
+    [Bridge.Reflectable(Bridge.MemberAccessibility.PublicStaticProperty)]
     public static class Colors
     {
         public static Color AliceBlue { get { return Color.FromUInt32(0xFFF0F8FF); } }

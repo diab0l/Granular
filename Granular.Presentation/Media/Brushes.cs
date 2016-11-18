@@ -6,6 +6,7 @@ using Granular.Collections;
 
 namespace System.Windows.Media
 {
+    [Bridge.Reflectable(Bridge.MemberAccessibility.PublicStaticProperty)]
     public static class Brushes
     {
         public static Brush AliceBlue { get { return brushes.GetValue(Colors.AliceBlue); } }

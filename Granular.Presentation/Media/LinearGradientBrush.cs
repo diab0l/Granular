@@ -5,6 +5,7 @@ using Granular.Extensions;
 
 namespace System.Windows.Media
 {
+    [Bridge.Reflectable(Bridge.MemberAccessibility.PublicInstanceProperty)]
     public class LinearGradientBrush : GradientBrush
     {
         public static readonly DependencyProperty StartPointProperty = DependencyProperty.Register("StartPoint", typeof(Point), typeof(LinearGradientBrush), new FrameworkPropertyMetadata(Point.Zero));

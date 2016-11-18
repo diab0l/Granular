@@ -8,6 +8,7 @@ using System.Windows.Media.Animation;
 namespace System.Windows
 {
     [ContentProperty("Storyboard")]
+    [Bridge.Reflectable(Bridge.MemberAccessibility.PublicInstanceProperty)]
     public class VisualTransition : Freezable
     {
         public string From { get; set; }

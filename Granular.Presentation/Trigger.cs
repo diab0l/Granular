@@ -71,6 +71,7 @@ namespace System.Windows
     }
 
     [ContentProperty("Setters")]
+    [Bridge.Reflectable(Bridge.MemberAccessibility.PublicInstanceProperty)]
     public class Trigger : DataTriggerBase
     {
         public IPropertyPathElement Property { get; set; }

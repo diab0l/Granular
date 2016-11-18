@@ -6,6 +6,7 @@ using Granular.Extensions;
 
 namespace System.Windows.Media.Animation
 {
+    [Bridge.Reflectable(Bridge.MemberAccessibility.PublicInstanceProperty)]
     public class TimelineClock : IClock
     {
         public event EventHandler Invalidated;

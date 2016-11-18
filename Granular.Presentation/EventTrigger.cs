@@ -9,6 +9,7 @@ using Granular.Collections;
 namespace System.Windows
 {
     [ContentProperty("Actions")]
+    [Bridge.Reflectable(Bridge.MemberAccessibility.PublicInstanceProperty)]
     public class EventTrigger : EventTriggerBase
     {
         private class EventTriggerCondition : IEventTriggerCondition, IDisposable

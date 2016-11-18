@@ -9,6 +9,7 @@ namespace System.Windows
 {
     [RuntimeNameProperty("Name")]
     [ContentProperty("Storyboard")]
+    [Bridge.Reflectable(Bridge.MemberAccessibility.PublicInstanceProperty)]
     public class VisualState : Freezable
     {
         public string Name { get; set; }

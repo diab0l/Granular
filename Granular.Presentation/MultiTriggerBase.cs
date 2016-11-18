@@ -76,6 +76,7 @@ namespace System.Windows
     }
 
     [ContentProperty("Setters")]
+    [Bridge.Reflectable(Bridge.MemberAccessibility.PublicInstanceProperty)]
     public abstract class MultiDataTriggerBase : DataTriggerBase
     {
         public ObservableCollection<Condition> Conditions { get; private set; }

@@ -7,6 +7,7 @@ using System.Windows.Markup;
 namespace System.Windows.Controls
 {
     [DictionaryKeyProperty("Key")]
+    [Bridge.Reflectable(Bridge.MemberAccessibility.PublicInstanceProperty)]
     public class ControlTemplate : FrameworkTemplate
     {
         private Type targetType;

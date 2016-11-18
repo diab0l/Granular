@@ -9,6 +9,7 @@ using System.Xaml;
 
 namespace System.Windows
 {
+    [Bridge.Reflectable(Bridge.MemberAccessibility.PublicInstanceProperty)]
     public class Condition
     {
         public Binding Binding { get; set; }

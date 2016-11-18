@@ -7,6 +7,7 @@ using System.Windows.Markup;
 namespace System.Windows.Controls
 {
     [ContentProperty("Child")]
+    [Bridge.Reflectable(Bridge.MemberAccessibility.PublicInstanceProperty)]
     public class Decorator : FrameworkElement
     {
         private UIElement child;

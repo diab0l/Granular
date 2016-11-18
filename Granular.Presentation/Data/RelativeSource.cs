@@ -16,6 +16,7 @@ namespace System.Windows.Data
     }
 
     [MarkupExtensionParameter("Mode")]
+    [Bridge.Reflectable(Bridge.MemberAccessibility.PublicInstanceProperty)]
     public class RelativeSource : IMarkupExtension
     {
         public RelativeSourceMode Mode { get; set; }

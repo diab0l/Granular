@@ -7,6 +7,7 @@ using System.Windows.Markup;
 namespace System.Windows.Data
 {
     [MarkupExtensionParameter("Property")]
+    [Bridge.Reflectable(Bridge.MemberAccessibility.PublicInstanceProperty)]
     public class TemplateBindingExtension : IMarkupExtension
     {
         public IPropertyPathElement Property { get; set; }

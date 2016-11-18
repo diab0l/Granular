@@ -4,6 +4,7 @@ using System.Linq;
 
 namespace System.Windows
 {
+    [Bridge.Reflectable(Bridge.MemberAccessibility.PublicInstanceProperty)]
     public class EventSetter : ITriggerAction
     {
         public RoutedEvent Event { get; set; }

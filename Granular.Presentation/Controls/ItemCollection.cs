@@ -10,6 +10,7 @@ using Granular.Extensions;
 namespace System.Windows.Controls
 {
     // ICollectionView adapter for a replaceable external IEnumerable source
+    [Bridge.Reflectable(Bridge.MemberAccessibility.PublicInstanceProperty)]
     public class ItemCollection : ICollectionView, IList<object>
     {
         public event NotifyCollectionChangedEventHandler CollectionChanged;

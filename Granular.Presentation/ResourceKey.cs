@@ -12,6 +12,7 @@ namespace System.Windows
         Assembly Assembly { get; }
     }
 
+    [Bridge.Reflectable(Bridge.MemberAccessibility.PublicInstanceProperty)]
     public sealed class ComponentResourceKey : IResourceKey, IMarkupExtension
     {
         public Assembly Assembly { get { return TypeInTargetAssembly != null ? TypeInTargetAssembly.Assembly : null; } }

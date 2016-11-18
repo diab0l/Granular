@@ -11,6 +11,7 @@ namespace System.Windows.Media.Animation
         Stop
     }
 
+    [Bridge.Reflectable(Bridge.MemberAccessibility.PublicInstanceProperty)]
     public abstract class Timeline : Freezable
     {
         public static readonly DependencyProperty BeginTimeProperty = DependencyProperty.Register("BeginTime", typeof(TimeSpan), typeof(Timeline), new FrameworkPropertyMetadata(TimeSpan.Zero));

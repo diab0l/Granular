@@ -10,6 +10,7 @@ namespace System.Windows
 {
     [ContentProperty("States")]
     [RuntimeNameProperty("Name")]
+    [Bridge.Reflectable(Bridge.MemberAccessibility.PublicInstanceProperty)]
     public class VisualStateGroup : Freezable
     {
         public string Name { get; set; }

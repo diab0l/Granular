@@ -5,6 +5,7 @@ using System.Text;
 
 namespace System.Windows.Media.Animation
 {
+    [Bridge.Reflectable(Bridge.MemberAccessibility.PublicInstanceProperty)]
     public class TimelineGroupClock : TimelineClock
     {
         public IEnumerable<TimelineClock> Children { get; private set; }

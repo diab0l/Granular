@@ -8,6 +8,7 @@ using Granular.Collections;
 namespace System.Windows.Media.Animation
 {
     [ContentProperty("Children")]
+    [Bridge.Reflectable(Bridge.MemberAccessibility.PublicInstanceProperty)]
     public abstract class TimelineGroup : Timeline
     {
         public ObservableCollection<Timeline> Children { get; private set; }

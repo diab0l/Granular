@@ -62,6 +62,7 @@ namespace System.Windows
     }
 
     [TypeConverter(typeof(FontFamilyTypeConverter))]
+    [Bridge.Reflectable(Bridge.MemberAccessibility.PublicInstanceProperty)]
     public class FontFamily
     {
         public static readonly FontFamily Default = new FontFamily(String.Empty);

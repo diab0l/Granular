@@ -27,6 +27,7 @@ namespace System.Windows
     }
 
     [RuntimeNameProperty("Name")]
+    [Bridge.Reflectable(Bridge.MemberAccessibility.PublicInstanceProperty)]
     public class FrameworkElement : UIElement, IResourceContainer
     {
         public event EventHandler<ResourcesChangedEventArgs> ResourcesChanged;

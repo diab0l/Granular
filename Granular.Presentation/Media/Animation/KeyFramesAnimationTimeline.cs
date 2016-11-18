@@ -8,6 +8,7 @@ using Granular.Extensions;
 namespace System.Windows.Media.Animation
 {
     [ContentProperty("KeyFrames")]
+    [Bridge.Reflectable(Bridge.MemberAccessibility.PublicInstanceProperty)]
     public class KeyFramesAnimationTimeline<T> : AnimationTimeline
     {
         public FreezableCollection<KeyFrame<T>> KeyFrames { get; private set; }

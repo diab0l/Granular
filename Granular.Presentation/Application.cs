@@ -8,6 +8,7 @@ using Granular.Extensions;
 
 namespace System.Windows
 {
+    [Bridge.Reflectable(Bridge.MemberAccessibility.PublicInstanceProperty, Bridge.MemberAccessibility.PublicInstanceEvent)]
     public class Application : IResourceContainer
     {
         public static Application Current { get; private set; }

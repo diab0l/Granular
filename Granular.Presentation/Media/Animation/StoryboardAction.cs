@@ -8,6 +8,7 @@ namespace System.Windows.Media.Animation
 {
     [RuntimeNameProperty("Name")]
     [ContentProperty("Storyboard")]
+    [Bridge.Reflectable(Bridge.MemberAccessibility.PublicInstanceProperty)]
     public class BeginStoryboard : Freezable, ITriggerAction
     {
         public static readonly DependencyProperty StoryboardProperty = DependencyProperty.Register("Storyboard", typeof(Storyboard), typeof(BeginStoryboard), new FrameworkPropertyMetadata());
@@ -87,6 +88,7 @@ namespace System.Windows.Media.Animation
         }
     }
 
+    [Bridge.Reflectable(Bridge.MemberAccessibility.PublicInstanceProperty)]
     public abstract class StoryboardAction : Freezable, ITriggerAction
     {
         public string BeginStoryboardName { get; set; }

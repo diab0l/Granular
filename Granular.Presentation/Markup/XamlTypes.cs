@@ -16,6 +16,7 @@ namespace System.Windows.Markup
         }
 
         [MarkupExtensionParameter("Type")]
+        [Bridge.Reflectable(Bridge.MemberAccessibility.PublicInstanceProperty)]
         private class TypeProvider : IMarkupExtension
         {
             public Type Type { get; set; }

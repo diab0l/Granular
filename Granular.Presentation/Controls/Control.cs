@@ -8,6 +8,7 @@ using System.Windows.Documents;
 
 namespace System.Windows.Controls
 {
+    [Bridge.Reflectable(Bridge.MemberAccessibility.PublicInstanceProperty)]
     public class Control : FrameworkElement
     {
         public static readonly RoutedEvent PreviewMouseDoubleClickEvent = EventManager.RegisterRoutedEvent("PreviewMouseDoubleClick", RoutingStrategy.Tunnel, typeof(MouseButtonEventHandler), typeof(Control));
