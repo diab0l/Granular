@@ -96,7 +96,7 @@ namespace System.Windows.Markup
                 return true;
             }
 
-            foreach (Assembly assembly in AppDomain.CurrentDomain.GetAssemblies())
+            foreach (Assembly assembly in Granular.Compatibility.AppDomain.GetAssemblies())
             {
                 if (TryGetType(String.Format("{0}.{1}, {2}", clrNamespace, localName, assembly.GetName().Name), out type))
                 {
@@ -130,7 +130,7 @@ namespace System.Windows.Markup
         {
             if (xmlnsDefinitionAttributesCache == null)
             {
-                xmlnsDefinitionAttributesCache = AppDomain.CurrentDomain.GetAssemblies().SelectMany(assembly => assembly.GetCustomAttributesCached<XmlnsDefinitionAttribute>()).ToArray();
+                xmlnsDefinitionAttributesCache = Granular.Compatibility.AppDomain.GetAssemblies().SelectMany(assembly => assembly.GetCustomAttributesCached<XmlnsDefinitionAttribute>()).ToArray();
             }
 
             return xmlnsDefinitionAttributesCache;

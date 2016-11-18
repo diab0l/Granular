@@ -47,6 +47,7 @@
     <Compile Include="Collections\ObservableCollection.cs" />
     <Compile Include="Collections\PriorityQueue.cs" />
     <Compile Include="Collections\ReadOnlyStack.cs" />
+    <Compile Include="Compatibility\AppDomain.cs" />
     <Compile Include="Compatibility\Array.cs" />
     <Compile Include="Compatibility\AssemblyExtensions.cs" />
     <Compile Include="Compatibility\BindingFlags.cs" />

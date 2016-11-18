@@ -78,7 +78,7 @@ namespace System.Windows
                 return;
             }
 
-            ApplicationHostAttribute[] applicationHostAttributes = AppDomain.CurrentDomain.GetAssemblies().SelectMany(assembly => assembly.GetCustomAttributesCached<ApplicationHostAttribute>()).ToArray();
+            ApplicationHostAttribute[] applicationHostAttributes = Granular.Compatibility.AppDomain.GetAssemblies().SelectMany(assembly => assembly.GetCustomAttributesCached<ApplicationHostAttribute>()).ToArray();
 
             if (applicationHostAttributes.Length == 0)
             {

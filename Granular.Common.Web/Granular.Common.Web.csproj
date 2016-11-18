@@ -128,6 +128,7 @@
     <Compile Include="..\Granular.Common\Xaml\XamlParser.cs">
       <Link>Xaml\XamlParser.cs</Link>
     </Compile>
+    <Compile Include="Compatibility\AppDomain.cs" />
     <Compile Include="Compatibility\Array.cs" />
     <Compile Include="Compatibility\AssemblyExtensions.cs" />
     <Compile Include="Compatibility\BindingFlags.cs" />

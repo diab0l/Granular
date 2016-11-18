@@ -62,7 +62,7 @@ namespace System.Windows
 
         private static byte[] ResolveResourceData(EmbeddedResourceKey key)
         {
-            Assembly assembly = AppDomain.CurrentDomain.GetAssemblies().Where(a => a.GetName().Name == key.AssemblyName).FirstOrDefault();
+            Assembly assembly = Granular.Compatibility.AppDomain.GetAssemblies().Where(a => a.GetName().Name == key.AssemblyName).FirstOrDefault();
 
             if (assembly == null)
             {
