@@ -8,6 +8,7 @@ using System.Text;
 using System.Xaml;
 using Microsoft.Build.Framework;
 using Microsoft.Build.Utilities;
+using Granular.Extensions;
 
 namespace Granular.BuildTasks
 {
@@ -143,7 +144,7 @@ namespace Granular.BuildTasks
             CodeCompileUnit classCompileUnit = new CodeCompileUnit();
             classCompileUnit.Namespaces.Add(classNamespace);
 
-            string targetDirectory = Path.Combine(IntermediateOutputPath, item.GetMetadata("RelativeDir"));
+            string targetDirectory = Path.GetDirectoryName(Path.Combine(IntermediateOutputPath, item.GetMetadata("Link").DefaultIfNullOrEmpty(item.GetMetadata("Identity"))));
             Directory.CreateDirectory(targetDirectory);
 
             string targetFileName = String.Format("{0}.g{1}{2}", item.GetMetadata("Filename"), item.GetMetadata("Extension"), LanguageSourceExtension);
