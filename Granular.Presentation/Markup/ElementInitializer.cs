@@ -303,8 +303,26 @@ namespace System.Windows.Markup
                 return ElementInitializer.Empty;
             }
 
-            if (ElementCollectionContentInitailizer.IsCollectionType(propertyAdapter.PropertyType) &&
-                !(values.Count() == 1 && values.First() is XamlElement && propertyAdapter.PropertyType.IsAssignableFrom(((XamlElement)values.First()).GetElementType())))
+            if (values.Count() == 1)
+            {
+                object value = values.First();
+
+                if (propertyAdapter.PropertyType == typeof(IFrameworkElementFactory))
+                {
+                    return new FrameworkElementFactoryInitializer(propertyAdapter, ElementFactory.FromValue(value, null, namespaces));
+                }
+
+                Type valueType = value is XamlElement ? ((XamlElement)value).GetElementType() : value.GetType();
+
+                ITypeConverter typeConverter;
+                if (propertyAdapter.PropertyType.IsAssignableFrom(valueType) || typeof(IMarkupExtension).IsAssignableFrom(valueType) || TypeConverter.TryGetTypeConverter(valueType, propertyAdapter.PropertyType, out typeConverter))
+                {
+                    IElementFactory contentFactory = ElementFactory.FromValue(value, propertyAdapter.PropertyType, namespaces);
+                    return new ElementPropertyMemberInitializer(propertyAdapter, contentFactory);
+                }
+            }
+
+            if (ElementCollectionContentInitailizer.IsCollectionType(propertyAdapter.PropertyType))
             {
                 IElementInitializer propertyContentInitializer = ElementCollectionContentInitailizer.Create(values, propertyAdapter.PropertyType);
 
@@ -314,13 +332,8 @@ namespace System.Windows.Markup
 
             if (values.Count() == 1)
             {
-                if (propertyAdapter.PropertyType == typeof(IFrameworkElementFactory))
-                {
-                    return new FrameworkElementFactoryInitializer(propertyAdapter, ElementFactory.FromValue(values.First(), null, namespaces));
-                }
-
-                IElementFactory contentFactory = ElementFactory.FromValue(values.First(), propertyAdapter.PropertyType, namespaces);
-                return new ElementPropertyMemberInitializer(propertyAdapter, contentFactory);
+                object value = values.First();
+                throw new Granular.Exception("Cannot assign value of type \"{0}\" to member of type \"{1}\"", value is XamlElement ? ((XamlElement)value).GetElementType() : value.GetType(), propertyAdapter.PropertyType.Name);
             }
 
             throw new Granular.Exception("Member of type \"{0}\" cannot have more than one child", propertyAdapter.PropertyType.Name);
