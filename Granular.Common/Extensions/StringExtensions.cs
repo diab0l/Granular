@@ -24,7 +24,7 @@ namespace Granular.Extensions
 
         public static int GetCharacterIndexFromLineIndex(this string @this, int lineIndex)
         {
-            int[] linesStartIndex = new[] { 0 }.Concat(@this.IndexOfAll("\n").Select(index => index + 1)).ToArray();
+            int[] linesStartIndex = ((IEnumerable<int>)new[] { 0 }).Concat(@this.IndexOfAll("\n").Select(index => index + 1)).ToArray();
 
             return lineIndex >= 0 && lineIndex < linesStartIndex.Length ? linesStartIndex[lineIndex] : -1;
         }
@@ -32,8 +32,8 @@ namespace Granular.Extensions
         public static int GetLineIndexFromCharacterIndex(this string @this, int charIndex)
         {
             int[] linesIndex = @this.IndexOfAll("\n");
-            int[] linesStartIndex = new[] { 0 }.Concat(linesIndex.Select(index => index + 1)).ToArray();
-            int[] linesEndIndex = linesIndex.Concat(new[] { @this.Length }).ToArray();
+            int[] linesStartIndex = ((IEnumerable<int>)new[] { 0 }).Concat(linesIndex.Select(index => index + 1)).ToArray();
+            int[] linesEndIndex = ((IEnumerable<int>)linesIndex).Concat(new[] { @this.Length }).ToArray();
 
             for (int i = 0; i < linesStartIndex.Length; i++)
             {
@@ -62,8 +62,8 @@ namespace Granular.Extensions
         {
             int[] linesIndex = @this.IndexOfAll("\n");
 
-            IEnumerable<int> linesStartIndex = new [] { 0 }.Concat(linesIndex.Select(index => index + 1));
-            IEnumerable<int> linesEndIndex = linesIndex.Concat(new[] { @this.Length });
+            IEnumerable<int> linesStartIndex = ((IEnumerable<int>)new [] { 0 }).Concat(linesIndex.Select(index => index + 1));
+            IEnumerable<int> linesEndIndex = ((IEnumerable<int>)linesIndex).Concat(new[] { @this.Length }).Cast<int>();
 
             return linesStartIndex.Zip(linesEndIndex, (lineStartIndex, lineEndIndex) => @this.Substring(lineStartIndex, lineEndIndex - lineStartIndex).TrimEnd('\r')).ToArray();
         }
