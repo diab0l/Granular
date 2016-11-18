@@ -201,7 +201,7 @@ namespace System.Windows.Data
         {
             object[] oldInnerCollection = innerCollection ?? new object[0];
 
-            innerCollection = TranslateCollection(SourceCollection.Cast<object>(), filterPredicate, sortKeySelector, sortDirection).ToArray();
+            innerCollection = TranslateCollection(Enumerable.Cast<object>(SourceCollection), filterPredicate, sortKeySelector, sortDirection).ToArray();
 
             if (innerCollection.Contains(CurrentItem))
             {
@@ -219,7 +219,7 @@ namespace System.Windows.Data
         {
             object[] oldInnerCollection = innerCollection;
 
-            innerCollection = TranslateCollection(SourceCollection.Cast<object>(), filterPredicate, sortKeySelector, sortDirection).ToArray();
+            innerCollection = TranslateCollection(Enumerable.Cast<object>(SourceCollection), filterPredicate, sortKeySelector, sortDirection).ToArray();
 
             if (innerCollection.Contains(CurrentItem))
             {
