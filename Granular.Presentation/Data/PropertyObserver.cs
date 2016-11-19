@@ -4,7 +4,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
 using System.Text;
-using System.Xaml;
+using System.Windows.Markup;
 using Granular.Collections;
 using Granular.Extensions;
 

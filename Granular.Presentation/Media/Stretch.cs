@@ -12,11 +12,4 @@ namespace System.Windows.Media
         Uniform,
         UniformToFill
     }
-
-    public enum StretchDirection
-    {
-        UpOnly,
-        DownOnly,
-        Both
-    }
 }

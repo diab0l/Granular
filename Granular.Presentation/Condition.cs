@@ -5,7 +5,6 @@ using System.Text;
 using Granular.Extensions;
 using System.Windows.Data;
 using System.Windows.Markup;
-using System.Xaml;
 
 namespace System.Windows
 {

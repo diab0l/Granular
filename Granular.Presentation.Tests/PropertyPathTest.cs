@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Windows;
-using System.Xaml;
+using System.Windows.Markup;
 using Granular.Presentation.Tests.Markup;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 

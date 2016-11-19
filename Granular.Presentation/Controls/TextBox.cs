@@ -9,14 +9,6 @@ using Granular.Extensions;
 
 namespace System.Windows.Controls
 {
-    public enum TextAlignment
-    {
-        Left,
-        Right,
-        Center,
-        Justify
-    }
-
     [ContentProperty("Text")]
     public class TextBox : TextBoxBase
     {

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Media.Animation;
 using System.Windows.Markup;
-using System.Xaml;
 
 namespace System.Windows.Media
 {

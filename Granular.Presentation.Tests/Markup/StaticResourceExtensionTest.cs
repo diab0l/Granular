@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using System.Windows;
 using System.Windows.Markup;
-using System.Xaml;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Granular.Presentation.Tests

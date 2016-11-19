@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Markup;
 
-namespace Granular.Presentation.Tests.Markup
+namespace Granular.Presentation.Tests
 {
     [TestClass]
     public class NameScopeTest

@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Xaml;
+using System.Windows.Markup;
 using Microsoft.Build.Framework;
 using Microsoft.Build.Utilities;
 using Granular.Extensions;

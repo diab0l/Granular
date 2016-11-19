@@ -5,7 +5,6 @@ using System.Text;
 using System.Windows.Media;
 using Granular.Extensions;
 using System.Windows.Markup;
-using System.Xaml;
 
 namespace System.Windows
 {

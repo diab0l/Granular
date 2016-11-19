@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace System.Xaml
+namespace System.Windows.Markup
 {
     public class XamlMember : XamlNode
     {

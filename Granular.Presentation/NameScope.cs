@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Media;
 
-namespace System.Windows.Markup
+namespace System.Windows
 {
     public interface INameScope : IEnumerable<KeyValuePair<string, object>>
     {

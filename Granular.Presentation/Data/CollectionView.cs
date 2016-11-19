@@ -8,29 +8,6 @@ using Granular.Extensions;
 
 namespace System.Windows.Data
 {
-    public enum ListSortDirection
-    {
-        Ascending,
-        Descending
-    }
-
-    public interface ICollectionView : IObservableCollection<object>
-    {
-        event EventHandler CurrentChanged;
-
-        IEnumerable SourceCollection { get; }
-
-        object CurrentItem { get; set; }
-        int CurrentItemIndex { get; set; }
-
-        bool CanFilter { get; }
-        Func<object, bool> FilterPredicate { get; set; }
-
-        bool CanSort { get; }
-        Func<object, object> SortKeySelector { get; set; }
-        ListSortDirection SortDirection { get; set; }
-    }
-
     // ICollectionView adapter for an IEnumerable source
     [Bridge.Reflectable(Bridge.MemberAccessibility.PublicInstanceProperty)]
     public class CollectionView : ICollectionView, IDisposable

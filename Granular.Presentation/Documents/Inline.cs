@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using Granular.Collections;
 using System.Windows.Markup;
-using System.Xaml;
 
 namespace System.Windows.Documents
 {

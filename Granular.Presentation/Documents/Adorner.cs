@@ -5,7 +5,7 @@ using System.Text;
 using System.Windows.Media;
 using Granular.Extensions;
 
-namespace System.Windows.Controls
+namespace System.Windows.Documents
 {
     [Bridge.Reflectable(Bridge.MemberAccessibility.PublicInstanceProperty)]
     public class Adorner : FrameworkElement

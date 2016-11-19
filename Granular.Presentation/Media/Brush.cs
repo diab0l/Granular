@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using System.Windows.Markup;
 using System.Windows.Media.Animation;
-using System.Xaml;
 
 namespace System.Windows.Media
 {

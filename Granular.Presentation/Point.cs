@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Granular.Extensions;
 using System.Windows.Markup;
-using System.Xaml;
 
 namespace System.Windows
 {

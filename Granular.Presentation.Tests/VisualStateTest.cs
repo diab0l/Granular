@@ -6,7 +6,6 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Markup;
 using System.Windows.Media.Animation;
-using System.Xaml;
 using Granular.Presentation.Media.Animation.Tests;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 

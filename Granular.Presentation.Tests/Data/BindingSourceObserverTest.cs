@@ -6,7 +6,6 @@ using System.Windows.Data;
 using System.Windows;
 using System.Windows.Markup;
 using System.Windows.Controls;
-using System.Xaml;
 
 namespace Granular.Presentation.Tests.Data
 {

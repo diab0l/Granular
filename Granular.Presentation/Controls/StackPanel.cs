@@ -26,7 +26,7 @@ namespace System.Windows.Controls
             set { SetValue(FlowDirectionProperty, value); }
         }
 
-        private bool IsNormalFlow { get { return FlowDirection == Controls.FlowDirection.LeftToRight || FlowDirection == Controls.FlowDirection.TopDown; } }
+        private bool IsNormalFlow { get { return FlowDirection == FlowDirection.LeftToRight || FlowDirection == FlowDirection.TopDown; } }
 
         protected override Size MeasureOverride(Size availableSize)
         {

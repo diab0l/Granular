@@ -52,12 +52,6 @@
     <Compile Include="..\Granular.Presentation\ContentElement.cs">
       <Link>ContentElement.cs</Link>
     </Compile>
-    <Compile Include="..\Granular.Presentation\Controls\Adorner.cs">
-      <Link>Controls\Adorner.cs</Link>
-    </Compile>
-    <Compile Include="..\Granular.Presentation\Controls\AdornerLayer.cs">
-      <Link>Controls\AdornerLayer.cs</Link>
-    </Compile>
     <Compile Include="..\Granular.Presentation\Controls\Border.cs">
       <Link>Controls\Border.cs</Link>
     </Compile>
@@ -69,6 +63,9 @@
     </Compile>
     <Compile Include="..\Granular.Presentation\Controls\CheckBox.cs">
       <Link>Controls\CheckBox.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\Controls\ClickMode.cs">
+      <Link>Controls\ClickMode.cs</Link>
     </Compile>
     <Compile Include="..\Granular.Presentation\Controls\ContentControl.cs">
       <Link>Controls\ContentControl.cs</Link>
@@ -100,14 +97,8 @@
     <Compile Include="..\Granular.Presentation\Controls\Expander.cs">
       <Link>Controls\Expander.cs</Link>
     </Compile>
-    <Compile Include="..\Granular.Presentation\Controls\FlowDirection.cs">
-      <Link>Controls\FlowDirection.cs</Link>
-    </Compile>
     <Compile Include="..\Granular.Presentation\Controls\Grid.cs">
       <Link>Controls\Grid.cs</Link>
-    </Compile>
-    <Compile Include="..\Granular.Presentation\Controls\GridLength.cs">
-      <Link>Controls\GridLength.cs</Link>
     </Compile>
     <Compile Include="..\Granular.Presentation\Controls\HeaderedContentControl.cs">
       <Link>Controls\HeaderedContentControl.cs</Link>
@@ -154,6 +145,9 @@
     <Compile Include="..\Granular.Presentation\Controls\Primitives\DragEventArgs.cs">
       <Link>Controls\Primitives\DragEventArgs.cs</Link>
     </Compile>
+    <Compile Include="..\Granular.Presentation\Controls\Primitives\ItemContainerGenerator.cs">
+      <Link>Controls\Primitives\ItemContainerGenerator.cs</Link>
+    </Compile>
     <Compile Include="..\Granular.Presentation\Controls\Primitives\Placement.cs">
       <Link>Controls\Primitives\Placement.cs</Link>
     </Compile>
@@ -168,6 +162,9 @@
     </Compile>
     <Compile Include="..\Granular.Presentation\Controls\Primitives\ScrollBar.cs">
       <Link>Controls\Primitives\ScrollBar.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\Controls\Primitives\ScrollEventArgs.cs">
+      <Link>Controls\Primitives\ScrollEventArgs.cs</Link>
     </Compile>
     <Compile Include="..\Granular.Presentation\Controls\Primitives\ScrollInfo.cs">
       <Link>Controls\Primitives\ScrollInfo.cs</Link>
@@ -202,9 +199,6 @@
     <Compile Include="..\Granular.Presentation\Controls\ScrollContentPresenter.cs">
       <Link>Controls\ScrollContentPresenter.cs</Link>
     </Compile>
-    <Compile Include="..\Granular.Presentation\Controls\ScrollEventArgs.cs">
-      <Link>Controls\ScrollEventArgs.cs</Link>
-    </Compile>
     <Compile Include="..\Granular.Presentation\Controls\ScrollViewer.cs">
       <Link>Controls\ScrollViewer.cs</Link>
     </Compile>
@@ -219,6 +213,9 @@
     </Compile>
     <Compile Include="..\Granular.Presentation\Controls\StackPanel.cs">
       <Link>Controls\StackPanel.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\Controls\StretchDirection.cs">
+      <Link>Controls\StretchDirection.cs</Link>
     </Compile>
     <Compile Include="..\Granular.Presentation\Controls\StyleSelector.cs">
       <Link>Controls\StyleSelector.cs</Link>
@@ -240,6 +237,9 @@
     </Compile>
     <Compile Include="..\Granular.Presentation\Controls\UserControl.cs">
       <Link>Controls\UserControl.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\Controls\VisualStates.cs">
+      <Link>Controls\VisualStates.cs</Link>
     </Compile>
     <Compile Include="..\Granular.Presentation\Controls\WrapPanel.cs">
       <Link>Controls\WrapPanel.cs</Link>
@@ -280,9 +280,6 @@
     <Compile Include="..\Granular.Presentation\Data\RelativeSource.cs">
       <Link>Data\RelativeSource.cs</Link>
     </Compile>
-    <Compile Include="..\Granular.Presentation\Data\TemplateBindingExtension.cs">
-      <Link>Data\TemplateBindingExtension.cs</Link>
-    </Compile>
     <Compile Include="..\Granular.Presentation\Data\ValueConverter.cs">
       <Link>Data\ValueConverter.cs</Link>
     </Compile>
@@ -297,6 +294,12 @@
     </Compile>
     <Compile Include="..\Granular.Presentation\DependencyPropertyValueEntry.cs">
       <Link>DependencyPropertyValueEntry.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\Documents\Adorner.cs">
+      <Link>Documents\Adorner.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\Documents\AdornerLayer.cs">
+      <Link>Documents\AdornerLayer.cs</Link>
     </Compile>
     <Compile Include="..\Granular.Presentation\Documents\Block.cs">
       <Link>Documents\Block.cs</Link>
@@ -337,6 +340,9 @@
     <Compile Include="..\Granular.Presentation\Expression.cs">
       <Link>Expression.cs</Link>
     </Compile>
+    <Compile Include="..\Granular.Presentation\FlowDirection.cs">
+      <Link>FlowDirection.cs</Link>
+    </Compile>
     <Compile Include="..\Granular.Presentation\Font.cs">
       <Link>Font.cs</Link>
     </Compile>
@@ -360,6 +366,9 @@
     </Compile>
     <Compile Include="..\Granular.Presentation\FreezableCollection.cs">
       <Link>FreezableCollection.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\GridLength.cs">
+      <Link>GridLength.cs</Link>
     </Compile>
     <Compile Include="..\Granular.Presentation\InputElement.cs">
       <Link>InputElement.cs</Link>
@@ -420,9 +429,6 @@
     </Compile>
     <Compile Include="..\Granular.Presentation\Markup\MarkupExtension.cs">
       <Link>Markup\MarkupExtension.cs</Link>
-    </Compile>
-    <Compile Include="..\Granular.Presentation\Markup\NameScope.cs">
-      <Link>Markup\NameScope.cs</Link>
     </Compile>
     <Compile Include="..\Granular.Presentation\Markup\PropertyAdapter.cs">
       <Link>Markup\PropertyAdapter.cs</Link>
@@ -574,6 +580,9 @@
     <Compile Include="..\Granular.Presentation\Media\Colors.cs">
       <Link>Media\Colors.cs</Link>
     </Compile>
+    <Compile Include="..\Granular.Presentation\Media\FontFamily.cs">
+      <Link>Markup\FontFamily.cs</Link>
+    </Compile>
     <Compile Include="..\Granular.Presentation\Media\GradientBrush.cs">
       <Link>Media\GradientBrush.cs</Link>
     </Compile>
@@ -649,6 +658,9 @@
     <Compile Include="..\Granular.Presentation\MultiTriggerBase.cs">
       <Link>MultiTriggerBase.cs</Link>
     </Compile>
+    <Compile Include="..\Granular.Presentation\NameScope.cs">
+      <Link>NameScope.cs</Link>
+    </Compile>
     <Compile Include="..\Granular.Presentation\Point.cs">
       <Link>Point.cs</Link>
     </Compile>
@@ -703,11 +715,17 @@
     <Compile Include="..\Granular.Presentation\SystemResources.cs">
       <Link>SystemResources.cs</Link>
     </Compile>
+    <Compile Include="..\Granular.Presentation\TemplateBindingExtension.cs">
+      <Link>TemplateBindingExtension.cs</Link>
+    </Compile>
     <Compile Include="..\Granular.Presentation\TemplatePartAttribute.cs">
       <Link>TemplatePartAttribute.cs</Link>
     </Compile>
     <Compile Include="..\Granular.Presentation\TemplateVisualStateAttribute.cs">
       <Link>TemplateVisualStateAttribute.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\TextAlignment.cs">
+      <Link>TextAlignment.cs</Link>
     </Compile>
     <Compile Include="..\Granular.Presentation\Thickness.cs">
       <Link>Thickness.cs</Link>
@@ -744,9 +762,6 @@
     </Compile>
     <Compile Include="..\Granular.Presentation\VisualStateManager.cs">
       <Link>VisualStateManager.cs</Link>
-    </Compile>
-    <Compile Include="..\Granular.Presentation\VisualStates.cs">
-      <Link>VisualStates.cs</Link>
     </Compile>
     <Compile Include="..\Granular.Presentation\VisualTransition.cs">
       <Link>VisualTransition.cs</Link>

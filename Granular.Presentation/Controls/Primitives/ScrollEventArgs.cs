@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace System.Windows.Controls
+namespace System.Windows.Controls.Primitives
 {
     public enum ScrollEventType
     {

@@ -5,7 +5,7 @@ using System.Text;
 using System.Xml.Linq;
 using Granular.Extensions;
 
-namespace System.Xaml
+namespace System.Windows.Markup
 {
     public static class XamlParser
     {

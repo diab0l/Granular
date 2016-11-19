@@ -4,8 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
-using Granular.Collections;
+using System.Windows.Controls.Primitives;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Granular.Collections;
 
 namespace Granular.Presentation.Tests.Controls
 {

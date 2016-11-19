@@ -5,7 +5,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using Granular.Collections;
 
-namespace System.Xaml
+namespace System.Windows.Markup
 {
     public class MarkupExtensionParser
     {

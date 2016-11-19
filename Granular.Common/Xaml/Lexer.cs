@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 
-namespace System.Xaml
+namespace System.Windows.Markup
 {
     public class Token
     {

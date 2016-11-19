@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using System.Windows.Markup;
 using Granular.Extensions;
-using System.Xaml;
 
 namespace System.Windows
 {

@@ -46,8 +46,10 @@
   <ItemGroup>
     <Compile Include="Condition.cs" />
     <Compile Include="ContentElement.cs" />
-    <Compile Include="Controls\Adorner.cs" />
-    <Compile Include="Controls\AdornerLayer.cs" />
+    <Compile Include="Controls\ClickMode.cs" />
+    <Compile Include="Controls\ItemContainerGenerator.cs" />
+    <Compile Include="Documents\Adorner.cs" />
+    <Compile Include="Documents\AdornerLayer.cs" />
     <Compile Include="Controls\Expander.cs" />
     <Compile Include="Controls\HeaderedContentControl.cs" />
     <Compile Include="Controls\ListBox.cs" />
@@ -62,6 +64,7 @@
     <Compile Include="Controls\SelectionChangedEventArgs.cs" />
     <Compile Include="Controls\SelectionGroup.cs" />
     <Compile Include="Controls\SpellCheck.cs" />
+    <Compile Include="Controls\StretchDirection.cs" />
     <Compile Include="Controls\TextBoxView.cs" />
     <Compile Include="Controls\TextChangedEventArgs.cs" />
     <Compile Include="Data\BindingSourceObserver.cs" />
@@ -73,6 +76,7 @@
     <Compile Include="FrameworkContentElement.cs" />
     <Compile Include="Input\KeyboardNavigation.cs" />
     <Compile Include="Input\KeyboardNavigationTarget.cs" />
+    <Compile Include="Media\FontFamily.cs" />
     <Compile Include="Media\MatrixTransform.cs" />
     <Compile Include="Media\TransformGroup.cs" />
     <Compile Include="Media\TranslateTransform.cs" />
@@ -143,7 +147,7 @@
     <Compile Include="Controls\Primitives\ScrollBar.cs" />
     <Compile Include="Controls\ScrollChangedEventArgs.cs" />
     <Compile Include="Controls\ScrollContentPresenter.cs" />
-    <Compile Include="Controls\ScrollEventArgs.cs" />
+    <Compile Include="Controls\Primitives\ScrollEventArgs.cs" />
     <Compile Include="Controls\Primitives\ScrollInfo.cs" />
     <Compile Include="Controls\ScrollViewer.cs" />
     <Compile Include="Controls\StyleSelector.cs" />
@@ -160,17 +164,17 @@
     <Compile Include="Controls\ContentPresenter.cs" />
     <Compile Include="Controls\DataTemplateSelector.cs" />
     <Compile Include="DataTemplate.cs" />
-    <Compile Include="Controls\ItemContainerGenerator.cs" />
+    <Compile Include="Controls\Primitives\ItemContainerGenerator.cs" />
     <Compile Include="Controls\TextBlock.cs" />
     <Compile Include="DataTrigger.cs" />
     <Compile Include="Data\BindingExpression.cs" />
     <Compile Include="Controls\Canvas.cs" />
     <Compile Include="Controls\Control.cs" />
     <Compile Include="Controls\DockPanel.cs" />
-    <Compile Include="Controls\FlowDirection.cs" />
+    <Compile Include="FlowDirection.cs" />
     <Compile Include="Controls\Grid.cs" />
     <Compile Include="Controls\DefinitionBase.cs" />
-    <Compile Include="Controls\GridLength.cs" />
+    <Compile Include="GridLength.cs" />
     <Compile Include="Controls\Panel.cs" />
     <Compile Include="Controls\StackPanel.cs" />
     <Compile Include="Controls\UIElementCollection.cs" />
@@ -178,7 +182,7 @@
     <Compile Include="Controls\ControlTemplate.cs" />
     <Compile Include="Data\Binding.cs" />
     <Compile Include="Data\PropertyObserver.cs" />
-    <Compile Include="Data\TemplateBindingExtension.cs" />
+    <Compile Include="TemplateBindingExtension.cs" />
     <Compile Include="Data\ValueConverter.cs" />
     <Compile Include="Data\RelativeSource.cs" />
     <Compile Include="Controls\Primitives\Popup.cs" />
@@ -250,6 +254,7 @@
     <Compile Include="SystemResources.cs" />
     <Compile Include="TemplatePartAttribute.cs" />
     <Compile Include="TemplateVisualStateAttribute.cs" />
+    <Compile Include="TextAlignment.cs" />
     <Compile Include="Thickness.cs" />
     <Compile Include="Threading\Dispatcher.cs" />
     <Compile Include="EventManager.cs" />
@@ -262,7 +267,7 @@
     <Compile Include="Expression.cs" />
     <Compile Include="FrameworkPropertyMetadata.cs" />
     <Compile Include="Markup\TypeParser.cs" />
-    <Compile Include="Markup\NameScope.cs" />
+    <Compile Include="NameScope.cs" />
     <Compile Include="Markup\PropertyAdapter.cs" />
     <Compile Include="Markup\InitializeContext.cs" />
     <Compile Include="Data\ObservableValue.cs" />
@@ -282,7 +287,7 @@
     <Compile Include="VisualState.cs" />
     <Compile Include="VisualStateGroup.cs" />
     <Compile Include="VisualStateManager.cs" />
-    <Compile Include="VisualStates.cs" />
+    <Compile Include="Controls\VisualStates.cs" />
     <Compile Include="VisualTransition.cs" />
     <Compile Include="Window.cs" />
   </ItemGroup>

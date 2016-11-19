@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Granular.Extensions;
 
-namespace System.Xaml
+namespace System.Windows.Markup
 {
     public class XamlElement : XamlNode
     {

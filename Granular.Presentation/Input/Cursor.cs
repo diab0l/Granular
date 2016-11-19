@@ -5,7 +5,6 @@ using System.Text;
 using System.Windows.Media;
 using Granular.Collections;
 using System.Windows.Markup;
-using System.Xaml;
 using System.Reflection;
 
 namespace System.Windows.Input

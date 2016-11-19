@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace System.Windows
+namespace System.Windows.Controls
 {
     public static class VisualStates
     {

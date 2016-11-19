@@ -42,6 +42,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Collections\CacheDictionary.cs" />
+    <Compile Include="Collections\CollectionView.cs" />
     <Compile Include="Collections\ListDictionary.cs" />
     <Compile Include="Collections\NotifyCollectionChanged.cs" />
     <Compile Include="Collections\ObservableCollection.cs" />

@@ -3,9 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Windows.Markup;
-using System.Xaml;
 
-namespace System.Windows.Controls
+namespace System.Windows
 {
     public enum GridUnitType
     {

@@ -5,7 +5,6 @@ using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Markup;
-using System.Xaml;
 using Granular.Presentation.Tests.Data;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 

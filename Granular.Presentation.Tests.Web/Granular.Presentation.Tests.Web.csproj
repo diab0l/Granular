@@ -169,9 +169,6 @@
     <Compile Include="..\Granular.Presentation.Tests\Markup\MarkupExtensionParserTest.cs">
       <Link>Markup\MarkupExtensionParserTest.cs</Link>
     </Compile>
-    <Compile Include="..\Granular.Presentation.Tests\Markup\NameScopeTest.cs">
-      <Link>Markup\NameScopeTest.cs</Link>
-    </Compile>
     <Compile Include="..\Granular.Presentation.Tests\Markup\StaticResourceExtensionTest.cs">
       <Link>Markup\StaticResourceExtensionTest.cs</Link>
     </Compile>
@@ -240,6 +237,9 @@
     </Compile>
     <Compile Include="..\Granular.Presentation.Tests\Media\VisualTest.cs">
       <Link>Media\VisualTest.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation.Tests\NameScopeTest.cs">
+      <Link>NameScopeTest.cs</Link>
     </Compile>
     <Compile Include="..\Granular.Presentation.Tests\PropertyPathTest.cs">
       <Link>PropertyPathTest.cs</Link>

@@ -6,7 +6,6 @@ using System.Text;
 using System.Text.RegularExpressions;
 using Granular.Extensions;
 using Granular.Collections;
-using System.Xaml;
 using System.Windows.Markup;
 
 namespace System.Windows

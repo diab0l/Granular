@@ -7,13 +7,6 @@ using System.Windows.Media;
 
 namespace System.Windows.Controls.Primitives
 {
-    public enum ClickMode
-    {
-        Release,
-        Press,
-        //Hover,
-    }
-
     [TemplateVisualState(VisualStates.CommonStates, VisualStates.NormalState)]
     [TemplateVisualState(VisualStates.CommonStates, VisualStates.MouseOverState)]
     [TemplateVisualState(VisualStates.CommonStates, VisualStates.PressedState)]
