@@ -15,7 +15,7 @@ namespace System.Windows
         public static readonly SystemResources SystemResources = new SystemResources();
 
         public event EventHandler<ResourcesChangedEventArgs> ResourcesChanged;
-        public event EventHandler<StartupEventArgs> Startup;
+        public event StartupEventHandler Startup;
         public event EventHandler LoadCompleted;
 
         public string StartupUri { get; set; }
@@ -61,7 +61,7 @@ namespace System.Windows
 
         public void Run()
         {
-            OnStartup();
+            OnStartup(StartupEventArgs.Empty);
             Startup.Raise(this, StartupEventArgs.Empty);
 
             LoadStartupUri();
@@ -108,7 +108,7 @@ namespace System.Windows
             return false;
         }
 
-        protected virtual void OnStartup()
+        protected virtual void OnStartup(StartupEventArgs e)
         {
             //
         }
