@@ -457,11 +457,11 @@ namespace System.Windows
 
             IsInitialized = true;
 
-            OnInitialized();
+            OnInitialized(EventArgs.Empty);
             RaiseEvent(new RoutedEventArgs(InitializedEvent, this));
         }
 
-        protected virtual void OnInitialized()
+        protected virtual void OnInitialized(EventArgs e)
         {
             //
         }
