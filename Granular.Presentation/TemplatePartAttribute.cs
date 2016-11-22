@@ -10,7 +10,13 @@ namespace System.Windows
         public string Name { get; private set; }
         public Type Type { get; private set; }
 
-        public TemplatePartAttribute(string name, Type type)
+        public TemplatePartAttribute()
+        {
+            //
+        }
+
+        public TemplatePartAttribute(string name, Type type) :
+            this()
         {
             this.Name = name;
             this.Type = type;

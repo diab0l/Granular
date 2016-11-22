@@ -7,10 +7,16 @@ namespace System.Windows
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
     public class TemplateVisualStateAttribute : Attribute
     {
-        public string GroupName { get; private set; }
-        public string Name { get; private set; }
+        public string GroupName { get; set; }
+        public string Name { get; set; }
 
-        public TemplateVisualStateAttribute(string groupName, string name)
+        public TemplateVisualStateAttribute()
+        {
+            //
+        }
+
+        public TemplateVisualStateAttribute(string groupName, string name) :
+            this()
         {
             this.GroupName = groupName;
             this.Name = name;
