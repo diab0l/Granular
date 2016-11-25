@@ -15,8 +15,8 @@ namespace System.Windows.Markup
         public IEnumerable<object> Values { get; private set; }
         public IEnumerable<XamlMember> Directives { get; private set; }
 
-        public XamlElement(XamlName name, XamlNamespaces namespaces, IEnumerable<XamlMember> members = null, IEnumerable<object> values = null, IEnumerable<XamlMember> directives = null) :
-            base(name, namespaces)
+        public XamlElement(XamlName name, XamlNamespaces namespaces, Uri sourceUri, IEnumerable<XamlMember> members = null, IEnumerable<object> values = null, IEnumerable<XamlMember> directives = null) :
+            base(name, namespaces, sourceUri)
         {
             this.Members = members ?? EmptyMembers;
             this.Values = values ?? EmptyValues;

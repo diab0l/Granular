@@ -23,12 +23,14 @@ namespace System.Windows.Markup
 
         private string text;
         private XamlNamespaces namespaces;
+        private Uri sourceUri;
         private ReadOnlyStack<Token> tokens;
 
-        private MarkupExtensionParser(string text, XamlNamespaces namespaces)
+        private MarkupExtensionParser(string text, XamlNamespaces namespaces, Uri sourceUri)
         {
             this.text = text;
             this.namespaces = namespaces;
+            this.sourceUri = sourceUri;
         }
 
         private XamlElement Parse()
@@ -55,7 +57,7 @@ namespace System.Windows.Markup
             IEnumerable<XamlMember> membersList = MatchMembersList();
             MatchTerminal("}");
 
-            return new XamlElement(new XamlName(GetTypeName(typeFullName), GetTypeNamespace(typeFullName)), namespaces, members: membersList);
+            return new XamlElement(new XamlName(GetTypeName(typeFullName), GetTypeNamespace(typeFullName)), namespaces, sourceUri, members: membersList);
         }
 
         // PL -> P PL' | epsilon
@@ -119,7 +121,7 @@ namespace System.Windows.Markup
                 value = MatchValue();
             }
 
-            return new XamlMember(new XamlName(name), namespaces, value);
+            return new XamlMember(new XamlName(name), namespaces, sourceUri, value);
         }
 
         // NV -> = V | epsilon
@@ -223,7 +225,7 @@ namespace System.Windows.Markup
             return namespaces.Get(namespaceSeparatorIndex != -1 ? typeFullName.Substring(0, namespaceSeparatorIndex) : String.Empty);
         }
 
-        public static object Parse(string text, XamlNamespaces namespaces)
+        public static object Parse(string text, XamlNamespaces namespaces, Uri sourceUri = null)
         {
             if (IsEscaped(text))
             {
@@ -232,7 +234,7 @@ namespace System.Windows.Markup
 
             if (IsMarkupExtension(text))
             {
-                return new MarkupExtensionParser(text, namespaces).Parse();
+                return new MarkupExtensionParser(text, namespaces, sourceUri).Parse();
             }
 
             return text;

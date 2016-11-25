@@ -10,14 +10,14 @@ namespace System.Windows.Markup
 
         public IEnumerable<object> Values { get; private set; }
 
-        public XamlMember(XamlName name, XamlNamespaces namespaces, object value) :
-            this(name, namespaces, new object[] { value })
+        public XamlMember(XamlName name, XamlNamespaces namespaces, Uri sourceUri, object value) :
+            this(name, namespaces, sourceUri, new object[] { value })
         {
             //
         }
 
-        public XamlMember(XamlName name, XamlNamespaces namespaces, IEnumerable<object> values) :
-            base(name, namespaces)
+        public XamlMember(XamlName name, XamlNamespaces namespaces, Uri sourceUri, IEnumerable<object> values) :
+            base(name, namespaces, sourceUri)
         {
             this.Values = values ?? EmptyValues;
         }
