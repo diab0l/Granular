@@ -28,6 +28,7 @@ namespace System.Windows.Markup
 
         private Type elementType;
         private XamlNamespaces namespaces;
+        private Uri sourceUri;
         private IEnumerable<IElementInitializer> memberInitializers;
         private IElementInitializer contentInitializer;
 
@@ -38,6 +39,7 @@ namespace System.Windows.Markup
         {
             elementType = element.GetElementType();
             namespaces = element.Namespaces;
+            sourceUri = element.SourceUri;
 
             memberInitializers = CreateMemberInitializers(element, elementType);
             contentInitializer = CreateContentInitializer(element, elementType);
@@ -58,6 +60,11 @@ namespace System.Windows.Markup
             if (element is ISupportInitialize)
             {
                 ((ISupportInitialize)element).BeginInit();
+            }
+
+            if (element is IUriContext)
+            {
+                ((IUriContext)element).BaseUri = sourceUri;
             }
 
             if (element == context.Root && element is DependencyObject)

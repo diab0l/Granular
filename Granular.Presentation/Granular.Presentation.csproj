@@ -76,6 +76,7 @@
     <Compile Include="FrameworkContentElement.cs" />
     <Compile Include="Input\KeyboardNavigation.cs" />
     <Compile Include="Input\KeyboardNavigationTarget.cs" />
+    <Compile Include="Markup\UriContext.cs" />
     <Compile Include="Media\FontFamily.cs" />
     <Compile Include="Media\MatrixTransform.cs" />
     <Compile Include="Media\TransformGroup.cs" />

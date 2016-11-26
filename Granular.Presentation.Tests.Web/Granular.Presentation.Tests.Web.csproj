@@ -175,6 +175,9 @@
     <Compile Include="..\Granular.Presentation.Tests\Markup\TypeParserTest.cs">
       <Link>Markup\TypeParserTest.cs</Link>
     </Compile>
+    <Compile Include="..\Granular.Presentation.Tests\Markup\UriContextTest.cs">
+      <Link>Markup\UriContextTest.cs</Link>
+    </Compile>
     <Compile Include="..\Granular.Presentation.Tests\Markup\XamlLoaderTest.cs">
       <Link>Markup\XamlLoaderTest.cs</Link>
     </Compile>

@@ -448,6 +448,9 @@
     <Compile Include="..\Granular.Presentation\Markup\TypeParser.cs">
       <Link>Markup\TypeParser.cs</Link>
     </Compile>
+    <Compile Include="..\Granular.Presentation\Markup\UriContext.cs">
+      <Link>Markup\UriContext.cs</Link>
+    </Compile>
     <Compile Include="..\Granular.Presentation\Markup\ValueProvider.cs">
       <Link>Markup\ValueProvider.cs</Link>
     </Compile>
