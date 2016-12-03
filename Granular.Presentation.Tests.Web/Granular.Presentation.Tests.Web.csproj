@@ -283,6 +283,9 @@
     <Compile Include="..\Granular.Presentation.Tests\UIElementTest.cs">
       <Link>UIElementTest.cs</Link>
     </Compile>
+    <Compile Include="..\Granular.Presentation.Tests\UriTest.cs">
+      <Link>UriTest.cs</Link>
+    </Compile>
     <Compile Include="..\Granular.Presentation.Tests\VisualStateTest.cs">
       <Link>VisualStateTest.cs</Link>
     </Compile>

@@ -157,7 +157,10 @@
     <Compile Include="Compatibility\TimeSpan.cs" />
     <Compile Include="Compatibility\Type.cs" />
     <Compile Include="Compatibility\TypeExtensions.cs" />
+    <Compile Include="Compatibility\Uri.cs" />
+    <Compile Include="Compatibility\UriComponents.cs" />
     <Compile Include="Compatibility\XDocument.cs" />
+    <Compile Include="Compatibility\UriExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="..\SharedAssemblyInfo.cs">
       <Link>Properties\SharedAssemblyInfo.cs</Link>

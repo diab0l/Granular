@@ -139,6 +139,7 @@
     <Compile Include="Media\Animation\AnimationExpressionTest.cs" />
     <Compile Include="TriggerTest.cs" />
     <Compile Include="UIElementTest.cs" />
+    <Compile Include="UriTest.cs" />
     <Compile Include="VisualStateTest.cs" />
   </ItemGroup>
   <ItemGroup>

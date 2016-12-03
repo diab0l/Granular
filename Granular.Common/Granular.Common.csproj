@@ -67,6 +67,8 @@
     <Compile Include="Compatibility\TimeSpan.cs" />
     <Compile Include="Compatibility\Type.cs" />
     <Compile Include="Compatibility\TypeExtensions.cs" />
+    <Compile Include="Compatibility\Uri.cs" />
+    <Compile Include="Compatibility\UriExtensions.cs" />
     <Compile Include="Diagnostics\HitCounter.cs" />
     <Compile Include="Diagnostics\Profiler.cs" />
     <Compile Include="Disposable.cs" />
