@@ -66,7 +66,7 @@ namespace System.Windows.Media.Animation
 
     public class RepeatBehaviorTypeConverter : ITypeConverter
     {
-        public object ConvertFrom(XamlNamespaces namespaces, object value)
+        public object ConvertFrom(XamlNamespaces namespaces, Uri sourceUri, object value)
         {
             return RepeatBehavior.Parse(value.ToString().Trim());
         }

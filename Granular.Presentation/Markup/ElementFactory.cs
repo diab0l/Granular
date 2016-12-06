@@ -31,14 +31,14 @@ namespace System.Windows.Markup
             return target;
         }
 
-        public static IElementFactory FromValue(object value, Type targetType, XamlNamespaces namespaces)
+        public static IElementFactory FromValue(object value, Type targetType, XamlNamespaces namespaces, Uri sourceUri)
         {
             if (value is XamlElement)
             {
                 return FromXamlElement((XamlElement)value, targetType);
             }
 
-            return FromElementFactory(new ConstantElementFactory(value), targetType, namespaces);
+            return FromElementFactory(new ConstantElementFactory(value), targetType, namespaces, sourceUri);
         }
 
         public static IElementFactory FromXamlElement(XamlElement element, Type targetType)
@@ -47,13 +47,13 @@ namespace System.Windows.Markup
 
             if (element.Values.Any() && PropertyAttribute.GetPropertyName<ContentPropertyAttribute>(elementType).IsNullOrEmpty() && !ElementCollectionContentInitailizer.IsCollectionType(elementType))
             {
-                return FromElementFactory(FromXamlElementContent(element), targetType, element.Namespaces);
+                return FromElementFactory(FromXamlElementContent(element), targetType, element.Namespaces, element.SourceUri);
             }
 
             IElementInitializer elementInitializer = new ElementInitializer(element);
             IElementFactory elementFactory = new ElementFactory(elementType, elementInitializer);
 
-            return FromElementFactory(elementFactory, targetType, element.Namespaces);
+            return FromElementFactory(elementFactory, targetType, element.Namespaces, element.SourceUri);
         }
 
         private static IElementFactory FromXamlElementContent(XamlElement element)
@@ -68,10 +68,10 @@ namespace System.Windows.Markup
                 throw new Granular.Exception("Element \"{0}\" can't have multiple children, as it's not a collection type and does not declare ContentProperty and can only be converted from its content", element.Name);
             }
 
-            return FromValue(element.Values.First(), element.GetElementType(), element.Namespaces);
+            return FromValue(element.Values.First(), element.GetElementType(), element.Namespaces, element.SourceUri);
         }
 
-        private static IElementFactory FromElementFactory(IElementFactory elementFactory, Type targetType, XamlNamespaces namespaces)
+        private static IElementFactory FromElementFactory(IElementFactory elementFactory, Type targetType, XamlNamespaces namespaces, Uri sourceUri)
         {
             if (typeof(IMarkupExtension).IsAssignableFrom(elementFactory.ElementType))
             {
@@ -80,7 +80,7 @@ namespace System.Windows.Markup
 
             if (targetType != null && !targetType.IsAssignableFrom(elementFactory.ElementType))
             {
-                return new ConvertedElementFactory(elementFactory, targetType, namespaces);
+                return new ConvertedElementFactory(elementFactory, targetType, namespaces, sourceUri);
             }
 
             return elementFactory;
@@ -93,19 +93,21 @@ namespace System.Windows.Markup
 
         private IElementFactory valueFactory;
         private XamlNamespaces namespaces;
+        private Uri sourceUri;
         private ITypeConverter typeConverter;
 
-        public ConvertedElementFactory(IElementFactory elementFactory, Type elementTargetType, XamlNamespaces namespaces)
+        public ConvertedElementFactory(IElementFactory elementFactory, Type elementTargetType, XamlNamespaces namespaces, Uri sourceUri)
         {
             this.valueFactory = elementFactory;
             this.ElementType = elementTargetType;
             this.namespaces = namespaces;
+            this.sourceUri = sourceUri;
             this.typeConverter = TypeConverter.GetTypeConverter(elementFactory.ElementType, elementTargetType);
         }
 
         public object CreateElement(InitializeContext context)
         {
-            return typeConverter.ConvertFrom(namespaces, valueFactory.CreateElement(context));
+            return typeConverter.ConvertFrom(namespaces, sourceUri, valueFactory.CreateElement(context));
         }
     }
 

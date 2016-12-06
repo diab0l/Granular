@@ -27,11 +27,11 @@ namespace System.Windows.Media
             colorTypeConverter = new ColorTypeConverter();
         }
 
-        public object ConvertFrom(XamlNamespaces namespaces, object value)
+        public object ConvertFrom(XamlNamespaces namespaces, Uri sourceUri, object value)
         {
             if (value is string)
             {
-                return new SolidColorBrush((Color)colorTypeConverter.ConvertFrom(namespaces, value));
+                return new SolidColorBrush((Color)colorTypeConverter.ConvertFrom(namespaces, sourceUri, value));
             }
 
             throw new Granular.Exception("Can't convert \"{0}\" to Color", value);

@@ -80,7 +80,7 @@ namespace System.Windows
             }
 
             object resolvedValue;
-            if (TypeConverter.TryConvertValue(value.ToString(), type, XamlNamespaces.Empty, out resolvedValue))
+            if (TypeConverter.TryConvertValue(value.ToString(), type, XamlNamespaces.Empty, null, out resolvedValue))
             {
                 return resolvedValue;
             }

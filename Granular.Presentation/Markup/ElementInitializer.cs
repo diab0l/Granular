@@ -124,7 +124,7 @@ namespace System.Windows.Markup
             string contentPropertyName = PropertyAttribute.GetPropertyName<ContentPropertyAttribute>(elementType);
             if (!contentPropertyName.IsNullOrEmpty())
             {
-                return ElementMemberInitializer.Create(new XamlName(contentPropertyName), elementType, element.Values, element.Namespaces);
+                return ElementMemberInitializer.Create(new XamlName(contentPropertyName), elementType, element.Values, element.Namespaces, element.SourceUri);
             }
 
             if (ElementCollectionContentInitailizer.IsCollectionType(elementType))
@@ -145,7 +145,7 @@ namespace System.Windows.Markup
                 // markup extensions may contain members with an empty name, the name should be resolved from the member index
                 XamlName memberName = member.Name.IsEmpty ? GetParameterName(elementType, index) : member.Name;
 
-                list.Add(ElementMemberInitializer.Create(memberName, elementType, member.Values, member.Namespaces));
+                list.Add(ElementMemberInitializer.Create(memberName, elementType, member.Values, member.Namespaces, member.SourceUri));
                 index++;
             }
 
@@ -195,12 +195,12 @@ namespace System.Windows.Markup
 
     public static class ElementMemberInitializer
     {
-        public static IElementInitializer Create(XamlName memberName, Type containingType, IEnumerable<object> values, XamlNamespaces namespaces)
+        public static IElementInitializer Create(XamlName memberName, Type containingType, IEnumerable<object> values, XamlNamespaces namespaces, Uri sourceUri)
         {
             IPropertyAdapter propertyAdapter = PropertyAdapter.CreateAdapter(containingType, memberName);
             if (propertyAdapter != null)
             {
-                return ElementPropertyMemberInitializer.Create(propertyAdapter, values, namespaces);
+                return ElementPropertyMemberInitializer.Create(propertyAdapter, values, namespaces, sourceUri);
             }
 
             IEventAdapter eventAdapter = EventAdapter.CreateAdapter(containingType, memberName);
@@ -303,7 +303,7 @@ namespace System.Windows.Markup
             propertyAdapter.SetValue(element, propertyValueFactory.CreateElement(context), context.ValueSource);
         }
 
-        public static IElementInitializer Create(IPropertyAdapter propertyAdapter, IEnumerable<object> values, XamlNamespaces namespaces)
+        public static IElementInitializer Create(IPropertyAdapter propertyAdapter, IEnumerable<object> values, XamlNamespaces namespaces, Uri sourceUri)
         {
             if (!values.Any())
             {
@@ -316,7 +316,7 @@ namespace System.Windows.Markup
 
                 if (propertyAdapter.PropertyType == typeof(IFrameworkElementFactory))
                 {
-                    return new FrameworkElementFactoryInitializer(propertyAdapter, ElementFactory.FromValue(value, null, namespaces));
+                    return new FrameworkElementFactoryInitializer(propertyAdapter, ElementFactory.FromValue(value, null, namespaces, sourceUri));
                 }
 
                 Type valueType = value is XamlElement ? ((XamlElement)value).GetElementType() : value.GetType();
@@ -324,7 +324,7 @@ namespace System.Windows.Markup
                 ITypeConverter typeConverter;
                 if (propertyAdapter.PropertyType.IsAssignableFrom(valueType) || typeof(IMarkupExtension).IsAssignableFrom(valueType) || TypeConverter.TryGetTypeConverter(valueType, propertyAdapter.PropertyType, out typeConverter))
                 {
-                    IElementFactory contentFactory = ElementFactory.FromValue(value, propertyAdapter.PropertyType, namespaces);
+                    IElementFactory contentFactory = ElementFactory.FromValue(value, propertyAdapter.PropertyType, namespaces, sourceUri);
                     return new ElementPropertyMemberInitializer(propertyAdapter, contentFactory);
                 }
             }
@@ -413,7 +413,7 @@ namespace System.Windows.Markup
 
         public ElementCollectionContentInitializer(Type valueTargetType, IEnumerable<object> values)
         {
-            elementsFactory = values.Select(value => ElementFactory.FromValue(value, valueTargetType, XamlNamespaces.Empty)).ToArray();
+            elementsFactory = values.Select(value => ElementFactory.FromValue(value, valueTargetType, XamlNamespaces.Empty, null)).ToArray();
         }
 
         public void InitializeElement(object element, InitializeContext context)
@@ -485,7 +485,7 @@ namespace System.Windows.Markup
             private static IElementFactory GetKeyDirectiveFactory(XamlElement element, Type keyType)
             {
                 XamlMember keyDirective = element.Directives.FirstOrDefault(directive => directive.Name == XamlLanguage.KeyDirective);
-                return keyDirective != null ? ElementFactory.FromValue(keyDirective.GetSingleValue(), keyType, element.Namespaces) : null;
+                return keyDirective != null ? ElementFactory.FromValue(keyDirective.GetSingleValue(), keyType, element.Namespaces, element.SourceUri) : null;
             }
 
             private static IPropertyAdapter GetKeyProperty(Type type)
@@ -524,7 +524,7 @@ namespace System.Windows.Markup
 
             foreach (XamlElement contentChild in valuesElements)
             {
-                bool isShared = contentChild.Directives.All(directive => directive.Name != XamlLanguage.SharedDirective || (bool)TypeConverter.ConvertValue(directive.GetSingleValue(), typeof(bool), XamlNamespaces.Empty));
+                bool isShared = contentChild.Directives.All(directive => directive.Name != XamlLanguage.SharedDirective || (bool)TypeConverter.ConvertValue(directive.GetSingleValue(), typeof(bool), XamlNamespaces.Empty, null));
 
                 IElementFactory contentChildFactory = ElementFactory.FromXamlElement(contentChild, valueType);
 

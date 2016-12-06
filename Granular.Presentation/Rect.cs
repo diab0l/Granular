@@ -262,7 +262,7 @@ namespace System.Windows
 
     public class RectTypeConverter : ITypeConverter
     {
-        public object ConvertFrom(XamlNamespaces namespaces, object value)
+        public object ConvertFrom(XamlNamespaces namespaces, Uri sourceUri, object value)
         {
             return Rect.Parse(value.ToString().Trim());
         }

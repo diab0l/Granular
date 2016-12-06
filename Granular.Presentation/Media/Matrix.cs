@@ -200,7 +200,7 @@ namespace System.Windows.Media
 
     public class MatrixTypeConverter : ITypeConverter
     {
-        public object ConvertFrom(XamlNamespaces namespaces, object value)
+        public object ConvertFrom(XamlNamespaces namespaces, Uri sourceUri, object value)
         {
             return Matrix.Parse(value.ToString().Trim());
         }

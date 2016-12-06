@@ -190,7 +190,7 @@ namespace Granular.Presentation.Tests.Markup
 
     public class LoaderTestContentConverter : ITypeConverter
     {
-        public object ConvertFrom(XamlNamespaces namespaces, object value)
+        public object ConvertFrom(XamlNamespaces namespaces, Uri sourceUri, object value)
         {
             if (value is LoaderTestElement)
             {
@@ -208,7 +208,7 @@ namespace Granular.Presentation.Tests.Markup
 
     public class LoaderTestElementConverter : ITypeConverter
     {
-        public object ConvertFrom(XamlNamespaces namespaces, object value)
+        public object ConvertFrom(XamlNamespaces namespaces, Uri sourceUri, object value)
         {
             if (value is LoaderTestContentElement)
             {

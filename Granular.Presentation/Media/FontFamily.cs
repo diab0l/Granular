@@ -34,7 +34,7 @@ namespace System.Windows.Media
 
     public class FontFamilyTypeConverter : ITypeConverter
     {
-        public object ConvertFrom(XamlNamespaces namespaces, object value)
+        public object ConvertFrom(XamlNamespaces namespaces, Uri sourceUri, object value)
         {
             return FontFamily.Parse(value.ToString().Trim());
         }

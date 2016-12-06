@@ -28,7 +28,7 @@ namespace System.Windows.Media
 
     public class TransformTypeConverter : ITypeConverter
     {
-        public object ConvertFrom(XamlNamespaces namespaces, object value)
+        public object ConvertFrom(XamlNamespaces namespaces, Uri sourceUri, object value)
         {
             return new MatrixTransform { Matrix = Matrix.Parse(value.ToString()) };
         }

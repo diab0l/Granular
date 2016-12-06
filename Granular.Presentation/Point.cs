@@ -264,7 +264,7 @@ namespace System.Windows
 
     public class PointTypeConverter : ITypeConverter
     {
-        public object ConvertFrom(XamlNamespaces namespaces, object value)
+        public object ConvertFrom(XamlNamespaces namespaces, Uri sourceUri, object value)
         {
             return Point.Parse(value.ToString().Trim());
         }

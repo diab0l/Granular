@@ -277,7 +277,7 @@ namespace System.Windows
 
     public class SizeTypeConverter : ITypeConverter
     {
-        public object ConvertFrom(XamlNamespaces namespaces, object value)
+        public object ConvertFrom(XamlNamespaces namespaces, Uri sourceUri, object value)
         {
             return Size.Parse(value.ToString().Trim());
         }

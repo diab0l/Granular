@@ -17,7 +17,7 @@ namespace System.Windows.Markup
             //
         }
 
-        public object ConvertFrom(XamlNamespaces namespaces, object value)
+        public object ConvertFrom(XamlNamespaces namespaces, Uri sourceUri, object value)
         {
             return value;
         }
@@ -32,7 +32,7 @@ namespace System.Windows.Markup
             //
         }
 
-        public object ConvertFrom(XamlNamespaces namespaces, object value)
+        public object ConvertFrom(XamlNamespaces namespaces, Uri sourceUri, object value)
         {
             return value.ToString();
         }
@@ -47,7 +47,7 @@ namespace System.Windows.Markup
             //
         }
 
-        public object ConvertFrom(XamlNamespaces namespaces, object value)
+        public object ConvertFrom(XamlNamespaces namespaces, Uri sourceUri, object value)
         {
             string text = value.ToString().Trim().ToLower();
 
@@ -69,7 +69,7 @@ namespace System.Windows.Markup
             //
         }
 
-        public object ConvertFrom(XamlNamespaces namespaces, object value)
+        public object ConvertFrom(XamlNamespaces namespaces, Uri sourceUri, object value)
         {
             return Int32.Parse(value.ToString());
         }
@@ -84,7 +84,7 @@ namespace System.Windows.Markup
             //
         }
 
-        public object ConvertFrom(XamlNamespaces namespaces, object value)
+        public object ConvertFrom(XamlNamespaces namespaces, Uri sourceUri, object value)
         {
             string text = value.ToString().Trim().ToLower();
 
@@ -106,7 +106,7 @@ namespace System.Windows.Markup
             //
         }
 
-        public object ConvertFrom(XamlNamespaces namespaces, object value)
+        public object ConvertFrom(XamlNamespaces namespaces, Uri sourceUri, object value)
         {
             TimeSpan timeSpan;
             if (Granular.Compatibility.TimeSpan.TryParse(value.ToString(), out timeSpan))
@@ -127,7 +127,7 @@ namespace System.Windows.Markup
             this.type = type;
         }
 
-        public object ConvertFrom(XamlNamespaces namespaces, object value)
+        public object ConvertFrom(XamlNamespaces namespaces, Uri sourceUri, object value)
         {
             return Enum.Parse(type, value.ToString().Trim());
         }
@@ -142,7 +142,7 @@ namespace System.Windows.Markup
             //
         }
 
-        public object ConvertFrom(XamlNamespaces namespaces, object value)
+        public object ConvertFrom(XamlNamespaces namespaces, Uri sourceUri, object value)
         {
             return TypeParser.ParseType(value.ToString().Trim(), namespaces);
         }
@@ -157,7 +157,7 @@ namespace System.Windows.Markup
             //
         }
 
-        public object ConvertFrom(XamlNamespaces namespaces, object value)
+        public object ConvertFrom(XamlNamespaces namespaces, Uri sourceUri, object value)
         {
             return Granular.Compatibility.Uri.CreateRelativeOrAbsoluteUri(value.ToString().Trim());
         }

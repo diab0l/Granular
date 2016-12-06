@@ -123,7 +123,7 @@ namespace System.Windows.Media
 
     public class ColorTypeConverter : ITypeConverter
     {
-        public object ConvertFrom(XamlNamespaces namespaces, object value)
+        public object ConvertFrom(XamlNamespaces namespaces, Uri sourceUri, object value)
         {
             if (value is string)
             {

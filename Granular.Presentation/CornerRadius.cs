@@ -97,7 +97,7 @@ namespace System.Windows
 
     public class CornerRadiusTypeConverter : ITypeConverter
     {
-        public object ConvertFrom(XamlNamespaces namespaces, object value)
+        public object ConvertFrom(XamlNamespaces namespaces, Uri sourceUri, object value)
         {
             return CornerRadius.Parse(value.ToString().Trim());
         }

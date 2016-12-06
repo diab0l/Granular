@@ -87,7 +87,7 @@ namespace System.Windows
 
     public class DurationTypeConverter : ITypeConverter
     {
-        public object ConvertFrom(XamlNamespaces namespaces, object value)
+        public object ConvertFrom(XamlNamespaces namespaces, Uri sourceUri, object value)
         {
             return Duration.Parse(value.ToString().Trim());
         }

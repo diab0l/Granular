@@ -20,12 +20,14 @@ namespace System.Windows.Markup
 
         private string text;
         private XamlNamespaces namespaces;
+        private Uri sourceUri;
         private ReadOnlyStack<Token> tokens;
 
-        public PropertyPathParser(string text, XamlNamespaces namespaces)
+        public PropertyPathParser(string text, XamlNamespaces namespaces, Uri sourceUri)
         {
             this.text = text;
             this.namespaces = namespaces;
+            this.sourceUri = sourceUri;
         }
 
         public IEnumerable<IPropertyPathElement> Parse()
@@ -34,18 +36,18 @@ namespace System.Windows.Markup
 
             List<IPropertyPathElement> elements = new List<IPropertyPathElement>();
 
-            elements.Add(MatchElement(namespaces));
+            elements.Add(MatchElement(namespaces, sourceUri));
 
             while (!tokens.IsEmpty)
             {
                 MatchTerminal(".");
-                elements.Add(MatchElement(namespaces));
+                elements.Add(MatchElement(namespaces, sourceUri));
             }
 
             return elements;
         }
 
-        private IPropertyPathElement MatchElement(XamlNamespaces namespaces)
+        private IPropertyPathElement MatchElement(XamlNamespaces namespaces, Uri sourceUri)
         {
             VerifyTokensExists();
 
@@ -57,7 +59,7 @@ namespace System.Windows.Markup
                 throw new Granular.Exception("Can't parse \"{0}\", Property name or Index parameters were expected, \"{1}\" was found at index {2}", text, tokens.Peek().Value, tokens.Peek().Start);
             }
 
-            return indexRawValues.Any() ? (IPropertyPathElement) new IndexPropertyPathElement(propertyName, indexRawValues, namespaces) : new PropertyPathElement(propertyName);
+            return indexRawValues.Any() ? (IPropertyPathElement) new IndexPropertyPathElement(propertyName, indexRawValues, namespaces, sourceUri) : new PropertyPathElement(propertyName);
         }
 
         private XamlName TryMatchPropertyName(XamlNamespaces namespaces)

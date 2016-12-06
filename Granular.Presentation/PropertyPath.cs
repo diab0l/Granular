@@ -119,12 +119,14 @@ namespace System.Windows
         public IEnumerable<string> IndexRawValues { get; private set; }
 
         private XamlNamespaces namespaces;
+        private Uri sourceUri;
 
-        public IndexPropertyPathElement(XamlName propertyName, IEnumerable<string> indexRawValues, XamlNamespaces namespaces)
+        public IndexPropertyPathElement(XamlName propertyName, IEnumerable<string> indexRawValues, XamlNamespaces namespaces, Uri sourceUri)
         {
             this.PropertyName = propertyName;
             this.IndexRawValues = indexRawValues;
             this.namespaces = namespaces;
+            this.sourceUri = sourceUri;
         }
 
         public override bool Equals(object obj)
@@ -202,7 +204,7 @@ namespace System.Windows
                 throw new Granular.Exception("Invalid number of index parameters for \"{0}.{1}\"", indexPropertyInfo.DeclaringType.Name, indexPropertyInfo.Name);
             }
 
-            return indexPropertyInfo.GetIndexParameters().Zip(IndexRawValues, (parameter, rawValue) => TypeConverter.ConvertValue(rawValue, parameter.ParameterType, namespaces)).ToArray();
+            return indexPropertyInfo.GetIndexParameters().Zip(IndexRawValues, (parameter, rawValue) => TypeConverter.ConvertValue(rawValue, parameter.ParameterType, namespaces, sourceUri)).ToArray();
         }
     }
 
@@ -278,7 +280,7 @@ namespace System.Windows
 
         public static PropertyPath Parse(string value, XamlNamespaces namespaces = null)
         {
-            PropertyPathParser parser = new PropertyPathParser(value, namespaces ?? XamlNamespaces.Empty);
+            PropertyPathParser parser = new PropertyPathParser(value, namespaces ?? XamlNamespaces.Empty, null);
             return new PropertyPath(parser.Parse());
         }
 
@@ -290,7 +292,7 @@ namespace System.Windows
 
     public class PropertyPathTypeConverter : ITypeConverter
     {
-        public object ConvertFrom(XamlNamespaces namespaces, object value)
+        public object ConvertFrom(XamlNamespaces namespaces, Uri sourceUri, object value)
         {
             return PropertyPath.Parse((string)value, namespaces);
         }
@@ -298,7 +300,7 @@ namespace System.Windows
 
     public class PropertyPathElementTypeConverter : ITypeConverter
     {
-        public object ConvertFrom(XamlNamespaces namespaces, object value)
+        public object ConvertFrom(XamlNamespaces namespaces, Uri sourceUri, object value)
         {
             return new PropertyPathElement(XamlName.FromPrefixedName((string)value, namespaces));
         }

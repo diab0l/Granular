@@ -64,7 +64,7 @@ namespace System.Windows
 
     internal class GridLengthTypeConverter : ITypeConverter
     {
-        public object ConvertFrom(XamlNamespaces namespaces, object value)
+        public object ConvertFrom(XamlNamespaces namespaces, Uri sourceUri, object value)
         {
             string text = value.ToString().Trim();
 

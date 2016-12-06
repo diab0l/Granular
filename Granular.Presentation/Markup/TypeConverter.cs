@@ -7,7 +7,7 @@ namespace System.Windows.Markup
 {
     public interface ITypeConverter
     {
-        object ConvertFrom(XamlNamespaces namespaces, object value);
+        object ConvertFrom(XamlNamespaces namespaces, Uri sourceUri, object value);
     }
 
     public class TypeConverterAttribute : Attribute
@@ -24,7 +24,7 @@ namespace System.Windows.Markup
     {
         private class EmptyTypeConverter : ITypeConverter
         {
-            public object ConvertFrom(XamlNamespaces namespaces, object value)
+            public object ConvertFrom(XamlNamespaces namespaces, Uri sourceUri, object value)
             {
                 return value;
             }
@@ -56,13 +56,13 @@ namespace System.Windows.Markup
             return typeConverter;
         }
 
-        public static bool TryConvertValue(object value, Type type, XamlNamespaces namespaces, out object result)
+        public static bool TryConvertValue(object value, Type type, XamlNamespaces namespaces, Uri sourceUri, out object result)
         {
             ITypeConverter typeConverter;
 
             if (TryGetTypeConverter(value.GetType(), type, out typeConverter))
             {
-                result = typeConverter.ConvertFrom(namespaces, value);
+                result = typeConverter.ConvertFrom(namespaces, sourceUri, value);
                 return true;
             }
 
@@ -70,11 +70,11 @@ namespace System.Windows.Markup
             return false;
         }
 
-        public static object ConvertValue(object value, Type type, XamlNamespaces namespaces)
+        public static object ConvertValue(object value, Type type, XamlNamespaces namespaces, Uri sourceUri)
         {
             object result;
 
-            if (!TryConvertValue(value, type, namespaces, out result))
+            if (!TryConvertValue(value, type, namespaces, sourceUri, out result))
             {
                 throw new Granular.Exception("Can't convert \"{0}\" to {1}", value, type.Name);
             }

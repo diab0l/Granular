@@ -15,7 +15,7 @@ namespace System.Windows.Documents
 
     public class InlineConverter : ITypeConverter
     {
-        public object ConvertFrom(XamlNamespaces namespaces, object value)
+        public object ConvertFrom(XamlNamespaces namespaces, Uri sourceUri, object value)
         {
             return new Run((string)value);
         }

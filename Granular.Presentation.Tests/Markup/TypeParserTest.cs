@@ -32,7 +32,7 @@ namespace Granular.Presentation.Tests.Markup
 
         private class Entry2TypeConverter : ITypeConverter
         {
-            public object ConvertFrom(XamlNamespaces namespaces, object value)
+            public object ConvertFrom(XamlNamespaces namespaces, Uri sourceUri, object value)
             {
                 string text = value.ToString().Trim();
 
@@ -43,7 +43,7 @@ namespace Granular.Presentation.Tests.Markup
         [TestMethod]
         public void ParseTypeConverterTest()
         {
-            Entry entry = (Entry)TypeConverter.ConvertValue("A,B", typeof(Entry), XamlNamespaces.Empty);
+            Entry entry = (Entry)TypeConverter.ConvertValue("A,B", typeof(Entry), XamlNamespaces.Empty, null);
 
             Assert.AreEqual("A", entry.Value1);
             Assert.AreEqual("B", entry.Value2);
@@ -52,10 +52,10 @@ namespace Granular.Presentation.Tests.Markup
         [TestMethod]
         public void ParseBooleanTest()
         {
-            bool value1 = (bool)TypeConverter.ConvertValue("True", typeof(Boolean), XamlNamespaces.Empty);
-            bool value2 = (bool)TypeConverter.ConvertValue("true", typeof(Boolean), XamlNamespaces.Empty);
-            bool value3 = (bool)TypeConverter.ConvertValue("False", typeof(Boolean), XamlNamespaces.Empty);
-            bool value4 = (bool)TypeConverter.ConvertValue("false", typeof(Boolean), XamlNamespaces.Empty);
+            bool value1 = (bool)TypeConverter.ConvertValue("True", typeof(Boolean), XamlNamespaces.Empty, null);
+            bool value2 = (bool)TypeConverter.ConvertValue("true", typeof(Boolean), XamlNamespaces.Empty, null);
+            bool value3 = (bool)TypeConverter.ConvertValue("False", typeof(Boolean), XamlNamespaces.Empty, null);
+            bool value4 = (bool)TypeConverter.ConvertValue("false", typeof(Boolean), XamlNamespaces.Empty, null);
 
             Assert.AreEqual(true, value1);
             Assert.AreEqual(true, value2);
@@ -67,9 +67,9 @@ namespace Granular.Presentation.Tests.Markup
         public void ParseEnumTest()
         {
             XamlNamespaces defaultNamespace = new XamlNamespaces("Granular.Presentation.Tests.Markup");
-            EnumParseTestType value1 = (EnumParseTestType)TypeConverter.ConvertValue("Value1", typeof(EnumParseTestType), defaultNamespace);
-            EnumParseTestType value2 = (EnumParseTestType)TypeConverter.ConvertValue("Value2", typeof(EnumParseTestType), defaultNamespace);
-            EnumParseTestType value3 = (EnumParseTestType)TypeConverter.ConvertValue("Value3", typeof(EnumParseTestType), defaultNamespace);
+            EnumParseTestType value1 = (EnumParseTestType)TypeConverter.ConvertValue("Value1", typeof(EnumParseTestType), defaultNamespace, null);
+            EnumParseTestType value2 = (EnumParseTestType)TypeConverter.ConvertValue("Value2", typeof(EnumParseTestType), defaultNamespace, null);
+            EnumParseTestType value3 = (EnumParseTestType)TypeConverter.ConvertValue("Value3", typeof(EnumParseTestType), defaultNamespace, null);
 
             Assert.AreEqual(EnumParseTestType.Value1, value1);
             Assert.AreEqual(EnumParseTestType.Value2, value2);
@@ -85,8 +85,8 @@ namespace Granular.Presentation.Tests.Markup
                 new NamespaceDeclaration("s", "clr-namespace:System"),
             });
 
-            Type type1 = (Type)TypeConverter.ConvertValue("Double", typeof(Type), namespaces);
-            Type type2 = (Type)TypeConverter.ConvertValue("s:Double", typeof(Type), namespaces);
+            Type type1 = (Type)TypeConverter.ConvertValue("Double", typeof(Type), namespaces, null);
+            Type type2 = (Type)TypeConverter.ConvertValue("s:Double", typeof(Type), namespaces, null);
             Type type3 = TypeParser.ParseType("Double", namespaces);
             Type type4 = TypeParser.ParseType("s:Double", namespaces);
 

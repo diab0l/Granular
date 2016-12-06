@@ -67,7 +67,7 @@ namespace System.Windows
 
             FrameworkElement resolvedTarget = GetResolvedTarget(target, TargetName, valueSource);
             DependencyProperty resolvedProperty = Property.GetDependencyProperty(resolvedTarget.GetType());
-            object resolvedValue = Value == null || Value is IExpressionProvider || resolvedProperty.PropertyType.IsInstanceOfType(Value) ? Value : TypeConverter.ConvertValue(Value.ToString(), resolvedProperty.PropertyType, XamlNamespaces.Empty);
+            object resolvedValue = Value == null || Value is IExpressionProvider || resolvedProperty.PropertyType.IsInstanceOfType(Value) ? Value : TypeConverter.ConvertValue(Value.ToString(), resolvedProperty.PropertyType, XamlNamespaces.Empty, null);
             BaseValueSource resolvedValueSource = GetResolvedValueSource(valueSource, resolvedTarget);
 
             if (IsStyleValueSource(valueSource)) // no need to use value overlap expression in style setters

@@ -94,7 +94,7 @@ namespace System.Windows
 
             DependencyProperty dependencyProperty = Property.GetDependencyProperty(element.GetType());
 
-            object resolvedValue = Value == null || dependencyProperty.PropertyType.IsInstanceOfType(Value) ? Value : TypeConverter.ConvertValue(Value.ToString(), dependencyProperty.PropertyType, XamlNamespaces.Empty);
+            object resolvedValue = Value == null || dependencyProperty.PropertyType.IsInstanceOfType(Value) ? Value : TypeConverter.ConvertValue(Value.ToString(), dependencyProperty.PropertyType, XamlNamespaces.Empty, null);
 
             FrameworkElement source = SourceName.IsNullOrEmpty() ? element : NameScope.GetTemplateNameScope(element).FindName(SourceName) as FrameworkElement;
 
