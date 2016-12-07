@@ -137,7 +137,9 @@
     <Compile Include="Compatibility\BindingFlags.cs" />
     <Compile Include="Compatibility\Collection.cs" />
     <Compile Include="Compatibility\Comparer.cs" />
+    <Compile Include="Compatibility\Configuration.cs" />
     <Compile Include="Compatibility\Convert.cs" />
+    <Compile Include="Compatibility\Data.cs" />
     <Compile Include="Compatibility\DebuggerNonUserCodeAttribute.cs" />
     <Compile Include="Compatibility\Dictionary.cs" />
     <Compile Include="Compatibility\DictionaryExtensions.cs" />

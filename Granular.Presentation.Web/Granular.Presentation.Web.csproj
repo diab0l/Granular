@@ -661,6 +661,9 @@
     <Compile Include="..\Granular.Presentation\NameScope.cs">
       <Link>NameScope.cs</Link>
     </Compile>
+    <Compile Include="..\Granular.Presentation\Navigation.cs">
+      <Link>Navigation.cs</Link>
+    </Compile>
     <Compile Include="..\Granular.Presentation\Point.cs">
       <Link>Point.cs</Link>
     </Compile>
@@ -699,6 +702,9 @@
     </Compile>
     <Compile Include="..\Granular.Presentation\Setter.cs">
       <Link>Setter.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\Shapes.cs">
+      <Link>Shapes.cs</Link>
     </Compile>
     <Compile Include="..\Granular.Presentation\Size.cs">
       <Link>Size.cs</Link>

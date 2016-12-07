@@ -60,6 +60,7 @@
     <Compile Include="Compatibility\Double.cs" />
     <Compile Include="Compatibility\EqualityComparer.cs" />
     <Compile Include="Compatibility\EventInfoExtensions.cs" />
+    <Compile Include="Compatibility\NonScriptableAttribute.cs" />
     <Compile Include="Compatibility\PropertyInfoExtensions.cs" />
     <Compile Include="Compatibility\ReflectableAttribute.cs" />
     <Compile Include="Compatibility\String.cs" />

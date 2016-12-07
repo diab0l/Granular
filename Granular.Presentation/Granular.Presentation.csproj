@@ -182,6 +182,8 @@
     <Compile Include="Controls\ControlTemplate.cs" />
     <Compile Include="Data\Binding.cs" />
     <Compile Include="Data\PropertyObserver.cs" />
+    <Compile Include="Navigation.cs" />
+    <Compile Include="Shapes.cs" />
     <Compile Include="TemplateBindingExtension.cs" />
     <Compile Include="Data\ValueConverter.cs" />
     <Compile Include="Data\RelativeSource.cs" />
