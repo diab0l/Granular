@@ -6,6 +6,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Threading;
 using Granular.Extensions;
+using System.Reflection;
 
 namespace System.Windows
 {
@@ -78,19 +79,38 @@ namespace System.Windows
                 return;
             }
 
-            ApplicationHostAttribute[] applicationHostAttributes = Granular.Compatibility.AppDomain.GetAssemblies().SelectMany(assembly => assembly.GetCustomAttributesCached<ApplicationHostAttribute>()).ToArray();
+            Type type = GetApplicationHostTypeByAttribute() ?? GetApplicationHostTypeByReference();
 
-            if (applicationHostAttributes.Length == 0)
+            if (type == null)
             {
-                throw new Granular.Exception("ApplicationHost assembly attribute was not found");
+                throw new Granular.Exception("Can't find an explicit ApplicationHost assembly attribute or an implicit IApplicationHost implementation in the loaded assemblies");
             }
+
+            Initialize((IApplicationHost)Activator.CreateInstance(type));
+        }
+
+        private static Type GetApplicationHostTypeByAttribute()
+        {
+            ApplicationHostAttribute[] applicationHostAttributes = Granular.Compatibility.AppDomain.GetAssemblies().SelectMany(assembly => assembly.GetCustomAttributesCached<ApplicationHostAttribute>()).ToArray();
 
             if (applicationHostAttributes.Length > 1)
             {
-                throw new Granular.Exception("Multiple ApplicationHost assembly attributes were found, leave only one attribute or call explicitly to ApplicationHost.Initialize");
+                throw new Granular.Exception("Multiple ApplicationHost assembly attributes were found, leave only one attribute or call ApplicationHost.Initialize() at the application entry point.");
             }
 
-            Initialize(Activator.CreateInstance(applicationHostAttributes[0].Type) as IApplicationHost);
+            return applicationHostAttributes.FirstOrDefault()?.Type;
+        }
+
+        private static Type GetApplicationHostTypeByReference()
+        {
+            IEnumerable<Type> types = Granular.Compatibility.AppDomain.GetAssemblies().SelectMany(assembly => assembly.GetTypes()).Where(type => type.IsClass && typeof(IApplicationHost).IsAssignableFrom(type)).ToArray();
+
+            if (types.Count() > 1)
+            {
+                throw new Granular.Exception("Multiple types that are implementing IApplicationHost are loaded, use ApplicationHost assembly attribute or call ApplicationHost.Initialize() at the application entry point. Types found: {0}", String.Join(", ", types.Select(type => type.FullName)));
+            }
+
+            return types.FirstOrDefault();
         }
 
         public static void Initialize(IApplicationHost applicationHost)
