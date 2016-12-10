@@ -13,10 +13,8 @@ namespace System
             return false;
         }
 
-        public static bool GetIsGenericType(this Type type)
-        {
-            return type.GetGenericTypeDefinition() != null;
-        }
+        [Bridge.Template("({type}.$genericTypeDefinition !== undefined)")]
+        public static extern bool GetIsGenericType(this Type type);
 
         public static bool GetIsValueType(this Type type)
         {
