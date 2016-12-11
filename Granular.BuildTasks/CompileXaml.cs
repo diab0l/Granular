@@ -128,6 +128,10 @@ namespace Granular.BuildTasks
 
             CodeTypeDeclaration classDeclaration = classDefinition.CreateClassDeclaration();
 
+            classDeclaration.CustomAttributes.Add(new CodeAttributeDeclaration("Bridge.Reflectable",
+                new CodeAttributeArgument(new CodeSnippetExpression("Bridge.MemberAccessibility.InstanceMethod")),
+                new CodeAttributeArgument(new CodeSnippetExpression("Bridge.MemberAccessibility.InstanceField"))));
+
             string itemRelativePath = item.GetRelativePath().Replace("\\", "/");
             string resourceUri = String.Format("/{0};component/{1}", TargetName, itemRelativePath);
 
