@@ -19,7 +19,7 @@ namespace System.Windows.Controls.Primitives
             remove { RemoveHandler(ValueChangedEvent, value); }
         }
 
-        public static readonly DependencyProperty ValueProperty = DependencyProperty.Register("Value", typeof(double), typeof(RangeBase), new FrameworkPropertyMetadata(coerceValueCallback: CoerceValueRange, bindsTwoWayByDefault: true, propertyChangedCallback: (sender, e) => ((RangeBase)sender).OnValueChanged(e)));
+        public static readonly DependencyProperty ValueProperty = DependencyProperty.Register("Value", typeof(double), typeof(RangeBase), new FrameworkPropertyMetadata(FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, propertyChangedCallback: (sender, e) => ((RangeBase)sender).OnValueChanged(e), coerceValueCallback: CoerceValueRange));
         public double Value
         {
             get { return (double)GetValue(ValueProperty); }

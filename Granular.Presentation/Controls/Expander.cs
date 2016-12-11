@@ -41,7 +41,7 @@ namespace System.Windows.Controls
             set { SetValue(ExpandDirectionProperty, value); }
         }
 
-        public static readonly DependencyProperty IsExpandedProperty = DependencyProperty.Register("IsExpanded", typeof(bool), typeof(Expander), new ControlPropertyMetadata(affectsVisualState: true, propertyChangedCallback: (sender, e) => ((Expander)sender).OnIsExpandedChanged(e)));
+        public static readonly DependencyProperty IsExpandedProperty = DependencyProperty.Register("IsExpanded", typeof(bool), typeof(Expander), new FrameworkPropertyMetadata(FrameworkPropertyMetadataOptions.AffectsVisualState, propertyChangedCallback: (sender, e) => ((Expander)sender).OnIsExpandedChanged(e)));
         public bool IsExpanded
         {
             get { return (bool)GetValue(IsExpandedProperty); }

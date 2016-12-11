@@ -40,63 +40,63 @@ namespace System.Windows
             remove { RemoveHandler(InitializedEvent, value); }
         }
 
-        public static readonly DependencyProperty HorizontalAlignmentProperty = DependencyProperty.Register("HorizontalAlignment", typeof(HorizontalAlignment), typeof(FrameworkElement), new FrameworkPropertyMetadata(HorizontalAlignment.Stretch, affectsMeasure: true, propertyChangedCallback: (sender, e) => ((FrameworkElement)sender).OnAlignmentChanged(e)));
+        public static readonly DependencyProperty HorizontalAlignmentProperty = DependencyProperty.Register("HorizontalAlignment", typeof(HorizontalAlignment), typeof(FrameworkElement), new FrameworkPropertyMetadata(HorizontalAlignment.Stretch, FrameworkPropertyMetadataOptions.AffectsMeasure, propertyChangedCallback: (sender, e) => ((FrameworkElement)sender).OnAlignmentChanged(e)));
         public HorizontalAlignment HorizontalAlignment
         {
             get { return (HorizontalAlignment)GetValue(HorizontalAlignmentProperty); }
             set { SetValue(HorizontalAlignmentProperty, value); }
         }
 
-        public static readonly DependencyProperty VerticalAlignmentProperty = DependencyProperty.Register("VerticalAlignment", typeof(VerticalAlignment), typeof(FrameworkElement), new FrameworkPropertyMetadata(VerticalAlignment.Stretch, affectsMeasure: true, propertyChangedCallback: (sender, e) => ((FrameworkElement)sender).OnAlignmentChanged(e)));
+        public static readonly DependencyProperty VerticalAlignmentProperty = DependencyProperty.Register("VerticalAlignment", typeof(VerticalAlignment), typeof(FrameworkElement), new FrameworkPropertyMetadata(VerticalAlignment.Stretch, FrameworkPropertyMetadataOptions.AffectsMeasure, propertyChangedCallback: (sender, e) => ((FrameworkElement)sender).OnAlignmentChanged(e)));
         public VerticalAlignment VerticalAlignment
         {
             get { return (VerticalAlignment)GetValue(VerticalAlignmentProperty); }
             set { SetValue(VerticalAlignmentProperty, value); }
         }
 
-        public static readonly DependencyProperty MarginProperty = DependencyProperty.Register("Margin", typeof(Thickness), typeof(FrameworkElement), new FrameworkPropertyMetadata(Thickness.Zero, affectsMeasure: true));
+        public static readonly DependencyProperty MarginProperty = DependencyProperty.Register("Margin", typeof(Thickness), typeof(FrameworkElement), new FrameworkPropertyMetadata(Thickness.Zero, FrameworkPropertyMetadataOptions.AffectsMeasure));
         public Thickness Margin
         {
             get { return (Thickness)GetValue(MarginProperty); }
             set { SetValue(MarginProperty, value); }
         }
 
-        public static readonly DependencyProperty WidthProperty = DependencyProperty.Register("Width", typeof(double), typeof(FrameworkElement), new FrameworkPropertyMetadata(Double.NaN, affectsMeasure: true, propertyChangedCallback: (sender, e) => ((FrameworkElement)sender).SetSize()));
+        public static readonly DependencyProperty WidthProperty = DependencyProperty.Register("Width", typeof(double), typeof(FrameworkElement), new FrameworkPropertyMetadata(Double.NaN, FrameworkPropertyMetadataOptions.AffectsMeasure, propertyChangedCallback: (sender, e) => ((FrameworkElement)sender).SetSize()));
         public double Width
         {
             get { return (double)GetValue(WidthProperty); }
             set { SetValue(WidthProperty, value); }
         }
 
-        public static readonly DependencyProperty HeightProperty = DependencyProperty.Register("Height", typeof(double), typeof(FrameworkElement), new FrameworkPropertyMetadata(Double.NaN, affectsMeasure: true, propertyChangedCallback: (sender, e) => ((FrameworkElement)sender).SetSize()));
+        public static readonly DependencyProperty HeightProperty = DependencyProperty.Register("Height", typeof(double), typeof(FrameworkElement), new FrameworkPropertyMetadata(Double.NaN, FrameworkPropertyMetadataOptions.AffectsMeasure, propertyChangedCallback: (sender, e) => ((FrameworkElement)sender).SetSize()));
         public double Height
         {
             get { return (double)GetValue(HeightProperty); }
             set { SetValue(HeightProperty, value); }
         }
 
-        public static readonly DependencyProperty MinWidthProperty = DependencyProperty.Register("MinWidth", typeof(double), typeof(FrameworkElement), new FrameworkPropertyMetadata(0.0, affectsMeasure: true, propertyChangedCallback: (sender, e) => ((FrameworkElement)sender).SetMinSize()));
+        public static readonly DependencyProperty MinWidthProperty = DependencyProperty.Register("MinWidth", typeof(double), typeof(FrameworkElement), new FrameworkPropertyMetadata(0.0, FrameworkPropertyMetadataOptions.AffectsMeasure, propertyChangedCallback: (sender, e) => ((FrameworkElement)sender).SetMinSize()));
         public double MinWidth
         {
             get { return (double)GetValue(MinWidthProperty); }
             set { SetValue(MinWidthProperty, value); }
         }
 
-        public static readonly DependencyProperty MinHeightProperty = DependencyProperty.Register("MinHeight", typeof(double), typeof(FrameworkElement), new FrameworkPropertyMetadata(0.0, affectsMeasure: true, propertyChangedCallback: (sender, e) => ((FrameworkElement)sender).SetMinSize()));
+        public static readonly DependencyProperty MinHeightProperty = DependencyProperty.Register("MinHeight", typeof(double), typeof(FrameworkElement), new FrameworkPropertyMetadata(0.0, FrameworkPropertyMetadataOptions.AffectsMeasure, propertyChangedCallback: (sender, e) => ((FrameworkElement)sender).SetMinSize()));
         public double MinHeight
         {
             get { return (double)GetValue(MinHeightProperty); }
             set { SetValue(MinHeightProperty, value); }
         }
 
-        public static readonly DependencyProperty MaxWidthProperty = DependencyProperty.Register("MaxWidth", typeof(double), typeof(FrameworkElement), new FrameworkPropertyMetadata(Double.PositiveInfinity, affectsMeasure: true, propertyChangedCallback: (sender, e) => ((FrameworkElement)sender).SetMaxSize()));
+        public static readonly DependencyProperty MaxWidthProperty = DependencyProperty.Register("MaxWidth", typeof(double), typeof(FrameworkElement), new FrameworkPropertyMetadata(Double.PositiveInfinity, FrameworkPropertyMetadataOptions.AffectsMeasure, propertyChangedCallback: (sender, e) => ((FrameworkElement)sender).SetMaxSize()));
         public double MaxWidth
         {
             get { return (double)GetValue(MaxWidthProperty); }
             set { SetValue(MaxWidthProperty, value); }
         }
 
-        public static readonly DependencyProperty MaxHeightProperty = DependencyProperty.Register("MaxHeight", typeof(double), typeof(FrameworkElement), new FrameworkPropertyMetadata(Double.PositiveInfinity, affectsMeasure: true, propertyChangedCallback: (sender, e) => ((FrameworkElement)sender).SetMaxSize()));
+        public static readonly DependencyProperty MaxHeightProperty = DependencyProperty.Register("MaxHeight", typeof(double), typeof(FrameworkElement), new FrameworkPropertyMetadata(Double.PositiveInfinity, FrameworkPropertyMetadataOptions.AffectsMeasure, propertyChangedCallback: (sender, e) => ((FrameworkElement)sender).SetMaxSize()));
         public double MaxHeight
         {
             get { return (double)GetValue(MaxHeightProperty); }
@@ -160,7 +160,7 @@ namespace System.Windows
             }
         }
 
-        public static readonly DependencyProperty StyleProperty = DependencyProperty.Register("Style", typeof(Style), typeof(FrameworkElement), new FrameworkPropertyMetadata(propertyChangedCallback: (sender, e) => (sender as FrameworkElement).OnStyleChanged(e), affectsMeasure: true));
+        public static readonly DependencyProperty StyleProperty = DependencyProperty.Register("Style", typeof(Style), typeof(FrameworkElement), new FrameworkPropertyMetadata(FrameworkPropertyMetadataOptions.AffectsMeasure, propertyChangedCallback: (sender, e) => (sender as FrameworkElement).OnStyleChanged(e)));
         public Style Style
         {
             get { return (Style)GetValue(StyleProperty); }
@@ -228,7 +228,7 @@ namespace System.Windows
             }
         }
 
-        public static readonly DependencyProperty DataContextProperty = DependencyProperty.Register("DataContext", typeof(object), typeof(FrameworkElement), new FrameworkPropertyMetadata(inherits: true, propertyChangedCallback: (sender, e) => ((FrameworkElement)sender).OnDataContextChanged(e)));
+        public static readonly DependencyProperty DataContextProperty = DependencyProperty.Register("DataContext", typeof(object), typeof(FrameworkElement), new FrameworkPropertyMetadata(FrameworkPropertyMetadataOptions.Inherits, propertyChangedCallback: (sender, e) => ((FrameworkElement)sender).OnDataContextChanged(e)));
         public object DataContext
         {
             get { return (object)GetValue(DataContextProperty); }
@@ -249,7 +249,7 @@ namespace System.Windows
             set { SetValue(ForceCursorProperty, value); }
         }
 
-        public static readonly DependencyProperty LayoutTransformProperty = DependencyProperty.Register("LayoutTransform", typeof(Transform), typeof(FrameworkElement), new FrameworkPropertyMetadata(Transform.Identity, affectsMeasure: true, propertyChangedCallback: (sender, e) => ((FrameworkElement)sender).OnLayoutTransformChanged(e)));
+        public static readonly DependencyProperty LayoutTransformProperty = DependencyProperty.Register("LayoutTransform", typeof(Transform), typeof(FrameworkElement), new FrameworkPropertyMetadata(Transform.Identity, FrameworkPropertyMetadataOptions.AffectsMeasure, propertyChangedCallback: (sender, e) => ((FrameworkElement)sender).OnLayoutTransformChanged(e)));
         public Transform LayoutTransform
         {
             get { return (Transform)GetValue(LayoutTransformProperty); }

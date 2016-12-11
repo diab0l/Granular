@@ -155,7 +155,6 @@
     <Compile Include="Controls\TextBox.cs" />
     <Compile Include="Controls\Primitives\Thumb.cs" />
     <Compile Include="Controls\Primitives\ToggleButton.cs" />
-    <Compile Include="Controls\ControlPropertyMetadata.cs" />
     <Compile Include="Controls\Primitives\Track.cs" />
     <Compile Include="Controls\UserControl.cs" />
     <Compile Include="CornerRadius.cs" />

@@ -40,9 +40,9 @@ namespace System.Windows.Controls
 
         static ListBoxItem()
         {
-            UIElement.IsEnabledProperty.OverrideMetadata(typeof(ListBoxItem), new ControlPropertyMetadata(affectsVisualState: true));
-            UIElement.IsMouseOverProperty.OverrideMetadata(typeof(ListBoxItem), new ControlPropertyMetadata(affectsVisualState: true));
-            Selector.IsSelectionActiveProperty.OverrideMetadata(typeof(ListBoxItem), new ControlPropertyMetadata(inherits: true, affectsVisualState: true));
+            UIElement.IsEnabledProperty.OverrideMetadata(typeof(ListBoxItem), new FrameworkPropertyMetadata(FrameworkPropertyMetadataOptions.AffectsVisualState));
+            UIElement.IsMouseOverProperty.OverrideMetadata(typeof(ListBoxItem), new FrameworkPropertyMetadata(FrameworkPropertyMetadataOptions.AffectsVisualState));
+            Selector.IsSelectionActiveProperty.OverrideMetadata(typeof(ListBoxItem), new FrameworkPropertyMetadata(FrameworkPropertyMetadataOptions.Inherits | FrameworkPropertyMetadataOptions.AffectsVisualState));
         }
 
         protected override void OnMouseDown(MouseButtonEventArgs e)

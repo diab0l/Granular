@@ -29,7 +29,7 @@ namespace System.Windows.Controls.Primitives
             set { SetValue(ClickModeProperty, value); }
         }
 
-        public static readonly DependencyProperty IsPressedProperty = DependencyProperty.Register("IsPressed", typeof(bool), typeof(ButtonBase), new ControlPropertyMetadata(false, (sender, e) => ((ButtonBase)sender).OnIsPressedChanged(e), affectsVisualState: true));
+        public static readonly DependencyProperty IsPressedProperty = DependencyProperty.Register("IsPressed", typeof(bool), typeof(ButtonBase), new FrameworkPropertyMetadata(false, FrameworkPropertyMetadataOptions.AffectsVisualState, (sender, e) => ((ButtonBase)sender).OnIsPressedChanged(e)));
         public bool IsPressed
         {
             get { return (bool)GetValue(IsPressedProperty); }
@@ -56,9 +56,9 @@ namespace System.Windows.Controls.Primitives
         {
             EventManager.RegisterClassHandler(typeof(ButtonBase), ClickEvent, (RoutedEventHandler)((sender, e) => ((ButtonBase)sender).OnClick(e)), false);
 
-            UIElement.IsEnabledProperty.OverrideMetadata(typeof(ButtonBase), new ControlPropertyMetadata(affectsVisualState: true));
-            UIElement.IsMouseOverProperty.OverrideMetadata(typeof(ButtonBase), new ControlPropertyMetadata(affectsVisualState: true));
-            UIElement.IsFocusedProperty.OverrideMetadata(typeof(ButtonBase), new ControlPropertyMetadata(affectsVisualState: true));
+            UIElement.IsEnabledProperty.OverrideMetadata(typeof(ButtonBase), new FrameworkPropertyMetadata(FrameworkPropertyMetadataOptions.AffectsVisualState));
+            UIElement.IsMouseOverProperty.OverrideMetadata(typeof(ButtonBase), new FrameworkPropertyMetadata(FrameworkPropertyMetadataOptions.AffectsVisualState));
+            UIElement.IsFocusedProperty.OverrideMetadata(typeof(ButtonBase), new FrameworkPropertyMetadata(FrameworkPropertyMetadataOptions.AffectsVisualState));
         }
 
         public ButtonBase()

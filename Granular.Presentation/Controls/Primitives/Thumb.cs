@@ -35,7 +35,7 @@ namespace System.Windows.Controls.Primitives
             remove { RemoveHandler(DragCompletedEvent, value); }
         }
 
-        private static readonly DependencyPropertyKey IsDraggingPropertyKey = DependencyProperty.RegisterReadOnly("IsDragging", typeof(bool), typeof(Thumb), new ControlPropertyMetadata(affectsVisualState: true));
+        private static readonly DependencyPropertyKey IsDraggingPropertyKey = DependencyProperty.RegisterReadOnly("IsDragging", typeof(bool), typeof(Thumb), new FrameworkPropertyMetadata(FrameworkPropertyMetadataOptions.AffectsVisualState));
         public static readonly DependencyProperty IsDraggingProperty = IsDraggingPropertyKey.DependencyProperty;
         public bool IsDragging
         {

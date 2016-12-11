@@ -77,7 +77,7 @@ namespace System.Windows
             set { SetValue(OpacityProperty, value); }
         }
 
-        public static readonly DependencyProperty VisibilityProperty = DependencyProperty.Register("Visibility", typeof(Visibility), typeof(UIElement), new FrameworkPropertyMetadata(Visibility.Visible, affectsMeasure: true, propertyChangedCallback: (sender, e) => ((UIElement)sender).OnVisibilityChanged(e)));
+        public static readonly DependencyProperty VisibilityProperty = DependencyProperty.Register("Visibility", typeof(Visibility), typeof(UIElement), new FrameworkPropertyMetadata(Visibility.Visible, FrameworkPropertyMetadataOptions.AffectsMeasure, propertyChangedCallback: (sender, e) => ((UIElement)sender).OnVisibilityChanged(e)));
         public Visibility Visibility
         {
             get { return (Visibility)GetValue(VisibilityProperty); }

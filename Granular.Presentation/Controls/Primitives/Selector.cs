@@ -70,7 +70,7 @@ namespace System.Windows.Controls.Primitives
             set { SetValue(IsSelectedProperty, value); }
         }
 
-        private static readonly DependencyPropertyKey IsSelectionActivePropertyKey = DependencyProperty.RegisterAttachedReadOnly("IsSelectionActive", typeof(bool), typeof(Selector), new FrameworkPropertyMetadata(inherits: true));
+        private static readonly DependencyPropertyKey IsSelectionActivePropertyKey = DependencyProperty.RegisterAttachedReadOnly("IsSelectionActive", typeof(bool), typeof(Selector), new FrameworkPropertyMetadata(FrameworkPropertyMetadataOptions.Inherits));
         public static readonly DependencyProperty IsSelectionActiveProperty = IsSelectionActivePropertyKey.DependencyProperty;
 
         public static bool GetIsSelectionActive(DependencyObject obj)

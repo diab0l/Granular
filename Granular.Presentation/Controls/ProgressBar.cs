@@ -80,7 +80,7 @@ namespace System.Windows.Controls
         {
             FrameworkElement.FocusableProperty.OverrideMetadata(typeof(ProgressBar), new FrameworkPropertyMetadata(false));
             RangeBase.MaximumProperty.OverrideMetadata(typeof(ProgressBar), new FrameworkPropertyMetadata(100.0));
-            Control.ForegroundProperty.OverrideMetadata(typeof(ProgressBar), new FrameworkPropertyMetadata(inherits: true, propertyChangedCallback: (sender, e) => ((ProgressBar)sender).OnForegroundChanged(e)));
+            Control.ForegroundProperty.OverrideMetadata(typeof(ProgressBar), new FrameworkPropertyMetadata(FrameworkPropertyMetadataOptions.Inherits, propertyChangedCallback: (sender, e) => ((ProgressBar)sender).OnForegroundChanged(e)));
         }
 
         protected override void OnApplyTemplate()

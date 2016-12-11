@@ -28,7 +28,7 @@ namespace System.Windows.Controls
             obj.SetValue(DockProperty, value);
         }
 
-        public static readonly DependencyProperty LastChildFillProperty = DependencyProperty.Register("LastChildFill", typeof(bool), typeof(DockPanel), new FrameworkPropertyMetadata(defaultValue: true, affectsMeasure: true));
+        public static readonly DependencyProperty LastChildFillProperty = DependencyProperty.Register("LastChildFill", typeof(bool), typeof(DockPanel), new FrameworkPropertyMetadata(true, FrameworkPropertyMetadataOptions.AffectsMeasure));
         public bool LastChildFill
         {
             get { return (bool)GetValue(LastChildFillProperty); }

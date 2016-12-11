@@ -64,28 +64,28 @@ namespace System.Windows.Controls
             private set { SetValue(ComputedScrollBarsVisibilityPropertyKey, value); }
         }
 
-        public static readonly DependencyProperty HorizontalScrollBarVisibilityProperty = DependencyProperty.RegisterAttached("HorizontalScrollBarVisibility", typeof(ScrollBarVisibility), typeof(ScrollViewer), new FrameworkPropertyMetadata(ScrollBarVisibility.Visible, affectsMeasure: true, propertyChangedCallback: OnScrollBarVisibilityChanged));
+        public static readonly DependencyProperty HorizontalScrollBarVisibilityProperty = DependencyProperty.RegisterAttached("HorizontalScrollBarVisibility", typeof(ScrollBarVisibility), typeof(ScrollViewer), new FrameworkPropertyMetadata(ScrollBarVisibility.Visible, FrameworkPropertyMetadataOptions.AffectsMeasure, propertyChangedCallback: OnScrollBarVisibilityChanged));
         public ScrollBarVisibility HorizontalScrollBarVisibility
         {
             get { return (ScrollBarVisibility)GetValue(HorizontalScrollBarVisibilityProperty); }
             set { SetValue(HorizontalScrollBarVisibilityProperty, value); }
         }
 
-        public static readonly DependencyProperty VerticalScrollBarVisibilityProperty = DependencyProperty.RegisterAttached("VerticalScrollBarVisibility", typeof(ScrollBarVisibility), typeof(ScrollViewer), new FrameworkPropertyMetadata(ScrollBarVisibility.Visible, affectsMeasure: true, propertyChangedCallback: OnScrollBarVisibilityChanged));
+        public static readonly DependencyProperty VerticalScrollBarVisibilityProperty = DependencyProperty.RegisterAttached("VerticalScrollBarVisibility", typeof(ScrollBarVisibility), typeof(ScrollViewer), new FrameworkPropertyMetadata(ScrollBarVisibility.Visible, FrameworkPropertyMetadataOptions.AffectsMeasure, propertyChangedCallback: OnScrollBarVisibilityChanged));
         public ScrollBarVisibility VerticalScrollBarVisibility
         {
             get { return (ScrollBarVisibility)GetValue(VerticalScrollBarVisibilityProperty); }
             set { SetValue(VerticalScrollBarVisibilityProperty, value); }
         }
 
-        public static readonly DependencyProperty HorizontalOffsetProperty = DependencyProperty.Register("HorizontalOffset", typeof(double), typeof(ScrollViewer), new FrameworkPropertyMetadata(affectsArrange: true, propertyChangedCallback: (sender, e) => ((ScrollViewer)sender).SetOffsets()));
+        public static readonly DependencyProperty HorizontalOffsetProperty = DependencyProperty.Register("HorizontalOffset", typeof(double), typeof(ScrollViewer), new FrameworkPropertyMetadata(FrameworkPropertyMetadataOptions.AffectsArrange, propertyChangedCallback: (sender, e) => ((ScrollViewer)sender).SetOffsets()));
         public double HorizontalOffset
         {
             get { return (double)GetValue(HorizontalOffsetProperty); }
             set { SetValue(HorizontalOffsetProperty, value); }
         }
 
-        public static readonly DependencyProperty VerticalOffsetProperty = DependencyProperty.Register("VerticalOffset", typeof(double), typeof(ScrollViewer), new FrameworkPropertyMetadata(affectsArrange: true, propertyChangedCallback: (sender, e) => ((ScrollViewer)sender).SetOffsets()));
+        public static readonly DependencyProperty VerticalOffsetProperty = DependencyProperty.Register("VerticalOffset", typeof(double), typeof(ScrollViewer), new FrameworkPropertyMetadata(FrameworkPropertyMetadataOptions.AffectsArrange, propertyChangedCallback: (sender, e) => ((ScrollViewer)sender).SetOffsets()));
         public double VerticalOffset
         {
             get { return (double)GetValue(VerticalOffsetProperty); }

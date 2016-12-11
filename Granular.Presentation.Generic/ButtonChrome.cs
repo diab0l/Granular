@@ -13,21 +13,21 @@ namespace Granular.Presentation.Generic
     [TemplateVisualState(VisualStates.CommonStates, VisualStates.DisabledState)]
     public class ButtonChrome : Control
     {
-        public static readonly DependencyProperty RenderEnabledProperty = DependencyProperty.RegisterAttached("RenderEnabled", typeof(bool), typeof(ButtonChrome), new ControlPropertyMetadata(affectsVisualState: true));
+        public static readonly DependencyProperty RenderEnabledProperty = DependencyProperty.RegisterAttached("RenderEnabled", typeof(bool), typeof(ButtonChrome), new FrameworkPropertyMetadata(FrameworkPropertyMetadataOptions.AffectsVisualState));
         public bool RenderEnabled
         {
             get { return (bool)GetValue(RenderEnabledProperty); }
             set { SetValue(RenderEnabledProperty, value); }
         }
 
-        public static readonly DependencyProperty RenderMouseOverProperty = DependencyProperty.RegisterAttached("RenderMouseOver", typeof(bool), typeof(ButtonChrome), new ControlPropertyMetadata(affectsVisualState: true));
+        public static readonly DependencyProperty RenderMouseOverProperty = DependencyProperty.RegisterAttached("RenderMouseOver", typeof(bool), typeof(ButtonChrome), new FrameworkPropertyMetadata(FrameworkPropertyMetadataOptions.AffectsVisualState));
         public bool RenderMouseOver
         {
             get { return (bool)GetValue(RenderMouseOverProperty); }
             set { SetValue(RenderMouseOverProperty, value); }
         }
 
-        public static readonly DependencyProperty RenderPressedProperty = DependencyProperty.RegisterAttached("RenderPressed", typeof(bool), typeof(ButtonChrome), new ControlPropertyMetadata(affectsVisualState: true));
+        public static readonly DependencyProperty RenderPressedProperty = DependencyProperty.RegisterAttached("RenderPressed", typeof(bool), typeof(ButtonChrome), new FrameworkPropertyMetadata(FrameworkPropertyMetadataOptions.AffectsVisualState));
         public bool RenderPressed
         {
             get { return (bool)GetValue(RenderPressedProperty); }

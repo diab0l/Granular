@@ -25,7 +25,7 @@ namespace Granular.Presentation.Tests
                 set { SetValue(Value1Property, value); }
             }
 
-            public static readonly DependencyProperty Value2Property = DependencyProperty.Register("Value2", typeof(string), typeof(TestObject), new PropertyMetadata(defaultValue: "defaultValue2", propertyChangedCallback: Value2PropertyChanged, inherits: true));
+            public static readonly DependencyProperty Value2Property = DependencyProperty.Register("Value2", typeof(string), typeof(TestObject), new PropertyMetadata(defaultValue: "defaultValue2", propertyChangedCallback: Value2PropertyChanged) { Inherits = true });
             public string Value2
             {
                 get { return (string)GetValue(Value2Property); }

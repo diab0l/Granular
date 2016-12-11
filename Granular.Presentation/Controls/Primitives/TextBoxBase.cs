@@ -53,9 +53,9 @@ namespace System.Windows.Controls.Primitives
 
         static TextBoxBase()
         {
-            UIElement.IsEnabledProperty.OverrideMetadata(typeof(TextBoxBase), new ControlPropertyMetadata(affectsVisualState: true));
-            UIElement.IsMouseOverProperty.OverrideMetadata(typeof(TextBoxBase), new ControlPropertyMetadata(affectsVisualState: true));
-            UIElement.IsFocusedProperty.OverrideMetadata(typeof(TextBoxBase), new ControlPropertyMetadata(affectsVisualState: true));
+            UIElement.IsEnabledProperty.OverrideMetadata(typeof(TextBoxBase), new FrameworkPropertyMetadata(FrameworkPropertyMetadataOptions.AffectsVisualState));
+            UIElement.IsMouseOverProperty.OverrideMetadata(typeof(TextBoxBase), new FrameworkPropertyMetadata(FrameworkPropertyMetadataOptions.AffectsVisualState));
+            UIElement.IsFocusedProperty.OverrideMetadata(typeof(TextBoxBase), new FrameworkPropertyMetadata(FrameworkPropertyMetadataOptions.AffectsVisualState));
         }
 
         protected override void OnApplyTemplate()

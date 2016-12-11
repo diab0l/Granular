@@ -260,8 +260,8 @@ namespace System.Windows.Data
 
         private static BindingMode GetDefaultBindingMode(DependencyObject dependencyObject, DependencyProperty dependencyProperty)
         {
-            FrameworkPropertyMetadata frameworkPropertyMetadata = dependencyProperty.GetMetadata(dependencyObject.GetType()) as FrameworkPropertyMetadata;
-            return frameworkPropertyMetadata != null && frameworkPropertyMetadata.BindsTwoWayByDefault ? BindingMode.TwoWay : BindingMode.OneWay;
+            FrameworkPropertyMetadata FrameworkPropertyMetadata = dependencyProperty.GetMetadata(dependencyObject.GetType()) as FrameworkPropertyMetadata;
+            return FrameworkPropertyMetadata != null && FrameworkPropertyMetadata.BindsTwoWayByDefault ? BindingMode.TwoWay : BindingMode.OneWay;
         }
     }
 }

@@ -29,7 +29,7 @@ namespace System.Windows.Controls
 
         public AdornerLayer AdornerLayer { get; private set; }
 
-        public static readonly DependencyProperty CanContentScrollProperty = ScrollViewer.CanContentScrollProperty.AddOwner(typeof(ScrollContentPresenter), new FrameworkPropertyMetadata(affectsArrange: true, propertyChangedCallback: OnCanContentScrollChanged));
+        public static readonly DependencyProperty CanContentScrollProperty = ScrollViewer.CanContentScrollProperty.AddOwner(typeof(ScrollContentPresenter), new FrameworkPropertyMetadata(FrameworkPropertyMetadataOptions.AffectsArrange, propertyChangedCallback: OnCanContentScrollChanged));
         public bool CanContentScroll
         {
             get { return (bool)GetValue(CanContentScrollProperty); }

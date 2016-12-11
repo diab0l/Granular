@@ -47,14 +47,14 @@ namespace System.Windows.Controls
             set { SetValue(MaxLengthProperty, value); }
         }
 
-        public static readonly DependencyProperty TextAlignmentProperty = TextBlock.TextAlignmentProperty.AddOwner(typeof(TextBox), new FrameworkPropertyMetadata(inherits: true));
+        public static readonly DependencyProperty TextAlignmentProperty = TextBlock.TextAlignmentProperty.AddOwner(typeof(TextBox), new FrameworkPropertyMetadata(FrameworkPropertyMetadataOptions.Inherits));
         public TextAlignment TextAlignment
         {
             get { return (TextAlignment)GetValue(TextAlignmentProperty); }
             set { SetValue(TextAlignmentProperty, value); }
         }
 
-        public static readonly DependencyProperty TextWrappingProperty = TextBlock.TextWrappingProperty.AddOwner(typeof(TextBox), new FrameworkPropertyMetadata(inherits: true));
+        public static readonly DependencyProperty TextWrappingProperty = TextBlock.TextWrappingProperty.AddOwner(typeof(TextBox), new FrameworkPropertyMetadata(FrameworkPropertyMetadataOptions.Inherits));
         public TextWrapping TextWrapping
         {
             get { return (TextWrapping)GetValue(TextWrappingProperty); }

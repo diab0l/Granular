@@ -21,7 +21,7 @@ namespace System.Windows.Controls
             set { SetValue(BorderBrushProperty, value); }
         }
 
-        public static readonly DependencyProperty BorderThicknessProperty = DependencyProperty.Register("BorderThickness", typeof(Thickness), typeof(Border), new FrameworkPropertyMetadata(Thickness.Zero, affectsMeasure: true, propertyChangedCallback: (sender, e) => ((Border)sender).SetRenderElementsProperty(renderElement => renderElement.BorderThickness = (Thickness)e.NewValue)));
+        public static readonly DependencyProperty BorderThicknessProperty = DependencyProperty.Register("BorderThickness", typeof(Thickness), typeof(Border), new FrameworkPropertyMetadata(Thickness.Zero, FrameworkPropertyMetadataOptions.AffectsMeasure, propertyChangedCallback: (sender, e) => ((Border)sender).SetRenderElementsProperty(renderElement => renderElement.BorderThickness = (Thickness)e.NewValue)));
         public Thickness BorderThickness
         {
             get { return (Thickness)GetValue(BorderThicknessProperty); }
@@ -35,7 +35,7 @@ namespace System.Windows.Controls
             set { SetValue(CornerRadiusProperty, value); }
         }
 
-        public static readonly DependencyProperty PaddingProperty = DependencyProperty.Register("Padding", typeof(Thickness), typeof(Border), new FrameworkPropertyMetadata(Thickness.Zero, affectsMeasure: true));
+        public static readonly DependencyProperty PaddingProperty = DependencyProperty.Register("Padding", typeof(Thickness), typeof(Border), new FrameworkPropertyMetadata(Thickness.Zero, FrameworkPropertyMetadataOptions.AffectsMeasure));
         public Thickness Padding
         {
             get { return (Thickness)GetValue(PaddingProperty); }

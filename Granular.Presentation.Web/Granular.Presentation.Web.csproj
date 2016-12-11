@@ -76,9 +76,6 @@
     <Compile Include="..\Granular.Presentation\Controls\Control.cs">
       <Link>Controls\Control.cs</Link>
     </Compile>
-    <Compile Include="..\Granular.Presentation\Controls\ControlPropertyMetadata.cs">
-      <Link>Controls\ControlPropertyMetadata.cs</Link>
-    </Compile>
     <Compile Include="..\Granular.Presentation\Controls\ControlTemplate.cs">
       <Link>Controls\ControlTemplate.cs</Link>
     </Compile>

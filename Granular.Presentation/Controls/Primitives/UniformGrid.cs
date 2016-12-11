@@ -9,21 +9,21 @@ namespace System.Windows.Controls.Primitives
 {
     public class UniformGrid : Panel
     {
-        public static readonly DependencyProperty RowsProperty = DependencyProperty.Register("Rows", typeof(int), typeof(UniformGrid), new FrameworkPropertyMetadata(affectsMeasure: true));
+        public static readonly DependencyProperty RowsProperty = DependencyProperty.Register("Rows", typeof(int), typeof(UniformGrid), new FrameworkPropertyMetadata(FrameworkPropertyMetadataOptions.AffectsMeasure));
         public int Rows
         {
             get { return (int)GetValue(RowsProperty); }
             set { SetValue(RowsProperty, value); }
         }
 
-        public static readonly DependencyProperty ColumnsProperty = DependencyProperty.Register("Columns", typeof(int), typeof(UniformGrid), new FrameworkPropertyMetadata(affectsMeasure: true));
+        public static readonly DependencyProperty ColumnsProperty = DependencyProperty.Register("Columns", typeof(int), typeof(UniformGrid), new FrameworkPropertyMetadata(FrameworkPropertyMetadataOptions.AffectsMeasure));
         public int Columns
         {
             get { return (int)GetValue(ColumnsProperty); }
             set { SetValue(ColumnsProperty, value); }
         }
 
-        public static readonly DependencyProperty FirstColumnProperty = DependencyProperty.Register("FirstColumn", typeof(int), typeof(UniformGrid), new FrameworkPropertyMetadata(affectsMeasure: true));
+        public static readonly DependencyProperty FirstColumnProperty = DependencyProperty.Register("FirstColumn", typeof(int), typeof(UniformGrid), new FrameworkPropertyMetadata(FrameworkPropertyMetadataOptions.AffectsMeasure));
         public int FirstColumn
         {
             get { return (int)GetValue(FirstColumnProperty); }

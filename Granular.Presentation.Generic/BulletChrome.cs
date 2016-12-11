@@ -17,28 +17,28 @@ namespace Granular.Presentation.Generic
     [TemplateVisualState(VisualStates.CheckStates, VisualStates.IndeterminateState)]
     public class BulletChrome : Control
     {
-        public static readonly DependencyProperty RenderEnabledProperty = DependencyProperty.RegisterAttached("RenderEnabled", typeof(bool), typeof(BulletChrome), new ControlPropertyMetadata(affectsVisualState: true));
+        public static readonly DependencyProperty RenderEnabledProperty = DependencyProperty.RegisterAttached("RenderEnabled", typeof(bool), typeof(BulletChrome), new FrameworkPropertyMetadata(FrameworkPropertyMetadataOptions.AffectsVisualState));
         public bool RenderEnabled
         {
             get { return (bool)GetValue(RenderEnabledProperty); }
             set { SetValue(RenderEnabledProperty, value); }
         }
 
-        public static readonly DependencyProperty RenderMouseOverProperty = DependencyProperty.RegisterAttached("RenderMouseOver", typeof(bool), typeof(BulletChrome), new ControlPropertyMetadata(affectsVisualState: true));
+        public static readonly DependencyProperty RenderMouseOverProperty = DependencyProperty.RegisterAttached("RenderMouseOver", typeof(bool), typeof(BulletChrome), new FrameworkPropertyMetadata(FrameworkPropertyMetadataOptions.AffectsVisualState));
         public bool RenderMouseOver
         {
             get { return (bool)GetValue(RenderMouseOverProperty); }
             set { SetValue(RenderMouseOverProperty, value); }
         }
 
-        public static readonly DependencyProperty RenderPressedProperty = DependencyProperty.RegisterAttached("RenderPressed", typeof(bool), typeof(BulletChrome), new ControlPropertyMetadata(affectsVisualState: true));
+        public static readonly DependencyProperty RenderPressedProperty = DependencyProperty.RegisterAttached("RenderPressed", typeof(bool), typeof(BulletChrome), new FrameworkPropertyMetadata(FrameworkPropertyMetadataOptions.AffectsVisualState));
         public bool RenderPressed
         {
             get { return (bool)GetValue(RenderPressedProperty); }
             set { SetValue(RenderPressedProperty, value); }
         }
 
-        public static readonly DependencyProperty RenderCheckedProperty = DependencyProperty.RegisterAttached("RenderChecked", typeof(bool?), typeof(BulletChrome), new ControlPropertyMetadata(affectsVisualState: true));
+        public static readonly DependencyProperty RenderCheckedProperty = DependencyProperty.RegisterAttached("RenderChecked", typeof(bool?), typeof(BulletChrome), new FrameworkPropertyMetadata(FrameworkPropertyMetadataOptions.AffectsVisualState));
         public bool? RenderChecked
         {
             get { return (bool?)GetValue(RenderCheckedProperty); }
