@@ -8,7 +8,7 @@ using Granular.Extensions;
 namespace System.Windows
 {
     [Bridge.Reflectable(Bridge.MemberAccessibility.PublicInstanceProperty, Bridge.MemberAccessibility.PublicInstanceEvent)]
-    public class Application : IResourceContainer
+    public class Application : IResourceContainer, IUriContext
     {
         public static Application Current { get; private set; }
 
@@ -18,7 +18,7 @@ namespace System.Windows
         public event StartupEventHandler Startup;
         public event EventHandler LoadCompleted;
 
-        public string StartupUri { get; set; }
+        public Uri StartupUri { get; set; }
 
         public Window MainWindow { get; set; }
 
@@ -49,6 +49,8 @@ namespace System.Windows
             }
         }
 
+        public Uri BaseUri { get; set; }
+
         public Application()
         {
             if (Current != null)
@@ -72,12 +74,13 @@ namespace System.Windows
 
         private void LoadStartupUri()
         {
-            if (StartupUri.IsNullOrEmpty())
+            if (StartupUri == null)
             {
                 return;
             }
 
-            XamlElement rootElement = XamlParser.Parse(Granular.Compatibility.String.FromByteArray(EmbeddedResourceLoader.LoadResourceData(StartupUri)));
+            Uri uri = StartupUri.ResolveAbsoluteUri(BaseUri);
+            XamlElement rootElement = XamlParser.Parse(Granular.Compatibility.String.FromByteArray(EmbeddedResourceLoader.LoadResourceData(uri)), uri);
             XamlMember classDirective = rootElement.Directives.FirstOrDefault(directive => directive.Name == XamlLanguage.ClassDirective);
 
             Window window = Activator.CreateInstance(Type.GetType(String.Format("{0}, {1}", classDirective.GetSingleValue(), GetType().Assembly.GetName().Name))) as Window;
@@ -118,14 +121,14 @@ namespace System.Windows
             //
         }
 
-        public static object LoadComponent(string resourceUri)
+        public static object LoadComponent(Uri resourceLocator)
         {
-            return EmbeddedResourceLoader.LoadResourceElement(resourceUri);
+            return EmbeddedResourceLoader.LoadResourceElement(resourceLocator);
         }
 
-        public static void LoadComponent(object target, string resourceUri)
+        public static void LoadComponent(object component, Uri resourceLocator)
         {
-            XamlLoader.Load(target, XamlParser.Parse(Granular.Compatibility.String.FromByteArray(EmbeddedResourceLoader.LoadResourceData(resourceUri))));
+            XamlLoader.Load(component, XamlParser.Parse(Granular.Compatibility.String.FromByteArray(EmbeddedResourceLoader.LoadResourceData(resourceLocator)), resourceLocator));
         }
     }
 }

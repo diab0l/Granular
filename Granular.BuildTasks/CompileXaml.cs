@@ -133,7 +133,7 @@ namespace Granular.BuildTasks
                 new CodeAttributeArgument(new CodeSnippetExpression("Bridge.MemberAccessibility.InstanceField"))));
 
             string itemRelativePath = item.GetRelativePath().Replace("\\", "/");
-            string resourceUri = String.Format("/{0};component/{1}", TargetName, itemRelativePath);
+            string resourceUri = String.Format("pack://application:,,,/{0};component/{1}", TargetName, itemRelativePath);
 
             classDeclaration.Members.Add(CreateInitializeComponentMethod(resourceUri));
 
@@ -178,7 +178,7 @@ namespace Granular.BuildTasks
                 Name = "InitializeComponent",
             };
 
-            initializeComponentMethod.Statements.Add(new CodeExpressionStatement(new CodeMethodInvokeExpression(new CodeVariableReferenceExpression("System.Windows.Application"), "LoadComponent", new CodeThisReferenceExpression(), new CodePrimitiveExpression(resourceUri))));
+            initializeComponentMethod.Statements.Add(new CodeExpressionStatement(new CodeMethodInvokeExpression(new CodeVariableReferenceExpression("System.Windows.Application"), "LoadComponent", new CodeThisReferenceExpression(), new CodeMethodInvokeExpression(null, "Granular.Compatibility.Uri.CreateAbsoluteUri", new CodePrimitiveExpression(resourceUri)))));
 
             return initializeComponentMethod;
         }
