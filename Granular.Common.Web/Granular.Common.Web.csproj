@@ -104,6 +104,9 @@
     <Compile Include="..\Granular.Common\Extensions\TypeExtensions.cs">
       <Link>Extensions\TypeExtensions.cs</Link>
     </Compile>
+    <Compile Include="..\Granular.Common\Extensions\UriExtensions.cs">
+      <Link>Extensions\UriExtensions.cs</Link>
+    </Compile>
     <Compile Include="..\Granular.Common\Xaml\Lexer.cs">
       <Link>Xaml\Lexer.cs</Link>
     </Compile>

@@ -83,6 +83,7 @@
     <Compile Include="Extensions\TimeSpanExtensions.cs" />
     <Compile Include="Extensions\TypeExtensions.cs" />
     <Compile Include="Exception.cs" />
+    <Compile Include="Extensions\UriExtensions.cs" />
     <Compile Include="Xaml\Lexer.cs" />
     <Compile Include="Xaml\MarkupExtensionParser.cs" />
     <Compile Include="Xaml\XamlMember.cs" />
