@@ -148,6 +148,21 @@ namespace System.Windows.Markup
         }
     }
 
+    internal class UriTypeConverter : ITypeConverter
+    {
+        public static readonly UriTypeConverter Default = new UriTypeConverter();
+
+        private UriTypeConverter()
+        {
+            //
+        }
+
+        public object ConvertFrom(XamlNamespaces namespaces, object value)
+        {
+            return Granular.Compatibility.Uri.CreateRelativeOrAbsoluteUri(value.ToString().Trim());
+        }
+    }
+
     public static class KnownTypes
     {
         private static CacheDictionary<Type, ITypeConverter> typeConverterCache = new CacheDictionary<Type, ITypeConverter>(ResolveTypeConverter);
@@ -197,6 +212,11 @@ namespace System.Windows.Markup
             if (type == typeof(Type))
             {
                 return TypeTypeConverter.Default;
+            }
+
+            if (type == typeof(Uri))
+            {
+                return UriTypeConverter.Default;
             }
 
             if (type.GetIsGenericType() && type.GetGenericTypeDefinition() == typeof(Nullable<>))
