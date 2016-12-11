@@ -18,24 +18,24 @@ namespace Granular.Collections
         private Dictionary<TKey, TValue> dictionary;
         private HashSet<TKey> unsetValues;
 
-        public CacheDictionary(ResolveValue resolveValue) :
-            this(null, resolveValue)
+        public CacheDictionary(ResolveValue resolveValue, IEqualityComparer<TKey> equalityComparer = null) :
+            this(null, resolveValue, equalityComparer)
         {
             //
         }
 
-        public CacheDictionary(TryResolveValue tryResolveValue) :
-            this(tryResolveValue, null)
+        public CacheDictionary(TryResolveValue tryResolveValue, IEqualityComparer<TKey> equalityComparer = null) :
+            this(tryResolveValue, null, equalityComparer)
         {
             //
         }
 
-        private CacheDictionary(TryResolveValue tryResolveValue, ResolveValue resolveValue)
+        private CacheDictionary(TryResolveValue tryResolveValue, ResolveValue resolveValue, IEqualityComparer<TKey> equalityComparer)
         {
             this.tryResolveValue = tryResolveValue;
             this.resolveValue = resolveValue;
 
-            dictionary = new Dictionary<TKey, TValue>();
+            dictionary = new Dictionary<TKey, TValue>(equalityComparer);
             unsetValues = new HashSet<TKey>();
         }
 
