@@ -3,21 +3,24 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Windows.Markup;
 using Granular.Collections;
 using Granular.Extensions;
 
 namespace System.Windows
 {
     [Bridge.Reflectable(Bridge.MemberAccessibility.PublicInstanceProperty)]
-    public class ResourceDictionary : IDictionary<object, object>, IResourceContainer
+    public class ResourceDictionary : IDictionary<object, object>, IResourceContainer, IUriContext
     {
         public event EventHandler<ResourcesChangedEventArgs> ResourcesChanged;
 
         public ObservableCollection<ResourceDictionary> MergedDictionaries { get; private set; }
 
+        public Uri BaseUri { get; set; }
+
         private ResourceDictionary sourceDictionary;
-        private string source;
-        public string Source
+        private Uri source;
+        public Uri Source
         {
             get { return source; }
             set
@@ -33,7 +36,7 @@ namespace System.Windows
                 }
 
                 source = value;
-                sourceDictionary = LoadResourceDictionary(source);
+                sourceDictionary = LoadResourceDictionary(source.ResolveAbsoluteUri(BaseUri));
 
                 if (sourceDictionary != null)
                 {
@@ -160,7 +163,7 @@ namespace System.Windows
             return dictionary.GetKeys().Concat(dictionary.MergedDictionaries.SelectMany(GetMergedDictionariesKeys));
         }
 
-        private static ResourceDictionary LoadResourceDictionary(string source)
+        private static ResourceDictionary LoadResourceDictionary(Uri source)
         {
             return Application.LoadComponent(source) as ResourceDictionary;
         }
