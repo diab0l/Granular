@@ -12,29 +12,23 @@ namespace System.Windows
 {
     public static class EmbeddedResourceLoader
     {
-        private sealed class EmbeddedResourceKey
+        private class UriEqualityComparer : IEqualityComparer<Uri>
         {
-            public string AssemblyName { get; private set; }
-            public string ResourcePath { get; private set; }
+            public static readonly UriEqualityComparer Default = new UriEqualityComparer();
 
-            public EmbeddedResourceKey(string assemblyName, string resourcePath)
+            private UriEqualityComparer()
             {
-                this.AssemblyName = assemblyName;
-                this.ResourcePath = resourcePath;
+                //
             }
 
-            public override bool Equals(object obj)
+            public bool Equals(Uri x, Uri y)
             {
-                EmbeddedResourceKey other = obj as EmbeddedResourceKey;
-
-                return Object.ReferenceEquals(this, other) || !Object.ReferenceEquals(other, null) &&
-                    Object.Equals(this.AssemblyName, other.AssemblyName) &&
-                    Object.Equals(this.ResourcePath, other.ResourcePath);
+                return Object.Equals(x.GetAbsoluteUri(), y.GetAbsoluteUri());
             }
 
-            public override int GetHashCode()
+            public int GetHashCode(Uri obj)
             {
-                return AssemblyName.GetHashCode() ^ ResourcePath.GetHashCode();
+                return obj.GetAbsoluteUri().GetHashCode();
             }
         }
 
@@ -42,73 +36,83 @@ namespace System.Windows
         private const int ResourceUriAssemblyNameGroupIndex = 1;
         private const int ResourceUriPathGroupIndex = 2;
 
-        private static readonly CacheDictionary<EmbeddedResourceKey, byte[]> resourceDataCache = new CacheDictionary<EmbeddedResourceKey, byte[]>(ResolveResourceData);
-        private static readonly CacheDictionary<EmbeddedResourceKey, object> resourceElementCache = new CacheDictionary<EmbeddedResourceKey, object>(ResolveResourceElement);
+        private static readonly CacheDictionary<Uri, byte[]> resourceDataCache = new CacheDictionary<Uri, byte[]>(ResolveResourceData, UriEqualityComparer.Default);
+        private static readonly CacheDictionary<Uri, object> resourceElementCache = new CacheDictionary<Uri, object>(ResolveResourceElement, UriEqualityComparer.Default);
 
-        public static byte[] LoadResourceData(string resourceUri)
+        public static byte[] LoadResourceData(Uri resourceUri)
+        {
+            VerifyResourceUri(resourceUri);
+
+            return resourceDataCache.GetValue(resourceUri);
+        }
+
+        private static byte[] ResolveResourceData(Uri resourceUri)
         {
             string assemblyName;
             string resourcePath;
-            ParseResourceUri(resourceUri, out assemblyName, out resourcePath);
+            if (!TryParseAbsolutePath(resourceUri.GetAbsolutePath(), out assemblyName, out resourcePath))
+            {
+                throw new Granular.Exception("Resource \"{0}\" absolute path is invalid", resourceUri.GetAbsoluteUri());
+            }
 
-            return resourceDataCache.GetValue(new EmbeddedResourceKey(assemblyName, resourcePath));
-        }
-
-        public static byte[] LoadResourceData(string assemblyName, string resourcePath)
-        {
-            return resourceDataCache.GetValue(new EmbeddedResourceKey(assemblyName, resourcePath));
-        }
-
-        private static byte[] ResolveResourceData(EmbeddedResourceKey key)
-        {
-            Assembly assembly = Granular.Compatibility.AppDomain.GetAssemblies().Where(a => a.GetName().Name == key.AssemblyName).FirstOrDefault();
+            Assembly assembly = Granular.Compatibility.AppDomain.GetAssemblies().Where(a => a.GetName().Name == assemblyName).FirstOrDefault();
 
             if (assembly == null)
             {
-                assembly = Assembly.Load(key.AssemblyName);
+                assembly = Assembly.Load(assemblyName);
             }
 
-            string resourceName = String.Format("{0}.{1}", key.AssemblyName, key.ResourcePath.TrimStart('/').Replace('/', '.'));
+            string resourceName = String.Format("{0}.{1}", assemblyName, resourcePath.TrimStart('/').Replace('/', '.'));
 
             byte[] resourceData = assembly != null ? assembly.GetManifestResourceData(resourceName) : null;
 
             if (resourceData == null)
             {
-                throw new Granular.Exception("Resource \"{0}\" was not found", resourceName);
+                throw new Granular.Exception("Resource \"{0}\" was not found", resourceUri.GetAbsoluteUri());
             }
 
             return resourceData;
         }
 
-        public static object LoadResourceElement(string resourceUri)
+        public static object LoadResourceElement(Uri resourceUri)
         {
-            string assemblyName;
-            string resourcePath;
-            ParseResourceUri(resourceUri, out assemblyName, out resourcePath);
+            VerifyResourceUri(resourceUri);
 
-            return resourceElementCache.GetValue(new EmbeddedResourceKey(assemblyName, resourcePath));
+            return resourceElementCache.GetValue(resourceUri);
         }
 
-        public static object LoadResourceElement(string assemblyName, string resourcePath)
+        private static object ResolveResourceElement(Uri resourceUri)
         {
-            return resourceElementCache.GetValue(new EmbeddedResourceKey(assemblyName, resourcePath));
+            string resourceString = Granular.Compatibility.String.FromByteArray(resourceDataCache.GetValue(resourceUri));
+            return XamlLoader.Load(XamlParser.Parse(resourceString, resourceUri));
         }
 
-        private static object ResolveResourceElement(EmbeddedResourceKey key)
+        private static bool TryParseAbsolutePath(string absolutePath, out string assemblyName, out string resourcePath)
         {
-            string resourceString = Granular.Compatibility.String.FromByteArray(resourceDataCache.GetValue(key));
-            return XamlLoader.Load(XamlParser.Parse(resourceString));
-        }
-
-        private static void ParseResourceUri(string resourceUri, out string assemblyName, out string resourcePath)
-        {
-            Match match = ResourceUriRegex.Match(resourceUri);
-            assemblyName = match.Groups[ResourceUriAssemblyNameGroupIndex].Value;
-            resourcePath = match.Groups[ResourceUriPathGroupIndex].Value;
+            Match match = ResourceUriRegex.Match(absolutePath);
 
             if (!match.Success)
             {
-                throw new Granular.Exception("Invalid resource uri \"{0}\"", resourceUri);
+                assemblyName = null;
+                resourcePath = null;
+                return false;
+            }
+
+            assemblyName = match.Groups[ResourceUriAssemblyNameGroupIndex].Value;
+            resourcePath = match.Groups[ResourceUriPathGroupIndex].Value;
+            return true;
+        }
+
+        private static void VerifyResourceUri(Uri resourceUri)
+        {
+            if (!resourceUri.GetIsAbsoluteUri())
+            {
+                throw new Granular.Exception("Resource uri \"{0}\" must be an absolute uri", resourceUri.GetOriginalString());
+            }
+
+            if (resourceUri.GetScheme() != "pack")
+            {
+                throw new Granular.Exception("Resource uri \"{0}\" must be a pack uri", resourceUri.GetAbsoluteUri());
             }
         }
     }
