@@ -403,14 +403,12 @@ namespace System.Windows
 
         public static DependencyProperty GetProperty(Type containingType, XamlName propertyName)
         {
-            if (!propertyName.IsMemberName)
+            if (propertyName.IsMemberName)
             {
-                // containing type wasn't specified, so the property could be owned by a base type
-                return GetSingleProperty(containingType, propertyName.LocalName);
+                containingType = TypeParser.ParseType(propertyName.ContainingTypeName);
             }
 
-            Type ownerType = TypeParser.ParseType(propertyName.ContainingTypeName);
-            return GetOwnedProperty(ownerType, propertyName.MemberName);
+            return GetOwnedProperty(containingType, propertyName.MemberName) ?? GetSingleProperty(containingType.BaseType, propertyName.MemberName);
         }
     }
 
