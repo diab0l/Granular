@@ -40,7 +40,7 @@ namespace System.Windows.Markup
 
         private static XamlMember CreateXamlMember(XAttribute attribute, XamlNamespaces namespaces, Uri sourceUri)
         {
-            XamlName name = new XamlName(attribute.Name.LocalName, attribute.Name.NamespaceName.IsNullOrEmpty() ? namespaces.Get(String.Empty) : attribute.Name.NamespaceName);
+            XamlName name = new XamlName(attribute.Name.LocalName, attribute.Name.NamespaceName.IsNullOrEmpty() ? namespaces.GetDefaultNamespace() : attribute.Name.NamespaceName);
             object value = (object)MarkupExtensionParser.Parse(attribute.Value, namespaces, sourceUri);
 
             return new XamlMember(name, namespaces, sourceUri, value);
@@ -48,7 +48,7 @@ namespace System.Windows.Markup
 
         private static XamlMember CreateXamlMember(XElement element, XamlNamespaces namespaces, Uri sourceUri)
         {
-            XamlName name = new XamlName(element.Name.LocalName, element.Name.NamespaceName.IsNullOrEmpty() ? namespaces.Get(String.Empty) : element.Name.NamespaceName);
+            XamlName name = new XamlName(element.Name.LocalName, element.Name.NamespaceName.IsNullOrEmpty() ? namespaces.GetDefaultNamespace() : element.Name.NamespaceName);
 
             if (element.Attributes().Any())
             {
@@ -108,8 +108,7 @@ namespace System.Windows.Markup
 
         private static bool IsDirective(XName name)
         {
-            return XamlLanguage.NamespaceName == name.NamespaceName &&
-                XamlLanguage.IsDirective(new XamlName(name.LocalName, name.NamespaceName));
+            return XamlLanguage.IsDirective(name.LocalName, name.NamespaceName);
         }
 
         private static string GetNamespaceDeclarationPrefix(XAttribute attribute)

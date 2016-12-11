@@ -79,7 +79,7 @@ namespace System.Windows.Markup
                 typeName = prefixedName.Substring(namespaceSeparatorIndex + 1);
             }
 
-            return namespaces.Contains(typeNamespacePrefix) ? new XamlName(typeName, namespaces.Get(typeNamespacePrefix)) : XamlName.Empty;
+            return namespaces.ContainsPrefix(typeNamespacePrefix) ? new XamlName(typeName, namespaces.GetNamespace(typeNamespacePrefix)) : XamlName.Empty;
         }
     }
 }

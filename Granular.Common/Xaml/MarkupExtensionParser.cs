@@ -222,7 +222,7 @@ namespace System.Windows.Markup
         private string GetTypeNamespace(string typeFullName)
         {
             int namespaceSeparatorIndex = typeFullName.IndexOf(":");
-            return namespaces.Get(namespaceSeparatorIndex != -1 ? typeFullName.Substring(0, namespaceSeparatorIndex) : String.Empty);
+            return namespaces.GetNamespace(namespaceSeparatorIndex != -1 ? typeFullName.Substring(0, namespaceSeparatorIndex) : String.Empty);
         }
 
         public static object Parse(string text, XamlNamespaces namespaces, Uri sourceUri = null)

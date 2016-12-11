@@ -64,12 +64,22 @@ namespace System.Windows.Markup
             return count == 0 ? "XamlNamespaces.Empty" : String.Format("XamlNamespaces[{0}]", count);
         }
 
-        public bool Contains(string prefix)
+        public bool ContainsPrefix(string prefix)
         {
             return items.Any(item => item.Prefix == prefix);
         }
 
-        public string Get(string prefix)
+        public bool ContainsNamespace(string @namespace)
+        {
+            return items.Any(item => item.Namespace == @namespace);
+        }
+
+        public string GetNamespace(string prefix)
+        {
+            return GetNamespaceDeclaration(prefix).Namespace;
+        }
+
+        public NamespaceDeclaration GetNamespaceDeclaration(string prefix)
         {
             NamespaceDeclaration namespaceDeclaration = items.FirstOrDefault(item => item.Prefix == prefix);
 
@@ -78,25 +88,25 @@ namespace System.Windows.Markup
                 throw new Granular.Exception("Namespaces doesn't contain a namespace with prefix \"{0}\"", prefix);
             }
 
-            return namespaceDeclaration.Namespace;
+            return namespaceDeclaration;
         }
 
         public XamlNamespaces Merge(IEnumerable<NamespaceDeclaration> namespaceDeclarations)
         {
-            return new XamlNamespaces(items.Concat(namespaceDeclarations).Distinct().ToArray());
+            return namespaceDeclarations.Any() ? new XamlNamespaces(items.Concat(namespaceDeclarations).Distinct().ToArray()) : this;
         }
     }
 
     public static class XamlNamespacesExtensions
     {
-        public static bool ContainsDefault(this XamlNamespaces @this)
+        public static bool ContainsDefaultNamespace(this XamlNamespaces @this)
         {
-            return @this.Contains(String.Empty);
+            return @this.ContainsPrefix(String.Empty);
         }
 
-        public static string GetDefault(this XamlNamespaces @this)
+        public static string GetDefaultNamespace(this XamlNamespaces @this)
         {
-            return @this.Get(String.Empty);
+            return @this.GetNamespace(String.Empty);
         }
     }
 }

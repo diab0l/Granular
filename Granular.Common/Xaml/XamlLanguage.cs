@@ -30,9 +30,9 @@ namespace System.Windows.Markup
             TypeTypeName,
         };
 
-        public static bool IsDirective(XamlName name)
+        public static bool IsDirective(string namespaceName, string localName)
         {
-            return Directives.Contains(name);
+            return namespaceName == NamespaceName && Directives.Contains(new XamlName(localName, namespaceName));
         }
 
         public static bool IsXamlType(XamlName name)
