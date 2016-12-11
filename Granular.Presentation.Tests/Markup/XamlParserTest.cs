@@ -53,11 +53,93 @@ namespace Granular.Presentation.Tests.Markup
                 <element1 xmlns:ns2='namespace2'/>
             </root1>");
 
-            Assert.AreEqual("http://schemas.microsoft.com/winfx/2006/xaml/presentation", root1.Namespaces.Get(String.Empty));
+            Assert.AreEqual("http://schemas.microsoft.com/winfx/2006/xaml/presentation", root1.Namespaces.GetNamespace(String.Empty));
 
-            Assert.AreEqual("namespace1", root1.Namespaces.Get("ns1"));
+            Assert.AreEqual("namespace1", root1.Namespaces.GetNamespace("ns1"));
 
-            Assert.AreEqual("namespace2", ((XamlElement)root1.Values.Single()).Namespaces.Get("ns2"));
+            Assert.AreEqual("namespace2", ((XamlElement)root1.Values.Single()).Namespaces.GetNamespace("ns2"));
+        }
+
+        [TestMethod]
+        public void MarkupCompatibilityIgnoreMultipleNamespaces()
+        {
+            XamlElement root = XamlParser.Parse(@"
+            <root xmlns='namespace'
+                  xmlns:n1='namepsace1'
+                  xmlns:n2='namepsace2'
+                  xmlns:mc='http://schemas.openxmlformats.org/markup-compatibility/2006'
+                  mc:Ignorable='n1 n2'
+                  property='value'
+                  n1:property='value1'
+                  n2:property='value2'>
+            </root>");
+
+            Assert.AreEqual(1, root.Members.Count());
+        }
+
+        [TestMethod]
+        public void MarkupCompatibilityIgnoreDeclaringElement()
+        {
+            XamlElement root = XamlParser.Parse(@"
+            <root xmlns='namespace' xmlns:n1='namepsace1' xmlns:mc='http://schemas.openxmlformats.org/markup-compatibility/2006'>
+                <n1:element mc:Ignorable='n1'/>
+                <n1:element />
+            </root>");
+
+            Assert.AreEqual(1, root.Values.Count());
+        }
+
+        [TestMethod]
+        public void MarkupCompatibilityNestedIgnoreProperties()
+        {
+            XamlElement root = XamlParser.Parse(@"
+            <root xmlns='namespace'
+                  xmlns:n1='namepsace1'
+                  xmlns:n2='namepsace2'
+                  xmlns:mc='http://schemas.openxmlformats.org/markup-compatibility/2006'
+                  property='valuevalue'
+                  n1:property='value1'
+                  n2:property='value2'>
+                <element mc:Ignorable='n1'
+                         property='valuevalue'
+                         n1:property='value1'
+                         n2:property='value2'>
+                    <element mc:Ignorable='n2'
+                             property='valuevalue'
+                             n1:property='value1'
+                             n2:property='value2'/>
+                </element>
+            </root>");
+
+            Assert.AreEqual(3, root.Members.Count());
+            Assert.AreEqual(2, ((XamlElement)root.Values.First()).Members.Count());
+            Assert.AreEqual(1, ((XamlElement)((XamlElement)root.Values.First()).Values.First()).Members.Count());
+        }
+
+        [TestMethod]
+        public void MarkupCompatibilityNestedIgnoreElements()
+        {
+            XamlElement root = XamlParser.Parse(@"
+            <root xmlns='namespace'
+                  xmlns:n1='namepsace1'
+                  xmlns:n2='namepsace2'
+                  xmlns:mc='http://schemas.openxmlformats.org/markup-compatibility/2006'>
+                <element mc:Ignorable='n1'>
+                    <element mc:Ignorable='n2'>
+                        <element/>
+                        <n1:element/>
+                        <n2:element/>
+                    </element>
+                    <n1:element/>
+                    <n2:element/>
+                </element>
+                <n1:element/>
+                <n2:element/>
+            </root>");
+
+            Assert.AreEqual(3, root.Values.Count());
+            Assert.AreEqual(2, ((XamlElement)root.Values.First()).Values.Count());
+            Assert.AreEqual(1, ((XamlElement)((XamlElement)root.Values.First()).Values.First()).Values.Count());
         }
     }
 }

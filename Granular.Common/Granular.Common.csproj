@@ -85,6 +85,7 @@
     <Compile Include="Exception.cs" />
     <Compile Include="Extensions\UriExtensions.cs" />
     <Compile Include="Xaml\Lexer.cs" />
+    <Compile Include="Xaml\MarkupCompatibility.cs" />
     <Compile Include="Xaml\MarkupExtensionParser.cs" />
     <Compile Include="Xaml\XamlMember.cs" />
     <Compile Include="Xaml\XamlNamespaces.cs" />

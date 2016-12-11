@@ -110,6 +110,9 @@
     <Compile Include="..\Granular.Common\Xaml\Lexer.cs">
       <Link>Xaml\Lexer.cs</Link>
     </Compile>
+    <Compile Include="..\Granular.Common\Xaml\MarkupCompatibility.cs">
+      <Link>Xaml\MarkupCompatibility.cs</Link>
+    </Compile>
     <Compile Include="..\Granular.Common\Xaml\MarkupExtensionParser.cs">
       <Link>Xaml\MarkupExtensionParser.cs</Link>
     </Compile>
