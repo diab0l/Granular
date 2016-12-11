@@ -46,7 +46,7 @@ namespace Granular.Presentation.Tests
             return new TestRenderImageSource();
         }
 
-        public IRenderImageSource CreateRenderImageSource(string uri, Rect sourceRect)
+        public IRenderImageSource CreateRenderImageSource(Uri uri, Rect sourceRect)
         {
             return new TestRenderImageSource() { State = RenderImageState.DownloadProgress };
         }

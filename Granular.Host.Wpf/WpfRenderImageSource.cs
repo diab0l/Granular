@@ -36,9 +36,9 @@ namespace Granular.Host.Wpf
             return new WpfRenderImageSource(bitmapImage);
         }
 
-        public IRenderImageSource CreateRenderImageSource(string uri, Rect sourceRect)
+        public IRenderImageSource CreateRenderImageSource(Uri uri, Rect sourceRect)
         {
-            if (!IsUrl(uri))
+            if (uri.GetScheme() != "http" && uri.GetScheme() != "https")
             {
                 return CreateRenderImageSource(RenderImageType.Unknown, EmbeddedResourceLoader.LoadResourceData(uri), sourceRect);
             }
@@ -46,7 +46,7 @@ namespace Granular.Host.Wpf
             wpf::System.Windows.Media.Imaging.BitmapImage bitmapImage = new wpf::System.Windows.Media.Imaging.BitmapImage();
 
             bitmapImage.BeginInit();
-            bitmapImage.UriSource = new Uri(uri);
+            bitmapImage.UriSource = uri;
 
             if (!sourceRect.IsNullOrEmpty())
             {
@@ -56,11 +56,6 @@ namespace Granular.Host.Wpf
             bitmapImage.EndInit();
 
             return new WpfRenderImageSource(bitmapImage);
-        }
-
-        private static bool IsUrl(string uri)
-        {
-            return uri.Contains("://");
         }
     }
 

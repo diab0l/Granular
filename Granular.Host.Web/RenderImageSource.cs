@@ -41,14 +41,14 @@ namespace Granular.Host
             objectUrlCache = new CacheDictionary<string, string>(ResolveObjectUrl);
         }
 
-        public IRenderImageSource CreateRenderImageSource(string uri, Rect sourceRect)
+        public IRenderImageSource CreateRenderImageSource(Uri uri, Rect sourceRect)
         {
-            if (IsUrl(uri))
+            if (uri.GetScheme() == "http" || uri.GetScheme() == "https")
             {
-                return new RenderImageSource(Container, uri, false, sourceRect);
+                return new RenderImageSource(Container, uri.GetAbsoluteUri(), false, sourceRect);
             }
 
-            return new RenderImageSource(Container, objectUrlCache.GetValue(uri), true, sourceRect);
+            return new RenderImageSource(Container, objectUrlCache.GetValue(uri.GetAbsoluteUri()), true, sourceRect);
         }
 
         public IRenderImageSource CreateRenderImageSource(RenderImageType imageType, byte[] imageData, Rect sourceRect)
@@ -61,7 +61,7 @@ namespace Granular.Host
 
         private string ResolveObjectUrl(string uri)
         {
-            byte[] imageData = EmbeddedResourceLoader.LoadResourceData(uri);
+            byte[] imageData = EmbeddedResourceLoader.LoadResourceData(new Uri(uri));
             string mimeType = converter.ToMimeTypeString(GetRenderImageType(uri));
 
             return CreateObjectUrl(CreateBlob(imageData, mimeType));
@@ -72,11 +72,6 @@ namespace Granular.Host
 
         [Bridge.Template("URL.createObjectURL({blob})")]
         public static extern string CreateObjectUrl(object blob);
-
-        private static bool IsUrl(string uri)
-        {
-            return uri.Contains("://");
-        }
 
         private static RenderImageType GetRenderImageType(string uri)
         {

@@ -15,12 +15,12 @@ namespace System.Windows.Media.Imaging
         //None = 2,
     }
 
-    public class BitmapImage : BitmapSource, ISupportInitialize
+    public class BitmapImage : BitmapSource, IUriContext, ISupportInitialize
     {
-        public static readonly DependencyProperty UriSourceProperty = DependencyProperty.Register("UriSource", typeof(string), typeof(BitmapImage), new FrameworkPropertyMetadata(propertyChangedCallback: (sender, e) => ((BitmapImage)sender).OnUriSourceChanged(e)));
-        public string UriSource
+        public static readonly DependencyProperty UriSourceProperty = DependencyProperty.Register("UriSource", typeof(Uri), typeof(BitmapImage), new FrameworkPropertyMetadata(propertyChangedCallback: (sender, e) => ((BitmapImage)sender).OnUriSourceChanged(e)));
+        public Uri UriSource
         {
-            get { return (string)GetValue(UriSourceProperty); }
+            get { return (Uri)GetValue(UriSourceProperty); }
             set { SetValue(UriSourceProperty, value); }
         }
 
@@ -52,6 +52,8 @@ namespace System.Windows.Media.Imaging
             }
         }
 
+        public Uri BaseUri { get; set; }
+
         private bool isInitializing;
 
         public BitmapImage()
@@ -59,7 +61,7 @@ namespace System.Windows.Media.Imaging
             //
         }
 
-        public BitmapImage(string uriSource, BitmapCacheOption cacheOption = BitmapCacheOption.Default)
+        public BitmapImage(Uri uriSource, BitmapCacheOption cacheOption = BitmapCacheOption.Default)
         {
             BeginInit();
             this.UriSource = uriSource;
@@ -115,17 +117,14 @@ namespace System.Windows.Media.Imaging
 
         private void CreateRenderImageSource()
         {
-            if (renderImageSource != null)
+            if (renderImageSource != null || UriSource == null)
             {
                 return;
             }
 
-            if (!UriSource.IsNullOrEmpty())
-            {
-                renderImageSource = ApplicationHost.Current.RenderImageSourceFactory.CreateRenderImageSource(UriSource, SourceRect);
-                renderImageSource.StateChanged += (sender, e) => SetRenderImageState(renderImageSource.State);
-                SetRenderImageState(renderImageSource.State);
-            }
+            renderImageSource = ApplicationHost.Current.RenderImageSourceFactory.CreateRenderImageSource(UriSource.ResolveAbsoluteUri(BaseUri), SourceRect);
+            renderImageSource.StateChanged += (sender, e) => SetRenderImageState(renderImageSource.State);
+            SetRenderImageState(renderImageSource.State);
         }
     }
 }

@@ -20,7 +20,13 @@ namespace System.Windows.Media
     {
         public object ConvertFrom(XamlNamespaces namespaces, object value)
         {
-            return new BitmapImage { UriSource = (string)value };
+            BitmapImage bitmapImage = new BitmapImage();
+            bitmapImage.BeginInit();
+            bitmapImage.BaseUri = sourceUri;
+            bitmapImage.UriSource = Granular.Compatibility.Uri.CreateRelativeOrAbsoluteUri((string)value);
+            bitmapImage.EndInit();
+
+            return bitmapImage;
         }
     }
 }

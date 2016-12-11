@@ -52,7 +52,7 @@ namespace System.Windows
     public interface IRenderImageSourceFactory
     {
         IRenderImageSource CreateRenderImageSource(RenderImageType imageType, byte[] imageData, Rect sourceRect);
-        IRenderImageSource CreateRenderImageSource(string uri, Rect sourceRect);
+        IRenderImageSource CreateRenderImageSource(Uri uri, Rect sourceRect);
     }
 
     public static class ApplicationHost
