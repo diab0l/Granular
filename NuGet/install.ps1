@@ -78,6 +78,12 @@ $assemblyInfoPath = [System.IO.Path]::Combine([System.IO.Path]::GetDirectoryName
 # Add a default reflectability assembly attribute
 InsertAssemblyAttribute -AssemblyInfoPath $assemblyInfoPath -ExistingSubstring "Reflectable" -Attribute "[assembly: Bridge.Reflectable(Bridge.MemberAccessibility.ProtectedInstanceProperty)]"
 
+# Add a reference to a type in Granular.Host
+InsertAssemblyAttribute -AssemblyInfoPath $assemblyInfoPath -ExistingSubstring "Granular.Host" -Attribute "[assembly: Granular.Compatibility.AssemblyReference(typeof(Granular.Host.WebApplicationHost))]"
+
+# Add a reference to a type in Presentation.Generic
+InsertAssemblyAttribute -AssemblyInfoPath $assemblyInfoPath -ExistingSubstring "Presentation.Generic" -Attribute "[assembly: Granular.Compatibility.AssemblyReference(typeof(Granular.Presentation.Generic.ButtonChrome))]"
+
 
 # Insert targets
 $loadedProject = [Microsoft.Build.Evaluation.ProjectCollection]::GlobalProjectCollection.GetLoadedProjects($project.FullName) | Select-Object -First 1
