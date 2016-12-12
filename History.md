@@ -1,6 +1,11 @@
 What's new
 ==========
 
+**0.2.0**
+- Compile with Bridge.Net
+- Uri support
+- Compatibility changes
+
 **0.1.4**
 - Button - Support ICommand (contributed by Miha Markič <miha@rthand.com>)
 - ColorTypeConverter - Support three character color codes (contributed by Suchiman <robinsue@live.de>)
