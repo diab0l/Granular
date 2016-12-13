@@ -1,5 +1,15 @@
-# Granular - WPF for JavaScript!
-Granular is a re-implementation of WPF, compiled to JavaScript, allowing WPF applications to run in the browser (using Saltarelle C# to JavaScript compiler).
+# Granular - WPF for JavaScript
+Granular is a re-implementation of WPF, compiled to JavaScript, allowing WPF applications to run in the browser (using [Bridge.NET](https://github.com/bridgedotnet/Bridge) C# to JavaScript compiler).
+
+## Installation
+1. Create a **Wpf application**, call it **WpfApplication1**
+2. Add a **Class Library** to the solution, call it **WpfApplication1.Web**
+3. Install **Granular** NuGet package into **WpfApplication1.Web**  
+   (from **Package Manager Console**: `Install-Package Granular -ProjectName WpfApplication1.Web`)
+4. Build
+5. Open **WpfApplication1.Web\bin\Debug\WpfApplication1.html**
+
+[A list of common issues can be found here](https://github.com/yuvaltz/Granular/wiki/Common-issues)
 
 ### Why?
 WPF defines many advanced UI concepts (such as visual / logical trees, layouts, routed events, resources, bindings and many others), and it also naturally supports MVVM and other UI patterns, with Granular we can enjoy all of them in the web.
@@ -31,8 +41,6 @@ And this is what the **Web application** looks like (exactly the same, except it
 
 The main advantage of this approach is that the development and testing is done solely in Visual Studio, away from any browser or JavaScript debugger.  
 Also there is no need to deal with all the html/css and fashionable JS frameworks mess, Granular exposes the WPF strong and well-defined APIs, and the whole development process is much cleaner and faster.
-
-**Try it yourself - [sample solution sources](http://yuvaltz.github.io/granular/wiki/tldr/GranularApplication1.zip)**  
 
 ### Moving forward
 Granular is still under development, and there are a lot of ways it can be moved forward. Any help from developers who are passionate about WPF (or *not-so-passionate* about the html/css ecosystem) would be much appreciated :)
