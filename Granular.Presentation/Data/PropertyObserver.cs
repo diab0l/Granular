@@ -271,20 +271,22 @@ namespace System.Windows.Data
             }
         }
 
-        private static IPropertyObserver CreateBaseObserver(Type propertyContainingType, XamlName propertyName)
+        private static IPropertyObserver CreateBaseObserver(Type containingType, XamlName propertyName)
         {
             if (propertyName.IsEmpty)
             {
                 return null;
             }
 
-            DependencyProperty dependencyProperty = DependencyProperty.GetProperty(propertyContainingType, propertyName);
+            containingType = propertyName.ResolveContainingType(containingType);
+
+            DependencyProperty dependencyProperty = DependencyProperty.GetProperty(containingType, propertyName.MemberName);
             if (dependencyProperty != null)
             {
                 return new DependencyPropertyObserver(dependencyProperty);
             }
 
-            PropertyInfo propertyInfo = propertyContainingType.GetInstanceProperty(propertyName.MemberName);
+            PropertyInfo propertyInfo = containingType.GetInstanceProperty(propertyName.MemberName);
             if (propertyInfo != null && !propertyInfo.GetIndexParameters().Any())
             {
                 return new ClrPropertyObserver(propertyInfo, new object[0]);

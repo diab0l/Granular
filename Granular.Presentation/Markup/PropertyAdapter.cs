@@ -21,11 +21,11 @@ namespace System.Windows.Markup
     public class TypeMemberKey
     {
         public Type Type { get; private set; }
-        public XamlName MemberName { get; private set; }
+        public string MemberName { get; private set; }
 
         private int hashCode;
 
-        public TypeMemberKey(Type type, XamlName memberName)
+        public TypeMemberKey(Type type, string memberName)
         {
             this.Type = type;
             this.MemberName = memberName;
@@ -49,7 +49,7 @@ namespace System.Windows.Markup
 
         public override string ToString()
         {
-            return String.Format("{0}.{1}", Type.FullName, MemberName.LocalName);
+            return String.Format("{0}.{1}", Type.FullName, MemberName);
         }
     }
 
@@ -57,7 +57,7 @@ namespace System.Windows.Markup
     {
         private static CacheDictionary<TypeMemberKey, IPropertyAdapter> adaptersCache = new CacheDictionary<TypeMemberKey, IPropertyAdapter>(TryCreateAdapter);
 
-        public static IPropertyAdapter CreateAdapter(Type targetType, XamlName propertyName)
+        public static IPropertyAdapter CreateAdapter(Type targetType, string propertyName)
         {
             IPropertyAdapter propertyAdapter;
             return adaptersCache.TryGetValue(new TypeMemberKey(targetType, propertyName), out propertyAdapter) ? propertyAdapter : null;
@@ -66,11 +66,6 @@ namespace System.Windows.Markup
         private static bool TryCreateAdapter(TypeMemberKey key, out IPropertyAdapter adapter)
         {
             adapter = null;
-
-            if (key.MemberName.IsEmpty)
-            {
-                return false;
-            }
 
             DependencyProperty dependencyProperty = DependencyProperty.GetProperty(key.Type, key.MemberName);
             if (dependencyProperty != null)
@@ -89,12 +84,9 @@ namespace System.Windows.Markup
             return false;
         }
 
-        private static PropertyInfo GetClrProperty(Type containingType, XamlName propertyName)
+        private static PropertyInfo GetClrProperty(Type containingType, string propertyName)
         {
-            string propertyMemberName = propertyName.MemberName;
-            Type propertyContainingType = propertyName.HasContainingTypeName ? TypeParser.ParseType(propertyName.ContainingTypeName) : containingType;
-
-            PropertyInfo propertyInfo = propertyContainingType.GetInstanceProperty(propertyMemberName);
+            PropertyInfo propertyInfo = containingType.GetInstanceProperty(propertyName);
             return propertyInfo != null && !propertyInfo.IsDelegate() ? propertyInfo : null;
         }
     }

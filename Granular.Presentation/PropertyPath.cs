@@ -67,21 +67,21 @@ namespace System.Windows
 
         public bool TryGetDependencyProperty(Type containingType, out DependencyProperty dependencyProperty)
         {
-            dependencyProperty = DependencyProperty.GetProperty(containingType, PropertyName);
+            dependencyProperty = DependencyProperty.GetProperty(PropertyName.ResolveContainingType(containingType), PropertyName.MemberName);
             return dependencyProperty != null;
         }
 
         public IPropertyObserver CreatePropertyObserver(Type baseValueType)
         {
-            DependencyProperty dependencyProperty = DependencyProperty.GetProperty(baseValueType, PropertyName);
+            Type containingType = PropertyName.ResolveContainingType(baseValueType);
+
+            DependencyProperty dependencyProperty = DependencyProperty.GetProperty(containingType, PropertyName.MemberName);
             if (dependencyProperty != null)
             {
                 return new DependencyPropertyObserver(dependencyProperty);
             }
 
-            Type propertyContainingType = PropertyName.HasContainingTypeName ? TypeParser.ParseType(PropertyName.ContainingTypeName) : baseValueType;
-
-            PropertyInfo propertyInfo = propertyContainingType.GetInstanceProperty(PropertyName.MemberName);
+            PropertyInfo propertyInfo = containingType.GetInstanceProperty(PropertyName.MemberName);
             if (propertyInfo != null)
             {
                 return new ClrPropertyObserver(propertyInfo, new object[0]);
@@ -92,16 +92,16 @@ namespace System.Windows
 
         public static bool TryGetValue(object target, XamlName propertyName, out object value)
         {
-            DependencyProperty dependencyProperty = DependencyProperty.GetProperty(target.GetType(), propertyName);
+            Type containingType = propertyName.ResolveContainingType(target.GetType());
+
+            DependencyProperty dependencyProperty = DependencyProperty.GetProperty(containingType, propertyName.MemberName);
             if (dependencyProperty != null && target is DependencyObject)
             {
                 value = ((DependencyObject)target).GetValue(dependencyProperty);
                 return true;
             }
 
-            Type propertyContainingType = propertyName.HasContainingTypeName ? TypeParser.ParseType(propertyName.ContainingTypeName) : target.GetType();
-
-            PropertyInfo propertyInfo = propertyContainingType.GetInstanceProperty(propertyName.MemberName);
+            PropertyInfo propertyInfo = containingType.GetInstanceProperty(propertyName.MemberName);
             if (propertyInfo != null && !propertyInfo.GetIndexParameters().Any())
             {
                 value = propertyInfo.GetValue(target, new object[0]);
@@ -153,7 +153,7 @@ namespace System.Windows
 
         public bool TryGetValue(object target, out object value)
         {
-            Type propertyContainingType = PropertyName.HasContainingTypeName ? TypeParser.ParseType(PropertyName.ContainingTypeName) : target.GetType();
+            Type containingType = PropertyName.ResolveContainingType(target.GetType());
             string propertyName = PropertyName.MemberName;
 
             bool isDefaultIndexProperty = propertyName.IsNullOrEmpty();
@@ -170,11 +170,11 @@ namespace System.Windows
                 }
 
                 target = indexPropertyValue;
-                propertyContainingType = indexPropertyValue.GetType();
+                containingType = indexPropertyValue.GetType();
                 isDefaultIndexProperty = true;
             }
 
-            PropertyInfo indexPropertyInfo = isDefaultIndexProperty ? propertyContainingType.GetDefaultIndexProperty() : propertyContainingType.GetInstanceProperty(propertyName);
+            PropertyInfo indexPropertyInfo = isDefaultIndexProperty ? containingType.GetDefaultIndexProperty() : containingType.GetInstanceProperty(propertyName);
 
             if (indexPropertyInfo == null)
             {

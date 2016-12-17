@@ -144,4 +144,12 @@ namespace System.Windows.Markup
             return TypeParser.ParseType(element.Name);
         }
     }
+
+    public static class XamlNameExtensions
+    {
+        public static Type ResolveContainingType(this XamlName name, Type defaultContainingType)
+        {
+            return name.HasContainingTypeName ? TypeParser.ParseType(name.ContainingTypeName) : defaultContainingType;
+        }
+    }
 }

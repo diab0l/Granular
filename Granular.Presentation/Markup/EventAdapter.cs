@@ -19,7 +19,7 @@ namespace System.Windows.Markup
     {
         private static CacheDictionary<TypeMemberKey, IEventAdapter> adaptersCache = new CacheDictionary<TypeMemberKey, IEventAdapter>(TryCreateAdapter);
 
-        public static IEventAdapter CreateAdapter(Type targetType, XamlName eventName)
+        public static IEventAdapter CreateAdapter(Type targetType, string eventName)
         {
             IEventAdapter eventAdapter;
             return adaptersCache.TryGetValue(new TypeMemberKey(targetType, eventName), out eventAdapter) ? eventAdapter : null;
@@ -53,28 +53,19 @@ namespace System.Windows.Markup
             return false;
         }
 
-        private static RoutedEvent GetRoutedEvent(Type containingType, XamlName eventName)
+        private static RoutedEvent GetRoutedEvent(Type containingType, string eventName)
         {
-            string eventMemberName = eventName.MemberName;
-            Type eventContainingType = eventName.HasContainingTypeName ? TypeParser.ParseType(eventName.ContainingTypeName) : containingType;
-
-            return EventManager.FindRoutedEvent(containingType, eventMemberName);
+            return EventManager.FindRoutedEvent(containingType, eventName);
         }
 
-        private static EventInfo GetClrEvent(Type containingType, XamlName eventName)
+        private static EventInfo GetClrEvent(Type containingType, string eventName)
         {
-            string eventMemberName = eventName.MemberName;
-            Type eventContainingType = eventName.HasContainingTypeName ? TypeParser.ParseType(eventName.ContainingTypeName) : containingType;
-
-            return eventContainingType.GetEvent(eventMemberName, BindingFlags.Instance | BindingFlags.Public | BindingFlags.FlattenHierarchy);
+            return containingType.GetEvent(eventName, BindingFlags.Instance | BindingFlags.Public | BindingFlags.FlattenHierarchy);
         }
 
-        private static PropertyInfo GetEventProperty(Type containingType, XamlName eventName)
+        private static PropertyInfo GetEventProperty(Type containingType, string eventName)
         {
-            string eventMemberName = eventName.MemberName;
-            Type eventContainingType = eventName.HasContainingTypeName ? TypeParser.ParseType(eventName.ContainingTypeName) : containingType;
-
-            PropertyInfo eventProperty = eventContainingType.GetInstanceProperty(eventMemberName);
+            PropertyInfo eventProperty = containingType.GetInstanceProperty(eventName);
             return eventProperty != null && eventProperty.IsDelegate() ? eventProperty : null;
         }
     }

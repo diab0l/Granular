@@ -92,13 +92,12 @@ namespace System.Windows
             string text = value.ToString().Trim();
 
             XamlName eventName = XamlName.FromPrefixedName(text, namespaces);
+            Type containingType = eventName.ResolveContainingType(null);
 
-            if (!eventName.HasContainingTypeName)
+            if (containingType == null)
             {
                 throw new Granular.Exception("Invalid routed event name \"{0}\"", eventName.LocalName);
             }
-
-            Type containingType = TypeParser.ParseType(eventName.ContainingTypeName);
 
             RoutedEvent routedEvent = EventManager.FindRoutedEvent(containingType, eventName.MemberName);
 

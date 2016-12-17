@@ -124,7 +124,7 @@ namespace System.Windows.Markup
             string contentPropertyName = PropertyAttribute.GetPropertyName<ContentPropertyAttribute>(elementType);
             if (!contentPropertyName.IsNullOrEmpty())
             {
-                return ElementMemberInitializer.Create(new XamlName(contentPropertyName), elementType, element.Values, element.Namespaces, element.SourceUri);
+                return ElementMemberInitializer.Create(elementType, contentPropertyName, element.Values, element.Namespaces, element.SourceUri);
             }
 
             if (ElementCollectionContentInitailizer.IsCollectionType(elementType))
@@ -145,7 +145,7 @@ namespace System.Windows.Markup
                 // markup extensions may contain members with an empty name, the name should be resolved from the member index
                 XamlName memberName = member.Name.IsEmpty ? GetParameterName(elementType, index) : member.Name;
 
-                list.Add(ElementMemberInitializer.Create(memberName, elementType, member.Values, member.Namespaces, member.SourceUri));
+                list.Add(ElementMemberInitializer.Create(memberName.ResolveContainingType(elementType), memberName.MemberName, member.Values, member.Namespaces, member.SourceUri));
                 index++;
             }
 
@@ -173,7 +173,7 @@ namespace System.Windows.Markup
         private static IPropertyAdapter GetNameProperty(Type type)
         {
             string propertyName = PropertyAttribute.GetPropertyName<RuntimeNamePropertyAttribute>(type);
-            return !propertyName.IsNullOrWhiteSpace() ? PropertyAdapter.CreateAdapter(type, new XamlName(propertyName)) : null;
+            return !propertyName.IsNullOrWhiteSpace() ? PropertyAdapter.CreateAdapter(type, propertyName) : null;
         }
 
         private static void SetFieldValue(object target, string fieldName, object fieldValue)
@@ -196,7 +196,7 @@ namespace System.Windows.Markup
 
     public static class ElementMemberInitializer
     {
-        public static IElementInitializer Create(XamlName memberName, Type containingType, IEnumerable<object> values, XamlNamespaces namespaces, Uri sourceUri)
+        public static IElementInitializer Create(Type containingType, string memberName, IEnumerable<object> values, XamlNamespaces namespaces, Uri sourceUri)
         {
             IPropertyAdapter propertyAdapter = PropertyAdapter.CreateAdapter(containingType, memberName);
             if (propertyAdapter != null)
@@ -213,7 +213,7 @@ namespace System.Windows.Markup
             throw new Granular.Exception("Type \"{0}\" does not contain a member named \"{1}\"", containingType.Name, memberName);
         }
 
-        private static string GetEventHandlerName(XamlName memberName, IEnumerable<object> values)
+        private static string GetEventHandlerName(string memberName, IEnumerable<object> values)
         {
             if (!values.Any())
             {
@@ -492,7 +492,7 @@ namespace System.Windows.Markup
             private static IPropertyAdapter GetKeyProperty(Type type)
             {
                 string propertyName = PropertyAttribute.GetPropertyName<DictionaryKeyPropertyAttribute>(type);
-                return !propertyName.IsNullOrWhiteSpace() ? PropertyAdapter.CreateAdapter(type, new XamlName(propertyName)) : null;
+                return !propertyName.IsNullOrWhiteSpace() ? PropertyAdapter.CreateAdapter(type, propertyName) : null;
             }
         }
 

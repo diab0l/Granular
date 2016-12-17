@@ -153,17 +153,6 @@ namespace System.Windows
             return GetRoutedEvents(ownerType, eventName, false).SingleOrDefault();
         }
 
-        public static RoutedEvent GetRoutedEvent(XamlName eventName)
-        {
-            if (!eventName.HasContainingTypeName)
-            {
-                throw new Granular.Exception("Invalid routed event name \"{0}\"", eventName.LocalName);
-            }
-
-            Type ownerType = TypeParser.ParseType(eventName.ContainingTypeName);
-            return GetOwnedRoutedEvent(ownerType, eventName.MemberName);
-        }
-
         public static IEnumerable<RoutedEventHandlerItem> GetFlattenedClassHandlers(Type classType, RoutedEvent routedEvent)
         {
             return flattenedClassHandlersCache.GetValue(new ClassHandlerKey(classType, routedEvent));

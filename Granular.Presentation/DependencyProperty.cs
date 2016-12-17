@@ -401,14 +401,9 @@ namespace System.Windows
             return registeredProperties.TryGetValue(new DependencyPropertyHashKey(ownerType, propertyName), out property) ? property : null;
         }
 
-        public static DependencyProperty GetProperty(Type containingType, XamlName propertyName)
+        public static DependencyProperty GetProperty(Type containingType, string propertyName)
         {
-            if (propertyName.HasContainingTypeName)
-            {
-                containingType = TypeParser.ParseType(propertyName.ContainingTypeName);
-            }
-
-            return GetOwnedProperty(containingType, propertyName.MemberName) ?? GetSingleProperty(containingType.BaseType, propertyName.MemberName);
+            return GetOwnedProperty(containingType, propertyName) ?? GetSingleProperty(containingType.BaseType, propertyName);
         }
     }
 
