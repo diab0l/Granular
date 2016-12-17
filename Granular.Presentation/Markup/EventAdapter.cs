@@ -56,7 +56,7 @@ namespace System.Windows.Markup
         private static RoutedEvent GetRoutedEvent(Type containingType, XamlName eventName)
         {
             string eventMemberName = eventName.MemberName;
-            Type eventContainingType = eventName.IsMemberName ? TypeParser.ParseType(eventName.ContainingTypeName) : containingType;
+            Type eventContainingType = eventName.HasContainingTypeName ? TypeParser.ParseType(eventName.ContainingTypeName) : containingType;
 
             return EventManager.FindRoutedEvent(containingType, eventMemberName);
         }
@@ -64,7 +64,7 @@ namespace System.Windows.Markup
         private static EventInfo GetClrEvent(Type containingType, XamlName eventName)
         {
             string eventMemberName = eventName.MemberName;
-            Type eventContainingType = eventName.IsMemberName ? TypeParser.ParseType(eventName.ContainingTypeName) : containingType;
+            Type eventContainingType = eventName.HasContainingTypeName ? TypeParser.ParseType(eventName.ContainingTypeName) : containingType;
 
             return eventContainingType.GetEvent(eventMemberName, BindingFlags.Instance | BindingFlags.Public | BindingFlags.FlattenHierarchy);
         }
@@ -72,7 +72,7 @@ namespace System.Windows.Markup
         private static PropertyInfo GetEventProperty(Type containingType, XamlName eventName)
         {
             string eventMemberName = eventName.MemberName;
-            Type eventContainingType = eventName.IsMemberName ? TypeParser.ParseType(eventName.ContainingTypeName) : containingType;
+            Type eventContainingType = eventName.HasContainingTypeName ? TypeParser.ParseType(eventName.ContainingTypeName) : containingType;
 
             PropertyInfo eventProperty = eventContainingType.GetInstanceProperty(eventMemberName);
             return eventProperty != null && eventProperty.IsDelegate() ? eventProperty : null;

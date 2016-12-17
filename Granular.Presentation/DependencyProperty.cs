@@ -403,7 +403,7 @@ namespace System.Windows
 
         public static DependencyProperty GetProperty(Type containingType, XamlName propertyName)
         {
-            if (propertyName.IsMemberName)
+            if (propertyName.HasContainingTypeName)
             {
                 containingType = TypeParser.ParseType(propertyName.ContainingTypeName);
             }

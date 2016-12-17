@@ -155,7 +155,7 @@ namespace System.Windows
 
         public static RoutedEvent GetRoutedEvent(XamlName eventName)
         {
-            if (!eventName.IsMemberName)
+            if (!eventName.HasContainingTypeName)
             {
                 throw new Granular.Exception("Invalid routed event name \"{0}\"", eventName.LocalName);
             }

@@ -93,7 +93,7 @@ namespace System.Windows
 
             XamlName eventName = XamlName.FromPrefixedName(text, namespaces);
 
-            if (!eventName.IsMemberName)
+            if (!eventName.HasContainingTypeName)
             {
                 throw new Granular.Exception("Invalid routed event name \"{0}\"", eventName.LocalName);
             }

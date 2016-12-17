@@ -12,8 +12,9 @@ namespace System.Windows.Markup
         public string LocalName { get; private set; }
         public string NamespaceName { get; private set; }
 
-        public bool IsMemberName { get; private set; }
         public string MemberName { get; private set; }
+
+        public bool HasContainingTypeName { get; private set; }
         public XamlName ContainingTypeName { get; private set; }
 
         public bool IsEmpty { get { return LocalName.IsNullOrEmpty(); } }
@@ -30,7 +31,7 @@ namespace System.Windows.Markup
                 MemberName = LocalName.Substring(typeSeparatorIndex + 1);
                 ContainingTypeName = new XamlName(LocalName.Substring(0, typeSeparatorIndex), NamespaceName);
 
-                IsMemberName = true;
+                HasContainingTypeName = true;
             }
             else
             {

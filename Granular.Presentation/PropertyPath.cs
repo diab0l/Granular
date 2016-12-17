@@ -57,7 +57,7 @@ namespace System.Windows
 
         public override string ToString()
         {
-            return PropertyName.IsMemberName ? String.Format("({0})", PropertyName.LocalName) : PropertyName.LocalName;
+            return PropertyName.HasContainingTypeName ? String.Format("({0})", PropertyName.LocalName) : PropertyName.LocalName;
         }
 
         public bool TryGetValue(object target, out object value)
@@ -79,7 +79,7 @@ namespace System.Windows
                 return new DependencyPropertyObserver(dependencyProperty);
             }
 
-            Type propertyContainingType = PropertyName.IsMemberName ? TypeParser.ParseType(PropertyName.ContainingTypeName) : baseValueType;
+            Type propertyContainingType = PropertyName.HasContainingTypeName ? TypeParser.ParseType(PropertyName.ContainingTypeName) : baseValueType;
 
             PropertyInfo propertyInfo = propertyContainingType.GetInstanceProperty(PropertyName.MemberName);
             if (propertyInfo != null)
@@ -99,7 +99,7 @@ namespace System.Windows
                 return true;
             }
 
-            Type propertyContainingType = propertyName.IsMemberName ? TypeParser.ParseType(propertyName.ContainingTypeName) : target.GetType();
+            Type propertyContainingType = propertyName.HasContainingTypeName ? TypeParser.ParseType(propertyName.ContainingTypeName) : target.GetType();
 
             PropertyInfo propertyInfo = propertyContainingType.GetInstanceProperty(propertyName.MemberName);
             if (propertyInfo != null && !propertyInfo.GetIndexParameters().Any())
@@ -145,7 +145,7 @@ namespace System.Windows
 
         public override string ToString()
         {
-            string propertyName = PropertyName.IsMemberName ? String.Format("({0})", PropertyName.LocalName) : PropertyName.LocalName;
+            string propertyName = PropertyName.HasContainingTypeName ? String.Format("({0})", PropertyName.LocalName) : PropertyName.LocalName;
             string indexRawValues = IndexRawValues.DefaultIfEmpty(String.Empty).Aggregate((s1, s2) => String.Format("{0}, {1}", s1, s2));
 
             return String.Format("{0}[{1}]", propertyName, indexRawValues);
@@ -153,7 +153,7 @@ namespace System.Windows
 
         public bool TryGetValue(object target, out object value)
         {
-            Type propertyContainingType = PropertyName.IsMemberName ? TypeParser.ParseType(PropertyName.ContainingTypeName) : target.GetType();
+            Type propertyContainingType = PropertyName.HasContainingTypeName ? TypeParser.ParseType(PropertyName.ContainingTypeName) : target.GetType();
             string propertyName = PropertyName.MemberName;
 
             bool isDefaultIndexProperty = propertyName.IsNullOrEmpty();

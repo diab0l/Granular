@@ -92,7 +92,7 @@ namespace System.Windows.Markup
         private static PropertyInfo GetClrProperty(Type containingType, XamlName propertyName)
         {
             string propertyMemberName = propertyName.MemberName;
-            Type propertyContainingType = propertyName.IsMemberName ? TypeParser.ParseType(propertyName.ContainingTypeName) : containingType;
+            Type propertyContainingType = propertyName.HasContainingTypeName ? TypeParser.ParseType(propertyName.ContainingTypeName) : containingType;
 
             PropertyInfo propertyInfo = propertyContainingType.GetInstanceProperty(propertyMemberName);
             return propertyInfo != null && !propertyInfo.IsDelegate() ? propertyInfo : null;
