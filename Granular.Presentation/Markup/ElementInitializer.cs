@@ -172,7 +172,8 @@ namespace System.Windows.Markup
 
         private static IPropertyAdapter GetNameProperty(Type type)
         {
-            return PropertyAdapter.CreateAdapter(type, new XamlName(PropertyAttribute.GetPropertyName<RuntimeNamePropertyAttribute>(type)));
+            string propertyName = PropertyAttribute.GetPropertyName<RuntimeNamePropertyAttribute>(type);
+            return !propertyName.IsNullOrWhiteSpace() ? PropertyAdapter.CreateAdapter(type, new XamlName(propertyName)) : null;
         }
 
         private static void SetFieldValue(object target, string fieldName, object fieldValue)
@@ -490,7 +491,8 @@ namespace System.Windows.Markup
 
             private static IPropertyAdapter GetKeyProperty(Type type)
             {
-                return PropertyAdapter.CreateAdapter(type, new XamlName(PropertyAttribute.GetPropertyName<DictionaryKeyPropertyAttribute>(type)));
+                string propertyName = PropertyAttribute.GetPropertyName<DictionaryKeyPropertyAttribute>(type);
+                return !propertyName.IsNullOrWhiteSpace() ? PropertyAdapter.CreateAdapter(type, new XamlName(propertyName)) : null;
             }
         }
 
