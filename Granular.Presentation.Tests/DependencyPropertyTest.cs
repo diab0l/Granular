@@ -235,13 +235,6 @@ namespace Granular.Presentation.Tests
         }
 
         [TestMethod]
-        public void OverrideMetadataGetPropertiesTest()
-        {
-            DependencyProperty[] properties = DependencyProperty.GetFlattenedProperties(typeof(ElementD)).ToArray();
-            CollectionAssert.AreEqual(properties, new[] { ElementA.Value0Property, ElementA.Value1Property });
-        }
-
-        [TestMethod]
         public void DependencyPropertyAmbiguityTest()
         {
             ElementB element = new ElementB();
@@ -252,35 +245,8 @@ namespace Granular.Presentation.Tests
             Assert.AreEqual(1, element.GetValue(ElementA.Value0Property));
             Assert.AreEqual(2, element.GetValue(ElementB.Value0Property2));
 
-            Assert.AreEqual(ElementA.Value0Property, DependencyProperty.GetOwnedProperty(typeof(ElementA), "Value0"));
-            Assert.AreEqual(ElementB.Value0Property2, DependencyProperty.GetOwnedProperty(typeof(ElementB), "Value0"));
-
-            DependencyProperty[] elementAProperties = new [] { ElementA.Value0Property, ElementA.Value1Property, ElementA.Value2Property, ElementA.Value3Property };
-            DependencyProperty[] elementBProperties = new [] { ElementB.Value0Property2 };
-
-            CollectionAssert.AreEqual(elementAProperties, DependencyProperty.GetProperties(typeof(ElementA)).ToArray());
-            CollectionAssert.AreEqual(elementBProperties, DependencyProperty.GetProperties(typeof(ElementB)).ToArray());
-            CollectionAssert.AreEqual(elementAProperties.Concat(elementBProperties).Cast<object>().ToArray(), DependencyProperty.GetFlattenedProperties(typeof(ElementB)).ToArray());
-
-            try
-            {
-                DependencyProperty.GetSingleProperty(typeof(ElementB), "Value0");
-                Assert.Fail();
-            }
-            catch
-            {
-                //
-            }
-
-            try
-            {
-                ElementA.Value0Property.AddOwner(typeof(ElementB));
-                Assert.Fail();
-            }
-            catch
-            {
-                //
-            }
+            Assert.AreEqual(ElementA.Value0Property, DependencyProperty.GetProperty(typeof(ElementA), "Value0"));
+            Assert.AreEqual(ElementB.Value0Property2, DependencyProperty.GetProperty(typeof(ElementB), "Value0"));
         }
 
         [TestMethod]

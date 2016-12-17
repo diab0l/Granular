@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Markup;
 using Granular.Collections;
+using Granular.Compatibility;
 using Granular.Extensions;
 
 namespace System.Windows
@@ -102,9 +103,6 @@ namespace System.Windows
 
         private static readonly Dictionary<DependencyPropertyHashKey, DependencyProperty> registeredProperties = new Dictionary<DependencyPropertyHashKey, DependencyProperty>();
         private static readonly Dictionary<DependencyPropertyHashKey, DependencyPropertyKey> registeredReadOnlyPropertiesKey = new Dictionary<DependencyPropertyHashKey, DependencyPropertyKey>();
-
-        private static readonly ListDictionary<Type, DependencyProperty> typeRegisteredProperties = new ListDictionary<Type, DependencyProperty>();
-        private static readonly CacheDictionary<Type, IEnumerable<DependencyProperty>> typeFlattenedPropertiesCache = new CacheDictionary<Type, IEnumerable<DependencyProperty>>(ResolveTypeFlattenedProperties);
 
         private DependencyProperty(DependencyPropertyHashKey hashKey, Type propertyType, PropertyMetadata metadata, ValidateValueCallback validateValueCallback, bool isAttached, bool isReadOnly)
         {
@@ -218,7 +216,7 @@ namespace System.Windows
 
         private bool ResolveTypeContains(Type type)
         {
-            return GetFlattenedProperties(type).Contains(this);
+            return typeMetadata.Keys.Any(baseType => type == baseType || type.IsSubclassOf(baseType));
         }
 
         internal void RaiseMetadataPropertyChangedCallback(DependencyObject dependencyObject, DependencyPropertyChangedEventArgs e)
@@ -348,7 +346,6 @@ namespace System.Windows
         {
             VerifyNotRegistered(key, dependencyProperty);
             registeredProperties.Add(key, dependencyProperty);
-            typeRegisteredProperties.Add(key.Owner, dependencyProperty);
         }
 
         private static void VerifyNotRegistered(DependencyPropertyHashKey key, DependencyProperty dependencyProperty)
@@ -360,50 +357,24 @@ namespace System.Windows
             }
         }
 
-        public static IEnumerable<DependencyProperty> GetProperties(Type containingType)
-        {
-            return typeRegisteredProperties.GetValues(containingType);
-        }
-
-        // get all the properties that are owned by the containingType or its base types
-        public static IEnumerable<DependencyProperty> GetFlattenedProperties(Type containingType)
-        {
-            return typeFlattenedPropertiesCache.GetValue(containingType);
-        }
-
-        private static IEnumerable<DependencyProperty> ResolveTypeFlattenedProperties(Type containingType)
-        {
-            System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(containingType.GetTypeHandle());
-
-            return containingType.BaseType != null ?
-                GetFlattenedProperties(containingType.BaseType).Concat(GetProperties(containingType)).ToArray() :
-                GetProperties(containingType).ToArray();
-        }
-
-        // get a property that is owned by the containingType or one of its base types (and verify there is no more than one match)
-        public static DependencyProperty GetSingleProperty(Type containingType, string propertyName)
-        {
-            DependencyProperty[] properties = GetFlattenedProperties(containingType).Where(property => property.Name == propertyName).ToArray();
-
-            if (properties.Length > 1)
-            {
-                throw new Granular.Exception("Type \"{0}\" contains more than one property named \"{1}\" ({2})", containingType.Name, propertyName, properties.Select(property => property.ToString()).Aggregate((s1, s2) => String.Format("{0}, {1}", s1, s2)));
-            }
-
-            return properties.FirstOrDefault();
-        }
-
-        public static DependencyProperty GetOwnedProperty(Type ownerType, string propertyName)
-        {
-            System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(ownerType.GetTypeHandle());
-
-            DependencyProperty property;
-            return registeredProperties.TryGetValue(new DependencyPropertyHashKey(ownerType, propertyName), out property) ? property : null;
-        }
-
+        // Get property that is owned by containingType or one of its base classes
         public static DependencyProperty GetProperty(Type containingType, string propertyName)
         {
-            return GetOwnedProperty(containingType, propertyName) ?? GetSingleProperty(containingType.BaseType, propertyName);
+            DependencyProperty dependencyProperty;
+
+            while (containingType != null && containingType != typeof(DependencyObject))
+            {
+                System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(containingType.GetTypeHandle());
+
+                if (registeredProperties.TryGetValue(new DependencyPropertyHashKey(containingType, propertyName), out dependencyProperty))
+                {
+                    return dependencyProperty;
+                }
+
+                containingType = containingType.BaseType;
+            }
+
+            return null;
         }
     }
 
@@ -420,7 +391,7 @@ namespace System.Windows
             }
 
             Type ownerType = TypeParser.ParseType(text.Substring(0, typeSeparatorIndex), namespaces);
-            DependencyProperty dependencyProperty = DependencyProperty.GetOwnedProperty(ownerType, text.Substring(typeSeparatorIndex + 1));
+            DependencyProperty dependencyProperty = DependencyProperty.GetProperty(ownerType, text.Substring(typeSeparatorIndex + 1));
 
             if (dependencyProperty == null)
             {
