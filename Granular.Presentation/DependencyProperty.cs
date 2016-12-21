@@ -195,16 +195,16 @@ namespace System.Windows
 
         public PropertyMetadata GetMetadata(Type type)
         {
-            return typeMetadataCache.GetValue(type);
-        }
-
-        private PropertyMetadata ResolveTypeMetadata(Type type)
-        {
             if (!isMetadataOverridden)
             {
                 return ownerMetadata;
             }
 
+            return typeMetadataCache.GetValue(type);
+        }
+
+        private PropertyMetadata ResolveTypeMetadata(Type type)
+        {
             Type closestBaseType = GetOrderedTypeMetadata().Where(baseType => type == baseType || type.IsSubclassOf(baseType)).LastOrDefault();
             return closestBaseType != null ? typeMetadata[closestBaseType] : ownerMetadata;
         }
