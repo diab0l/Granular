@@ -116,52 +116,64 @@ namespace Granular.Presentation.Tests
         public void RoutedEventSourceTest()
         {
             string text = @"
-            <ResourceDictionary xmlns='http://schemas.microsoft.com/winfx/2006/xaml/presentation' xmlns:x='http://schemas.microsoft.com/winfx/2006/xaml' xmlns:test='clr-namespace:Granular.Presentation.Tests;assembly=Granular.Presentation.Tests' >
-                <ControlTemplate x:Key='template1'>
-                    <StackPanel>
-                        <test:RoutedEventTestElement x:Name='child1' Width='100' Template='{DynamicResource template2}'/>
-                    </StackPanel>
-                </ControlTemplate>
+            <Decorator x:Name='decorator1' xmlns='http://schemas.microsoft.com/winfx/2006/xaml/presentation' xmlns:x='http://schemas.microsoft.com/winfx/2006/xaml' xmlns:test='clr-namespace:Granular.Presentation.Tests;assembly=Granular.Presentation.Tests' >
+                <Decorator.Resources>
+                    <ControlTemplate x:Key='template2'>
+                        <Decorator x:Name='decorator2'>
+                            <Decorator x:Name='decorator2a'>
+                                <test:RoutedEventTestElement x:Name='element2' Width='20' Template='{DynamicResource template3}'/>
+                            </Decorator>
+                        </Decorator>
+                    </ControlTemplate>
 
-                <ControlTemplate x:Key='template2'>
-                    <StackPanel>
-                        <test:RoutedEventTestElement x:Name='child2' Width='200'/>
-                    </StackPanel>
-                </ControlTemplate>
-            </ResourceDictionary>
-            ";
+                    <ControlTemplate x:Key='template3'>
+                        <Decorator x:Name='decorator3'>
+                            <Decorator x:Name='decorator3a'>
+                                <test:RoutedEventTestElement x:Name='element3' Width='30'/>
+                            </Decorator>
+                        </Decorator>
+                    </ControlTemplate>
+                </Decorator.Resources>
 
-            ResourceDictionary resources = XamlLoader.Load(XamlParser.Parse(text)) as ResourceDictionary;
+                <Decorator x:Name='decorator1a'>
+                    <test:RoutedEventTestElement x:Name='element1' Width='10' Template='{DynamicResource template2}'/>
+                </Decorator>
+            </Decorator>";
 
-            RoutedEventTestElement root = new RoutedEventTestElement();
-            root.Resources = resources;
+            Decorator decorator1 = XamlLoader.Load(XamlParser.Parse(text)) as Decorator;
+            Assert.IsNotNull(decorator1);
 
-            root.Template = resources.GetValue("template1") as ControlTemplate;
-            root.ApplyTemplate();
+            RoutedEventTestElement element1 = NameScope.GetNameScope(decorator1).FindName("element1") as RoutedEventTestElement;
+            Assert.IsNotNull(element1);
+            Assert.AreEqual(10, element1.Width);
 
-            RoutedEventTestElement child1 = NameScope.GetTemplateNameScope(root).FindName("child1") as RoutedEventTestElement;
-            child1.ApplyTemplate();
+            Decorator decorator2 = NameScope.GetTemplateNameScope(element1).FindName("decorator2") as Decorator;
+            Assert.IsNotNull(decorator2);
 
-            Assert.IsNotNull(child1);
-            Assert.AreEqual(100, child1.Width);
+            RoutedEventTestElement element2 = NameScope.GetTemplateNameScope(element1).FindName("element2") as RoutedEventTestElement;
+            Assert.IsNotNull(element2);
+            Assert.AreEqual(20, element2.Width);
 
-            RoutedEventTestElement child2 = NameScope.GetTemplateNameScope(child1).FindName("child2") as RoutedEventTestElement;
-            Assert.IsNotNull(child2);
-            Assert.AreEqual(200, child2.Width);
+            Decorator decorator3 = NameScope.GetTemplateNameScope(element2).FindName("decorator3") as Decorator;
+            Assert.IsNotNull(decorator3);
 
-            object source0 = null;
+            RoutedEventTestElement element3 = NameScope.GetTemplateNameScope(element2).FindName("element3") as RoutedEventTestElement;
+            Assert.IsNotNull(element3);
+            Assert.AreEqual(30, element3.Width);
+
             object source1 = null;
             object source2 = null;
+            object source3 = null;
 
-            root.Bubble += (sender, e) => source0 = e.Source;
-            child1.Bubble += (sender, e) => source1 = e.Source;
-            child2.Bubble += (sender, e) => source2 = e.Source;
+            decorator1.AddHandler(RoutedEventTestElement.BubbleEvent, (RoutedEventHandler)((sender, e) => source1 = e.Source));
+            decorator2.AddHandler(RoutedEventTestElement.BubbleEvent, (RoutedEventHandler)((sender, e) => source2 = e.Source));
+            decorator3.AddHandler(RoutedEventTestElement.BubbleEvent, (RoutedEventHandler)((sender, e) => source3 = e.Source));
 
-            child2.RaiseEvent(new RoutedEventArgs(RoutedEventTestElement.BubbleEvent, child2));
+            element3.RaiseEvent(new RoutedEventArgs(RoutedEventTestElement.BubbleEvent, element3));
 
-            Assert.AreEqual(root, source0);
-            Assert.AreEqual(child1, source1);
-            Assert.AreEqual(child2, source2);
+            Assert.AreEqual(element1, source1);
+            Assert.AreEqual(element2, source2);
+            Assert.AreEqual(element3, source3);
         }
     }
 }

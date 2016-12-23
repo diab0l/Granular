@@ -278,25 +278,23 @@ namespace System.Windows
 
         public void RaiseEvent(RoutedEventArgs e)
         {
-            EventRoute eventRoute = new EventRoute(e.RoutedEvent, GetEventRouteItems(e.RoutedEvent, this));
+            EventRoute eventRoute = new EventRoute(e.RoutedEvent, GetEventRouteItems(e.RoutedEvent, this, this));
             e.Source = this;
             eventRoute.InvokeHandlers(e);
         }
 
-        private IEnumerable<EventRouteItem> GetEventRouteItems(RoutedEvent routedEvent, UIElement originalSource)
+        private IEnumerable<EventRouteItem> GetEventRouteItems(RoutedEvent routedEvent, UIElement originalSource, UIElement logicalSource)
         {
-            object logicalSource = GetClosestLogicalChild(this, originalSource);
-
             IEnumerable<EventRouteItem> items = GetRoutedEventHandlers(routedEvent).Select(handler => new EventRouteItem(handler, originalSource, logicalSource, this));
 
             if (routedEvent.RoutingStrategy == RoutingStrategy.Bubble ||
                 routedEvent.RoutingStrategy == RoutingStrategy.Tunnel)
             {
-                UIElement parent = VisualParent as UIElement;
+                UIElement visualParent = VisualParent as UIElement;
 
-                if (parent != null)
+                if (visualParent != null)
                 {
-                    IEnumerable<EventRouteItem> parentItems = parent.GetEventRouteItems(routedEvent, this);
+                    IEnumerable<EventRouteItem> parentItems = visualParent.GetEventRouteItems(routedEvent, originalSource, LogicalParent != visualParent ? visualParent : logicalSource);
 
                     if (routedEvent.RoutingStrategy == RoutingStrategy.Bubble)
                     {
@@ -737,28 +735,6 @@ namespace System.Windows
             {
                 ((UIElement)element).RemoveHandler(routedEvent, handler);
             }
-        }
-
-        private static object GetClosestLogicalChild(UIElement rootElement, UIElement childElement)
-        {
-            while (childElement != rootElement && childElement != null)
-            {
-                UIElement element = childElement;
-
-                while (element != null)
-                {
-                    if (element == rootElement)
-                    {
-                        return childElement;
-                    }
-
-                    element = element.LogicalParent;
-                }
-
-                childElement = childElement.VisualParent as UIElement;
-            }
-
-            return childElement;
         }
     }
 }
