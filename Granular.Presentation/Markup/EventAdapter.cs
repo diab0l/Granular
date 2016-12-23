@@ -55,7 +55,7 @@ namespace System.Windows.Markup
 
         private static RoutedEvent GetRoutedEvent(Type containingType, string eventName)
         {
-            return EventManager.FindRoutedEvent(containingType, eventName);
+            return EventManager.GetEvent(containingType, eventName);
         }
 
         private static EventInfo GetClrEvent(Type containingType, string eventName)

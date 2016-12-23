@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Windows.Markup;
+using Granular.Collections;
 
 namespace System.Windows
 {
@@ -60,6 +61,8 @@ namespace System.Windows
         public Type HandlerType { get; private set; }
         public Type OwnerType { get; private set; }
 
+        private ListDictionary<Type, RoutedEventHandlerItem> classesHandlers;
+
         public RoutedEvent(string name, RoutingStrategy routingStrategy, Type handlerType, Type ownerType)
         {
             this.Name = name;
@@ -83,6 +86,42 @@ namespace System.Windows
         {
             return String.Format("{0}.{1}", OwnerType.FullName, Name);
         }
+
+        public void RegisterClassHandler(Type classType, RoutedEventHandlerItem routedEventHandlerItem)
+        {
+            if (classesHandlers == null)
+            {
+                classesHandlers = new ListDictionary<Type, RoutedEventHandlerItem>();
+            }
+
+            classesHandlers.Add(classType, routedEventHandlerItem);
+        }
+
+        public IEnumerable<RoutedEventHandlerItem> GetClassHandlers(Type classType)
+        {
+            if (classesHandlers == null)
+            {
+                return new RoutedEventHandlerItem[0];
+            }
+
+            IEnumerable <RoutedEventHandlerItem> flattenedHandlers = null;
+            int classesHandlesCount = 0;
+
+            while (classType != null)
+            {
+                IEnumerable<RoutedEventHandlerItem> classHandlers = classesHandlers.GetValues(classType);
+
+                if (classHandlers.Any())
+                {
+                    flattenedHandlers = flattenedHandlers != null ? classHandlers.Concat(flattenedHandlers) : classHandlers;
+                    classesHandlesCount++;
+                }
+
+                classType = classType.BaseType;
+            }
+
+            return classesHandlesCount > 1 ? flattenedHandlers.ToArray() : (flattenedHandlers ?? new RoutedEventHandlerItem[0]);
+        }
     }
 
     public class RoutedEventTypeConverter : ITypeConverter
@@ -99,7 +138,7 @@ namespace System.Windows
                 throw new Granular.Exception("Invalid routed event name \"{0}\"", eventName.LocalName);
             }
 
-            RoutedEvent routedEvent = EventManager.FindRoutedEvent(containingType, eventName.MemberName);
+            RoutedEvent routedEvent = EventManager.GetEvent(containingType, eventName.MemberName);
 
             if (routedEvent == null)
             {

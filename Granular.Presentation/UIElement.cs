@@ -317,7 +317,7 @@ namespace System.Windows
 
         private IEnumerable<RoutedEventHandlerItem> ResolveRoutedEventHandlers(RoutedEvent routedEvent)
         {
-            return EventManager.GetFlattenedClassHandlers(GetType(), routedEvent).
+            return routedEvent.GetClassHandlers(GetType()).
                 Concat(GetRoutedEventHandlersOverride(routedEvent)).
                 Concat(routedEventHandlers.GetValues(routedEvent)).
                 ToArray();
