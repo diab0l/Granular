@@ -13,31 +13,17 @@ namespace System.Windows.Markup
         public static readonly XamlName KeyDirective = new XamlName("Key", NamespaceName);
         public static readonly XamlName SharedDirective = new XamlName("Shared", NamespaceName);
 
-        private static readonly IEnumerable<XamlName> Directives = new[]
-        {
-            ClassDirective,
-            NameDirective,
-            KeyDirective,
-            SharedDirective,
-        };
-
         public static readonly XamlName NullTypeName = new XamlName("Null", NamespaceName);
         public static readonly XamlName TypeTypeName = new XamlName("Type", NamespaceName);
 
-        private static readonly IEnumerable<XamlName> XamlTypes = new[]
-        {
-            NullTypeName,
-            TypeTypeName,
-        };
-
         public static bool IsDirective(string namespaceName, string localName)
         {
-            return namespaceName == NamespaceName && Directives.Contains(new XamlName(localName, namespaceName));
+            return namespaceName == NamespaceName && (localName == ClassDirective.LocalName || localName == NameDirective.LocalName || localName == KeyDirective.LocalName || localName == SharedDirective.LocalName);
         }
 
-        public static bool IsXamlType(XamlName name)
+        public static bool IsXamlType(string namespaceName, string localName)
         {
-            return XamlTypes.Contains(name);
+            return namespaceName == NamespaceName && (localName == NullTypeName.LocalName || localName == TypeTypeName.LocalName);
         }
     }
 }

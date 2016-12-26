@@ -15,7 +15,7 @@ namespace Granular.BuildTasks
     {
         public static string ParseTypeName(this ITypeParser typeParser, XamlName name)
         {
-            if (XamlLanguage.IsXamlType(name))
+            if (XamlLanguage.IsXamlType(name.NamespaceName, name.LocalName))
             {
                 return String.Empty;
             }

@@ -27,15 +27,22 @@ namespace System.Windows.Markup
             }
         }
 
-        private static readonly IDictionary<XamlName, Type> TypeProviders = new Dictionary<XamlName, Type>
-        {
-            { XamlLanguage.NullTypeName, typeof(NullProvider)},
-            { XamlLanguage.TypeTypeName,  typeof(TypeProvider) },
-        };
-
         public static bool TryParseXamlType(XamlName name, out Type type)
         {
-            return TypeProviders.TryGetValue(name, out type);
+            if (name == XamlLanguage.NullTypeName)
+            {
+                type = typeof(NullProvider);
+                return true;
+            }
+
+            if (name == XamlLanguage.TypeTypeName)
+            {
+                type = typeof(TypeProvider);
+                return true;
+            }
+
+            type = null;
+            return false;
         }
 
         public static Type ParseXamlType(XamlName xamlName)
