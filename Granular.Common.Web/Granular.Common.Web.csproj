@@ -150,6 +150,7 @@
     <Compile Include="Compatibility\Dictionary.cs" />
     <Compile Include="Compatibility\DictionaryExtensions.cs" />
     <Compile Include="Compatibility\Double.cs" />
+    <Compile Include="Compatibility\Enumerable.cs" />
     <Compile Include="Compatibility\EnumerableExtensions.cs" />
     <Compile Include="Compatibility\EqualityComparer.cs" />
     <Compile Include="Compatibility\EventInfoExtensions.cs" />
