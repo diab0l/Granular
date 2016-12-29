@@ -81,7 +81,7 @@ namespace System.Xml.Linq
         {
             this.element = element;
             this.Name = XName.Get(element.GetLocalName(), element.GetNamespaceURI());
-            this.attributes = element.Attributes.Select(node => new XAttribute(node));
+            this.attributes = element.Attributes.Select(node => new XAttribute(node)).ToArray();
         }
 
         public IEnumerable<XAttribute> Attributes()
