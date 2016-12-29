@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
+using Granular.Compatibility.Linq;
 
 namespace System.Windows.Markup
 {
