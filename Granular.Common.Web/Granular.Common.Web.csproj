@@ -53,6 +53,9 @@
     <Compile Include="..\Granular.Common\Collections\MinimalDictionary.cs">
       <Link>Collections\MinimalDictionary.cs</Link>
     </Compile>
+    <Compile Include="..\Granular.Common\Collections\MinimalSet.cs">
+      <Link>Collections\MinimalSet.cs</Link>
+    </Compile>
     <Compile Include="..\Granular.Common\Collections\NotifyCollectionChanged.cs">
       <Link>Collections\NotifyCollectionChanged.cs</Link>
     </Compile>
