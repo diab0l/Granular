@@ -6,6 +6,7 @@ using System.Reflection;
 using System.Text;
 using System.Windows.Markup;
 using Granular.Extensions;
+using Granular.Collections;
 
 namespace System.Windows.Markup
 {
@@ -350,6 +351,8 @@ namespace System.Windows.Markup
 
     public static class ElementCollectionContentInitailizer
     {
+        private static CacheDictionary<Type, bool> IsCollectionTypeCache = CacheDictionary<Type, bool>.CreateUsingStringKeys(ResolveIsCollectionType, type => type.FullName);
+
         public static IElementInitializer Create(IEnumerable<object> values, Type containingType)
         {
             Type keyType;
@@ -369,6 +372,11 @@ namespace System.Windows.Markup
         }
 
         public static bool IsCollectionType(Type type)
+        {
+            return IsCollectionTypeCache.GetValue(type);
+        }
+
+        private static bool ResolveIsCollectionType(Type type)
         {
             Type keyType;
             Type valueType;
