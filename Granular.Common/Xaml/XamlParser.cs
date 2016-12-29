@@ -122,12 +122,12 @@ namespace System.Windows.Markup
 
         private static bool IsMemberName(XName name)
         {
-            return name.LocalName.Contains('.') && !IsDirective(name);
+            return name.LocalName.Contains(".") && !IsDirective(name);
         }
 
         private static bool IsValueName(XName name)
         {
-            return !name.LocalName.Contains('.') && !IsDirective(name);
+            return !name.LocalName.Contains(".") && !IsDirective(name);
         }
 
         private static bool IsDirective(XName name)
