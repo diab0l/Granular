@@ -50,6 +50,9 @@
     <Compile Include="..\Granular.Common\Collections\ConvertedStringDictionary.cs">
       <Link>Collections\ConvertedStringDictionary.cs</Link>
     </Compile>
+    <Compile Include="..\Granular.Common\Collections\ConvertedStringSet.cs">
+      <Link>Collections\ConvertedStringSet.cs</Link>
+    </Compile>
     <Compile Include="..\Granular.Common\Collections\ListDictionary.cs">
       <Link>Collections\ListDictionary.cs</Link>
     </Compile>
