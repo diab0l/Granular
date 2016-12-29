@@ -56,7 +56,6 @@
     <Compile Include="Compatibility\Comparer.cs" />
     <Compile Include="Compatibility\Convert.cs" />
     <Compile Include="Compatibility\Dictionary.cs" />
-    <Compile Include="Compatibility\DictionaryExtensions.cs" />
     <Compile Include="Compatibility\Double.cs" />
     <Compile Include="Compatibility\EqualityComparer.cs" />
     <Compile Include="Compatibility\EventInfoExtensions.cs" />

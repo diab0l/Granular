@@ -524,11 +524,11 @@ namespace Granular.Presentation.Tests.Markup
             Assert.IsNotNull(dictionary);
             Assert.AreEqual(1, dictionary.Count);
 
-            Assert.AreEqual(1, ((LoaderTestElement)dictionary.GetValues().First()).Value1);
-            Assert.AreEqual(2, ((LoaderTestElement)dictionary.GetValues().First()).Value2);
+            Assert.AreEqual(1, ((LoaderTestElement)dictionary.Values.First()).Value1);
+            Assert.AreEqual(2, ((LoaderTestElement)dictionary.Values.First()).Value2);
 
-            Assert.AreEqual(3, ((LoaderTestElement)dictionary.GetKeys().First()).Value1);
-            Assert.AreEqual(4, ((LoaderTestElement)dictionary.GetKeys().First()).Value2);
+            Assert.AreEqual(3, ((LoaderTestElement)dictionary.Keys.First()).Value1);
+            Assert.AreEqual(4, ((LoaderTestElement)dictionary.Keys.First()).Value2);
         }
     }
 }

@@ -47,9 +47,9 @@ namespace System.Windows
 
         public int Count { get { return dictionary.Count + MergedDictionaries.Select(mergedDictionary => mergedDictionary.Count).DefaultIfEmpty(0).Sum(); } }
 
-        ICollection<object> IDictionary<object, object>.Keys { get { return dictionary.Keys; } }
+        public ICollection<object> Keys { get { return dictionary.Keys; } }
 
-        ICollection<object> IDictionary<object, object>.Values { get { return dictionary.Values; } }
+        public ICollection<object> Values { get { return dictionary.Values; } }
 
         public object this[object key]
         {
@@ -115,7 +115,7 @@ namespace System.Windows
 
         public bool Contains(object key)
         {
-            return dictionary.Keys.Contains(key) || MergedDictionaries.SelectMany(d => d.GetKeys()).Contains(key);
+            return dictionary.Keys.Contains(key) || MergedDictionaries.Any(d => ((IDictionary<object, object>)d).Keys.Contains(key));
         }
 
         public bool Remove(object key)
@@ -160,7 +160,7 @@ namespace System.Windows
 
         private static IEnumerable<object> GetMergedDictionariesKeys(ResourceDictionary dictionary)
         {
-            return dictionary.GetKeys().Concat(dictionary.MergedDictionaries.SelectMany(GetMergedDictionariesKeys));
+            return ((IDictionary<object, object>)dictionary).Keys.Concat(dictionary.MergedDictionaries.SelectMany(GetMergedDictionariesKeys));
         }
 
         private static ResourceDictionary LoadResourceDictionary(Uri source)
