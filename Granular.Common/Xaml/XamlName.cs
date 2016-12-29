@@ -12,6 +12,8 @@ namespace System.Windows.Markup
         public string LocalName { get; private set; }
         public string NamespaceName { get; private set; }
 
+        public string FullName { get; private set; }
+
         public string MemberName { get; private set; }
 
         public bool HasContainingTypeName { get; private set; }
@@ -23,6 +25,8 @@ namespace System.Windows.Markup
         {
             this.LocalName = localName ?? String.Empty;
             this.NamespaceName = namespaceName ?? String.Empty;
+
+            this.FullName = namespaceName == null ? localName : namespaceName + ":" + localName;
 
             int typeSeparatorIndex = LocalName.IndexOf('.');
 
@@ -41,7 +45,7 @@ namespace System.Windows.Markup
 
         public override string ToString()
         {
-            return NamespaceName.IsNullOrEmpty() ? LocalName : String.Format("{0}:{1}", NamespaceName, LocalName);
+            return FullName;
         }
 
         public override int GetHashCode()
