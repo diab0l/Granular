@@ -13,9 +13,9 @@ namespace System.Collections.Generic
 
         private Dictionary<T, object> dictionary;
 
-        public HashSet()
+        public HashSet(IEqualityComparer<T> comparer = null)
         {
-            dictionary = new Dictionary<T, object>();
+            dictionary = new Dictionary<T, object>(comparer);
         }
 
         public bool Contains(T item)
