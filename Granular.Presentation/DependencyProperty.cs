@@ -59,31 +59,6 @@ namespace System.Windows
             }
         }
 
-        private class TypeComparer : IComparer<Type>
-        {
-            public static readonly TypeComparer Default = new TypeComparer();
-
-            private TypeComparer()
-            {
-                //
-            }
-
-            public int Compare(Type x, Type y)
-            {
-                if (y.IsSubclassOf(x))
-                {
-                    return -1;
-                }
-
-                if (x.IsSubclassOf(y))
-                {
-                    return 1;
-                }
-
-                return 0;
-            }
-        }
-
         public string Name { get; private set; }
         public Type OwnerType { get; private set; }
         public Type PropertyType { get; private set; }
