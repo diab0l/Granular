@@ -161,6 +161,7 @@
     <Compile Include="Compatibility\SortedList.cs" />
     <Compile Include="Compatibility\STAThreadAttribute.cs" />
     <Compile Include="Compatibility\String.cs" />
+    <Compile Include="Compatibility\StringDictionary.cs" />
     <Compile Include="Compatibility\TimeSpan.cs" />
     <Compile Include="Compatibility\Type.cs" />
     <Compile Include="Compatibility\TypeExtensions.cs" />
