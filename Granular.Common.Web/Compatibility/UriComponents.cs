@@ -44,9 +44,9 @@ namespace Granular.Compatibility
 
         private UriComponents(string scheme, string userInfo, string host, int port, string path, string query, string fragment)
         {
-            bool isFile = System.String.Equals(scheme, "file", StringComparison.InvariantCultureIgnoreCase);
+            bool isFile = scheme.ToLower() == "file";
             bool isUnc = isFile && !host.IsNullOrEmpty();
-            bool isLocalhost = System.String.Equals(host, "localhost", StringComparison.InvariantCultureIgnoreCase);
+            bool isLocalhost = host.ToLower() == "localhost";
             string absolutePath = isFile && !isUnc ? path.TrimStart('/') : path;
 
             this.Scheme = scheme;
@@ -161,12 +161,12 @@ namespace Granular.Compatibility
 
         private static int GetDefaultPort(string scheme)
         {
-            if (System.String.Equals(scheme, "http", StringComparison.InvariantCultureIgnoreCase))
+            if (scheme.ToLower() == "http")
             {
                 return HttpDefaultPort;
             }
 
-            if (System.String.Equals(scheme, "https", StringComparison.InvariantCultureIgnoreCase))
+            if (scheme.ToLower() == "https")
             {
                 return HttpsDefaultPort;
             }
