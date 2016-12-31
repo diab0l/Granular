@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Granular.Extensions;
 
@@ -11,13 +10,13 @@ namespace Granular.Compatibility
     public class UriComponents
     {
         // scheme:[//[user:password@]host[:port]][/]path[?query][#fragment]
-        private static Regex AbsoluteUriRegex = new Regex(@"^(?<scheme>[^:]*):(//((?<userInfo>[^@]*)@)?(?<host>[^:/]*)(?<port>:[^/]*)?)?(?<path>/?[^\?#]*)(?<query>\?[^#]*)?((?<fragment>#.*))?$");
+        private static Granular.Compatibility.Regex AbsoluteUriRegex = new Granular.Compatibility.Regex(@"^([^:]*):(\/\/(([^@]*)@)?([^:\/]*)(:[^\/]*)?)?(\/?[^\?#]*)(\?[^#]*)?(#.*)?$");
 
         // [/]path[?query][#fragment]
-        private static Regex RelativeUriRegex = new Regex(@"^(?<path>/?[^\?#]*)(?<query>\?[^#]*)?((?<fragment>#.*))?$");
+        private static Granular.Compatibility.Regex RelativeUriRegex = new Granular.Compatibility.Regex(@"^(\/?[^\?#]*)(\?[^#]*)?(#.*)?$");
 
         // [drive]:/
-        private static Regex RootedPathRegex = new Regex(@"^(?<root>[a-zA-Z]:/)[^/]");
+        private static Granular.Compatibility.Regex RootedPathRegex = new Granular.Compatibility.Regex(@"^([a-zA-Z]:\/)[^\/]");
 
         private const int HttpDefaultPort = 80;
         private const int HttpsDefaultPort = 443;
@@ -81,11 +80,11 @@ namespace Granular.Compatibility
                 return new UriComponents(Scheme, UserInfo, Host, Port, "/" + CombineFilePath(AbsolutePath, relativeUriString), Query, Fragment);
             }
 
-            Match relativeUriMatch = RelativeUriRegex.Match(relativeUriString);
+            string[] relativeUriMatch = RelativeUriRegex.Match(relativeUriString);
 
-            string path = relativeUriMatch.Groups["path"].Value;
-            string query = relativeUriMatch.Groups["query"].Value;
-            string fragment = relativeUriMatch.Groups["fragment"].Value;
+            string path = relativeUriMatch[1].DefaultIfNullOrEmpty();
+            string query = relativeUriMatch[2].DefaultIfNullOrEmpty();
+            string fragment = relativeUriMatch[3].DefaultIfNullOrEmpty();
 
             string combinedPath = path.StartsWith("/") ? path : (AbsolutePath.Substring(0, AbsolutePath.LastIndexOf('/') + 1) + path);
 
@@ -94,7 +93,7 @@ namespace Granular.Compatibility
 
         private static string CombineFilePath(string path, string relativePath)
         {
-            if (RootedPathRegex.IsMatch(relativePath))
+            if (RootedPathRegex.Match(relativePath) != null)
             {
                 return relativePath;
             }
@@ -116,29 +115,29 @@ namespace Granular.Compatibility
         {
             uriString = uriString.Replace('\\', '/');
 
-            if (RootedPathRegex.IsMatch(uriString))
+            if (RootedPathRegex.Match(uriString) != null)
             {
                 uriString = $"file:///{uriString}";
             }
 
-            Match absoluteUriMatch = AbsoluteUriRegex.Match(uriString);
-            if (!absoluteUriMatch.Success)
+            string[] absoluteUriMatch = AbsoluteUriRegex.Match(uriString);
+            if (absoluteUriMatch == null)
             {
                 uriComponents = null;
                 return false;
             }
 
-            string scheme = absoluteUriMatch.Groups["scheme"].Value;
-            string userInfo = absoluteUriMatch.Groups["userInfo"].Value;
-            string path = absoluteUriMatch.Groups["path"].Value;
-            string query = absoluteUriMatch.Groups["query"].Value;
-            string fragment = absoluteUriMatch.Groups["fragment"].Value;
+            string scheme = absoluteUriMatch[1].DefaultIfNullOrEmpty();
+            string userInfo = absoluteUriMatch[4].DefaultIfNullOrEmpty();
+            string path = absoluteUriMatch[7].DefaultIfNullOrEmpty();
+            string query = absoluteUriMatch[8].DefaultIfNullOrEmpty();
+            string fragment = absoluteUriMatch[9].DefaultIfNullOrEmpty();
 
             string host;
             int port;
 
-            string hostGroupValue = absoluteUriMatch.Groups["host"].Value;
-            string portGroupValue = absoluteUriMatch.Groups["port"].Value;
+            string hostGroupValue = absoluteUriMatch[5].DefaultIfNullOrEmpty();
+            string portGroupValue = absoluteUriMatch[6].DefaultIfNullOrEmpty();
 
             if (portGroupValue.IsNullOrEmpty())
             {

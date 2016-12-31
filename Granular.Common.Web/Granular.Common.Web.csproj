@@ -158,6 +158,7 @@
     <Compile Include="Compatibility\HashSet.cs" />
     <Compile Include="Compatibility\ICommand.cs" />
     <Compile Include="Compatibility\PropertyInfoExtensions.cs" />
+    <Compile Include="Compatibility\Regex.cs" />
     <Compile Include="Compatibility\SortedList.cs" />
     <Compile Include="Compatibility\STAThreadAttribute.cs" />
     <Compile Include="Compatibility\String.cs" />

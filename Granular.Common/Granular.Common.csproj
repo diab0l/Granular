@@ -59,6 +59,7 @@
     <Compile Include="Compatibility\Double.cs" />
     <Compile Include="Compatibility\EqualityComparer.cs" />
     <Compile Include="Compatibility\EventInfoExtensions.cs" />
+    <Compile Include="Compatibility\Regex.cs" />
     <Compile Include="Compatibility\StringDictionary.cs" />
     <Compile Include="Compatibility\NonScriptableAttribute.cs" />
     <Compile Include="Compatibility\PropertyInfoExtensions.cs" />

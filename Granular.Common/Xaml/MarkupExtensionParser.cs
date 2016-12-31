@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Text.RegularExpressions;
 using Granular.Collections;
 
 namespace System.Windows.Markup
@@ -13,12 +12,12 @@ namespace System.Windows.Markup
 
         private static readonly Lexer lexer = new Lexer
         (
-            new RegexTokenDefinition(TokenType.Terminal, new Regex("[{}=,]")),
-            new RegexTokenDefinition(TokenType.Boolean, new Regex("true|True|false|False")),
-            new RegexTokenDefinition(TokenType.String, new Regex("'([^']|'')*'")),
-            new RegexTokenDefinition(TokenType.Integer, new Regex("[0-9]+")),
-            new RegexTokenDefinition(TokenType.Decimal, new Regex("[0-9]*\\.[0-9]+")),
-            new RegexTokenDefinition(TokenType.Identifier, new Regex(@"[A-Za-z0-9_:\(\)\.]*"))
+            new RegexTokenDefinition(TokenType.Terminal, new Granular.Compatibility.Regex("^[{}=,]")),
+            new RegexTokenDefinition(TokenType.Boolean, new Granular.Compatibility.Regex("^(true|True|false|False)")),
+            new RegexTokenDefinition(TokenType.String, new Granular.Compatibility.Regex("^'([^']|'')*'")),
+            new RegexTokenDefinition(TokenType.Integer, new Granular.Compatibility.Regex("^[0-9]+")),
+            new RegexTokenDefinition(TokenType.Decimal, new Granular.Compatibility.Regex("^[0-9]*\\.[0-9]+")),
+            new RegexTokenDefinition(TokenType.Identifier, new Granular.Compatibility.Regex(@"^[A-Za-z0-9_:\(\)\.]*"))
         );
 
         private string text;

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Text.RegularExpressions;
 using Granular.Extensions;
 
 namespace Granular.Compatibility
@@ -13,7 +12,7 @@ namespace Granular.Compatibility
         public static readonly System.TimeSpan MaxValue = System.TimeSpan.FromDays(10000);
 
         //[ws][-]{[d.]hh:mm[:ss[.ff]]|d}[ws]
-        private static readonly Regex TimeSpanFormatRegex = new Regex(@"(-?)(((([0-9]+)\.)?([0-9]+):([0-9]+)(:([0-9]*)(\.([0-9]+))?)?)|([0-9]+))");
+        private static readonly Granular.Compatibility.Regex TimeSpanFormatRegex = new Granular.Compatibility.Regex(@"^(-?)(((([0-9]+)\.)?([0-9]+):([0-9]+)(:([0-9]*)(\.([0-9]+))?)?)|([0-9]+))$");
         private const int TimeSpanFormatSignGroupIndex = 1;
         private const int TimeSpanFormatDaysGroupIndex = 5;
         private const int TimeSpanFormatHoursGroupIndex = 6;
@@ -30,21 +29,21 @@ namespace Granular.Compatibility
             int seconds = 0;
             int milliseconds = 0;
 
-            System.Text.RegularExpressions.Match match = TimeSpanFormatRegex.Match(s);
+            string[] match = TimeSpanFormatRegex.Match(s);
 
-            if (!match.Success)
+            if (match == null)
             {
                 result = System.TimeSpan.Zero;
                 return false;
             }
 
-            if (!Int32.TryParse(match.Groups[TimeSpanFormatDaysAlternativeGroupIndex].Value, out days))
+            if (!Int32.TryParse(match[TimeSpanFormatDaysAlternativeGroupIndex], out days))
             {
-                days = Int32.Parse(match.Groups[TimeSpanFormatDaysGroupIndex].Value.DefaultIfNullOrEmpty("0"));
-                hours = Int32.Parse(match.Groups[TimeSpanFormatHoursGroupIndex].Value.DefaultIfNullOrEmpty("0"));
-                minutes = Int32.Parse(match.Groups[TimeSpanFormatMinutesGroupIndex].Value.DefaultIfNullOrEmpty("0"));
-                seconds = Int32.Parse(match.Groups[TimeSpanFormatSecondsGroupIndex].Value.DefaultIfNullOrEmpty("0"));
-                milliseconds = Int32.Parse(match.Groups[TimeSpanFormatMillisecondsGroupIndex].Value.DefaultIfNullOrEmpty("000").PadRight(3, '0'));
+                days = Int32.Parse(match[TimeSpanFormatDaysGroupIndex].DefaultIfNullOrEmpty("0"));
+                hours = Int32.Parse(match[TimeSpanFormatHoursGroupIndex].DefaultIfNullOrEmpty("0"));
+                minutes = Int32.Parse(match[TimeSpanFormatMinutesGroupIndex].DefaultIfNullOrEmpty("0"));
+                seconds = Int32.Parse(match[TimeSpanFormatSecondsGroupIndex].DefaultIfNullOrEmpty("0"));
+                milliseconds = Int32.Parse(match[TimeSpanFormatMillisecondsGroupIndex].DefaultIfNullOrEmpty("000").PadRight(3, '0'));
             }
 
             if (hours >= 24 || minutes >= 60 || seconds >= 60 || milliseconds >= 1000)
@@ -53,7 +52,7 @@ namespace Granular.Compatibility
                 return false;
             }
 
-            if (match.Groups[TimeSpanFormatSignGroupIndex].Value == "-")
+            if (match[TimeSpanFormatSignGroupIndex] == "-")
             {
                 days = -days;
                 hours = -hours;

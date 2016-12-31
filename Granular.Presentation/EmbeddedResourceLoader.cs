@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text;
-using System.Text.RegularExpressions;
 using Granular.Extensions;
 using Granular.Collections;
 using System.Windows.Markup;
@@ -32,7 +31,7 @@ namespace System.Windows
             }
         }
 
-        private static readonly Regex ResourceUriRegex = new Regex("/([^;]*);component/(.*)");
+        private static readonly Granular.Compatibility.Regex ResourceUriRegex = new Granular.Compatibility.Regex("/([^;]*);component/(.*)");
         private const int ResourceUriAssemblyNameGroupIndex = 1;
         private const int ResourceUriPathGroupIndex = 2;
 
@@ -89,17 +88,17 @@ namespace System.Windows
 
         private static bool TryParseAbsolutePath(string absolutePath, out string assemblyName, out string resourcePath)
         {
-            Match match = ResourceUriRegex.Match(absolutePath);
+            string[] matches = ResourceUriRegex.Match(absolutePath);
 
-            if (!match.Success)
+            if (matches == null)
             {
                 assemblyName = null;
                 resourcePath = null;
                 return false;
             }
 
-            assemblyName = match.Groups[ResourceUriAssemblyNameGroupIndex].Value;
-            resourcePath = match.Groups[ResourceUriPathGroupIndex].Value;
+            assemblyName = matches[ResourceUriAssemblyNameGroupIndex];
+            resourcePath = matches[ResourceUriPathGroupIndex];
             return true;
         }
 

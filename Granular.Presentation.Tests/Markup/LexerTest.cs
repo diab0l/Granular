@@ -15,8 +15,8 @@ namespace Granular.Presentation.Tests.Markup
         public void LexerBasicTest()
         {
             Lexer lexer = new Lexer(
-                new RegexTokenDefinition("A", new Regex("a+")),
-                new RegexTokenDefinition("B", new Regex("b+")));
+                new RegexTokenDefinition("A", new Granular.Compatibility.Regex("^a+")),
+                new RegexTokenDefinition("B", new Granular.Compatibility.Regex("^b+")));
 
             IEnumerator<Token> tokenEnumerator = lexer.GetTokens("aaa b   a \t bbb").GetEnumerator();
 

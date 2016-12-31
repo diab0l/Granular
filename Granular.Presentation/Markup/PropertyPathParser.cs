@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Text.RegularExpressions;
 using System.Windows.Markup;
 using Granular.Collections;
 
@@ -14,8 +13,8 @@ namespace System.Windows.Markup
 
         private static readonly Lexer lexer = new Lexer
         (
-            new RegexTokenDefinition(TokenType.Terminal, new Regex(@"[\(\)\[\]\.,]")),
-            new RegexTokenDefinition(TokenType.Value, new Regex(@"[^\(\)\[\]\.\,]*"))
+            new RegexTokenDefinition(TokenType.Terminal, new Granular.Compatibility.Regex(@"^[\(\)\[\]\.,]")),
+            new RegexTokenDefinition(TokenType.Value, new Granular.Compatibility.Regex(@"^[^\(\)\[\]\.\,]*"))
         );
 
         private string text;

@@ -1,8 +1,8 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Text.RegularExpressions;
 
 namespace System.Windows.Markup
 {
@@ -33,9 +33,9 @@ namespace System.Windows.Markup
     public class RegexTokenDefinition : ITokenDefinition
     {
         private object id;
-        private Regex regex;
+        private Granular.Compatibility.Regex regex;
 
-        public RegexTokenDefinition(object id, Regex regex)
+        public RegexTokenDefinition(object id, Granular.Compatibility.Regex regex)
         {
             this.id = id;
             this.regex = regex;
@@ -43,11 +43,11 @@ namespace System.Windows.Markup
 
         public Token Match(string stream, int start)
         {
-            Match match = regex.Match(stream.Substring(start));
+            string[] matches = regex.Match(stream.Substring(start));
 
-            if (match.Success && match.Index == 0)
+            if (matches != null)
             {
-                return new Token(id, match.Groups[0].Value, start);
+                return new Token(id, matches[0], start);
             }
 
             return null;
@@ -56,8 +56,8 @@ namespace System.Windows.Markup
 
     public class Lexer
     {
-        private static readonly Regex WhiteSpaceRegex = new Regex("[ \t]+");
         private IEnumerable<ITokenDefinition> tokensDefinition;
+        private static readonly Granular.Compatibility.Regex WhiteSpaceRegex = new Granular.Compatibility.Regex("^[ \t]+");
 
         public Lexer(params ITokenDefinition[] tokensDefinition)
         {
@@ -70,11 +70,11 @@ namespace System.Windows.Markup
 
             while (start < stream.Length)
             {
-                Match match = WhiteSpaceRegex.Match(stream.Substring(start));
+                string[] matches = WhiteSpaceRegex.Match(stream.Substring(start));
 
-                if (match.Success && match.Groups[0].Index == 0)
+                if (matches != null)
                 {
-                    start += match.Groups[0].Length;
+                    start += matches[0].Length;
                 }
 
                 Token selectedToken = null;
