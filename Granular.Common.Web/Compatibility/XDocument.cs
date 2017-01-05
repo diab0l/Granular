@@ -1,6 +1,6 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using Bridge;
 using Bridge.Html5;
 using Granular.Extensions;
@@ -14,36 +14,51 @@ namespace System.Xml.Linq
 
     public class XText : XNode
     {
-        public string Value { get; set; }
+        public string Value { get { return node.NodeValue; } }
 
         private Node node;
 
         public XText(Node node)
         {
             this.node = node;
-            this.Value = node.NodeValue;
         }
     }
 
     public abstract class XContainer : XNode
     {
-        private Node node;
-        private IEnumerable<XNode> nodes;
-        private IEnumerable<XElement> elements;
+        private XNode[] nodes;
+        private XElement[] elements;
 
         public XContainer(Node node)
         {
-            this.node = node;
-            this.nodes = node.ChildNodes.TrySelect<Node, XNode>(XNodeFactory.TryCreateNode).ToArray();
-            this.elements = nodes.OfType<XElement>().ToArray();
+            nodes = new XNode[0];
+            elements = new XElement[0];
+
+            for (int i = 0; i < node.ChildNodes.Length; i++)
+            {
+                Node childNode = node.ChildNodes[i];
+
+                if (childNode.NodeType == NodeType.Element)
+                {
+                    XElement childElement = new XElement((Element)childNode);
+                    elements.Push(childElement);
+                    nodes.Push(childElement);
+                }
+
+                if (childNode.NodeType == NodeType.Text && !childNode.NodeValue.IsNullOrWhiteSpace())
+                {
+                    XText childText = new XText(childNode);
+                    nodes.Push(childText);
+                }
+            }
         }
 
-        public IEnumerable<XNode> Nodes()
+        public XNode[] Nodes()
         {
             return nodes;
         }
 
-        public IEnumerable<XElement> Elements()
+        public XElement[] Elements()
         {
             return elements;
         }
@@ -59,7 +74,7 @@ namespace System.Xml.Linq
             base(node)
         {
             this.node = node;
-            this.Root = new XElement((Element)node.ChildNodes.Single());
+            this.Root = new XElement((Element)node.FirstChild);
         }
 
         public static XDocument Parse(string text)
@@ -71,20 +86,25 @@ namespace System.Xml.Linq
 
     public class XElement : XContainer
     {
-        public XName Name { get; set; }
+        public XName Name { get; private set; }
 
         private Element element;
-        private IEnumerable<XAttribute> attributes;
+        private XAttribute[] attributes;
 
         public XElement(Element element) :
             base(element)
         {
             this.element = element;
             this.Name = XName.Get(element.GetLocalName(), element.GetNamespaceURI());
-            this.attributes = element.Attributes.Select(node => new XAttribute(node)).ToArray();
+
+            this.attributes = new XAttribute[element.Attributes.Length];
+            for (int i = 0; i < attributes.Length; i++)
+            {
+                attributes[i] = new XAttribute(element.Attributes[i]);
+            }
         }
 
-        public IEnumerable<XAttribute> Attributes()
+        public XAttribute[] Attributes()
         {
             return attributes;
         }
@@ -115,7 +135,7 @@ namespace System.Xml.Linq
     public class XAttribute
     {
         public XName Name { get; private set; }
-        public string Value { get; set; }
+        public string Value { get; private set; }
 
         public bool IsNamespaceDeclaration { get; private set; }
 
@@ -139,27 +159,6 @@ namespace System.Xml.Linq
             }
 
             this.Value = node.NodeValue;
-        }
-    }
-
-    public static class XNodeFactory
-    {
-        public static bool TryCreateNode(Node node, out XNode result)
-        {
-            if (node.NodeType == NodeType.Element)
-            {
-                result = new XElement((Element)node);
-                return true;
-            }
-
-            if (node.NodeType == NodeType.Text && !node.NodeValue.IsNullOrWhiteSpace())
-            {
-                result = new XText(node);
-                return true;
-            }
-
-            result = null;
-            return false;
         }
     }
 
