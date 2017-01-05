@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 
@@ -8,7 +9,7 @@ namespace Granular.Collections
     {
         public bool IsEmpty { get; private set; }
 
-        private IEnumerator<T> enumerator;
+        private IEnumerator enumerator;
 
         public ReadOnlyStack(IEnumerable<T> source)
         {
@@ -24,7 +25,7 @@ namespace Granular.Collections
                 throw new Granular.Exception("Stack is empty");
             }
 
-            T current = enumerator.Current;
+            T current = (dynamic)enumerator.Current;
 
             MoveNext();
 
@@ -38,7 +39,7 @@ namespace Granular.Collections
                 throw new Granular.Exception("Stack is empty");
             }
 
-            return enumerator.Current;
+            return (dynamic)enumerator.Current;
         }
 
         private void MoveNext()

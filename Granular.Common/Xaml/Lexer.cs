@@ -56,8 +56,8 @@ namespace System.Windows.Markup
 
     public class Lexer
     {
-        private IEnumerable<ITokenDefinition> tokensDefinition;
         private static readonly Granular.Compatibility.Regex WhiteSpaceRegex = new Granular.Compatibility.Regex("^[ \t]+");
+        private ITokenDefinition[] tokensDefinition;
 
         public Lexer(params ITokenDefinition[] tokensDefinition)
         {
