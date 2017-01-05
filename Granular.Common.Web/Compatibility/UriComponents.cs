@@ -59,9 +59,9 @@ namespace Granular.Compatibility
             this.IsFile = isFile;
             this.IsUnc = isUnc;
             this.IsLoopback = isFile && !isUnc || isLocalhost;
-            this.LocalPath = isUnc ? System.String.Format("\\\\{0}{1}", host, absolutePath.Replace('/', '\\')) : isFile ? absolutePath.Replace('/', '\\') : absolutePath;
+            this.LocalPath = isUnc ? "\\\\" + host + absolutePath.Replace('/', '\\') : isFile ? absolutePath.Replace('/', '\\') : absolutePath;
             this.IsDefaultPort = Port == GetDefaultPort(scheme);
-            this.PathAndQuery = $"{absolutePath}{query}";
+            this.PathAndQuery = absolutePath + query;
             this.AbsoluteUri = GetAbsoluteUri(scheme, userInfo, host, port, path, query, fragment);
             this.Segments = GetPathSegments(path);
         }
@@ -117,7 +117,7 @@ namespace Granular.Compatibility
 
             if (RootedPathRegex.Match(uriString) != null)
             {
-                uriString = $"file:///{uriString}";
+                uriString = "file:///" + uriString;
             }
 
             string[] absoluteUriMatch = AbsoluteUriRegex.Match(uriString);
@@ -176,7 +176,13 @@ namespace Granular.Compatibility
         private static string[] GetPathSegments(string path)
         {
             string[] segments = path.Split('/');
-            return segments.Take(segments.Length - 1).Select(segment => $"{segment}/").Concat(new[] { segments.Last() }).ToArray();
+
+            for (int i = 0; i < segments.Length - 1; i++)
+            {
+                segments[i] = segments[i] + "/";
+            }
+
+            return segments;
         }
 
         private static string GetAbsoluteUri(string scheme, string userInfo, string host, int port, string path, string query, string fragment)
