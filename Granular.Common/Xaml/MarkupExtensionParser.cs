@@ -242,12 +242,12 @@ namespace System.Windows.Markup
         private static bool IsMarkupExtension(string text)
         {
             text = text.Trim();
-            return text.StartsWith("{") && text.EndsWith("}");
+            return Granular.Compatibility.String.StartsWith(text, '{') && Granular.Compatibility.String.EndsWith(text, '}');
         }
 
         private static bool IsEscaped(string text)
         {
-            return text.StartsWith("{}");
+            return Granular.Compatibility.String.StartsWith(text, "{}");
         }
 
         private static string GetEscapedText(string text)

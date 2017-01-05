@@ -18,5 +18,25 @@ namespace Granular.Compatibility
                 }
             }
         }
+
+        public static bool StartsWith(string s, char value)
+        {
+            return s.Length > 0 && s[0] == value;
+        }
+
+        public static bool EndsWith(string s, char value)
+        {
+            return s.Length > 0 && s[s.Length - 1] == value;
+        }
+
+        public static bool StartsWith(string s, string value)
+        {
+            return s.StartsWith(value);
+        }
+
+        public static bool EndsWith(string s, string value)
+        {
+            return s.EndsWith(value);
+        }
     }
 }

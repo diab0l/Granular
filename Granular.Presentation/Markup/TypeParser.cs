@@ -58,7 +58,7 @@ namespace System.Windows.Markup
 
         private static bool TryGetType(XamlName xamlName, out Type type)
         {
-            if (xamlName.NamespaceName.StartsWith(ClrNamespacePrefix))
+            if (Granular.Compatibility.String.StartsWith(xamlName.NamespaceName, ClrNamespacePrefix))
             {
                 string clrNamespace = GetClrNamespace(xamlName.NamespaceName.Substring(ClrNamespacePrefix.Length));
                 string assemblyName = GetAssemblyName(xamlName.NamespaceName.Substring(ClrNamespacePrefix.Length));
