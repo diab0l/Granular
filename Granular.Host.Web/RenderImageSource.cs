@@ -38,7 +38,7 @@ namespace Granular.Host
         private RenderImageSourceFactory(IHtmlValueConverter converter)
         {
             this.converter = converter;
-            objectUrlCache = new CacheDictionary<string, string>(ResolveObjectUrl);
+            objectUrlCache = CacheDictionary<string, string>.CreateUsingStringKeys(ResolveObjectUrl);
         }
 
         public IRenderImageSource CreateRenderImageSource(Uri uri, Rect sourceRect)

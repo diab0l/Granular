@@ -165,7 +165,7 @@ namespace System.Windows.Markup
 
     public static class KnownTypes
     {
-        private static CacheDictionary<Type, ITypeConverter> typeConverterCache = new CacheDictionary<Type, ITypeConverter>(ResolveTypeConverter);
+        private static CacheDictionary<Type, ITypeConverter> typeConverterCache = CacheDictionary<Type, ITypeConverter>.CreateUsingStringKeys(ResolveTypeConverter, type => type.FullName);
 
         public static ITypeConverter GetTypeConverter(Type type)
         {

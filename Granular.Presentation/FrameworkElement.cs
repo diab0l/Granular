@@ -270,7 +270,7 @@ namespace System.Windows
             Triggers = new ObservableCollection<ITrigger>();
             Triggers.CollectionChanged += OnTriggersCollectionChanged;
 
-            resourcesCache = new CacheDictionary<object, object>(TryResolveResource);
+            resourcesCache = CacheDictionary<object, object>.Create(TryResolveResource);
 
             actualWidthValueEntry = GetValueEntry(ActualWidthPropertyKey);
             actualHeightValueEntry = GetValueEntry(ActualHeightPropertyKey);

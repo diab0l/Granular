@@ -60,6 +60,7 @@ namespace System.Windows
         public RoutingStrategy RoutingStrategy { get; private set; }
         public Type HandlerType { get; private set; }
         public Type OwnerType { get; private set; }
+        public string StringKey { get; private set; }
 
         private ListDictionary<Type, RoutedEventHandlerItem> classesHandlers;
 
@@ -69,6 +70,7 @@ namespace System.Windows
             this.RoutingStrategy = routingStrategy;
             this.HandlerType = handlerType;
             this.OwnerType = ownerType;
+            this.StringKey = ownerType.FullName + "," + name;
         }
 
         public RoutedEvent AddOwner(Type ownerType)

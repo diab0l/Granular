@@ -76,7 +76,7 @@ namespace System.Windows.Input
 
     public static class Cursors
     {
-        private static readonly CacheDictionary<CursorType, Cursor> cursors = new CacheDictionary<CursorType, Cursor>(cursorType => new Cursor(cursorType));
+        private static readonly CacheDictionary<CursorType, Cursor> cursors = CacheDictionary<CursorType, Cursor>.Create(cursorType => new Cursor(cursorType));
 
         public static Cursor None { get { return cursors.GetValue(CursorType.None); } }
         public static Cursor No { get { return cursors.GetValue(CursorType.No); } }

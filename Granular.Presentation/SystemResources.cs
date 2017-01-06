@@ -43,7 +43,7 @@ namespace System.Windows
 
         public SystemResources()
         {
-            resourcesCache = new CacheDictionary<object, object>(TryResolveResource);
+            resourcesCache = CacheDictionary<object, object>.Create(TryResolveResource);
         }
 
         public bool TryGetResource(object resourceKey, out object value)

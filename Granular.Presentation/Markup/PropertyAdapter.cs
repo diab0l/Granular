@@ -22,6 +22,7 @@ namespace System.Windows.Markup
     {
         public Type Type { get; private set; }
         public string MemberName { get; private set; }
+        public string StringKey { get; private set; }
 
         private int hashCode;
 
@@ -29,6 +30,7 @@ namespace System.Windows.Markup
         {
             this.Type = type;
             this.MemberName = memberName;
+            this.StringKey = Type.FullName + "," + MemberName;
 
             this.hashCode = type.GetHashCode() ^ memberName.GetHashCode();
         }
@@ -55,7 +57,7 @@ namespace System.Windows.Markup
 
     public static class PropertyAdapter
     {
-        private static CacheDictionary<TypeMemberKey, IPropertyAdapter> adaptersCache = new CacheDictionary<TypeMemberKey, IPropertyAdapter>(TryCreateAdapter);
+        private static CacheDictionary<TypeMemberKey, IPropertyAdapter> adaptersCache = CacheDictionary<TypeMemberKey, IPropertyAdapter>.CreateUsingStringKeys(TryCreateAdapter, typeMemberKey => typeMemberKey.StringKey);
 
         public static IPropertyAdapter CreateAdapter(Type targetType, string propertyName)
         {

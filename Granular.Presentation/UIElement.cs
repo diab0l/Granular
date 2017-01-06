@@ -212,7 +212,7 @@ namespace System.Windows
             logicalChildren = new List<object>();
             LogicalChildren = new ReadOnlyCollection<object>(logicalChildren);
             routedEventHandlers = new ListDictionary<RoutedEvent, RoutedEventHandlerItem>();
-            routedEventHandlersCache = new CacheDictionary<RoutedEvent, IEnumerable<RoutedEventHandlerItem>>(ResolveRoutedEventHandlers);
+            routedEventHandlersCache = CacheDictionary<RoutedEvent, IEnumerable<RoutedEventHandlerItem>>.CreateUsingStringKeys(ResolveRoutedEventHandlers, routedEvent => routedEvent.StringKey);
             PreviousFinalRect = Rect.Empty;
             PreviousAvailableSize = Size.Empty;
             previousDesiredSize = Size.Empty;

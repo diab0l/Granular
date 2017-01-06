@@ -15,28 +15,15 @@ namespace Granular.Collections
         private TryResolveValue tryResolveValue;
         private ResolveValue resolveValue;
 
-        private Dictionary<TKey, TValue> dictionary;
-        private HashSet<TKey> unsetValues;
+        private IMinimalDictionary values;
+        private IMinimalSet unsetValues;
 
-        public CacheDictionary(ResolveValue resolveValue, IEqualityComparer<TKey> equalityComparer = null) :
-            this(null, resolveValue, equalityComparer)
-        {
-            //
-        }
-
-        public CacheDictionary(TryResolveValue tryResolveValue, IEqualityComparer<TKey> equalityComparer = null) :
-            this(tryResolveValue, null, equalityComparer)
-        {
-            //
-        }
-
-        private CacheDictionary(TryResolveValue tryResolveValue, ResolveValue resolveValue, IEqualityComparer<TKey> equalityComparer)
+        private CacheDictionary(TryResolveValue tryResolveValue, ResolveValue resolveValue, IMinimalDictionary valuesContainer, IMinimalSet unsetValuesContainer)
         {
             this.tryResolveValue = tryResolveValue;
             this.resolveValue = resolveValue;
-
-            dictionary = new Dictionary<TKey, TValue>(equalityComparer);
-            unsetValues = new HashSet<TKey>();
+            this.values = valuesContainer;
+            this.unsetValues = unsetValuesContainer;
         }
 
         public TValue GetValue(TKey key)
@@ -52,8 +39,18 @@ namespace Granular.Collections
 
         public bool TryGetValue(TKey key, out TValue value)
         {
-            if (dictionary.TryGetValue(key, out value))
+            object result;
+
+            if (values.TryGetValue(key, out result))
             {
+                value = (dynamic)result;
+                return true;
+            }
+
+            if (resolveValue != null)
+            {
+                value = resolveValue(key);
+                values.Add(key, value);
                 return true;
             }
 
@@ -63,16 +60,9 @@ namespace Granular.Collections
                 return false;
             }
 
-            if (tryResolveValue != null && tryResolveValue(key, out value))
+            if (tryResolveValue(key, out value))
             {
-                dictionary.Add(key, value);
-                return true;
-            }
-
-            if (resolveValue != null)
-            {
-                value = resolveValue(key);
-                dictionary.Add(key, value);
+                values.Add(key, value);
                 return true;
             }
 
@@ -83,19 +73,39 @@ namespace Granular.Collections
 
         public bool Contains(TKey key)
         {
-            return dictionary.ContainsKey(key) || unsetValues.Contains(key);
+            return values.ContainsKey(key) || unsetValues.Contains(key);
         }
 
         public void Remove(TKey key)
         {
-            dictionary.Remove(key);
+            values.Remove(key);
             unsetValues.Remove(key);
         }
 
         public void Clear()
         {
-            dictionary.Clear();
+            values.Clear();
             unsetValues.Clear();
+        }
+
+        public static CacheDictionary<TKey, TValue> Create(TryResolveValue tryResolveValue, IEqualityComparer<TKey> comparer = null)
+        {
+            return new CacheDictionary<TKey, TValue>(tryResolveValue, null, new MinimalDictionary<TKey, TValue>(comparer), new MinimalSet<TKey>(comparer));
+        }
+
+        public static CacheDictionary<TKey, TValue> Create(ResolveValue resolveValue, IEqualityComparer<TKey> comparer = null)
+        {
+            return new CacheDictionary<TKey, TValue>(null, resolveValue, new MinimalDictionary<TKey, TValue>(comparer), new MinimalSet<TKey>(comparer));
+        }
+
+        public static CacheDictionary<TKey, TValue> CreateUsingStringKeys(TryResolveValue tryResolveValue, Func<TKey, string> getStringKey = null)
+        {
+            return new CacheDictionary<TKey, TValue>(tryResolveValue, null, new ConvertedStringDictionary<TKey, TValue>(getStringKey), new ConvertedStringSet<TKey>(getStringKey));
+        }
+
+        public static CacheDictionary<TKey, TValue> CreateUsingStringKeys(ResolveValue resolveValue, Func<TKey, string> getStringKey = null)
+        {
+            return new CacheDictionary<TKey, TValue>(null, resolveValue, new ConvertedStringDictionary<TKey, TValue>(getStringKey), new ConvertedStringSet<TKey>(getStringKey));
         }
     }
 }

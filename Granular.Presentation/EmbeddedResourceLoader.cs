@@ -35,8 +35,8 @@ namespace System.Windows
         private const int ResourceUriAssemblyNameGroupIndex = 1;
         private const int ResourceUriPathGroupIndex = 2;
 
-        private static readonly CacheDictionary<Uri, byte[]> resourceDataCache = new CacheDictionary<Uri, byte[]>(ResolveResourceData, UriEqualityComparer.Default);
-        private static readonly CacheDictionary<Uri, object> resourceElementCache = new CacheDictionary<Uri, object>(ResolveResourceElement, UriEqualityComparer.Default);
+        private static readonly CacheDictionary<Uri, byte[]> resourceDataCache = CacheDictionary<Uri, byte[]>.CreateUsingStringKeys(ResolveResourceData, uri => uri.GetAbsoluteUri());
+        private static readonly CacheDictionary<Uri, object> resourceElementCache = CacheDictionary<Uri, object>.CreateUsingStringKeys(ResolveResourceElement, uri => uri.GetAbsoluteUri());
 
         public static byte[] LoadResourceData(Uri resourceUri)
         {

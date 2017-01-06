@@ -17,7 +17,7 @@ namespace System.Windows.Markup
 
     public static class EventAdapter
     {
-        private static CacheDictionary<TypeMemberKey, IEventAdapter> adaptersCache = new CacheDictionary<TypeMemberKey, IEventAdapter>(TryCreateAdapter);
+        private static CacheDictionary<TypeMemberKey, IEventAdapter> adaptersCache = CacheDictionary<TypeMemberKey, IEventAdapter>.CreateUsingStringKeys(TryCreateAdapter, typeMemberKey => typeMemberKey.StringKey);
 
         public static IEventAdapter CreateAdapter(Type targetType, string eventName)
         {

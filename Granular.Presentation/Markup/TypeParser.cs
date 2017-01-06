@@ -14,7 +14,7 @@ namespace System.Windows.Markup
         private static string ClrNamespacePrefix = "clr-namespace:";
         private static readonly string AssemblyQualifier = ";assembly=";
 
-        private static readonly CacheDictionary<XamlName, Type> resolvedTypesCache = new CacheDictionary<XamlName, Type>(TryResolveType);
+        private static readonly CacheDictionary<XamlName, Type> resolvedTypesCache = CacheDictionary<XamlName, Type>.CreateUsingStringKeys(TryResolveType, xamlName => xamlName.FullName);
         private static IEnumerable<XmlnsDefinitionAttribute> xmlnsDefinitionAttributesCache;
 
         public static Type ParseType(string prefixedTypeName, XamlNamespaces namespaces)
@@ -44,7 +44,7 @@ namespace System.Windows.Markup
             return resolvedTypesCache.TryGetValue(name, out type);
         }
 
-        public static bool TryResolveType(XamlName name, out Type type)
+        private static bool TryResolveType(XamlName name, out Type type)
         {
             if (XamlTypes.TryParseXamlType(name, out type))
             {

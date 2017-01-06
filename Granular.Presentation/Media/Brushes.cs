@@ -151,7 +151,7 @@ namespace System.Windows.Media
         public static SolidColorBrush Yellow { get { return brushes.GetValue(Colors.Yellow); } }
         public static SolidColorBrush YellowGreen { get { return brushes.GetValue(Colors.YellowGreen); } }
 
-        private static readonly CacheDictionary<Color, SolidColorBrush> brushes = new CacheDictionary<Color, SolidColorBrush>(CreateBrush);
+        private static readonly CacheDictionary<Color, SolidColorBrush> brushes = CacheDictionary<Color, SolidColorBrush>.Create(CreateBrush);
 
         private static SolidColorBrush CreateBrush(Color color)
         {

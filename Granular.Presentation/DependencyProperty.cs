@@ -95,8 +95,8 @@ namespace System.Windows
             typeMetadata = new Dictionary<Type, PropertyMetadata>();
             typeMetadata.Add(OwnerType, ownerMetadata);
 
-            typeMetadataCache = new CacheDictionary<Type, PropertyMetadata>(ResolveTypeMetadata);
-            typeContainsCache = new CacheDictionary<Type, bool>(ResolveTypeContains);
+            typeMetadataCache = CacheDictionary<Type, PropertyMetadata>.CreateUsingStringKeys(ResolveTypeMetadata, type => type.FullName);
+            typeContainsCache = CacheDictionary<Type, bool>.CreateUsingStringKeys(ResolveTypeContains, type => type.FullName);
         }
 
         public override int GetHashCode()
