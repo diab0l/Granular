@@ -10,6 +10,7 @@ namespace System.Windows
 {
     [ContentProperty("Setters")]
     [DictionaryKeyProperty("Key")]
+    [DeferredValueKeyProvider(typeof(StyleKeyProvider))]
     [Bridge.Reflectable(Bridge.MemberAccessibility.PublicInstanceProperty)]
     public class Style
     {
@@ -120,6 +121,26 @@ namespace System.Windows
         public override string ToString()
         {
             return String.Format("StyleKey({0})", TargetType.Name);
+        }
+    }
+
+    public class StyleKeyProvider : IDeferredValueKeyProvider
+    {
+        public object GetValueKey(XamlElement element)
+        {
+            XamlMember keyMember = element.Members.SingleOrDefault(member => member.Name.LocalName == "Key");
+            if (keyMember != null)
+            {
+                return ElementFactory.FromValue(keyMember.Values.Single(), typeof(object), element.Namespaces, element.SourceUri).CreateElement(new InitializeContext());
+            }
+
+            XamlMember targetTypeMember = element.Members.SingleOrDefault(member => member.Name.LocalName == "TargetType");
+            if (targetTypeMember != null)
+            {
+                return new StyleKey((Type)ElementFactory.FromValue(targetTypeMember.Values.Single(), typeof(Type), element.Namespaces, element.SourceUri).CreateElement(new InitializeContext()));
+            }
+
+            throw new Granular.Exception($"Can't create value key from \"{element.Name}\"");
         }
     }
 }

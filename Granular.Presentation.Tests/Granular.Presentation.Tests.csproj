@@ -66,6 +66,7 @@
     <Compile Include="DependencyPropertyCallbackTest.cs" />
     <Compile Include="DependencyPropertyValueEntryTest.cs" />
     <Compile Include="Input\KeyboardNavigationTargetTest.cs" />
+    <Compile Include="Markup\DeferredDictionaryValueTest.cs" />
     <Compile Include="Markup\LexerTest.cs" />
     <Compile Include="Markup\UriContextTest.cs" />
     <Compile Include="NameScopeTest.cs" />

@@ -23,4 +23,9 @@ namespace System.Windows.Markup
             return provideValue();
         }
     }
+
+    [AttributeUsage(AttributeTargets.Class)]
+    public class SupportsValueProviderAttribute : Attribute
+    {
+    }
 }

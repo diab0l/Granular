@@ -360,7 +360,7 @@ namespace System.Windows.Markup
 
             if (TryGetDictionaryGenericArguments(containingType, out keyType, out valueType))
             {
-                return new ElementDictionaryContentInitializer(keyType, valueType, values);
+                return new ElementDictionaryContentInitializer(containingType, keyType, valueType, values);
             }
 
             if (TryGetCollectionGenericArgument(containingType, out valueType))
@@ -436,24 +436,60 @@ namespace System.Windows.Markup
 
     public class ElementDictionaryContentInitializer : IElementInitializer
     {
-        private class ValueProviderFactory : IElementFactory
+        private class DeferredValueFactory : IElementFactory
         {
             public Type ElementType { get { return typeof(ValueProvider); } }
 
+            private XamlElement element;
+            private Type targetType;
+            private bool isShared;
+
             private IElementFactory elementFactory;
 
-            public ValueProviderFactory(IElementFactory elementFactory)
+            public DeferredValueFactory(XamlElement element, Type targetType, bool isShared)
             {
-                this.elementFactory = elementFactory;
+                this.element = element;
+                this.targetType = targetType;
+                this.isShared = isShared;
             }
 
             public object CreateElement(InitializeContext context)
             {
+                object value = null;
+
                 return new ValueProvider(() =>
                 {
-                    InitializeContext localContext = new InitializeContext(null, null, new NameScope(context.NameScope), context.TemplatedParent, context.ValueSource);
-                    return elementFactory.CreateElement(localContext);
+                    if (elementFactory == null)
+                    {
+                        elementFactory = ElementFactory.FromXamlElement(element, targetType);
+                    }
+
+                    if (value == null || !isShared)
+                    {
+                        value = elementFactory.CreateElement(context);
+                    }
+
+                    return value;
                 });
+            }
+        }
+
+        private class DeferredKeyFactory : IElementFactory
+        {
+            public Type ElementType { get { return typeof(object); } }
+
+            private IDeferredValueKeyProvider provider;
+            private XamlElement element;
+
+            public DeferredKeyFactory(IDeferredValueKeyProvider provider, XamlElement element)
+            {
+                this.provider = provider;
+                this.element = element;
+            }
+
+            public object CreateElement(InitializeContext context)
+            {
+                return provider.GetValueKey(element);
             }
         }
 
@@ -461,16 +497,18 @@ namespace System.Windows.Markup
         {
             private IElementFactory valueFactory;
             private IElementFactory keyDirectiveFactory;
+            private IElementFactory deferredKeyFactory;
             private IPropertyAdapter keyProperty;
 
-            public KeyValueElementFactory(Type keyType, IElementFactory valueFactory, XamlElement xamlElement)
+            public KeyValueElementFactory(Type keyType, IElementFactory valueFactory, XamlElement xamlElement, bool isValueDeferred)
             {
                 this.valueFactory = valueFactory;
 
-                keyProperty = GetKeyProperty(valueFactory.ElementType);
                 keyDirectiveFactory = GetKeyDirectiveFactory(xamlElement, keyType);
+                deferredKeyFactory = isValueDeferred && keyDirectiveFactory == null ? GetDeferredKeyFactory(xamlElement) : null;
+                keyProperty = GetKeyProperty(valueFactory.ElementType);
 
-                if (keyDirectiveFactory == null && keyProperty == null)
+                if (keyDirectiveFactory == null && deferredKeyFactory == null && keyProperty == null)
                 {
                     throw new Granular.Exception("Dictionary item \"{0}\" must have a key", xamlElement.Name);
                 }
@@ -480,12 +518,24 @@ namespace System.Windows.Markup
             {
                 object element = valueFactory.CreateElement(context);
 
-                object key = keyDirectiveFactory != null ? keyDirectiveFactory.CreateElement(context) : keyProperty.GetValue(element);
+                object key = null;
 
-                if (keyDirectiveFactory != null && keyProperty != null)
+                if (keyDirectiveFactory != null)
                 {
-                    // key property exists, but the key directive was used, so update the property
-                    keyProperty.SetValue(element, key, context.ValueSource);
+                    key = keyDirectiveFactory.CreateElement(context);
+
+                    if (keyProperty != null)
+                    {
+                        keyProperty.SetValue(element, key, context.ValueSource);
+                    }
+                }
+                else if (deferredKeyFactory != null)
+                {
+                    key = deferredKeyFactory.CreateElement(context);
+                }
+                else
+                {
+                    key = keyProperty.GetValue(element);
                 }
 
                 return new KeyValuePair<object, object>(key, element);
@@ -502,13 +552,37 @@ namespace System.Windows.Markup
                 string propertyName = PropertyAttribute.GetPropertyName<DictionaryKeyPropertyAttribute>(type);
                 return !propertyName.IsNullOrWhiteSpace() ? PropertyAdapter.CreateAdapter(type, propertyName) : null;
             }
+
+            private static IElementFactory GetDeferredKeyFactory(XamlElement xamlElement)
+            {
+                Type elementType = xamlElement.GetElementType();
+
+                IDeferredValueKeyProvider provider = DeferredValueKeyProviders.GetDeferredValueKeyProvider(elementType);
+                if (provider != null)
+                {
+                    return new DeferredKeyFactory(provider, xamlElement);
+                }
+
+                string keyPropertyName = PropertyAttribute.GetPropertyName<DictionaryKeyPropertyAttribute>(elementType);
+                if (!keyPropertyName.IsNullOrWhiteSpace())
+                {
+                    XamlMember keyMember = xamlElement.Members.FirstOrDefault(member => member.Name.LocalName == keyPropertyName);
+                    if (keyMember != null)
+                    {
+                        IPropertyAdapter keyProperty = PropertyAdapter.CreateAdapter(elementType, keyPropertyName);
+                        return ElementFactory.FromValue(keyMember.Values.Single(), keyProperty.PropertyType, xamlElement.Namespaces, xamlElement.SourceUri);
+                    }
+                }
+
+                return null;
+            }
         }
 
         private IEnumerable<KeyValueElementFactory> keyElementFactories;
 
-        public ElementDictionaryContentInitializer(Type keyType, Type valueType, IEnumerable<object> values)
+        public ElementDictionaryContentInitializer(Type dictionaryType, Type keyType, Type valueType, IEnumerable<object> values)
         {
-            keyElementFactories = CreateElementsFactories(keyType, valueType, values);
+            keyElementFactories = CreateElementsFactories(dictionaryType, keyType, valueType, values);
         }
 
         public void InitializeElement(object element, InitializeContext context)
@@ -521,7 +595,7 @@ namespace System.Windows.Markup
             }
         }
 
-        private static IEnumerable<KeyValueElementFactory> CreateElementsFactories(Type keyType, Type valueType, IEnumerable<object> values)
+        private static IEnumerable<KeyValueElementFactory> CreateElementsFactories(Type dictionaryType, Type keyType, Type valueType, IEnumerable<object> values)
         {
             if (values.Any(value => !(value is XamlElement)))
             {
@@ -530,20 +604,22 @@ namespace System.Windows.Markup
 
             IEnumerable<XamlElement> valuesElements =  System.Linq.Enumerable.Cast<XamlElement>(values);
 
+            bool isValueProviderSupported = dictionaryType.GetCustomAttributes(true).OfType<SupportsValueProviderAttribute>().Any();
+
             List<KeyValueElementFactory> list = new List<KeyValueElementFactory>();
 
             foreach (XamlElement contentChild in valuesElements)
             {
                 bool isShared = contentChild.Directives.All(directive => directive.Name != XamlLanguage.SharedDirective || (bool)TypeConverter.ConvertValue(directive.GetSingleValue(), typeof(bool), XamlNamespaces.Empty, null));
 
-                IElementFactory contentChildFactory = ElementFactory.FromXamlElement(contentChild, valueType);
-
-                if (!isShared)
+                if (!isShared && !isValueProviderSupported)
                 {
-                    contentChildFactory = new ValueProviderFactory(contentChildFactory);
+                    throw new Granular.Exception($"Can't add a non shared value to \"{dictionaryType.FullName}\" as it does not declare a \"SupportsValueProvider\" attribute");
                 }
 
-                list.Add(new KeyValueElementFactory(keyType, contentChildFactory, contentChild));
+                IElementFactory contentChildFactory = isValueProviderSupported ? new DeferredValueFactory(contentChild, valueType, isShared) : ElementFactory.FromXamlElement(contentChild, valueType);
+
+                list.Add(new KeyValueElementFactory(keyType, contentChildFactory, contentChild, isValueProviderSupported));
             }
 
             return list;

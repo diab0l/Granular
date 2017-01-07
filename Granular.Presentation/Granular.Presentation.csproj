@@ -48,6 +48,7 @@
     <Compile Include="ContentElement.cs" />
     <Compile Include="Controls\ClickMode.cs" />
     <Compile Include="Controls\ItemContainerGenerator.cs" />
+    <Compile Include="Markup\DeferredValueKeyProvider.cs" />
     <Compile Include="Documents\Adorner.cs" />
     <Compile Include="Documents\AdornerLayer.cs" />
     <Compile Include="Controls\Expander.cs" />

@@ -7,6 +7,7 @@ using System.Windows.Markup;
 namespace System.Windows
 {
     [DictionaryKeyProperty("Key")]
+    [DeferredValueKeyProvider(typeof(DataTemplateKeyProvider))]
     [Bridge.Reflectable(Bridge.MemberAccessibility.PublicInstanceProperty)]
     public class DataTemplate : FrameworkTemplate
     {
@@ -35,6 +36,26 @@ namespace System.Windows
         public DataTemplate()
         {
             //
+        }
+    }
+
+    public class DataTemplateKeyProvider : IDeferredValueKeyProvider
+    {
+        public object GetValueKey(XamlElement element)
+        {
+            XamlMember keyMember = element.Members.SingleOrDefault(member => member.Name.LocalName == "Key");
+            if (keyMember != null)
+            {
+                return ElementFactory.FromValue(keyMember.Values.Single(), typeof(object), element.Namespaces, element.SourceUri).CreateElement(new InitializeContext());
+            }
+
+            XamlMember dataTypeMember = element.Members.SingleOrDefault(member => member.Name.LocalName == "DataType");
+            if (dataTypeMember != null)
+            {
+                return new TemplateKey((Type)ElementFactory.FromValue(dataTypeMember.Values.Single(), typeof(Type), element.Namespaces, element.SourceUri).CreateElement(new InitializeContext()));
+            }
+
+            throw new Granular.Exception($"Can't create value key from \"{element.Name}\"");
         }
     }
 }

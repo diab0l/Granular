@@ -409,6 +409,9 @@
     <Compile Include="..\Granular.Presentation\LayoutManager.cs">
       <Link>LayoutManager.cs</Link>
     </Compile>
+    <Compile Include="..\Granular.Presentation\Markup\DeferredValueKeyProvider.cs">
+      <Link>Markup\DeferredValueKeyProvider.cs</Link>
+    </Compile>
     <Compile Include="..\Granular.Presentation\Markup\ElementFactory.cs">
       <Link>Markup\ElementFactory.cs</Link>
     </Compile>

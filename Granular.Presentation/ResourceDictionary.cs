@@ -9,6 +9,7 @@ using Granular.Extensions;
 
 namespace System.Windows
 {
+    [SupportsValueProvider]
     [Bridge.Reflectable(Bridge.MemberAccessibility.PublicInstanceProperty)]
     public class ResourceDictionary : IDictionary<object, object>, IResourceContainer, IUriContext
     {

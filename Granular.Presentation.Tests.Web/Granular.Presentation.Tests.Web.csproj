@@ -160,6 +160,9 @@
     <Compile Include="..\Granular.Presentation.Tests\Input\TestPresentationSource.cs">
       <Link>Input\TestPresentationSource.cs</Link>
     </Compile>
+    <Compile Include="..\Granular.Presentation.Tests\Markup\DeferredDictionaryValueTest.cs">
+      <Link>Markup\DeferredDictionaryValueTest.cs</Link>
+    </Compile>
     <Compile Include="..\Granular.Presentation.Tests\Markup\DynamicResourceExtensionTest.cs">
       <Link>Markup\DynamicResourceExtensionTest.cs</Link>
     </Compile>
