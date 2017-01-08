@@ -14,11 +14,13 @@ namespace System.Windows
         {
             public Type Owner { get; private set; }
             public string Name { get; private set; }
+            public string HashString { get; private set; }
 
             public RoutedEventHashKey(Type owner, string name)
             {
                 this.Owner = owner;
                 this.Name = name;
+                this.HashString = owner.FullName + "," + name;
             }
 
             public override bool Equals(object obj)
@@ -41,7 +43,7 @@ namespace System.Windows
             }
         }
 
-        private static readonly Dictionary<RoutedEventHashKey, RoutedEvent> registeredEvents = new Dictionary<RoutedEventHashKey, RoutedEvent>();
+        private static readonly ConvertedStringDictionary<RoutedEventHashKey, RoutedEvent> registeredEvents = new ConvertedStringDictionary<RoutedEventHashKey, RoutedEvent>(hashKey => hashKey.HashString);
 
         public static RoutedEvent RegisterRoutedEvent(string name, RoutingStrategy routingStrategy, Type handlerType, Type ownerType)
         {
