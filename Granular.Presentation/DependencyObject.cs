@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Windows.Data;
+using Granular.Collections;
 using Granular.Extensions;
 
 namespace System.Windows
@@ -45,8 +46,8 @@ namespace System.Windows
     {
         public event DependencyPropertyChangedEventHandler PropertyChanged;
 
-        private Dictionary<DependencyProperty, IDependencyPropertyValueEntry> entries;
-        private Dictionary<DependencyProperty, IDependencyPropertyValueEntry> readOnlyEntries;
+        private ConvertedStringDictionary<DependencyProperty, IDependencyPropertyValueEntry> entries;
+        private ConvertedStringDictionary<DependencyProperty, IDependencyPropertyValueEntry> readOnlyEntries;
 
         private DependencyObject inheritanceParent;
         private DependencyPropertyChangedEventHandler entryValueChangedEventHandler;
@@ -55,8 +56,8 @@ namespace System.Windows
 
         public DependencyObject()
         {
-            this.entries = new Dictionary<DependencyProperty, IDependencyPropertyValueEntry>();
-            this.readOnlyEntries = new Dictionary<DependencyProperty, IDependencyPropertyValueEntry>();
+            this.entries = new ConvertedStringDictionary<DependencyProperty, IDependencyPropertyValueEntry>(dependencyProperty => dependencyProperty.HashString);
+            this.readOnlyEntries = new ConvertedStringDictionary<DependencyProperty, IDependencyPropertyValueEntry>(dependencyProperty => dependencyProperty.HashString);
 
             this.entryValueChangedEventHandler = OnEntryValueChanged;
             this.containedEntryValueChangedEventHandler = OnContainedEntryValueChanged;
@@ -329,7 +330,7 @@ namespace System.Windows
             if (inheritanceParent == null)
             {
                 // clear inherited values
-                foreach (KeyValuePair<DependencyProperty, IDependencyPropertyValueEntry> pair in entries)
+                foreach (KeyValuePair<DependencyProperty, IDependencyPropertyValueEntry> pair in entries.GetKeyValuePairs())
                 {
                     if (pair.Key.Inherits)
                     {
@@ -340,7 +341,7 @@ namespace System.Windows
             else
             {
                 // update existing inherited values
-                foreach (KeyValuePair<DependencyProperty, IDependencyPropertyValueEntry> pair in entries)
+                foreach (KeyValuePair<DependencyProperty, IDependencyPropertyValueEntry> pair in entries.GetKeyValuePairs())
                 {
                     if (pair.Key.Inherits)
                     {
@@ -349,7 +350,7 @@ namespace System.Windows
                 }
 
                 // add missing inherited values
-                foreach (KeyValuePair<DependencyProperty, IDependencyPropertyValueEntry> pair in inheritanceParent.entries)
+                foreach (KeyValuePair<DependencyProperty, IDependencyPropertyValueEntry> pair in inheritanceParent.entries.GetKeyValuePairs())
                 {
                     if (pair.Key.Inherits)
                     {
