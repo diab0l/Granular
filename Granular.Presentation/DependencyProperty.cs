@@ -28,6 +28,7 @@ namespace System.Windows
         {
             public Type Owner { get; private set; }
             public string Name { get; private set; }
+            public string HashString { get; private set; }
 
             private int hashCode;
 
@@ -35,6 +36,7 @@ namespace System.Windows
             {
                 this.Owner = owner;
                 this.Name = name;
+                this.HashString = owner.FullName + "," + name;
 
                 this.hashCode = Owner.GetHashCode() ^ Name.GetHashCode();
             }
@@ -66,9 +68,10 @@ namespace System.Windows
         public bool IsReadOnly { get; private set; }
         public bool Inherits { get; private set; }
         public bool IsAttached { get; private set; }
+        public string HashString { get; private set; }
 
         private DependencyPropertyHashKey hashKey;
-        private Dictionary<Type, PropertyMetadata> typeMetadata;
+        private IMinimalDictionary<Type, PropertyMetadata> typeMetadata;
         private PropertyMetadata ownerMetadata;
         private bool isMetadataOverridden;
 
@@ -76,8 +79,8 @@ namespace System.Windows
         private CacheDictionary<Type, bool> typeContainsCache;
         private IEnumerable<Type> orderedTypeMetadataCache;
 
-        private static readonly Dictionary<DependencyPropertyHashKey, DependencyProperty> registeredProperties = new Dictionary<DependencyPropertyHashKey, DependencyProperty>();
-        private static readonly Dictionary<DependencyPropertyHashKey, DependencyPropertyKey> registeredReadOnlyPropertiesKey = new Dictionary<DependencyPropertyHashKey, DependencyPropertyKey>();
+        private static readonly ConvertedStringDictionary<DependencyPropertyHashKey, DependencyProperty> registeredProperties = new ConvertedStringDictionary<DependencyPropertyHashKey, DependencyProperty>(hashKey => hashKey.HashString);
+        private static readonly ConvertedStringDictionary<DependencyPropertyHashKey, DependencyPropertyKey> registeredReadOnlyPropertiesKey = new ConvertedStringDictionary<DependencyPropertyHashKey, DependencyPropertyKey>(hashKey => hashKey.HashString);
 
         private DependencyProperty(DependencyPropertyHashKey hashKey, Type propertyType, PropertyMetadata metadata, ValidateValueCallback validateValueCallback, bool isAttached, bool isReadOnly)
         {
@@ -88,11 +91,12 @@ namespace System.Windows
             this.ValidateValueCallback = validateValueCallback;
             this.IsReadOnly = isReadOnly;
             this.Inherits = metadata.Inherits;
+            this.HashString = hashKey.HashString;
 
             this.ownerMetadata = metadata;
             this.IsAttached = isAttached;
 
-            typeMetadata = new Dictionary<Type, PropertyMetadata>();
+            typeMetadata = new ConvertedStringDictionary<Type, PropertyMetadata>(type => type.FullName);
             typeMetadata.Add(OwnerType, ownerMetadata);
 
             typeMetadataCache = CacheDictionary<Type, PropertyMetadata>.CreateUsingStringKeys(ResolveTypeMetadata, type => type.FullName);
@@ -181,7 +185,7 @@ namespace System.Windows
         private PropertyMetadata ResolveTypeMetadata(Type type)
         {
             Type closestBaseType = GetOrderedTypeMetadata().Where(baseType => type == baseType || type.IsSubclassOf(baseType)).LastOrDefault();
-            return closestBaseType != null ? typeMetadata[closestBaseType] : ownerMetadata;
+            return closestBaseType != null ? typeMetadata.GetValue(closestBaseType) : ownerMetadata;
         }
 
         public bool IsContainedBy(Type type)
@@ -191,7 +195,7 @@ namespace System.Windows
 
         private bool ResolveTypeContains(Type type)
         {
-            return typeMetadata.Keys.Any(baseType => type == baseType || type.IsSubclassOf(baseType));
+            return typeMetadata.GetKeys().Any(baseType => type == baseType || type.IsSubclassOf(baseType));
         }
 
         internal void RaiseMetadataPropertyChangedCallback(DependencyObject dependencyObject, DependencyPropertyChangedEventArgs e)
@@ -208,7 +212,7 @@ namespace System.Windows
                     continue;
                 }
 
-                PropertyMetadata propertyMetadata = typeMetadata[type];
+                PropertyMetadata propertyMetadata = typeMetadata.GetValue(type);
 
                 if (propertyMetadata.PropertyChangedCallback != null)
                 {
@@ -223,7 +227,7 @@ namespace System.Windows
             {
                 // topological sorting, with the original owner type first, and each base class before all of its subclasses
                 List<Type> orderedTypes = new List<Type> { OwnerType };
-                List<Type> remainingTypes = typeMetadata.Keys.Where(type => type != OwnerType).ToList();
+                List<Type> remainingTypes = typeMetadata.GetKeys().Where(type => type != OwnerType).ToList();
 
                 while (remainingTypes.Any())
                 {
