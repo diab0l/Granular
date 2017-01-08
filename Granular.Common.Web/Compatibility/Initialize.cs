@@ -23,5 +23,21 @@ namespace Granular.Common.Compatibility
                 };
             */
         }
+
+        [Bridge.Init(Bridge.InitPosition.Before)]
+        static void DefineTypeAliasCache()
+        {
+            /*@
+                Bridge.resolveTypeAlias = Bridge.getTypeAlias;
+
+                Bridge.getTypeAlias = function (obj) {
+                    if (obj.$$alias === undefined) {
+                        obj.$$alias = Bridge.resolveTypeAlias(obj);
+                    }
+
+                    return obj.$$alias;
+                };
+             */
+        }
     }
 }
