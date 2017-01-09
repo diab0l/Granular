@@ -17,29 +17,29 @@ namespace System.Windows.Markup
         public string MemberName { get; private set; }
 
         public bool HasContainingTypeName { get; private set; }
-        public XamlName ContainingTypeName { get; private set; }
+        public string ContainingTypeName { get; private set; }
 
         public bool IsEmpty { get { return LocalName.IsNullOrEmpty(); } }
 
         public XamlName(string localName, string namespaceName = null)
         {
-            this.LocalName = localName ?? String.Empty;
+            this.LocalName = localName;
             this.NamespaceName = namespaceName ?? String.Empty;
 
             this.FullName = namespaceName == null ? localName : namespaceName + ":" + localName;
 
-            int typeSeparatorIndex = LocalName.IndexOf('.');
+            int typeSeparatorIndex = localName.IndexOf('.');
 
             if (typeSeparatorIndex != -1)
             {
-                MemberName = LocalName.Substring(typeSeparatorIndex + 1);
-                ContainingTypeName = new XamlName(LocalName.Substring(0, typeSeparatorIndex), NamespaceName);
+                MemberName = localName.Substring(typeSeparatorIndex + 1);
+                ContainingTypeName = localName.Substring(0, typeSeparatorIndex);
 
                 HasContainingTypeName = true;
             }
             else
             {
-                MemberName = LocalName;
+                MemberName = localName;
             }
         }
 
@@ -77,7 +77,7 @@ namespace System.Windows.Markup
             string typeName = prefixedName;
             string typeNamespacePrefix = String.Empty;
 
-            int namespaceSeparatorIndex = prefixedName.IndexOf(":");
+            int namespaceSeparatorIndex = prefixedName.IndexOf(':');
             if (namespaceSeparatorIndex != -1)
             {
                 typeNamespacePrefix = prefixedName.Substring(0, namespaceSeparatorIndex);

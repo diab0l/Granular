@@ -149,7 +149,7 @@ namespace System.Windows.Markup
     {
         public static Type ResolveContainingType(this XamlName name, Type defaultContainingType)
         {
-            return name.HasContainingTypeName ? TypeParser.ParseType(name.ContainingTypeName) : defaultContainingType;
+            return name.HasContainingTypeName ? TypeParser.ParseType(new XamlName(name.ContainingTypeName, name.NamespaceName)) : defaultContainingType;
         }
     }
 }
