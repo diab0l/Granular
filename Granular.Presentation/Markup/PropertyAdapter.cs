@@ -32,7 +32,7 @@ namespace System.Windows.Markup
             this.MemberName = memberName;
             this.StringKey = Type.FullName + "," + MemberName;
 
-            this.hashCode = type.GetHashCode() ^ memberName.GetHashCode();
+            this.hashCode = StringKey.GetHashCode();
         }
 
         public override bool Equals(object obj)

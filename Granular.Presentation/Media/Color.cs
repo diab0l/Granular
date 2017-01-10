@@ -16,12 +16,16 @@ namespace System.Windows.Media
         public byte G { get; private set; }
         public byte B { get; private set; }
 
+        private int hashCode;
+
         private Color(byte a, byte r, byte g, byte b)
         {
             this.A = a;
             this.R = r;
             this.G = g;
             this.B = b;
+
+            this.hashCode = A ^ R ^ G ^ B;
         }
 
         public override bool Equals(object obj)
@@ -35,7 +39,7 @@ namespace System.Windows.Media
 
         public override int GetHashCode()
         {
-            return A.GetHashCode() ^ R.GetHashCode() ^ G.GetHashCode() ^ B.GetHashCode();
+            return hashCode;
         }
 
         public override string ToString()

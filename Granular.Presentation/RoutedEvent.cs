@@ -62,6 +62,7 @@ namespace System.Windows
         public Type OwnerType { get; private set; }
         public string StringKey { get; private set; }
 
+        private int hashCode;
         private ListDictionary<Type, RoutedEventHandlerItem> classesHandlers;
 
         public RoutedEvent(string name, RoutingStrategy routingStrategy, Type handlerType, Type ownerType)
@@ -71,6 +72,7 @@ namespace System.Windows
             this.HandlerType = handlerType;
             this.OwnerType = ownerType;
             this.StringKey = ownerType.FullName + "," + name;
+            this.hashCode = StringKey.GetHashCode();
         }
 
         public RoutedEvent AddOwner(Type ownerType)
@@ -81,7 +83,7 @@ namespace System.Windows
 
         public override int GetHashCode()
         {
-            return OwnerType.GetHashCode() ^ Name.GetHashCode();
+            return hashCode;
         }
 
         public override string ToString()

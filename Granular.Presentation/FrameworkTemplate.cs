@@ -86,9 +86,12 @@ namespace System.Windows
 
         public Type TargetType { get; private set; }
 
+        private int hashCode;
+
         public TemplateKey(Type targetType)
         {
             this.TargetType = targetType;
+            this.hashCode = targetType.GetHashCode();
         }
 
         public override bool Equals(object obj)
@@ -101,7 +104,7 @@ namespace System.Windows
 
         public override int GetHashCode()
         {
-            return TargetType.GetHashCode();
+            return hashCode;
         }
 
         public override string ToString()

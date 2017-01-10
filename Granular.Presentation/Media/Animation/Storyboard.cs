@@ -21,10 +21,13 @@ namespace System.Windows.Media.Animation
             public IAnimatable Target { get; private set; }
             public DependencyProperty TargetProperty { get; private set; }
 
+            private int hashCode;
+
             public TargetKey(IAnimatable target, DependencyProperty targetProperty)
             {
                 this.Target = target;
                 this.TargetProperty = targetProperty;
+                this.hashCode = Target.GetHashCode() ^ TargetProperty.GetHashCode();
             }
 
             public override bool Equals(object obj)
@@ -38,7 +41,7 @@ namespace System.Windows.Media.Animation
 
             public override int GetHashCode()
             {
-                return Target.GetHashCode() ^ TargetProperty.GetHashCode();
+                return hashCode;
             }
         }
 

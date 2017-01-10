@@ -100,9 +100,13 @@ namespace System.Windows
 
         public Type TargetType { get; private set; }
 
+        private int hashCode;
+
         public StyleKey(Type targetType)
         {
             this.TargetType = targetType;
+
+            this.hashCode = TargetType.GetHashCode();
         }
 
         public override bool Equals(object obj)
@@ -115,7 +119,7 @@ namespace System.Windows
 
         public override int GetHashCode()
         {
-            return TargetType.GetHashCode();
+            return hashCode;
         }
 
         public override string ToString()
