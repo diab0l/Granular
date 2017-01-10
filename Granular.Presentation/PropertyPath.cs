@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Windows.Data;
 using System.Windows.Markup;
 using Granular.Extensions;
+using Granular.Compatibility.Linq;
 
 namespace System.Windows
 {
@@ -266,11 +266,12 @@ namespace System.Windows
 
         public IEnumerable<IPropertyPathElement> Elements { get; private set; }
 
-        public bool IsEmpty { get { return !Elements.Any(); } }
+        public bool IsEmpty { get; private set; }
 
         public PropertyPath(IEnumerable<IPropertyPathElement> elements)
         {
             this.Elements = elements;
+            this.IsEmpty = !Elements.Any();
         }
 
         public override string ToString()
