@@ -56,8 +56,8 @@ namespace System.Windows
 
         public DependencyObject()
         {
-            this.entries = new ConvertedStringDictionary<DependencyProperty, IDependencyPropertyValueEntry>(dependencyProperty => dependencyProperty.HashString);
-            this.readOnlyEntries = new ConvertedStringDictionary<DependencyProperty, IDependencyPropertyValueEntry>(dependencyProperty => dependencyProperty.HashString);
+            this.entries = new ConvertedStringDictionary<DependencyProperty, IDependencyPropertyValueEntry>(dependencyProperty => dependencyProperty.StringKey);
+            this.readOnlyEntries = new ConvertedStringDictionary<DependencyProperty, IDependencyPropertyValueEntry>(dependencyProperty => dependencyProperty.StringKey);
 
             this.entryValueChangedEventHandler = OnEntryValueChanged;
             this.containedEntryValueChangedEventHandler = OnContainedEntryValueChanged;
