@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
+using Granular.Compatibility.Linq;
 using Granular.Extensions;
 
 namespace System.Windows.Controls
