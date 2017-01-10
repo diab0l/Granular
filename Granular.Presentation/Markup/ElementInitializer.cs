@@ -122,7 +122,7 @@ namespace System.Windows.Markup
                 return null;
             }
 
-            string contentPropertyName = PropertyAttribute.GetPropertyName<ContentPropertyAttribute>(elementType);
+            string contentPropertyName = ContentPropertyAttribute.GetPropertyName(elementType);
             if (!contentPropertyName.IsNullOrEmpty())
             {
                 return ElementMemberInitializer.Create(elementType, contentPropertyName, element.Values, element.Namespaces, element.SourceUri);
@@ -173,7 +173,7 @@ namespace System.Windows.Markup
 
         private static IPropertyAdapter GetNameProperty(Type type)
         {
-            string propertyName = PropertyAttribute.GetPropertyName<RuntimeNamePropertyAttribute>(type);
+            string propertyName = RuntimeNamePropertyAttribute.GetPropertyName(type);
             return !propertyName.IsNullOrWhiteSpace() ? PropertyAdapter.CreateAdapter(type, propertyName) : null;
         }
 
@@ -549,7 +549,7 @@ namespace System.Windows.Markup
 
             private static IPropertyAdapter GetKeyProperty(Type type)
             {
-                string propertyName = PropertyAttribute.GetPropertyName<DictionaryKeyPropertyAttribute>(type);
+                string propertyName = DictionaryKeyPropertyAttribute.GetPropertyName(type);
                 return !propertyName.IsNullOrWhiteSpace() ? PropertyAdapter.CreateAdapter(type, propertyName) : null;
             }
 
@@ -563,7 +563,7 @@ namespace System.Windows.Markup
                     return new DeferredKeyFactory(provider, xamlElement);
                 }
 
-                string keyPropertyName = PropertyAttribute.GetPropertyName<DictionaryKeyPropertyAttribute>(elementType);
+                string keyPropertyName = DictionaryKeyPropertyAttribute.GetPropertyName(elementType);
                 if (!keyPropertyName.IsNullOrWhiteSpace())
                 {
                     XamlMember keyMember = xamlElement.Members.FirstOrDefault(member => member.Name.LocalName == keyPropertyName);

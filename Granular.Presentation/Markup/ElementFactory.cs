@@ -45,7 +45,7 @@ namespace System.Windows.Markup
         {
             Type elementType = element.GetElementType();
 
-            if (element.Values.Any() && PropertyAttribute.GetPropertyName<ContentPropertyAttribute>(elementType).IsNullOrEmpty() && !ElementCollectionContentInitailizer.IsCollectionType(elementType))
+            if (element.Values.Any() && ContentPropertyAttribute.GetPropertyName(elementType).IsNullOrEmpty() && !ElementCollectionContentInitailizer.IsCollectionType(elementType))
             {
                 return FromElementFactory(FromXamlElementContent(element), targetType, element.Namespaces, element.SourceUri);
             }

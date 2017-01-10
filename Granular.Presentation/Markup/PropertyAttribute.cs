@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Granular.Collections;
 using Granular.Compatibility.Linq;
 
 namespace System.Windows.Markup
@@ -14,36 +15,57 @@ namespace System.Windows.Markup
             this.Name = name;
         }
 
-        public static string GetPropertyName<T>(Type type) where T : PropertyAttribute
+        protected static string ResolvePropertyName<T>(Type type) where T : PropertyAttribute
         {
-            return type.GetCustomAttributes(true).OfType<T>().Select(attribute => attribute.Name).DefaultIfEmpty(String.Empty).First();
+            return type.GetCustomAttributes(true).OfType<T>().Select(attribute => attribute.Name).FirstOrDefault();
         }
     }
 
     public class ContentPropertyAttribute : PropertyAttribute
     {
+        private static CacheDictionary<Type, string> propertyNameCache = CacheDictionary<Type, string>.CreateUsingStringKeys(type => PropertyAttribute.ResolvePropertyName<ContentPropertyAttribute>(type), type => type.FullName);
+
         public ContentPropertyAttribute(string name) :
             base(name)
         {
             //
         }
+
+        public static string GetPropertyName(Type type)
+        {
+            return propertyNameCache.GetValue(type);
+        }
     }
 
     public class RuntimeNamePropertyAttribute : PropertyAttribute
     {
+        private static CacheDictionary<Type, string> propertyNameCache = CacheDictionary<Type, string>.CreateUsingStringKeys(type => PropertyAttribute.ResolvePropertyName<RuntimeNamePropertyAttribute>(type), type => type.FullName);
+
         public RuntimeNamePropertyAttribute(string name) :
             base(name)
         {
             //
         }
+
+        public static string GetPropertyName(Type type)
+        {
+            return propertyNameCache.GetValue(type);
+        }
     }
 
     public class DictionaryKeyPropertyAttribute : PropertyAttribute
     {
+        private static CacheDictionary<Type, string> propertyNameCache = CacheDictionary<Type, string>.CreateUsingStringKeys(type => PropertyAttribute.ResolvePropertyName<DictionaryKeyPropertyAttribute>(type), type => type.FullName);
+
         public DictionaryKeyPropertyAttribute(string name) :
             base(name)
         {
             //
+        }
+
+        public static string GetPropertyName(Type type)
+        {
+            return propertyNameCache.GetValue(type);
         }
     }
 
