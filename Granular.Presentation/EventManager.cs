@@ -14,13 +14,13 @@ namespace System.Windows
         {
             public Type Owner { get; private set; }
             public string Name { get; private set; }
-            public string HashString { get; private set; }
+            public string KeyString { get; private set; }
 
             public RoutedEventHashKey(Type owner, string name)
             {
                 this.Owner = owner;
                 this.Name = name;
-                this.HashString = owner.FullName + "," + name;
+                this.KeyString = owner.FullName + "," + name;
             }
 
             public override bool Equals(object obj)
@@ -34,7 +34,7 @@ namespace System.Windows
 
             public override int GetHashCode()
             {
-                return Owner.GetHashCode() ^ Name.GetHashCode();
+                return KeyString.GetHashCode();
             }
 
             public override string ToString()
@@ -43,7 +43,7 @@ namespace System.Windows
             }
         }
 
-        private static readonly ConvertedStringDictionary<RoutedEventHashKey, RoutedEvent> registeredEvents = new ConvertedStringDictionary<RoutedEventHashKey, RoutedEvent>(hashKey => hashKey.HashString);
+        private static readonly ConvertedStringDictionary<RoutedEventHashKey, RoutedEvent> registeredEvents = new ConvertedStringDictionary<RoutedEventHashKey, RoutedEvent>(hashKey => hashKey.KeyString);
 
         public static RoutedEvent RegisterRoutedEvent(string name, RoutingStrategy routingStrategy, Type handlerType, Type ownerType)
         {
