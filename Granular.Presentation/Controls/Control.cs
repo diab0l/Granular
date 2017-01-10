@@ -132,7 +132,7 @@ namespace System.Windows.Controls
 
         static Control()
         {
-            FocusableProperty.OverrideMetadata(typeof(Control), new FrameworkPropertyMetadata(true));
+            UIElement.FocusableProperty.OverrideMetadata(typeof(Control), new FrameworkPropertyMetadata(true));
 
             EventManager.RegisterClassHandler(typeof(Control), UIElement.PreviewMouseDownEvent, (MouseButtonEventHandler)OnPreviewMouseDown, true);
             EventManager.RegisterClassHandler(typeof(Control), UIElement.MouseDownEvent, (MouseButtonEventHandler)OnMouseDown, true);

@@ -9,9 +9,9 @@ namespace System.Windows.Controls
         static UserControl()
         {
             Control.IsTabStopProperty.OverrideMetadata(typeof(UserControl), new FrameworkPropertyMetadata(false));
-            HorizontalContentAlignmentProperty.OverrideMetadata(typeof(UserControl), new FrameworkPropertyMetadata(HorizontalAlignment.Stretch));
-            VerticalContentAlignmentProperty.OverrideMetadata(typeof(UserControl), new FrameworkPropertyMetadata(VerticalAlignment.Stretch));
-            FocusableProperty.OverrideMetadata(typeof(UserControl), new FrameworkPropertyMetadata(false));
+            Control.HorizontalContentAlignmentProperty.OverrideMetadata(typeof(UserControl), new FrameworkPropertyMetadata(HorizontalAlignment.Stretch));
+            Control.VerticalContentAlignmentProperty.OverrideMetadata(typeof(UserControl), new FrameworkPropertyMetadata(VerticalAlignment.Stretch));
+            UIElement.FocusableProperty.OverrideMetadata(typeof(UserControl), new FrameworkPropertyMetadata(false));
         }
     }
 }

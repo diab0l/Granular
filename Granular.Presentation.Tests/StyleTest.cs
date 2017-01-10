@@ -142,6 +142,7 @@ namespace Granular.Presentation.Tests
             resources.Add(new StyleKey(typeof(Control)), style);
 
             Control control = new Control();
+            control.DefaultStyleKey = new StyleKey(typeof(Control));
             control.Resources = resources;
 
             Assert.AreEqual(style, control.Style);

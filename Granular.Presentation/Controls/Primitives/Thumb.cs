@@ -47,7 +47,8 @@ namespace System.Windows.Controls.Primitives
 
         static Thumb()
         {
-            FocusableProperty.OverrideMetadata(typeof(Thumb), new FrameworkPropertyMetadata(false));
+            UIElement.FocusableProperty.OverrideMetadata(typeof(Thumb), new FrameworkPropertyMetadata(false));
+            FrameworkElement.DefaultStyleKeyProperty.OverrideMetadata(typeof(Thumb), new FrameworkPropertyMetadata(new StyleKey(typeof(Thumb))));
         }
 
         protected override void OnMouseDown(MouseButtonEventArgs e)

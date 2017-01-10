@@ -41,6 +41,11 @@ namespace System.Windows.Controls
         private DataTemplate itemTemplate;
         private Style itemContainerStyle;
 
+        static ContentControl()
+        {
+            FrameworkElement.DefaultStyleKeyProperty.OverrideMetadata(typeof(ContentControl), new FrameworkPropertyMetadata(new StyleKey(typeof(ContentControl))));
+        }
+
         public ContentControl()
         {
             //

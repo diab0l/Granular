@@ -64,6 +64,11 @@ namespace System.Windows.Controls
             }
         }
 
+        static RadioButton()
+        {
+            FrameworkElement.DefaultStyleKeyProperty.OverrideMetadata(typeof(RadioButton), new FrameworkPropertyMetadata(new StyleKey(typeof(RadioButton))));
+        }
+
         public RadioButton()
         {
             //

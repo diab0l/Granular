@@ -50,7 +50,8 @@ namespace Granular.Presentation.Generic
 
         static ButtonChrome()
         {
-            FocusableProperty.OverrideMetadata(typeof(ButtonChrome), new FrameworkPropertyMetadata(false));
+            UIElement.FocusableProperty.OverrideMetadata(typeof(ButtonChrome), new FrameworkPropertyMetadata(false));
+            FrameworkElement.DefaultStyleKeyProperty.OverrideMetadata(typeof(ButtonChrome), new FrameworkPropertyMetadata(new StyleKey(typeof(ButtonChrome))));
         }
 
         protected override void UpdateVisualState(bool useTransitions)

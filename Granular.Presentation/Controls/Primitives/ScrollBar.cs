@@ -189,7 +189,8 @@ namespace System.Windows.Controls.Primitives
 
         static ScrollBar()
         {
-            FocusableProperty.OverrideMetadata(typeof(ScrollBar), new FrameworkPropertyMetadata(false));
+            UIElement.FocusableProperty.OverrideMetadata(typeof(ScrollBar), new FrameworkPropertyMetadata(false));
+            FrameworkElement.DefaultStyleKeyProperty.OverrideMetadata(typeof(ScrollBar), new FrameworkPropertyMetadata(new StyleKey(typeof(ScrollBar))));
         }
 
         public ScrollBar()

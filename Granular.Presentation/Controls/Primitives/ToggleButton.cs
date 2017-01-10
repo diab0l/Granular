@@ -51,6 +51,11 @@ namespace System.Windows.Controls.Primitives
             set { SetValue(CheckOnClickProperty, value); }
         }
 
+        static ToggleButton()
+        {
+            FrameworkElement.DefaultStyleKeyProperty.OverrideMetadata(typeof(ToggleButton), new FrameworkPropertyMetadata(new StyleKey(typeof(ToggleButton))));
+        }
+
         protected override void OnClick(RoutedEventArgs e)
         {
             if (CheckOnClick)

@@ -51,6 +51,7 @@ namespace System.Windows.Controls
             UIElement.IsMouseOverProperty.OverrideMetadata(typeof(PasswordBox), new FrameworkPropertyMetadata(FrameworkPropertyMetadataOptions.AffectsVisualState));
             UIElement.IsFocusedProperty.OverrideMetadata(typeof(PasswordBox), new FrameworkPropertyMetadata(FrameworkPropertyMetadataOptions.AffectsVisualState));
             FrameworkElement.CursorProperty.OverrideMetadata(typeof(PasswordBox), new FrameworkPropertyMetadata(Cursors.IBeam));
+            FrameworkElement.DefaultStyleKeyProperty.OverrideMetadata(typeof(PasswordBox), new FrameworkPropertyMetadata(new StyleKey(typeof(PasswordBox))));
         }
 
         public PasswordBox()

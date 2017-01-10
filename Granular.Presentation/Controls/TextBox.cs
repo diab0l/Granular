@@ -86,6 +86,7 @@ namespace System.Windows.Controls
             TextBoxBase.IsReadOnlyProperty.OverrideMetadata(typeof(TextBox), new FrameworkPropertyMetadata(propertyChangedCallback: (sender, e) => ((TextBox)sender).textBoxView.IsReadOnly = ((TextBox)sender).IsReadOnly));
             SpellCheck.IsEnabledProperty.OverrideMetadata(typeof(TextBox), new FrameworkPropertyMetadata(propertyChangedCallback: (sender, e) => ((TextBox)sender).textBoxView.SpellCheck = (bool)e.NewValue));
             FrameworkElement.CursorProperty.OverrideMetadata(typeof(TextBox), new FrameworkPropertyMetadata(Cursors.IBeam));
+            FrameworkElement.DefaultStyleKeyProperty.OverrideMetadata(typeof(TextBox), new FrameworkPropertyMetadata(new StyleKey(typeof(TextBox))));
         }
 
         public TextBox()

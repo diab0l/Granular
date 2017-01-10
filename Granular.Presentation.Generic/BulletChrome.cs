@@ -73,6 +73,11 @@ namespace Granular.Presentation.Generic
             set { SetValue(IsThreeStateProperty, value); }
         }
 
+        static BulletChrome()
+        {
+            FrameworkElement.DefaultStyleKeyProperty.OverrideMetadata(typeof(BulletChrome), new FrameworkPropertyMetadata(new StyleKey(typeof(BulletChrome))));
+        }
+
         protected override void UpdateVisualState(bool useTransitions)
         {
             VisualStateManager.GoToState(this, GetCommonStateName(), useTransitions);

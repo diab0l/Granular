@@ -167,6 +167,13 @@ namespace System.Windows
             set { SetValue(StyleProperty, value); }
         }
 
+        public static readonly DependencyProperty DefaultStyleKeyProperty = DependencyProperty.Register("DefaultStyleKey", typeof(object), typeof(FrameworkElement), new FrameworkPropertyMetadata());
+        public object DefaultStyleKey
+        {
+            get { return (object)GetValue(DefaultStyleKeyProperty); }
+            set { SetValue(DefaultStyleKeyProperty, value); }
+        }
+
         public static readonly DependencyProperty FocusVisualStyleProperty = DependencyProperty.Register("FocusVisualStyle", typeof(Style), typeof(FrameworkElement), new FrameworkPropertyMetadata());
         public Style FocusVisualStyle
         {
@@ -519,7 +526,14 @@ namespace System.Windows
         protected virtual void OnResourcesChanged(ResourcesChangedEventArgs e)
         {
             resourcesCache.Clear();
-            SetValue(StyleProperty, GetDefaultStyle(), BaseValueSource.Default);
+
+            object value;
+            if (DefaultStyleKey == null || !TryGetResource(DefaultStyleKey, out value))
+            {
+                value = null;
+            }
+
+            SetValue(StyleProperty, value, BaseValueSource.Default);
         }
 
         protected void SetResourceInheritanceParent(IResourceContainer parent)
@@ -530,24 +544,6 @@ namespace System.Windows
         protected virtual void OnTemplateChildChanged()
         {
             //
-        }
-
-        private Style GetDefaultStyle()
-        {
-            Type type = GetType();
-
-            while (type != typeof(FrameworkElement))
-            {
-                object value;
-                if (TryGetResource(new StyleKey(type), out value))
-                {
-                    return value as Style;
-                }
-
-                type = type.BaseType;
-            }
-
-            return null;
         }
 
         private void OnTriggersCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)

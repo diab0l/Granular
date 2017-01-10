@@ -85,6 +85,11 @@ namespace System.Windows.Controls
             private set { SetValue(ItemContainerGeneratorPropertyKey, value); }
         }
 
+        static ItemsControl()
+        {
+            FrameworkElement.DefaultStyleKeyProperty.OverrideMetadata(typeof(ItemsControl), new FrameworkPropertyMetadata(new StyleKey(typeof(ItemsControl))));
+        }
+
         public ItemsControl()
         {
             Items = new ItemCollection();

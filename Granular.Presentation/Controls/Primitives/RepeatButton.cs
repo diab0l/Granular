@@ -27,7 +27,8 @@ namespace System.Windows.Controls.Primitives
 
         static RepeatButton()
         {
-            ClickModeProperty.OverrideMetadata(typeof(RepeatButton), new FrameworkPropertyMetadata(ClickMode.Press));
+            ButtonBase.ClickModeProperty.OverrideMetadata(typeof(RepeatButton), new FrameworkPropertyMetadata(ClickMode.Press));
+            FrameworkElement.DefaultStyleKeyProperty.OverrideMetadata(typeof(RepeatButton), new FrameworkPropertyMetadata(new StyleKey(typeof(RepeatButton))));
         }
 
         public RepeatButton()

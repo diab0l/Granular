@@ -8,6 +8,9 @@ namespace System.Windows.Controls
 {
     public class Button : ButtonBase
     {
-        //
+        static Button()
+        {
+            FrameworkElement.DefaultStyleKeyProperty.OverrideMetadata(typeof(Button), new FrameworkPropertyMetadata(new StyleKey(typeof(Button))));
+        }
     }
 }

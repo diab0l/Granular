@@ -195,6 +195,7 @@ namespace System.Windows.Controls
         static ScrollViewer()
         {
             Control.IsTabStopProperty.OverrideMetadata(typeof(ScrollViewer), new FrameworkPropertyMetadata(false));
+            FrameworkElement.DefaultStyleKeyProperty.OverrideMetadata(typeof(ScrollViewer), new FrameworkPropertyMetadata(new StyleKey(typeof(ScrollViewer))));
         }
 
         protected override void OnApplyTemplate()

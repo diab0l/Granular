@@ -51,6 +51,7 @@ namespace System.Windows.Controls
         static Expander()
         {
             Control.IsTabStopProperty.OverrideMetadata(typeof(Expander), new FrameworkPropertyMetadata(false));
+            FrameworkElement.DefaultStyleKeyProperty.OverrideMetadata(typeof(Expander), new FrameworkPropertyMetadata(new StyleKey(typeof(Expander))));
         }
 
         public Expander()
