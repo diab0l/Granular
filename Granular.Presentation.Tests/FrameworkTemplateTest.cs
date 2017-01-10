@@ -76,48 +76,5 @@ namespace Granular.Presentation.Tests
 
             Assert.AreEqual(Double.NaN, control.Height);
         }
-
-        [TestMethod]
-        public void TemplateFindDefaultTest()
-        {
-            string text = @"
-            <ControlTemplate xmlns='http://schemas.microsoft.com/winfx/2006/xaml/presentation' xmlns:x='http://schemas.microsoft.com/winfx/2006/xaml' TargetType='{x:Type Control}'>
-                <FrameworkElement/>
-            </ControlTemplate>";
-
-            ControlTemplate controlTemplate = XamlLoader.Load(XamlParser.Parse(text)) as ControlTemplate;
-
-            ResourceDictionary resources = new ResourceDictionary();
-            resources.Add(new TemplateKey(typeof(Control)), controlTemplate);
-
-            Control control = new Control();
-            control.Resources = resources;
-
-            Assert.AreEqual(controlTemplate, control.Template);
-        }
-
-        [TestMethod]
-        public void TemplateAndStyleFindDefaultTest()
-        {
-            Style style = new Style { TargetType = typeof(Control) };
-            style.Setters.Add(new Setter { Property = new DependencyPropertyPathElement(FrameworkElement.WidthProperty), Value = 100 });
-
-            string text = @"
-            <ControlTemplate xmlns='http://schemas.microsoft.com/winfx/2006/xaml/presentation' xmlns:x='http://schemas.microsoft.com/winfx/2006/xaml' TargetType='{x:Type Control}'>
-                <FrameworkElement/>
-            </ControlTemplate>";
-
-            ControlTemplate controlTemplate = XamlLoader.Load(XamlParser.Parse(text)) as ControlTemplate;
-
-            ResourceDictionary resources = new ResourceDictionary();
-            resources.Add(new StyleKey(typeof(Control)), style);
-            resources.Add(new TemplateKey(typeof(Control)), controlTemplate);
-
-            Control control = new Control();
-            control.Resources = resources;
-
-            Assert.AreEqual(style, control.Style);
-            Assert.AreEqual(controlTemplate, control.Template);
-        }
     }
 }

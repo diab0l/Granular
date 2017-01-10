@@ -171,12 +171,6 @@ namespace System.Windows.Controls
             return finalSize;
         }
 
-        protected override void OnResourcesChanged(ResourcesChangedEventArgs e)
-        {
-            base.OnResourcesChanged(e);
-            SetValue(TemplateProperty, GetDefaultControlTemplate(), BaseValueSource.Default);
-        }
-
         protected virtual void UpdateVisualState(bool useTransitions)
         {
             //
@@ -190,24 +184,6 @@ namespace System.Windows.Controls
         protected override IFrameworkTemplate GetTemplate()
         {
             return Template;
-        }
-
-        private ControlTemplate GetDefaultControlTemplate()
-        {
-            Type type = GetType();
-
-            while (type != typeof(FrameworkElement))
-            {
-                object value;
-                if (TryGetResource(new TemplateKey(type), out value))
-                {
-                    return value as ControlTemplate;
-                }
-
-                type = type.BaseType;
-            }
-
-            return null;
         }
 
         private bool RaiseMouseButtonEvent(MouseButtonEventArgs e, RoutedEvent routedEvent)

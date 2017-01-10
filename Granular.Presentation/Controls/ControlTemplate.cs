@@ -6,7 +6,6 @@ using System.Windows.Markup;
 
 namespace System.Windows.Controls
 {
-    [DictionaryKeyProperty("Key")]
     [Bridge.Reflectable(Bridge.MemberAccessibility.PublicInstanceProperty)]
     public class ControlTemplate : FrameworkTemplate
     {
@@ -23,13 +22,6 @@ namespace System.Windows.Controls
 
                 targetType = value;
             }
-        }
-
-        private object key;
-        public object Key
-        {
-            get { return key ?? new TemplateKey(TargetType); }
-            set { key = value; }
         }
 
         public ControlTemplate()
