@@ -41,39 +41,41 @@ namespace System.Windows
 
         event EventHandler<ResourcesChangedEventArgs> IResourceContainer.ResourcesChanged { add { } remove { } }
 
-        private CacheDictionary<object, object> resourcesCache;
+        private CacheDictionary<Assembly, ResourceDictionary> themeResourcesCache;
 
         public SystemResources()
         {
-            resourcesCache = CacheDictionary<object, object>.Create(TryResolveResource);
+            themeResourcesCache = CacheDictionary<Assembly, ResourceDictionary>.CreateUsingStringKeys(ResolveAssemblyThemeResources, assembly => assembly.FullName);
         }
 
-        public bool TryGetResource(object resourceKey, out object value)
+        private static bool ResolveAssemblyThemeResources(Assembly assembly, out ResourceDictionary value)
         {
-            return resourcesCache.TryGetValue(resourceKey, out value);
-        }
-
-        private bool TryResolveResource(object resourceKey, out object value)
-        {
-            value = null;
-
-            if (!(resourceKey is IResourceKey) || ((IResourceKey)resourceKey).Assembly == null)
-            {
-                return false;
-            }
-
-            Assembly assembly = ((IResourceKey)resourceKey).Assembly;
             ThemeInfoAttribute themeInfoAttribute = assembly.FirstOrDefaultCustomAttributeCached<ThemeInfoAttribute>();
 
             if (themeInfoAttribute == null || themeInfoAttribute.GenericDictionaryLocation == ResourceDictionaryLocation.None)
             {
+                value = null;
                 return false;
             }
 
-            string assemblyName = themeInfoAttribute.GenericDictionaryLocation == ResourceDictionaryLocation.SourceAssembly ? assembly.GetName().Name : String.Format("{0}.{1}", assembly.GetName().Name, ThemeName);
+            string themeResourcesAssemblyName = themeInfoAttribute.GenericDictionaryLocation == ResourceDictionaryLocation.SourceAssembly ? assembly.GetName().Name : String.Format("{0}.{1}", assembly.GetName().Name, ThemeName);
 
-            ResourceDictionary resourceDictionary = (ResourceDictionary)EmbeddedResourceLoader.LoadResourceElement(Granular.Compatibility.Uri.CreateAbsoluteUri(String.Format("pack://application:,,,/{0};component/Themes/{1}.xaml", assemblyName, ThemeNameAndColor)));
-            return resourceDictionary.TryGetValue(resourceKey, out value);
+            value = (ResourceDictionary)EmbeddedResourceLoader.LoadResourceElement(Granular.Compatibility.Uri.CreateAbsoluteUri(String.Format("pack://application:,,,/{0};component/Themes/{1}.xaml", themeResourcesAssemblyName, ThemeNameAndColor)));
+            return true;
+        }
+
+        public bool TryGetResource(object resourceKey, out object value)
+        {
+            value = null;
+
+            Assembly assembly = (resourceKey as IResourceKey)?.Assembly;
+            if (assembly == null)
+            {
+                return false;
+            }
+
+            ResourceDictionary themeResources;
+            return themeResourcesCache.TryGetValue(assembly, out themeResources) && themeResources.TryGetValue(resourceKey, out value);
         }
     }
 }
