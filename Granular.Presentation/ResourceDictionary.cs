@@ -46,7 +46,7 @@ namespace System.Windows
             }
         }
 
-        public int Count { get { return dictionary.Count + MergedDictionaries.Select(mergedDictionary => mergedDictionary.Count).DefaultIfEmpty(0).Sum(); } }
+        public int Count { get { return dictionary.Count;  } }
 
         public ICollection<object> Keys { get { return dictionary.Keys; } }
 
