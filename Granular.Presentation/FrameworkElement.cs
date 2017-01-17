@@ -219,6 +219,8 @@ namespace System.Windows
                     return;
                 }
 
+                IResourceContainer oldResourceInheritanceParent = resourceInheritanceParent;
+
                 if (resourceInheritanceParent != null)
                 {
                     resourceInheritanceParent.ResourcesChanged -= OnParentResourcesChanged;
@@ -231,9 +233,14 @@ namespace System.Windows
                     resourceInheritanceParent.ResourcesChanged += OnParentResourcesChanged;
                 }
 
-                RaiseResourcesChanged(ResourcesChangedEventArgs.Reset);
+                if (oldResourceInheritanceParent != null && !oldResourceInheritanceParent.IsEmpty || resourceInheritanceParent != null && !resourceInheritanceParent.IsEmpty)
+                {
+                    RaiseResourcesChanged(ResourcesChangedEventArgs.Reset);
+                }
             }
         }
+
+        bool IResourceContainer.IsEmpty { get { return (ResourceInheritanceParent == null || ResourceInheritanceParent.IsEmpty) && (Resources == null || Resources.IsEmpty); } }
 
         public static readonly DependencyProperty DataContextProperty = DependencyProperty.Register("DataContext", typeof(object), typeof(FrameworkElement), new FrameworkPropertyMetadata(FrameworkPropertyMetadataOptions.Inherits, propertyChangedCallback: (sender, e) => ((FrameworkElement)sender).OnDataContextChanged(e)));
         public object DataContext

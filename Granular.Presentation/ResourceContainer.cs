@@ -7,6 +7,7 @@ namespace System.Windows
     public interface IResourceContainer
     {
         event EventHandler<ResourcesChangedEventArgs> ResourcesChanged;
+        bool IsEmpty { get; }
 
         bool TryGetResource(object resourceKey, out object value);
     }

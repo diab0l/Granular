@@ -87,6 +87,8 @@ namespace System.Windows
                     return;
                 }
 
+                IResourceContainer oldParentResourceContainer = parentResourceContainer;
+
                 if (parentResourceContainer != null)
                 {
                     parentResourceContainer.ResourcesChanged -= OnParentResourcesChanged;
@@ -99,9 +101,14 @@ namespace System.Windows
                     parentResourceContainer.ResourcesChanged += OnParentResourcesChanged;
                 }
 
-                ResourcesChanged.Raise(this, ResourcesChangedEventArgs.Reset);
+                if (oldParentResourceContainer != null && !oldParentResourceContainer.IsEmpty || parentResourceContainer != null && !parentResourceContainer.IsEmpty)
+                {
+                    ResourcesChanged.Raise(this, ResourcesChangedEventArgs.Reset);
+                }
             }
         }
+
+        bool IResourceContainer.IsEmpty { get { return ParentResourceContainer == null || ParentResourceContainer.IsEmpty; } }
 
         private void OnParentResourcesChanged(object sender, ResourcesChangedEventArgs e)
         {

@@ -49,6 +49,8 @@ namespace System.Windows
             }
         }
 
+        bool IResourceContainer.IsEmpty { get { return false; } }
+
         public Uri BaseUri { get; set; }
 
         public Application()

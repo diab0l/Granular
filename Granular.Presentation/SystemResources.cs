@@ -37,6 +37,8 @@ namespace System.Windows
         private const string ThemeName = "Generic";
         private const string ThemeNameAndColor = "Generic";
 
+        public bool IsEmpty { get { return false; } }
+
         event EventHandler<ResourcesChangedEventArgs> IResourceContainer.ResourcesChanged { add { } remove { } }
 
         private CacheDictionary<object, object> resourcesCache;

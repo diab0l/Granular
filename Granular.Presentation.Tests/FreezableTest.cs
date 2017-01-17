@@ -76,7 +76,7 @@ namespace Granular.Presentation.Tests
             Assert.IsFalse(freezable1.TryGetResource("key1", out resourceValue));
 
             freezableCollection.TrySetContextParent(element);
-            Assert.AreEqual(2, resources1ChangedCount);
+            Assert.AreEqual(1, resources1ChangedCount);
             Assert.IsTrue(freezable1.TryGetResource("key1", out resourceValue));
             Assert.AreEqual("value1", resourceValue);
 
@@ -86,7 +86,7 @@ namespace Granular.Presentation.Tests
             Assert.AreEqual("value1", resourceValue);
 
             freezableCollection.Clear();
-            Assert.AreEqual(3, resources1ChangedCount);
+            Assert.AreEqual(2, resources1ChangedCount);
             Assert.IsFalse(freezable1.TryGetResource("key1", out resourceValue));
             Assert.IsFalse(freezable2.TryGetResource("key1", out resourceValue));
         }

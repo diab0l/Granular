@@ -48,6 +48,8 @@ namespace System.Windows
 
         public int Count { get { return dictionary.Count;  } }
 
+        public bool IsEmpty { get { return Count == 0 && MergedDictionaries.All(dictionary => dictionary.IsEmpty); } }
+
         public ICollection<object> Keys { get { return dictionary.Keys; } }
 
         public ICollection<object> Values { get { return dictionary.Values; } }
