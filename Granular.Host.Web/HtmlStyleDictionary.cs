@@ -5,6 +5,7 @@ using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using Granular.Collections;
 using Granular.Extensions;
 
 namespace Granular.Host
@@ -34,46 +35,45 @@ namespace Granular.Host
 
         private Bridge.Html5.HTMLElement element;
 
-        private Dictionary<string, string> dictionary;
-        private Dictionary<string, string> setProperties;
-        private HashSet<string> clearProperties;
+        private object properties;
+        private object setProperties;
+        private object clearProperties;
 
         public HtmlStyleDictionary(Bridge.Html5.HTMLElement element)
         {
             this.element = element;
 
-            dictionary = new Dictionary<string, string>();
-            setProperties = new Dictionary<string, string>();
-            clearProperties = new HashSet<string>();
+            properties = new object();
+            setProperties = new object();
+            clearProperties = new object();
 
             IsValid = true;
         }
 
         public void SetValue(string key, string value)
         {
-            string currentValue;
-            if (dictionary.TryGetValue(key, out currentValue) && currentValue == value)
+            if ((string)properties[key] == value)
             {
                 return;
             }
 
-            dictionary[key] = value;
+            properties[key] = value;
             setProperties[key] = value;
-            clearProperties.Remove(key);
+            DeleteProperty(clearProperties[key]);
 
             IsValid = false;
         }
 
         public void ClearValue(string key)
         {
-            if (!dictionary.ContainsKey(key))
+            if (IsUndefined(properties[key]))
             {
                 return;
             }
 
-            dictionary.Remove(key);
-            setProperties.Remove(key);
-            clearProperties.Add(key);
+            DeleteProperty(properties[key]);
+            DeleteProperty(setProperties[key]);
+            clearProperties[key] = null;
 
             IsValid = false;
         }
@@ -85,21 +85,30 @@ namespace Granular.Host
                 return;
             }
 
-            foreach (KeyValuePair<string, string> pair in setProperties)
+            foreach (string key in GetKeys(setProperties))
             {
-                element.Style.SetProperty(pair.Key, pair.Value);
+                element.Style.SetProperty(key, (string)setProperties[key]);
             }
 
-            foreach (string key in clearProperties)
+            foreach (string key in GetKeys(clearProperties))
             {
                 element.Style.RemoveProperty(key);
             }
 
-            setProperties.Clear();
-            clearProperties.Clear();
+            setProperties = new object();
+            clearProperties = new object();
 
             IsValid = true;
         }
+
+        [Bridge.Template("({value} === undefined)")]
+        private static extern bool IsUndefined(object value);
+
+        [Bridge.Template("delete {value}")]
+        private static extern object DeleteProperty(object value);
+
+        [Bridge.Template("Object.keys({obj})")]
+        private static extern string[] GetKeys(object obj);
     }
 
     internal static class HtmlStyleDictionaryExtensions
