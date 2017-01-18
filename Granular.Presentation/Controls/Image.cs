@@ -64,7 +64,7 @@ namespace System.Windows.Controls
             }
         }
 
-        private Dictionary<IRenderElementFactory, IImageRenderElement> imageRenderElements;
+        private RenderElementDictionary<IImageRenderElement> imageRenderElements;
 
         static Image()
         {
@@ -73,28 +73,12 @@ namespace System.Windows.Controls
 
         public Image()
         {
-            imageRenderElements = new Dictionary<IRenderElementFactory, IImageRenderElement>();
+            imageRenderElements = new RenderElementDictionary<IImageRenderElement>(CreateRenderElement);
         }
 
         protected override object CreateContentRenderElementOverride(IRenderElementFactory factory)
         {
-            IImageRenderElement imageRenderElement;
-            if (imageRenderElements.TryGetValue(factory, out imageRenderElement))
-            {
-                return imageRenderElement;
-            }
-
-            imageRenderElement = factory.CreateImageRenderElement(this);
-
-            if (Source != null)
-            {
-                imageRenderElement.Bounds = GetStretchRect(Source.Size, VisualBounds.Size, Stretch, StretchDirection);
-                imageRenderElement.Source = this.Source;
-            }
-
-            imageRenderElements.Add(factory, imageRenderElement);
-
-            return imageRenderElement;
+            return imageRenderElements.GetRenderElement(factory);
         }
 
         protected override Size MeasureOverride(Size availableSize)
@@ -111,7 +95,7 @@ namespace System.Windows.Controls
         {
             Rect imageRenderElementBounds = Source != null ? GetStretchRect(Source.Size, finalSize, Stretch, StretchDirection) : Rect.Zero;
 
-            foreach (IImageRenderElement imageRenderElement in imageRenderElements.Values)
+            foreach (IImageRenderElement imageRenderElement in imageRenderElements.Elements)
             {
                 imageRenderElement.Bounds = imageRenderElementBounds;
                 imageRenderElement.Source = Source;
@@ -135,6 +119,19 @@ namespace System.Windows.Controls
         private void OnBitmapSourceDownloadFailed(object sender, EventArgs e)
         {
             RaiseEvent(new RoutedEventArgs(ImageFailedEvent, this));
+        }
+
+        private IImageRenderElement CreateRenderElement(IRenderElementFactory factory)
+        {
+            IImageRenderElement imageRenderElement = factory.CreateImageRenderElement(this);
+
+            if (Source != null)
+            {
+                imageRenderElement.Bounds = GetStretchRect(Source.Size, VisualBounds.Size, Stretch, StretchDirection);
+                imageRenderElement.Source = this.Source;
+            }
+
+            return imageRenderElement;
         }
 
         private static Rect GetStretchRect(Size size, Size availableSize, Stretch stretch, StretchDirection stretchDirection)

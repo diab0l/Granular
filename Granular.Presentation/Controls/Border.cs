@@ -7,28 +7,28 @@ namespace System.Windows.Controls
 {
     public class Border : Decorator
     {
-        public static readonly DependencyProperty BackgroundProperty = Panel.BackgroundProperty.AddOwner(typeof(Border), new FrameworkPropertyMetadata(null, (sender, e) => ((Border)sender).SetRenderElementsProperty(renderElement => renderElement.Background = (Brush)e.NewValue)));
+        public static readonly DependencyProperty BackgroundProperty = Panel.BackgroundProperty.AddOwner(typeof(Border), new FrameworkPropertyMetadata(null, (sender, e) => ((Border)sender).borderRenderElements.SetRenderElementsProperty(renderElement => renderElement.Background = (Brush)e.NewValue)));
         public Brush Background
         {
             get { return (Brush)GetValue(BackgroundProperty); }
             set { SetValue(BackgroundProperty, value); }
         }
 
-        public static readonly DependencyProperty BorderBrushProperty = DependencyProperty.Register("BorderBrush", typeof(Brush), typeof(Border), new FrameworkPropertyMetadata(null, (sender, e) => ((Border)sender).SetRenderElementsProperty(renderElement => renderElement.BorderBrush = (Brush)e.NewValue)));
+        public static readonly DependencyProperty BorderBrushProperty = DependencyProperty.Register("BorderBrush", typeof(Brush), typeof(Border), new FrameworkPropertyMetadata(null, (sender, e) => ((Border)sender).borderRenderElements.SetRenderElementsProperty(renderElement => renderElement.BorderBrush = (Brush)e.NewValue)));
         public Brush BorderBrush
         {
             get { return (Brush)GetValue(BorderBrushProperty); }
             set { SetValue(BorderBrushProperty, value); }
         }
 
-        public static readonly DependencyProperty BorderThicknessProperty = DependencyProperty.Register("BorderThickness", typeof(Thickness), typeof(Border), new FrameworkPropertyMetadata(Thickness.Zero, FrameworkPropertyMetadataOptions.AffectsMeasure, propertyChangedCallback: (sender, e) => ((Border)sender).SetRenderElementsProperty(renderElement => renderElement.BorderThickness = (Thickness)e.NewValue)));
+        public static readonly DependencyProperty BorderThicknessProperty = DependencyProperty.Register("BorderThickness", typeof(Thickness), typeof(Border), new FrameworkPropertyMetadata(Thickness.Zero, FrameworkPropertyMetadataOptions.AffectsMeasure, propertyChangedCallback: (sender, e) => ((Border)sender).borderRenderElements.SetRenderElementsProperty(renderElement => renderElement.BorderThickness = (Thickness)e.NewValue)));
         public Thickness BorderThickness
         {
             get { return (Thickness)GetValue(BorderThicknessProperty); }
             set { SetValue(BorderThicknessProperty, value); }
         }
 
-        public static readonly DependencyProperty CornerRadiusProperty = DependencyProperty.Register("CornerRadius", typeof(CornerRadius), typeof(Border), new FrameworkPropertyMetadata(CornerRadius.Zero, (sender, e) => ((Border)sender).SetRenderElementsProperty(renderElement => renderElement.CornerRadius = (CornerRadius)e.NewValue)));
+        public static readonly DependencyProperty CornerRadiusProperty = DependencyProperty.Register("CornerRadius", typeof(CornerRadius), typeof(Border), new FrameworkPropertyMetadata(CornerRadius.Zero, (sender, e) => ((Border)sender).borderRenderElements.SetRenderElementsProperty(renderElement => renderElement.CornerRadius = (CornerRadius)e.NewValue)));
         public CornerRadius CornerRadius
         {
             get { return (CornerRadius)GetValue(CornerRadiusProperty); }
@@ -42,46 +42,21 @@ namespace System.Windows.Controls
             set { SetValue(PaddingProperty, value); }
         }
 
-        private Dictionary<IRenderElementFactory, IBorderRenderElement> borderRenderElements;
+        private RenderElementDictionary<IBorderRenderElement> borderRenderElements;
 
         static Border()
         {
-            UIElement.IsHitTestVisibleProperty.OverrideMetadata(typeof(Border), new FrameworkPropertyMetadata(propertyChangedCallback: (sender, e) => ((Border)sender).SetRenderElementsProperty(renderElement => renderElement.IsHitTestVisible = (bool)e.NewValue)));
+            UIElement.IsHitTestVisibleProperty.OverrideMetadata(typeof(Border), new FrameworkPropertyMetadata(propertyChangedCallback: (sender, e) => ((Border)sender).borderRenderElements.SetRenderElementsProperty(renderElement => renderElement.IsHitTestVisible = (bool)e.NewValue)));
         }
 
         public Border()
         {
-            borderRenderElements = new Dictionary<IRenderElementFactory, IBorderRenderElement>();
-        }
-
-        private void SetRenderElementsProperty(Action<IBorderRenderElement> setter)
-        {
-            foreach (IBorderRenderElement borderRenderElement in borderRenderElements.Values)
-            {
-                setter(borderRenderElement);
-            }
+            borderRenderElements = new RenderElementDictionary<IBorderRenderElement>(CreateRenderElement);
         }
 
         protected override object CreateContentRenderElementOverride(IRenderElementFactory factory)
         {
-            IBorderRenderElement borderRenderElement;
-            if (borderRenderElements.TryGetValue(factory, out borderRenderElement))
-            {
-                return borderRenderElement;
-            }
-
-            borderRenderElement = factory.CreateBorderRenderElement(this);
-
-            borderRenderElement.Background = Background;
-            borderRenderElement.BorderBrush = BorderBrush;
-            borderRenderElement.BorderThickness = BorderThickness;
-            borderRenderElement.Bounds = new Rect(VisualSize);
-            borderRenderElement.CornerRadius = CornerRadius;
-            borderRenderElement.IsHitTestVisible = IsHitTestVisible;
-
-            borderRenderElements.Add(factory, borderRenderElement);
-
-            return borderRenderElement;
+            return borderRenderElements.GetRenderElement(factory);
         }
 
         protected override Size MeasureOverride(Size availableSize)
@@ -96,7 +71,7 @@ namespace System.Windows.Controls
                 Child.Arrange(new Rect(BorderThickness.Location + Padding.Location, (finalSize - BorderThickness.Size - Padding.Size).Max(Size.Zero)));
             }
 
-            foreach (IBorderRenderElement borderRenderElement in borderRenderElements.Values)
+            foreach (IBorderRenderElement borderRenderElement in borderRenderElements.Elements)
             {
                 borderRenderElement.Bounds = new Rect(finalSize);
             }
@@ -116,6 +91,20 @@ namespace System.Windows.Controls
                 position.Y < borderTickness.Top ||
                 borderSize.Width - position.X < borderTickness.Right ||
                 borderSize.Height - position.Y < borderTickness.Bottom; // cornerRadius is ignored
+        }
+
+        private IBorderRenderElement CreateRenderElement(IRenderElementFactory factory)
+        {
+            IBorderRenderElement borderRenderElement = factory.CreateBorderRenderElement(this);
+
+            borderRenderElement.Background = Background;
+            borderRenderElement.BorderBrush = BorderBrush;
+            borderRenderElement.BorderThickness = BorderThickness;
+            borderRenderElement.Bounds = new Rect(VisualSize);
+            borderRenderElement.CornerRadius = CornerRadius;
+            borderRenderElement.IsHitTestVisible = IsHitTestVisible;
+
+            return borderRenderElement;
         }
     }
 }
