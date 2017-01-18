@@ -74,7 +74,7 @@ namespace System.Windows.Controls
             set { SetValue(TextTrimmingProperty, value); }
         }
 
-        public static readonly DependencyProperty TextWrappingProperty = DependencyProperty.Register("TextWrapping", typeof(TextWrapping), typeof(TextBlock), new FrameworkPropertyMetadata(FrameworkPropertyMetadataOptions.AffectsMeasure | FrameworkPropertyMetadataOptions.Inherits, propertyChangedCallback: (sender, e) => ((TextBlock)sender).SetRenderElementsProperty(textBlockRenderElement => textBlockRenderElement.TextWrapping = (TextWrapping)e.NewValue)));
+        public static readonly DependencyProperty TextWrappingProperty = DependencyProperty.Register("TextWrapping", typeof(TextWrapping), typeof(TextBlock), new FrameworkPropertyMetadata(TextWrapping.NoWrap, FrameworkPropertyMetadataOptions.AffectsMeasure | FrameworkPropertyMetadataOptions.Inherits, propertyChangedCallback: (sender, e) => ((TextBlock)sender).SetRenderElementsProperty(textBlockRenderElement => textBlockRenderElement.TextWrapping = (TextWrapping)e.NewValue)));
         public TextWrapping TextWrapping
         {
             get { return (TextWrapping)GetValue(TextWrappingProperty); }
@@ -82,12 +82,10 @@ namespace System.Windows.Controls
         }
 
         private Dictionary<IRenderElementFactory, ITextBlockRenderElement> textBlockRenderElements;
-
-        private MeasureCache measureCache;
+        private Size noWrapSize;
 
         public TextBlock()
         {
-            measureCache = new MeasureCache(4);
             textBlockRenderElements = new Dictionary<IRenderElementFactory, ITextBlockRenderElement>();
         }
 
@@ -120,17 +118,17 @@ namespace System.Windows.Controls
 
         protected override Size MeasureOverride(Size availableSize)
         {
-            Size measuredSize;
-
-            if (measureCache.TryGetMeasure(Size.FromWidth(availableSize.Width), out measuredSize))
+            if (noWrapSize == null)
             {
-                return measuredSize;
+                noWrapSize = ApplicationHost.Current.TextMeasurementService.Measure(Text ?? String.Empty, FontSize, new Typeface(FontFamily, FontStyle, FontWeight, FontStretch), Double.PositiveInfinity);
             }
 
-            measuredSize = ApplicationHost.Current.TextMeasurementService.Measure(Text ?? String.Empty, FontSize, new Typeface(FontFamily, FontStyle, FontWeight, FontStretch), availableSize.Width);
-            measureCache.SetMeasure(Size.FromWidth(availableSize.Width), measuredSize);
+            if (TextWrapping == TextWrapping.NoWrap || noWrapSize.Width <= availableSize.Width)
+            {
+                return noWrapSize;
+            }
 
-            return measuredSize;
+            return ApplicationHost.Current.TextMeasurementService.Measure(Text ?? String.Empty, FontSize, new Typeface(FontFamily, FontStyle, FontWeight, FontStretch), availableSize.Width);
         }
 
         protected override Size ArrangeOverride(Size finalSize)
@@ -146,37 +144,37 @@ namespace System.Windows.Controls
         private void OnTextChanged(DependencyPropertyChangedEventArgs e)
         {
             SetRenderElementsProperty(textBlockRenderElement => textBlockRenderElement.Text = Text);
-            measureCache.Clear();
+            noWrapSize = null;
         }
 
         private void OnFontFamilyChanged(DependencyPropertyChangedEventArgs e)
         {
             SetRenderElementsProperty(textBlockRenderElement => textBlockRenderElement.FontFamily = FontFamily);
-            measureCache.Clear();
+            noWrapSize = null;
         }
 
         private void OnFontSizeChanged(DependencyPropertyChangedEventArgs e)
         {
             SetRenderElementsProperty(textBlockRenderElement => textBlockRenderElement.FontSize = FontSize);
-            measureCache.Clear();
+            noWrapSize = null;
         }
 
         private void OnFontStyleChanged(DependencyPropertyChangedEventArgs e)
         {
             SetRenderElementsProperty(textBlockRenderElement => textBlockRenderElement.FontStyle = FontStyle);
-            measureCache.Clear();
+            noWrapSize = null;
         }
 
         private void OnFontWeightChanged(DependencyPropertyChangedEventArgs e)
         {
             SetRenderElementsProperty(textBlockRenderElement => textBlockRenderElement.FontWeight = FontWeight);
-            measureCache.Clear();
+            noWrapSize = null;
         }
 
         private void OnFontStretchChanged(DependencyPropertyChangedEventArgs e)
         {
             SetRenderElementsProperty(textBlockRenderElement => textBlockRenderElement.FontStretch = FontStretch);
-            measureCache.Clear();
+            noWrapSize = null;
         }
 
         private void SetRenderElementsProperty(Action<ITextBlockRenderElement> setter)

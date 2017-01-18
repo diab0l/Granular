@@ -141,7 +141,6 @@
     <Compile Include="Controls\ItemsControl.cs" />
     <Compile Include="Controls\ItemsPanelTemplate.cs" />
     <Compile Include="Controls\ItemsPresenter.cs" />
-    <Compile Include="Controls\MeasureCache.cs" />
     <Compile Include="Controls\Primitives\Placement.cs" />
     <Compile Include="Controls\PopupLayer.cs" />
     <Compile Include="Controls\Primitives\RangeBase.cs" />
