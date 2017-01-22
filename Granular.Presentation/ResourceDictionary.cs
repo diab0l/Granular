@@ -86,6 +86,11 @@ namespace System.Windows
         {
             if (dictionary.TryGetValue(key, out value))
             {
+                if (value is IValueProvider)
+                {
+                    value = ((IValueProvider)value).ProvideValue();
+                }
+
                 return true;
             }
 

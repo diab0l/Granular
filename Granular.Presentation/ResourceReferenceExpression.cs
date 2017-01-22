@@ -40,9 +40,6 @@ namespace System.Windows
         private ObservableValue observableValue;
         private IResourceContainer resourceContainer;
 
-        private IValueProvider currentValueProvider;
-        private object currentValue;
-
         public ResourceReferenceExpression(IResourceContainer resourceContainer, object resourceKey)
         {
             this.resourceContainer = resourceContainer;
@@ -77,24 +74,7 @@ namespace System.Windows
         private object GetResourceValue()
         {
             object value;
-
-            if (!resourceContainer.TryGetResource(resourceKey, out value))
-            {
-                return ObservableValue.UnsetValue;
-            }
-
-            if (!(value is IValueProvider))
-            {
-                return value;
-            }
-
-            if (currentValueProvider != value)
-            {
-                currentValueProvider = (IValueProvider)value;
-                currentValue = currentValueProvider.ProvideValue();
-            }
-
-            return currentValue;
+            return resourceContainer.TryGetResource(resourceKey, out value) ? value : ObservableValue.UnsetValue;
         }
     }
 }

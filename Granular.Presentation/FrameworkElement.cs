@@ -268,7 +268,6 @@ namespace System.Windows
         public string Name { get; set; }
 
         private IFrameworkTemplate appliedTemplate;
-        private CacheDictionary<object, object> resourcesCache;
         private Matrix layoutTransformValue;
         private bool isDefaultAlignment;
 
@@ -276,8 +275,6 @@ namespace System.Windows
         {
             Triggers = new ObservableCollection<ITrigger>();
             Triggers.CollectionChanged += OnTriggersCollectionChanged;
-
-            resourcesCache = CacheDictionary<object, object>.Create(TryResolveResource);
 
             actualWidthValueEntry = GetValueEntry(ActualWidthPropertyKey);
             actualHeightValueEntry = GetValueEntry(ActualHeightPropertyKey);
@@ -488,23 +485,14 @@ namespace System.Windows
 
         public bool TryGetResource(object resourceKey, out object value)
         {
-            return resourcesCache.TryGetValue(resourceKey, out value);
-        }
-
-        private bool TryResolveResource(object resourceKey, out object value)
-        {
-            if (Resources != null && Resources.TryGetValue(resourceKey, out value))
+            if ((Resources == null || !Resources.TryGetValue(resourceKey, out value)) &&
+                (ResourceInheritanceParent == null || !ResourceInheritanceParent.TryGetResource(resourceKey, out value)))
             {
-                return true;
+                value = null;
+                return false;
             }
 
-            if (ResourceInheritanceParent != null && ResourceInheritanceParent.TryGetResource(resourceKey, out value))
-            {
-                return true;
-            }
-
-            value = null;
-            return false;
+            return true;
         }
 
         private void OnParentResourcesChanged(object sender, ResourcesChangedEventArgs e)
@@ -525,8 +513,6 @@ namespace System.Windows
 
         protected virtual void OnResourcesChanged(ResourcesChangedEventArgs e)
         {
-            resourcesCache.Clear();
-
             object value;
             if (DefaultStyleKey == null || !TryGetResource(DefaultStyleKey, out value))
             {

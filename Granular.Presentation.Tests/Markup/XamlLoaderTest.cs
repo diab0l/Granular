@@ -377,24 +377,25 @@ namespace Granular.Presentation.Tests.Markup
             Assert.IsTrue(dictionary.Contains("item1"));
             Assert.IsTrue(dictionary.Contains("item2"));
 
-            IValueProvider valueProvider = dictionary.GetValue("item1") as IValueProvider;
-            Assert.IsNotNull(valueProvider);
-
-            LoaderTestElement item1a = valueProvider.ProvideValue() as LoaderTestElement;
+            LoaderTestElement item1a = dictionary.GetValue("item1") as LoaderTestElement;
             Assert.IsNotNull(item1a);
             Assert.AreEqual(1, ((LoaderTestElement)item1a).Value1);
             Assert.AreEqual(2, ((LoaderTestElement)item1a).Value2);
 
-            LoaderTestElement item1b = valueProvider.ProvideValue() as LoaderTestElement;
+            LoaderTestElement item1b = dictionary.GetValue("item1") as LoaderTestElement;
+            Assert.IsFalse(ReferenceEquals(item1a, item1b));
             Assert.IsNotNull(item1b);
             Assert.AreNotEqual(item1a, item1b);
             Assert.AreEqual(1, ((LoaderTestElement)item1b).Value1);
             Assert.AreEqual(2, ((LoaderTestElement)item1b).Value2);
 
-            LoaderTestElement item2 = dictionary.GetValue("item2") as LoaderTestElement;
-            Assert.IsNotNull(item2);
-            Assert.AreEqual(3, ((LoaderTestElement)item2).Value1);
-            Assert.AreEqual(4, ((LoaderTestElement)item2).Value2);
+            LoaderTestElement item2a = dictionary.GetValue("item2") as LoaderTestElement;
+            Assert.IsNotNull(item2a);
+            Assert.AreEqual(3, ((LoaderTestElement)item2a).Value1);
+            Assert.AreEqual(4, ((LoaderTestElement)item2a).Value2);
+
+            LoaderTestElement item2b = dictionary.GetValue("item2") as LoaderTestElement;
+            Assert.IsTrue(ReferenceEquals(item2a, item2b));
         }
 
         [TestMethod]
@@ -524,11 +525,14 @@ namespace Granular.Presentation.Tests.Markup
             Assert.IsNotNull(dictionary);
             Assert.AreEqual(1, dictionary.Count);
 
-            Assert.AreEqual(1, ((LoaderTestElement)dictionary.Values.First()).Value1);
-            Assert.AreEqual(2, ((LoaderTestElement)dictionary.Values.First()).Value2);
+            LoaderTestElement key = (LoaderTestElement)dictionary.Keys.First();
+            LoaderTestElement value = (LoaderTestElement)dictionary[key];
 
-            Assert.AreEqual(3, ((LoaderTestElement)dictionary.Keys.First()).Value1);
-            Assert.AreEqual(4, ((LoaderTestElement)dictionary.Keys.First()).Value2);
+            Assert.AreEqual(1, value.Value1);
+            Assert.AreEqual(2, value.Value2);
+
+            Assert.AreEqual(3, key.Value1);
+            Assert.AreEqual(4, key.Value2);
         }
     }
 }
