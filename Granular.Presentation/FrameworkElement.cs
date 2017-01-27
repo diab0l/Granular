@@ -318,6 +318,16 @@ namespace System.Windows
                 {
                     InvalidateArrange();
                 }
+
+                if (metadata.AffectsParentMeasure && VisualParent != null)
+                {
+                    ((UIElement)VisualParent).InvalidateMeasure();
+                }
+
+                if (metadata.AffectsParentArrange && VisualParent != null)
+                {
+                    ((UIElement)VisualParent).InvalidateArrange();
+                }
             }
 
             if (!e.IsSubPropertyChange)
