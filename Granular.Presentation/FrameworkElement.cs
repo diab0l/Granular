@@ -530,8 +530,13 @@ namespace System.Windows
 
         protected virtual void OnResourcesChanged(ResourcesChangedEventArgs e)
         {
+            if (DefaultStyleKey == null || !e.Contains(DefaultStyleKey))
+            {
+                return;
+            }
+
             object value;
-            if (DefaultStyleKey == null || !TryGetResource(DefaultStyleKey, out value))
+            if (!TryGetResource(DefaultStyleKey, out value))
             {
                 value = null;
             }
