@@ -13,6 +13,34 @@
         </GradientBrush.GradientStops>
     </LinearGradientBrush>
 
+    <Storyboard x:Key="ButtonStateTransitionToNormalStoryboard">
+        <DoubleAnimation Storyboard.TargetName="backgroundOverlay" Storyboard.TargetProperty="(UIElement.Opacity)" Duration="0:0:0.3" To="0" />
+    </Storyboard>
+
+    <Storyboard x:Key="ButtonStateTransitionPressedToMouseOver">
+        <DoubleAnimation Storyboard.TargetName="backgroundOverlay" Storyboard.TargetProperty="(UIElement.Opacity)" Duration="0:0:0.1" From="1" To="0.5" />
+    </Storyboard>
+
+    <Storyboard x:Key="ButtonStateTransitionToMouseOver">
+        <DoubleAnimation Storyboard.TargetName="backgroundOverlay" Storyboard.TargetProperty="(UIElement.Opacity)" Duration="0:0:0.3" To="0.5" />
+    </Storyboard>
+
+    <Storyboard x:Key="ButtonStateTransitionPressedToPressed">
+        <DoubleAnimation Storyboard.TargetName="backgroundOverlay" Storyboard.TargetProperty="(UIElement.Opacity)" Duration="0:0:0.1" To="1" />
+    </Storyboard>
+
+    <Storyboard x:Key="ButtonStateTransitionPressedToDisabled">
+        <DoubleAnimation Storyboard.TargetName="backgroundOverlay" Storyboard.TargetProperty="(UIElement.Opacity)" Duration="0:0:0.1" To="0" />
+    </Storyboard>
+
+    <Storyboard x:Key="ButtonDisabledStateStoryboard">
+        <DoubleAnimation Storyboard.TargetName="backgroundOverlay" Storyboard.TargetProperty="(UIElement.Opacity)" Duration="0" To="0" />
+    </Storyboard>
+
+    <Storyboard x:Key="ButtonPressedStateStoryboard">
+        <DoubleAnimation Storyboard.TargetName="backgroundOverlay" Storyboard.TargetProperty="(UIElement.Opacity)" Duration="0" To="1" />
+    </Storyboard>
+
     <Style TargetType="{x:Type theme:ButtonChrome}">
         <Setter Property="Background" Value="{StaticResource BackgroundBrush}"/>
         <Setter Property="BorderBrush" Value="{StaticResource BorderBrush}"/>
@@ -23,44 +51,16 @@
                         <VisualStateManager.VisualStateGroups>
                             <VisualStateGroup x:Name="CommonStates">
                                 <VisualStateGroup.Transitions>
-                                    <VisualTransition To="Normal">
-                                        <Storyboard>
-                                            <DoubleAnimation Storyboard.TargetName="backgroundOverlay" Storyboard.TargetProperty="(UIElement.Opacity)" Duration="0:0:0.3" To="0" />
-                                        </Storyboard>
-                                    </VisualTransition>
-                                    <VisualTransition To="MouseOver" From="Pressed">
-                                        <Storyboard>
-                                            <DoubleAnimation Storyboard.TargetName="backgroundOverlay" Storyboard.TargetProperty="(UIElement.Opacity)" Duration="0:0:0.1" From="1" To="0.5" />
-                                        </Storyboard>
-                                    </VisualTransition>
-                                    <VisualTransition To="MouseOver">
-                                        <Storyboard>
-                                            <DoubleAnimation Storyboard.TargetName="backgroundOverlay" Storyboard.TargetProperty="(UIElement.Opacity)" Duration="0:0:0.3" To="0.5" />
-                                        </Storyboard>
-                                    </VisualTransition>
-                                    <VisualTransition To="Pressed">
-                                        <Storyboard>
-                                            <DoubleAnimation Storyboard.TargetName="backgroundOverlay" Storyboard.TargetProperty="(UIElement.Opacity)" Duration="0:0:0.1" To="1" />
-                                        </Storyboard>
-                                    </VisualTransition>
-                                    <VisualTransition To="Disabled">
-                                        <Storyboard>
-                                            <DoubleAnimation Storyboard.TargetName="backgroundOverlay" Storyboard.TargetProperty="(UIElement.Opacity)" Duration="0:0:0.1" To="0" />
-                                        </Storyboard>
-                                    </VisualTransition>
+                                    <VisualTransition To="Normal" Storyboard="{StaticResource ButtonStateTransitionToNormalStoryboard}"/>
+                                    <VisualTransition To="MouseOver" From="Pressed" Storyboard="{StaticResource ButtonStateTransitionPressedToMouseOver}"/>
+                                    <VisualTransition To="MouseOver" Storyboard="{StaticResource ButtonStateTransitionToMouseOver}"/>
+                                    <VisualTransition To="Pressed" Storyboard="{StaticResource ButtonStateTransitionPressedToPressed}"/>
+                                    <VisualTransition To="Disabled" Storyboard="{StaticResource ButtonStateTransitionPressedToDisabled}"/>
                                 </VisualStateGroup.Transitions>
                                 <VisualState x:Name="Normal"/>
                                 <VisualState x:Name="MouseOver"/>
-                                <VisualState x:Name="Pressed">
-                                    <Storyboard>
-                                        <DoubleAnimation Storyboard.TargetName="backgroundOverlay" Storyboard.TargetProperty="(UIElement.Opacity)" Duration="0" To="1" />
-                                    </Storyboard>
-                                </VisualState>
-                                <VisualState x:Name="Disabled">
-                                    <Storyboard>
-                                        <DoubleAnimation Storyboard.TargetName="backgroundOverlay" Storyboard.TargetProperty="(UIElement.Opacity)" Duration="0" To="0" />
-                                    </Storyboard>
-                                </VisualState>
+                                <VisualState x:Name="Pressed" Storyboard="{StaticResource ButtonPressedStateStoryboard}"/>
+                                <VisualState x:Name="Disabled" Storyboard="{StaticResource ButtonDisabledStateStoryboard}"/>
                             </VisualStateGroup>
                         </VisualStateManager.VisualStateGroups>
 
