@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Granular.Collections;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,6 +11,8 @@ namespace Granular.Host.Render
 {
     public class HtmlVisualRenderElement : HtmlRenderElement, IVisualRenderElement
     {
+        private static readonly CacheDictionary<Type, string> ElementTagNameCache = CacheDictionary<Type, string>.CreateUsingStringKeys(ResolveElementTagName, type => type.FullName);
+
         private Brush background;
         public Brush Background
         {
@@ -218,7 +221,12 @@ namespace Granular.Host.Render
 
         private static string GetElementTagName(object target)
         {
-            string typeName = target.GetType().Name.Replace('$', '_');
+            return ElementTagNameCache.GetValue(target.GetType());
+        }
+
+        private static string ResolveElementTagName(Type type)
+        {
+            string typeName = type.Name.Replace('$', '_');
             return HtmlDefinition.Tags.Contains(typeName.ToLower()) ? String.Format("{0}_", typeName) : typeName;
         }
 
