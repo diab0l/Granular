@@ -93,6 +93,34 @@ namespace Granular.Host.Wpf.Render
             }
         }
 
+        private object content;
+        public object Content
+        {
+            get { return content; }
+            set
+            {
+                if (content == value)
+                {
+                    return;
+                }
+
+                if (content != null)
+                {
+                    container.Children.Remove(((IWpfRenderElement)content).WpfElement);
+                    childrenStartIndex--;
+                }
+
+                content = value;
+
+                if (content != null)
+                {
+                    container.Children.Insert(0, ((IWpfRenderElement)content).WpfElement);
+                    childrenStartIndex++;
+                }
+            }
+        }
+
+        private int childrenStartIndex;
         private List<object> children;
         public IEnumerable<object> Children { get { return children; } }
 
@@ -111,7 +139,7 @@ namespace Granular.Host.Wpf.Render
         public void InsertChild(int index, object child)
         {
             children.Insert(index, child);
-            container.Children.Insert(index, ((IWpfRenderElement)child).WpfElement);
+            container.Children.Insert(index + childrenStartIndex, ((IWpfRenderElement)child).WpfElement);
         }
 
         public void RemoveChild(object child)

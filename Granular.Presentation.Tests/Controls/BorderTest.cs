@@ -32,25 +32,26 @@ namespace Granular.Presentation.Tests.Controls
 
             IRenderElementFactory factory = TestRenderElementFactory.Default;
 
-            border.GetRenderElement(factory);
 
-            Assert.AreEqual(new Rect(240, 160), border.GetRenderElement(factory).Bounds);
+            IVisualRenderElement visualRenderElement = border.GetRenderElement(factory);
 
-            Assert.AreEqual(2, border.GetRenderElement(factory).Children.Count());
+            Assert.AreEqual(new Rect(240, 160), visualRenderElement.Bounds);
 
-            IBorderRenderElement borderRenderElement = border.GetRenderElement(factory).Children.ElementAt(0) as IBorderRenderElement;
+            Assert.AreEqual(1, visualRenderElement.Children.Count());
+
+            IBorderRenderElement borderRenderElement = visualRenderElement.Content as IBorderRenderElement;
             Assert.IsNotNull(borderRenderElement);
             Assert.AreEqual(backgroundBrush, borderRenderElement.Background);
             Assert.AreEqual(borderBrush, borderRenderElement.BorderBrush);
             Assert.AreEqual(borderThickness, borderRenderElement.BorderThickness);
             Assert.AreEqual(new Rect(240, 160), borderRenderElement.Bounds);
 
-            IVisualRenderElement visualRenderElement = border.GetRenderElement(factory).Children.ElementAt(1) as IVisualRenderElement;
-            Assert.IsNotNull(visualRenderElement);
-            Assert.AreEqual(new Rect(10, 20, 200, 100), visualRenderElement.Bounds);
+            IVisualRenderElement childVisualRenderElement = visualRenderElement.Children.Single() as IVisualRenderElement;
+            Assert.IsNotNull(childVisualRenderElement);
+            Assert.AreEqual(new Rect(10, 20, 200, 100), childVisualRenderElement.Bounds);
 
             border.Child = null;
-            Assert.AreEqual(1, border.GetRenderElement(factory).Children.Count());
+            Assert.AreEqual(0, visualRenderElement.Children.Count());
         }
 
         [TestMethod]

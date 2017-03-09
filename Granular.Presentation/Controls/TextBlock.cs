@@ -89,7 +89,7 @@ namespace System.Windows.Controls
             textBlockRenderElements = new RenderElementDictionary<ITextBlockRenderElement>(CreateRenderElement);
         }
 
-        protected override object CreateContentRenderElementOverride(IRenderElementFactory factory)
+        protected override object CreateRenderElementContentOverride(IRenderElementFactory factory)
         {
             return textBlockRenderElements.GetRenderElement(factory);
         }

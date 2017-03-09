@@ -76,7 +76,7 @@ namespace System.Windows.Controls
             imageRenderElements = new RenderElementDictionary<IImageRenderElement>(CreateRenderElement);
         }
 
-        protected override object CreateContentRenderElementOverride(IRenderElementFactory factory)
+        protected override object CreateRenderElementContentOverride(IRenderElementFactory factory)
         {
             return imageRenderElements.GetRenderElement(factory);
         }

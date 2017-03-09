@@ -54,7 +54,7 @@ namespace System.Windows.Controls
             borderRenderElements = new RenderElementDictionary<IBorderRenderElement>(CreateRenderElement);
         }
 
-        protected override object CreateContentRenderElementOverride(IRenderElementFactory factory)
+        protected override object CreateRenderElementContentOverride(IRenderElementFactory factory)
         {
             return borderRenderElements.GetRenderElement(factory);
         }

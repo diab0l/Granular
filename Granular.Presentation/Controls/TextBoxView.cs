@@ -239,7 +239,7 @@ namespace System.Windows.Controls
             measuredLineHeight = Double.NaN;
         }
 
-        protected override object CreateContentRenderElementOverride(IRenderElementFactory factory)
+        protected override object CreateRenderElementContentOverride(IRenderElementFactory factory)
         {
             return textBoxRenderElements.GetRenderElement(factory);
         }

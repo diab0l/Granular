@@ -228,7 +228,6 @@ namespace System.Windows.Media
         }
 
         private RenderElementDictionary<IVisualRenderElement> visualRenderElements;
-        private bool containsContentRenderElement;
 
         private Rect hitTestBounds;
         private bool isHitTestBoundsValid;
@@ -266,7 +265,7 @@ namespace System.Windows.Media
             child.VisualParent = this;
             visualChildren.Add(child);
 
-            int renderChildIndex = containsContentRenderElement ? visualChildren.Count : visualChildren.Count - 1;
+            int renderChildIndex = visualChildren.Count - 1;
             foreach (IRenderElementFactory factory in visualRenderElements.Factories)
             {
                 visualRenderElements.GetRenderElement(factory).InsertChild(renderChildIndex, child.GetRenderElement(factory));
@@ -354,27 +353,14 @@ namespace System.Windows.Media
             visualRenderElement.Opacity = VisualOpacity;
             visualRenderElement.Transform = VisualTransform;
 
+            visualRenderElement.Content = CreateRenderElementContentOverride(factory);
+
             int index = 0;
             foreach (Visual child in VisualChildren)
             {
                 child.GetRenderElement(factory);
                 visualRenderElement.InsertChild(index, child.GetRenderElement(factory));
                 index++;
-            }
-
-            object contentRenderElement = CreateContentRenderElementOverride(factory);
-            if (contentRenderElement != null)
-            {
-                visualRenderElement.InsertChild(0, contentRenderElement);
-            }
-
-            if (visualRenderElements.Count == 0)
-            {
-                containsContentRenderElement = contentRenderElement != null;
-            }
-            else if (containsContentRenderElement != (contentRenderElement != null))
-            {
-                throw new Granular.Exception("ContentRenderElement for type \"{0}\" must be created for all of the factories or none of them", GetType().Name);
             }
 
             return visualRenderElement;
@@ -390,7 +376,7 @@ namespace System.Windows.Media
             }
         }
 
-        protected virtual object CreateContentRenderElementOverride(IRenderElementFactory factory)
+        protected virtual object CreateRenderElementContentOverride(IRenderElementFactory factory)
         {
             return null;
         }

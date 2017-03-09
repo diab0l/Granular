@@ -6,6 +6,7 @@ using System.Text;
 using System.Windows;
 using System.Windows.Markup;
 using System.Windows.Media;
+using Bridge.Html5;
 
 namespace Granular.Host.Render
 {
@@ -137,6 +138,40 @@ namespace Granular.Host.Render
             }
         }
 
+        private object content;
+        public object Content
+        {
+            get { return content; }
+            set
+            {
+                if (content == value)
+                {
+                    return;
+                }
+
+                if (content != null)
+                {
+                    childrenActions.Add(() =>
+                    {
+                        RemoveChildElement(((HtmlRenderElement)content).HtmlElement);
+                        childrenStartIndex--;
+                    });
+                }
+
+                content = value;
+
+                if (content != null)
+                {
+                    childrenActions.Add(() =>
+                    {
+                        InsertChildElement(0, ((HtmlRenderElement)content).HtmlElement);
+                        childrenStartIndex++;
+                    });
+                }
+            }
+        }
+
+        private int childrenStartIndex;
         private List<object> children;
         public IEnumerable<object> Children { get { return children; } }
 
@@ -182,16 +217,9 @@ namespace Granular.Host.Render
                 throw new Granular.Exception("Can't add child of type \"{0}\"", child.GetType().Name);
             }
 
-            if (index < children.Count)
-            {
-                children.Insert(index, child);
-                childrenActions.Add(() => HtmlElement.InsertBefore(((HtmlRenderElement)child).HtmlElement, HtmlElement.Children[index]));
-            }
-            else
-            {
-                children.Add(child);
-                childrenActions.Add(() => HtmlElement.AppendChild(((HtmlRenderElement)child).HtmlElement));
-            }
+            children.Insert(index, child);
+
+            childrenActions.Add(() => InsertChildElement(index + childrenStartIndex, ((HtmlRenderElement)child).HtmlElement));
 
             InvalidateRender();
         }
@@ -212,6 +240,23 @@ namespace Granular.Host.Render
             }
 
             InvalidateRender();
+        }
+
+        private void InsertChildElement(int index, HTMLElement child)
+        {
+            if (index < HtmlElement.ChildElementCount)
+            {
+                HtmlElement.InsertBefore(child, HtmlElement.Children[index]);
+            }
+            else
+            {
+                HtmlElement.AppendChild(child);
+            }
+        }
+
+        private void RemoveChildElement(HTMLElement child)
+        {
+            HtmlElement.RemoveChild(child);
         }
 
         private void OnBackgroundChanged(object sender, EventArgs e)
