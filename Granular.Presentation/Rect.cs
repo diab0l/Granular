@@ -67,11 +67,6 @@ namespace System.Windows
                     throw new Granular.Exception("Can't create Rect with a size with an empty dimension");
                 }
 
-                if (size.Width < 0 || size.Height < 0)
-                {
-                    throw new Granular.Exception("Can't create Rect with a negative size");
-                }
-
                 this.IsEmpty = false;
 
                 this.Location = location;

@@ -29,6 +29,8 @@ namespace Granular.Presentation.Tests.Controls
 
             ScrollViewer scrollViewer = XamlLoader.Load(XamlParser.Parse(text)) as ScrollViewer;
             scrollViewer.IsRootElement = true;
+            scrollViewer.Measure(Size.Infinity);
+            scrollViewer.Arrange(new Rect(scrollViewer.DesiredSize));
 
             Border border = NameScope.GetNameScope(scrollViewer).FindName("border") as Border;
 

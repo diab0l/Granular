@@ -46,24 +46,7 @@ namespace System.Windows
 
         public bool IsArrangeValid { get; private set; }
 
-        private Size desiredSize;
-        public Size DesiredSize
-        {
-            get { return desiredSize; }
-            set
-            {
-                if (desiredSize == value)
-                {
-                    return;
-                }
-
-                desiredSize = value;
-                if (VisualParent != null)
-                {
-                    ((UIElement)VisualParent).InvalidateMeasure();
-                }
-            }
-        }
+        public Size DesiredSize { get; private set; }
 
         public Size RenderSize { get { return VisualSize; } }
 
@@ -214,7 +197,7 @@ namespace System.Windows
             routedEventHandlers = new ListDictionary<RoutedEvent, RoutedEventHandlerItem>();
             routedEventHandlersCache = CacheDictionary<RoutedEvent, IEnumerable<RoutedEventHandlerItem>>.CreateUsingStringKeys(ResolveRoutedEventHandlers, routedEvent => routedEvent.StringKey);
             PreviousFinalRect = Rect.Empty;
-            PreviousAvailableSize = Size.Empty;
+            PreviousAvailableSize = Size.Infinity;
             previousDesiredSize = Size.Empty;
 
             VisualClipToBounds = ClipToBounds;
@@ -353,14 +336,18 @@ namespace System.Windows
                         return;
                     }
 
-                    InvalidateArrange();
-
                     DesiredSize = MeasureCore(availableSize);
 
-                    IsMeasureValid = true;
+                    if (previousDesiredSize == null || !previousDesiredSize.IsClose(DesiredSize))
+                    {
+                        InvalidateArrange();
+                        InvalidateParentMeasure();
+                    }
 
                     PreviousAvailableSize = availableSize;
                     previousDesiredSize = DesiredSize;
+
+                    IsMeasureValid = true;
                     LayoutManager.Current.RemoveMeasure(this);
                 }
             }
@@ -373,7 +360,7 @@ namespace System.Windows
 
         public void InvalidateMeasure()
         {
-            if (disableMeasureInvalidationRequests > 0 || !IsMeasureValid && !PreviousAvailableSize.IsEmpty)
+            if (disableMeasureInvalidationRequests > 0 || !IsMeasureValid)
             {
                 return;
             }
@@ -382,25 +369,28 @@ namespace System.Windows
             LayoutManager.Current.AddMeasure(this);
         }
 
+        public void InvalidateParentMeasure()
+        {
+            if (VisualParent != null)
+            {
+                ((UIElement)VisualParent).InvalidateMeasure();
+            }
+        }
+
         public void Arrange(Rect finalRect)
         {
             using (Dispatcher.CurrentDispatcher.DisableProcessing())
             {
                 using (DisableMeasureInvalidation())
                 {
-                    if (Visibility == Visibility.Collapsed)
+                    if (Visibility == Visibility.Collapsed ||
+                        IsArrangeValid && finalRect.IsClose(PreviousFinalRect))
                     {
                         LayoutManager.Current.RemoveArrange(this);
                         return;
                     }
 
-                    if (IsArrangeValid && finalRect.IsClose(PreviousFinalRect))
-                    {
-                        LayoutManager.Current.RemoveArrange(this);
-                        return;
-                    }
-
-                    if (!IsMeasureValid || !PreviousAvailableSize.IsClose(finalRect.Size))
+                    if (!IsMeasureValid)
                     {
                         Measure(finalRect.Size);
                     }
@@ -422,13 +412,21 @@ namespace System.Windows
 
         public void InvalidateArrange()
         {
-            if (!IsArrangeValid && !PreviousFinalRect.IsEmpty)
+            if (!IsArrangeValid)
             {
                 return;
             }
 
             IsArrangeValid = false;
             LayoutManager.Current.AddArrange(this);
+        }
+
+        public void InvalidateParentArrange()
+        {
+            if (VisualParent != null)
+            {
+                ((UIElement)VisualParent).InvalidateArrange();
+            }
         }
 
         private IDisposable DisableMeasureInvalidation()
@@ -450,11 +448,11 @@ namespace System.Windows
 
         protected override void OnVisualParentChanged(Visual oldVisualParent, Visual newVisualParent)
         {
-            SetInheritanceParent();
-
             CoerceValue(IsVisibleProperty);
             CoerceValue(IsEnabledProperty);
             CoerceValue(IsHitTestVisibleProperty);
+
+            SetInheritanceParent();
 
             if (oldVisualParent != null)
             {

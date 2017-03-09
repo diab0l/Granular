@@ -97,6 +97,8 @@ namespace Granular.Host
             Bridge.Html5.Window.AddEventListener("wheel", OnMouseWheel);
 
             SetRootElementSize();
+            ((FrameworkElement)RootElement).Arrange(new Rect(window.InnerWidth, window.InnerHeight));
+
             Bridge.Html5.Window.Document.Body.Style.Overflow = Overflow.Hidden;
             Bridge.Html5.Window.Document.Body.AppendChild(((HtmlRenderElement)RootElement.GetRenderElement(HtmlRenderElementFactory.Default)).HtmlElement);
 

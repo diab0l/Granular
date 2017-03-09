@@ -24,7 +24,6 @@ namespace System.Windows.Controls
 
                 text = value;
                 textBoxRenderElements.SetRenderElementsProperty(renderElement => renderElement.Text = text);
-                InvalidateMeasure();
                 TextChanged.Raise(this);
             }
         }

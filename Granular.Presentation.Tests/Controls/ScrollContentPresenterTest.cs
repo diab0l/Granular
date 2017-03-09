@@ -23,13 +23,8 @@ namespace Granular.Presentation.Tests.Controls
 
             public Size MeasureSize { get; set; }
 
-            public Size LastAvailableSize1 { get; private set; }
-            public Size LastAvailableSize2 { get; private set; }
-
             protected override Size MeasureOverride(Size availableSize)
             {
-                LastAvailableSize2 = LastAvailableSize1;
-                LastAvailableSize1 = availableSize;
                 return MeasureSize;
             }
 
@@ -44,6 +39,9 @@ namespace Granular.Presentation.Tests.Controls
         {
             Border border = new Border();
             ScrollContentPresenter scrollContentPresenter = new ScrollContentPresenter { Width = 200, Height = 100, Content = border, IsRootElement = true };
+
+            scrollContentPresenter.Measure(Size.Infinity);
+            scrollContentPresenter.Arrange(new Rect(scrollContentPresenter.DesiredSize));
 
             border.Width = 10;
             border.Height = 10;
@@ -67,22 +65,25 @@ namespace Granular.Presentation.Tests.Controls
             ScrollContentPresenter scrollContentPresenter = new ScrollContentPresenter { Width = 200, Height = 100, IsRootElement = true };
             content.ViewportSize = scrollContentPresenter.RenderSize;
 
+            scrollContentPresenter.Measure(Size.Infinity);
+            scrollContentPresenter.Arrange(new Rect(scrollContentPresenter.DesiredSize));
+
             scrollContentPresenter.Content = content;
             Assert.AreEqual(new Size(100, 50), scrollContentPresenter.ExtentSize);
 
             scrollContentPresenter.CanContentScroll = true;
             Assert.AreEqual(new Size(400, 200), scrollContentPresenter.ExtentSize);
-            Assert.AreEqual(new Size(200, 100), content.LastAvailableSize1);
+            Assert.AreEqual(new Size(200, 100), content.PreviousAvailableSize);
             Assert.IsFalse(content.CanHorizontallyScroll);
             Assert.IsFalse(content.CanVerticallyScroll);
 
             scrollContentPresenter.CanHorizontallyScroll = true;
-            Assert.AreEqual(new Size(Double.PositiveInfinity, 100), content.LastAvailableSize2);
+            Assert.AreEqual(new Size(Double.PositiveInfinity, 100), content.PreviousAvailableSize);
             Assert.IsTrue(content.CanHorizontallyScroll);
             Assert.IsFalse(content.CanVerticallyScroll);
 
             scrollContentPresenter.CanVerticallyScroll = true;
-            Assert.AreEqual(new Size(Double.PositiveInfinity, Double.PositiveInfinity), content.LastAvailableSize2);
+            Assert.AreEqual(new Size(Double.PositiveInfinity, Double.PositiveInfinity), content.PreviousAvailableSize);
             Assert.IsTrue(content.CanHorizontallyScroll);
             Assert.IsTrue(content.CanVerticallyScroll);
         }

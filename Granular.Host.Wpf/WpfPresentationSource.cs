@@ -89,6 +89,7 @@ namespace Granular.Host.Wpf
 
             container.Children.Add(((IWpfRenderElement)rootElement.GetRenderElement(WpfRenderElementFactory.Default)).WpfElement);
             SetRootElementSize();
+            ((FrameworkElement)RootElement).Arrange(new Rect(container.ActualWidth, container.ActualHeight));
 
             MouseDevice.Activate();
             KeyboardDevice.Activate();

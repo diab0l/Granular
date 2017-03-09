@@ -142,7 +142,7 @@ namespace Granular.Presentation.Tests.Controls
             BitmapSource bitmapSource = BitmapSource.Create(null);
             ((TestRenderImageSource)bitmapSource.RenderImageSource).Size = new Size(200, 100);
 
-            return new Image { Source = bitmapSource };
+            return new Image { Source = bitmapSource, IsRootElement = true };
         }
 
         private static TestImageRenderElement GetImageRenderElement(Image image)

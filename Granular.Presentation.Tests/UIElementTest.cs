@@ -127,7 +127,7 @@ namespace Granular.Presentation.Tests
             TestTaskScheduler scheduler = (TestTaskScheduler)ApplicationHost.Current.TaskScheduler;
             using (scheduler.DisableImmediateProcessing())
             {
-                UIElement root = new UIElement();
+                UIElement root = new UIElement { IsRootElement = true };
                 UIElement child = new UIElement();
 
                 root.Measure(Size.Infinity);

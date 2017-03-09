@@ -46,7 +46,9 @@
                 <RowDefinition Height="*" />
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
-            <RepeatButton x:Name="PART_DecreaseButton" Grid.Row="0" Style="{StaticResource ScrollBarLineButtonStyle}" Content="▴"/>
+            <RepeatButton x:Name="PART_DecreaseButton" Grid.Row="0" Style="{StaticResource ScrollBarLineButtonStyle}">
+                <TextBlock Text="&#9652;" VerticalAlignment="Center" Margin="0,-10"/>
+            </RepeatButton>
             <Track x:Name="PART_Track" Grid.Row="1"
                    Orientation="{TemplateBinding Orientation}"
                    ViewportSize="{TemplateBinding ViewportSize}"
@@ -63,7 +65,9 @@
                     <RepeatButton Style="{StaticResource ScrollBarPageButtonStyle}" />
                 </Track.IncreaseRepeatButton>
             </Track>
-            <RepeatButton x:Name="PART_IncreaseButton" Grid.Row="2" Style="{StaticResource ScrollBarLineButtonStyle}" Content="▾"/>
+            <RepeatButton x:Name="PART_IncreaseButton" Grid.Row="2" Style="{StaticResource ScrollBarLineButtonStyle}">
+                <TextBlock Text="&#9662;" VerticalAlignment="Center" Margin="0,-10"/>
+            </RepeatButton>
         </Grid>
     </ControlTemplate>
 
@@ -74,7 +78,9 @@
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
-            <RepeatButton x:Name="PART_DecreaseButton" Grid.Column="0" Style="{StaticResource ScrollBarLineButtonStyle}" Content="◂"/>
+            <RepeatButton x:Name="PART_DecreaseButton" Grid.Column="0" Style="{StaticResource ScrollBarLineButtonStyle}">
+                <TextBlock Text="&#9666;" VerticalAlignment="Center" Margin="0,-10"/>
+            </RepeatButton>
             <Track x:Name="PART_Track" Grid.Column="1"
                    Orientation="{TemplateBinding Orientation}"
                    ViewportSize="{TemplateBinding ViewportSize}"
@@ -91,7 +97,9 @@
                     <RepeatButton Style="{StaticResource ScrollBarPageButtonStyle}" />
                 </Track.IncreaseRepeatButton>
             </Track>
-            <RepeatButton x:Name="PART_IncreaseButton" Grid.Column="2" Style="{StaticResource ScrollBarLineButtonStyle}" Content="▸"/>
+            <RepeatButton x:Name="PART_IncreaseButton" Grid.Column="2" Style="{StaticResource ScrollBarLineButtonStyle}">
+                <TextBlock Text="&#9656;" VerticalAlignment="Center" Margin="0,-10"/>
+            </RepeatButton>
         </Grid>
     </ControlTemplate>
 

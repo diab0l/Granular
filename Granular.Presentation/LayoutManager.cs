@@ -78,13 +78,13 @@ namespace System.Windows
                 while (measureQueue.Count > 0)
                 {
                     UIElement element = GetTopElement(measureQueue);
-                    element.Measure(element.VisualParent == null || element.PreviousAvailableSize.IsEmpty ? Size.Infinity : element.PreviousAvailableSize);
+                    element.Measure(element.PreviousAvailableSize);
                 }
 
                 while (arrangeQueue.Count > 0)
                 {
                     UIElement element = GetTopElement(arrangeQueue);
-                    element.Arrange(element.VisualParent == null || element.PreviousFinalRect.IsEmpty ? new Rect(element.DesiredSize) : element.PreviousFinalRect);
+                    element.Arrange(element.PreviousFinalRect);
                 }
 
                 while (updatedElements.Count > 0 && measureQueue.Count == 0 && arrangeQueue.Count == 0) // LayoutUpdated can invalidate other elements
@@ -97,7 +97,7 @@ namespace System.Windows
             }
         }
 
-        private UIElement GetTopElement(HashSet<UIElement> measureQueue)
+        private UIElement GetTopElement(IEnumerable<UIElement> measureQueue)
         {
             UIElement topElement = null;
 
