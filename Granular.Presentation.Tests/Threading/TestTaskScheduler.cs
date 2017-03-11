@@ -12,11 +12,14 @@ namespace Granular.Presentation.Tests.Threading
     {
         private class CancellableAction
         {
+            public TimeSpan TimeSpan { get; private set; }
+
             private Action action;
             private bool isCancelled;
 
-            public CancellableAction(Action action)
+            public CancellableAction(TimeSpan timeSpan, Action action)
             {
+                this.TimeSpan = timeSpan;
                 this.action = action;
             }
 
@@ -34,36 +37,21 @@ namespace Granular.Presentation.Tests.Threading
             }
         }
 
-        private class TimeSpanComparer : IComparer<TimeSpan>
-        {
-            public static readonly TimeSpanComparer Default = new TimeSpanComparer();
-
-            private TimeSpanComparer()
-            {
-                //
-            }
-
-            public int Compare(TimeSpan x, TimeSpan y)
-            {
-                return x.Ticks == y.Ticks ? 0 : (x.Ticks > y.Ticks ? -1 : 1);
-            }
-        }
-
         public TimeSpan CurrentTime { get; private set; }
 
-        private PriorityQueue<TimeSpan, CancellableAction> queue;
+        private List<CancellableAction> actions;
         private bool isImmediateProcessingDisabled;
         private bool isProcessing;
 
         public TestTaskScheduler()
         {
-            this.queue = new PriorityQueue<TimeSpan, CancellableAction>(TimeSpanComparer.Default);
+            this.actions = new List<CancellableAction>();
         }
 
         public IDisposable ScheduleTask(TimeSpan timeSpan, Action action)
         {
-            CancellableAction cancellableAction = new CancellableAction(action);
-            queue.Enqueue(CurrentTime + timeSpan, cancellableAction);
+            CancellableAction cancellableAction = new CancellableAction(CurrentTime + timeSpan, action);
+            EnqueueAction(cancellableAction);
 
             if (timeSpan == TimeSpan.Zero && !isProcessing && !isImmediateProcessingDisabled)
             {
@@ -90,9 +78,9 @@ namespace Granular.Presentation.Tests.Threading
                 throw new Granular.Exception("Time must larger than CurrentTime");
             }
 
-            while (queue.Count > 0 && queue.First().Key <= time)
+            while (actions.Count > 0 && actions.First().TimeSpan <= time)
             {
-                CurrentTime = queue.First().Key;
+                CurrentTime = actions.First().TimeSpan;
                 ProcessDueOperations();
             }
 
@@ -103,9 +91,9 @@ namespace Granular.Presentation.Tests.Threading
         {
             isProcessing = true;
 
-            while (queue.Count > 0 && queue.First().Key <= CurrentTime)
+            while (actions.Count > 0 && actions.First().TimeSpan <= CurrentTime)
             {
-                queue.Dequeue().Invoke();
+                DequeueAction().Invoke();
             }
 
             isProcessing = false;
@@ -124,6 +112,29 @@ namespace Granular.Presentation.Tests.Threading
                 isImmediateProcessingDisabled = false;
                 ProcessDueOperations();
             });
+        }
+
+        private void EnqueueAction(CancellableAction cancellableAction)
+        {
+            int i = 0;
+            foreach (CancellableAction action in actions)
+            {
+                if (cancellableAction.TimeSpan < action.TimeSpan)
+                {
+                    break;
+                }
+
+                i++;
+            }
+
+            actions.Insert(i, cancellableAction);
+        }
+
+        private CancellableAction DequeueAction()
+        {
+            CancellableAction cancellableAction = actions[0];
+            actions.RemoveAt(0);
+            return cancellableAction;
         }
     }
 }

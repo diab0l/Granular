@@ -32,14 +32,14 @@ namespace System.Windows.Threading
     {
         public static readonly Dispatcher CurrentDispatcher = new Dispatcher();
 
-        private PriorityQueue<DispatcherPriority, DispatcherOperation> queue;
+        private PriorityQueue<DispatcherOperation> queue;
         private int disableProcessingRequests;
         private bool isProcessQueueScheduled;
         private IDisposable disableProcessingToken;
 
         public Dispatcher()
         {
-            queue = new PriorityQueue<DispatcherPriority, DispatcherOperation>();
+            queue = new PriorityQueue<DispatcherOperation>((int)DispatcherPriority.Send + 1);
             disableProcessingToken = new Disposable(EnableProcessing);
         }
 
@@ -57,7 +57,7 @@ namespace System.Windows.Threading
 
         private void Invoke(DispatcherOperation operation)
         {
-            queue.Enqueue(operation.Priority, operation);
+            queue.Enqueue((int)operation.Priority, operation);
 
             DispatcherOperation currentOperation;
             while (TryDequeue(out currentOperation))
@@ -94,7 +94,7 @@ namespace System.Windows.Threading
 
         private void InvokeAsync(DispatcherOperation operation)
         {
-            queue.Enqueue(operation.Priority, operation);
+            queue.Enqueue((int)operation.Priority, operation);
             ProcessQueueAsync();
         }
 

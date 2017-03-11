@@ -10,25 +10,10 @@ namespace Granular.Presentation.Tests.Collections
     [TestClass]
     public class PriorityQueueTest
     {
-        private class CustomComparer<T> : IComparer<T>
-        {
-            private Func<T, T, int> comparer;
-
-            public CustomComparer(Func<T, T, int> comparer)
-            {
-                this.comparer = comparer;
-            }
-
-            public int Compare(T x, T y)
-            {
-                return comparer(x, y);
-            }
-        }
-
         [TestMethod]
         public void PriorityQueueBasicTest()
         {
-            PriorityQueue<int, string> queue = new PriorityQueue<int, string>();
+            PriorityQueue<string> queue = new PriorityQueue<string>(6);
             queue.Enqueue(5, "value1a");
             queue.Enqueue(3, "value2a");
             queue.Enqueue(2, "value3a");
@@ -41,7 +26,7 @@ namespace Granular.Presentation.Tests.Collections
             queue.Enqueue(4, "value4b");
             queue.Enqueue(1, "value5b");
 
-            Assert.AreEqual(10, queue.Count());
+            Assert.AreEqual(10, queue.Count);
 
             Assert.AreEqual("value1a", queue.Dequeue());
             Assert.AreEqual("value1b", queue.Dequeue());
@@ -54,14 +39,13 @@ namespace Granular.Presentation.Tests.Collections
             Assert.AreEqual("value5a", queue.Dequeue());
             Assert.AreEqual("value5b", queue.Dequeue());
 
-            Assert.AreEqual(0, queue.Count());
+            Assert.AreEqual(0, queue.Count);
         }
 
         [TestMethod]
         public void PriorityQueueStabilityTest()
         {
-            CustomComparer<int> comparer = new CustomComparer<int>((a, b) => Comparer<int>.Default.Compare(a / 10, b / 10));
-            PriorityQueue<int, int> queue = new PriorityQueue<int, int>(comparer);
+            PriorityQueue<int> queue = new PriorityQueue<int>(10);
             List<int> list = new List<int>();
             Random random = new Random(1021);
 
@@ -70,13 +54,13 @@ namespace Granular.Presentation.Tests.Collections
                 int n = random.Next(100);
 
                 int j = 0;
-                while (j < list.Count && comparer.Compare(list[j], n) != -1)
+                while (j < list.Count && list[j] / 10 >= n / 10)
                 {
                     j++;
                 }
 
                 list.Insert(j, n);
-                queue.Enqueue(n, n);
+                queue.Enqueue(n / 10, n);
             }
 
             for (int i = 0; i < list.Count; i++)
