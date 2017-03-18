@@ -10,8 +10,8 @@
         <description>WPF for JavaScript</description>
         <tags>granular bridge wpf xaml javascript</tags>
         <dependencies>
-            <dependency id="Bridge.Min" version="15.5" />
-            <dependency id="Bridge.Html5" version="15.5" />
+            <dependency id="Bridge.Min" version="15.7" />
+            <dependency id="Bridge.Html5" version="15.7" />
         </dependencies>
     </metadata>
     <files>
