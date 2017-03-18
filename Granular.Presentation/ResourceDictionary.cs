@@ -196,23 +196,23 @@ namespace System.Windows
             return dictionary.GetEnumerator();
         }
 
-        public void Add(KeyValuePair<object, object> item)
+        void ICollection<KeyValuePair<object, object>>.Add(KeyValuePair<object, object> item)
         {
             Add(item.Key, item.Value);
         }
 
-        public bool Contains(KeyValuePair<object, object> item)
+        bool ICollection<KeyValuePair<object, object>>.Contains(KeyValuePair<object, object> item)
         {
             object value;
             return TryGetValue(item.Key, out value) && item.Value == value;
         }
 
-        public bool Remove(KeyValuePair<object, object> item)
+        bool ICollection<KeyValuePair<object, object>>.Remove(KeyValuePair<object, object> item)
         {
             return ((ICollection<KeyValuePair<object, object>>)this).Contains(item) && Remove(item.Key);
         }
 
-        public void CopyTo(KeyValuePair<object, object>[] array, int arrayIndex)
+        void ICollection<KeyValuePair<object, object>>.CopyTo(KeyValuePair<object, object>[] array, int arrayIndex)
         {
             dictionary.ToArray().CopyTo(array, arrayIndex);
         }
