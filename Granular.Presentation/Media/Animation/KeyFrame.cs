@@ -6,14 +6,14 @@ namespace System.Windows.Media.Animation
 {
     public abstract class KeyFrame<T> : Freezable
     {
-        public static readonly DependencyProperty ValueProperty = DependencyProperty.Register("Value", typeof(T), typeof(KeyFrame<T>), new FrameworkPropertyMetadata());
+        public static readonly DependencyProperty ValueProperty = DependencyPropertyRegisterNonGeneric("Value", typeof(T), typeof(KeyFrame<T>), new FrameworkPropertyMetadata());
         public T Value
         {
             get { return (T)GetValue(ValueProperty); }
             set { SetValue(ValueProperty, value); }
         }
 
-        public static readonly DependencyProperty KeyTimeProperty = DependencyProperty.Register("KeyTime", typeof(KeyTime), typeof(KeyFrame<T>), new FrameworkPropertyMetadata());
+        public static readonly DependencyProperty KeyTimeProperty = DependencyPropertyRegisterNonGeneric("KeyTime", typeof(KeyTime), typeof(KeyFrame<T>), new FrameworkPropertyMetadata());
         public KeyTime KeyTime
         {
             get { return (KeyTime)GetValue(KeyTimeProperty); }
@@ -21,6 +21,11 @@ namespace System.Windows.Media.Animation
         }
 
         public abstract T InterpolateValue(T baseValue, double keyFrameProgress);
+
+        protected static DependencyProperty DependencyPropertyRegisterNonGeneric(string name, Type propertyType, Type ownerType, PropertyMetadata metadata = null, ValidateValueCallback validateValueCallback = null)
+        {
+            return typeof(T).IsGenericParameter ? null : DependencyProperty.Register(name, propertyType, ownerType, metadata, validateValueCallback);
+        }
     }
 
     public class DiscreteKeyFrame<T> : KeyFrame<T>
@@ -55,7 +60,7 @@ namespace System.Windows.Media.Animation
 
     public class EasingKeyFrame<T> : KeyFrame<T>
     {
-        public static readonly DependencyProperty EasingFunctionProperty = DependencyProperty.Register("EasingFunction", typeof(IEasingFunction), typeof(EasingKeyFrame<T>), new FrameworkPropertyMetadata());
+        public static readonly DependencyProperty EasingFunctionProperty = DependencyPropertyRegisterNonGeneric("EasingFunction", typeof(IEasingFunction), typeof(EasingKeyFrame<T>), new FrameworkPropertyMetadata());
         public IEasingFunction EasingFunction
         {
             get { return (IEasingFunction)GetValue(EasingFunctionProperty); }
