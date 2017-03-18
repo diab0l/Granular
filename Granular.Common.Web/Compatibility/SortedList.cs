@@ -164,5 +164,26 @@ namespace System.Collections.Generic
         {
             return GetEnumerator();
         }
+
+        public bool Remove(KeyValuePair<TKey, TValue> item)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Add(KeyValuePair<TKey, TValue> item)
+        {
+            Add(item.Key, item.Value);
+        }
+
+        public void CopyTo(KeyValuePair<TKey, TValue>[] array, int arrayIndex)
+        {
+            //
+        }
+
+        public bool Contains(KeyValuePair<TKey, TValue> item)
+        {
+            TValue value;
+            return TryGetValue(item.Key, out value) && Equals(item.Value, value);
+        }
     }
 }
