@@ -30,18 +30,21 @@ namespace System.Windows.Controls
 
         protected override Size MeasureOverride(Size availableSize)
         {
+            double availableCrossLength = GetCrossLength(availableSize);
+            Size measureSize = CreateSize(Orientation, Double.PositiveInfinity, availableCrossLength);
+
             double mainLength = 0;
             double crossLength = 0;
 
             foreach (FrameworkElement child in Children)
             {
-                MeasureChild(child, Double.PositiveInfinity, GetCrossLength(availableSize));
+                child.Measure(measureSize);
 
                 mainLength += GetMainLength(child.DesiredSize);
                 crossLength = Math.Max(crossLength, GetCrossLength(child.DesiredSize));
             }
 
-            return CreateSize(mainLength, crossLength);
+            return CreateSize(Orientation, mainLength, crossLength);
         }
 
         protected override Size ArrangeOverride(Size finalSize)
@@ -55,23 +58,12 @@ namespace System.Windows.Controls
                 double childMainLength = GetMainLength(child.DesiredSize);
                 double childMainStart = IsNormalFlow ? childrenMainLength : panelMainLength - childrenMainLength - childMainLength;
 
-                ArrangeChild(child, childMainStart, 0, childMainLength, panelCrossLength);
+                child.Arrange(CreateRect(Orientation, childMainStart, 0, childMainLength, panelCrossLength));
 
                 childrenMainLength += childMainLength;
             }
 
-            return CreateSize(GetMainLength(finalSize), panelCrossLength);
-        }
-
-
-        private Size CreateSize(double mainLength, double crossLength)
-        {
-            if (Orientation == Orientation.Horizontal)
-            {
-                return new Size(mainLength, crossLength);
-            }
-
-            return new Size(crossLength, mainLength);
+            return CreateSize(Orientation, GetMainLength(finalSize), panelCrossLength);
         }
 
         private double GetMainLength(Size size)
@@ -84,18 +76,18 @@ namespace System.Windows.Controls
             return Orientation == Orientation.Horizontal ? size.Height : size.Width;
         }
 
-        private void MeasureChild(UIElement child, double availableMainLength, double availableCrossLength)
+        private static Size CreateSize(Orientation orientation, double mainLength, double crossLength)
         {
-            child.Measure(Orientation == Orientation.Horizontal ?
-                new Size(availableMainLength, availableCrossLength) :
-                new Size(availableCrossLength, availableMainLength));
+            return orientation == Orientation.Horizontal ?
+                new Size(mainLength, crossLength) :
+                new Size(crossLength, mainLength);
         }
 
-        private void ArrangeChild(UIElement child, double finalMainStart, double finalCrossStart, double finalMainLength, double finalCrossLength)
+        private static Rect CreateRect(Orientation orientation, double mainStart, double crossStart, double mainLength, double crossLength)
         {
-            child.Arrange(Orientation == Orientation.Horizontal ?
-                new Rect(finalMainStart, finalCrossStart, finalMainLength, finalCrossLength) :
-                new Rect(finalCrossStart, finalMainStart, finalCrossLength, finalMainLength));
+            return orientation == Orientation.Horizontal ?
+                new Rect(mainStart, crossStart, mainLength, crossLength) :
+                new Rect(crossStart, mainStart, crossLength, mainLength);
         }
     }
 }
