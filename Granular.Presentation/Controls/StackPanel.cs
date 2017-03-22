@@ -28,6 +28,8 @@ namespace System.Windows.Controls
 
         private bool IsNormalFlow { get { return FlowDirection == FlowDirection.LeftToRight || FlowDirection == FlowDirection.TopDown; } }
 
+        private double measuredCrossLength;
+
         protected override Size MeasureOverride(Size availableSize)
         {
             double availableCrossLength = GetCrossLength(availableSize);
@@ -44,6 +46,8 @@ namespace System.Windows.Controls
                 crossLength = Math.Max(crossLength, GetCrossLength(child.DesiredSize));
             }
 
+            measuredCrossLength = availableCrossLength;
+
             return CreateSize(Orientation, mainLength, crossLength);
         }
 
@@ -51,6 +55,18 @@ namespace System.Windows.Controls
         {
             double panelMainLength = Children.Select(child => GetMainLength(child.DesiredSize)).Sum();
             double panelCrossLength = GetCrossLength(finalSize);
+
+            if (measuredCrossLength != panelCrossLength)
+            {
+                Size measureSize = CreateSize(Orientation, Double.PositiveInfinity, panelCrossLength);
+
+                foreach (FrameworkElement child in Children)
+                {
+                    child.Measure(measureSize);
+                }
+
+                measuredCrossLength = panelCrossLength;
+            }
 
             double childrenMainLength = 0;
             foreach (UIElement child in Children)
