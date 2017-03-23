@@ -65,6 +65,7 @@
     <Compile Include="Data\BindingSourceObserverTest.cs" />
     <Compile Include="DependencyPropertyCallbackTest.cs" />
     <Compile Include="DependencyPropertyValueEntryTest.cs" />
+    <Compile Include="FrameworkElementLayoutTest.cs" />
     <Compile Include="Input\KeyboardNavigationTargetTest.cs" />
     <Compile Include="Markup\DeferredDictionaryValueTest.cs" />
     <Compile Include="Markup\LexerTest.cs" />

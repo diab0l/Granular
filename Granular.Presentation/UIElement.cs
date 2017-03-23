@@ -60,7 +60,7 @@ namespace System.Windows
             set { SetValue(OpacityProperty, value); }
         }
 
-        public static readonly DependencyProperty VisibilityProperty = DependencyProperty.Register("Visibility", typeof(Visibility), typeof(UIElement), new FrameworkPropertyMetadata(Visibility.Visible, FrameworkPropertyMetadataOptions.AffectsMeasure, propertyChangedCallback: (sender, e) => ((UIElement)sender).OnVisibilityChanged(e)));
+        public static readonly DependencyProperty VisibilityProperty = DependencyProperty.Register("Visibility", typeof(Visibility), typeof(UIElement), new FrameworkPropertyMetadata(Visibility.Visible, FrameworkPropertyMetadataOptions.AffectsParentMeasure, propertyChangedCallback: (sender, e) => ((UIElement)sender).OnVisibilityChanged(e)));
         public Visibility Visibility
         {
             get { return (Visibility)GetValue(VisibilityProperty); }
@@ -196,6 +196,7 @@ namespace System.Windows
             LogicalChildren = new ReadOnlyCollection<object>(logicalChildren);
             routedEventHandlers = new ListDictionary<RoutedEvent, RoutedEventHandlerItem>();
             routedEventHandlersCache = CacheDictionary<RoutedEvent, IEnumerable<RoutedEventHandlerItem>>.CreateUsingStringKeys(ResolveRoutedEventHandlers, routedEvent => routedEvent.StringKey);
+            DesiredSize = Size.Zero;
             PreviousFinalRect = Rect.Empty;
             PreviousAvailableSize = Size.Infinity;
             previousDesiredSize = Size.Empty;
@@ -324,28 +325,19 @@ namespace System.Windows
                 {
                     if (Visibility == Visibility.Collapsed)
                     {
-                        LayoutManager.Current.RemoveMeasure(this);
                         DesiredSize = Size.Zero;
-                        return;
                     }
-
-                    if (IsMeasureValid && PreviousAvailableSize.IsClose(availableSize))
+                    else if (IsMeasureValid && PreviousAvailableSize.IsClose(availableSize))
                     {
-                        LayoutManager.Current.RemoveMeasure(this);
                         DesiredSize = previousDesiredSize;
-                        return;
                     }
-
-                    DesiredSize = MeasureCore(availableSize);
-
-                    if (previousDesiredSize == null || !previousDesiredSize.IsClose(DesiredSize))
+                    else
                     {
-                        InvalidateArrange();
-                        InvalidateParentMeasure();
-                    }
+                        DesiredSize = MeasureCore(availableSize);
 
-                    PreviousAvailableSize = availableSize;
-                    previousDesiredSize = DesiredSize;
+                        PreviousAvailableSize = availableSize;
+                        previousDesiredSize = DesiredSize;
+                    }
 
                     IsMeasureValid = true;
                     LayoutManager.Current.RemoveMeasure(this);
@@ -383,8 +375,7 @@ namespace System.Windows
             {
                 using (DisableMeasureInvalidation())
                 {
-                    if (Visibility == Visibility.Collapsed ||
-                        IsArrangeValid && finalRect.IsClose(PreviousFinalRect))
+                    if (Visibility != Visibility.Visible || IsArrangeValid && finalRect.IsClose(PreviousFinalRect))
                     {
                         LayoutManager.Current.RemoveArrange(this);
                         return;
@@ -583,18 +574,7 @@ namespace System.Windows
 
         private void OnVisibilityChanged(DependencyPropertyChangedEventArgs e)
         {
-            if (Visibility != Visibility.Collapsed)
-            {
-                if (!IsMeasureValid)
-                {
-                    LayoutManager.Current.AddMeasure(this);
-                }
-
-                if (!IsArrangeValid)
-                {
-                    LayoutManager.Current.AddArrange(this);
-                }
-            }
+            DesiredSize = Visibility == Visibility.Collapsed ? Size.Zero : previousDesiredSize;
 
             IsVisible = Visibility == Visibility.Visible;
         }

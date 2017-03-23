@@ -78,7 +78,15 @@ namespace System.Windows
                 while (measureQueue.Count > 0)
                 {
                     UIElement element = GetTopElement(measureQueue);
+                    Size previousDesiredSize = element.DesiredSize;
+
                     element.Measure(element.PreviousAvailableSize);
+
+                    if (previousDesiredSize != element.DesiredSize)
+                    {
+                        element.InvalidateArrange();
+                        element.InvalidateParentMeasure();
+                    }
                 }
 
                 while (arrangeQueue.Count > 0)
