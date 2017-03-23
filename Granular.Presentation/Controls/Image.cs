@@ -93,13 +93,7 @@ namespace System.Windows.Controls
 
         protected override Size ArrangeOverride(Size finalSize)
         {
-            Rect imageRenderElementBounds = Source != null ? GetStretchRect(Source.Size, finalSize, Stretch, StretchDirection) : Rect.Zero;
-
-            foreach (IImageRenderElement imageRenderElement in imageRenderElements.Elements)
-            {
-                imageRenderElement.Bounds = imageRenderElementBounds;
-                imageRenderElement.Source = Source;
-            }
+            SetRenderElements(Source, finalSize);
 
             return finalSize;
         }
@@ -108,11 +102,15 @@ namespace System.Windows.Controls
         {
             BitmapSource = Source as BitmapSource;
 
+            SetRenderElements(Source, RenderSize);
+
             InvalidateMeasure();
         }
 
         private void OnBitmapSourceDownloadCompleted(object sender, EventArgs e)
         {
+            SetRenderElements(Source, RenderSize);
+
             InvalidateMeasure();
         }
 
@@ -132,6 +130,17 @@ namespace System.Windows.Controls
             }
 
             return imageRenderElement;
+        }
+
+        private void SetRenderElements(ImageSource source, Size availableSize)
+        {
+            Rect bounds = source != null ? GetStretchRect(source.Size, availableSize, Stretch, StretchDirection) : Rect.Zero;
+
+            foreach (IImageRenderElement imageRenderElement in imageRenderElements.Elements)
+            {
+                imageRenderElement.Bounds = bounds;
+                imageRenderElement.Source = source;
+            }
         }
 
         private static Rect GetStretchRect(Size size, Size availableSize, Stretch stretch, StretchDirection stretchDirection)
