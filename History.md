@@ -1,6 +1,9 @@
 What's new
 ==========
 
+**0.2.1**
+- Performance optimizations - Optimized layout calls, Deferred resources, Styles default key, and others
+
 **0.2.0**
 - Compile with Bridge.Net
 - Uri support
