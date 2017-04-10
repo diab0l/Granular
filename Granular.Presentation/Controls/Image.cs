@@ -64,7 +64,7 @@ namespace System.Windows.Controls
             }
         }
 
-        private RenderElementDictionary<IImageRenderElement> imageRenderElements;
+        private IImageRenderElement imageRenderElement;
 
         static Image()
         {
@@ -73,12 +73,23 @@ namespace System.Windows.Controls
 
         public Image()
         {
-            imageRenderElements = new RenderElementDictionary<IImageRenderElement>(CreateRenderElement);
+            //
         }
 
         protected override object CreateRenderElementContentOverride(IRenderElementFactory factory)
         {
-            return imageRenderElements.GetRenderElement(factory);
+            if (imageRenderElement == null)
+            {
+                imageRenderElement = factory.CreateImageRenderElement(this);
+
+                if (Source != null)
+                {
+                    imageRenderElement.Bounds = GetStretchRect(Source.Size, VisualBounds.Size, Stretch, StretchDirection);
+                    imageRenderElement.Source = this.Source;
+                }
+            }
+
+            return imageRenderElement;
         }
 
         protected override Size MeasureOverride(Size availableSize)
@@ -119,24 +130,11 @@ namespace System.Windows.Controls
             RaiseEvent(new RoutedEventArgs(ImageFailedEvent, this));
         }
 
-        private IImageRenderElement CreateRenderElement(IRenderElementFactory factory)
-        {
-            IImageRenderElement imageRenderElement = factory.CreateImageRenderElement(this);
-
-            if (Source != null)
-            {
-                imageRenderElement.Bounds = GetStretchRect(Source.Size, VisualBounds.Size, Stretch, StretchDirection);
-                imageRenderElement.Source = this.Source;
-            }
-
-            return imageRenderElement;
-        }
-
         private void SetRenderElements(ImageSource source, Size availableSize)
         {
             Rect bounds = source != null ? GetStretchRect(source.Size, availableSize, Stretch, StretchDirection) : Rect.Zero;
 
-            foreach (IImageRenderElement imageRenderElement in imageRenderElements.Elements)
+            if (imageRenderElement != null)
             {
                 imageRenderElement.Bounds = bounds;
                 imageRenderElement.Source = source;

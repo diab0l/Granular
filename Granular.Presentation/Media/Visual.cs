@@ -72,7 +72,7 @@ namespace System.Windows.Media
 
                 visualBackground = value;
 
-                foreach (IVisualRenderElement visualRenderElement in visualRenderElements.Elements)
+                if (visualRenderElement != null)
                 {
                     visualRenderElement.Background = visualBackground;
                 }
@@ -93,7 +93,7 @@ namespace System.Windows.Media
 
                 visualBounds = value;
 
-                foreach (IVisualRenderElement visualRenderElement in visualRenderElements.Elements)
+                if (visualRenderElement != null)
                 {
                     visualRenderElement.Bounds = visualBounds;
                 }
@@ -118,7 +118,7 @@ namespace System.Windows.Media
 
                 visualClipToBounds = value;
 
-                foreach (IVisualRenderElement visualRenderElement in visualRenderElements.Elements)
+                if (visualRenderElement != null)
                 {
                     visualRenderElement.ClipToBounds = visualClipToBounds;
                 }
@@ -140,7 +140,7 @@ namespace System.Windows.Media
 
                 visualIsHitTestVisible = value;
 
-                foreach (IVisualRenderElement visualRenderElement in visualRenderElements.Elements)
+                if (visualRenderElement != null)
                 {
                     visualRenderElement.IsHitTestVisible = visualIsHitTestVisible;
                 }
@@ -160,7 +160,7 @@ namespace System.Windows.Media
 
                 visualIsVisible = value;
 
-                foreach (IVisualRenderElement visualRenderElement in visualRenderElements.Elements)
+                if (visualRenderElement != null)
                 {
                     visualRenderElement.IsVisible = visualIsVisible;
                 }
@@ -180,7 +180,7 @@ namespace System.Windows.Media
 
                 visualOpacity = value;
 
-                foreach (IVisualRenderElement visualRenderElement in visualRenderElements.Elements)
+                if (visualRenderElement != null)
                 {
                     visualRenderElement.Opacity = visualOpacity;
                 }
@@ -201,7 +201,7 @@ namespace System.Windows.Media
 
                 visualTransform = value;
 
-                foreach (IVisualRenderElement visualRenderElement in visualRenderElements.Elements)
+                if (visualRenderElement != null)
                 {
                     visualRenderElement.Transform = visualTransform;
                 }
@@ -227,7 +227,8 @@ namespace System.Windows.Media
             }
         }
 
-        private RenderElementDictionary<IVisualRenderElement> visualRenderElements;
+        private IVisualRenderElement visualRenderElement;
+        private IRenderElementFactory renderElementFactory;
 
         private Rect hitTestBounds;
         private bool isHitTestBoundsValid;
@@ -236,8 +237,6 @@ namespace System.Windows.Media
         {
             visualChildren = new List<Visual>();
             VisualChildren = new ReadOnlyCollection<Visual>(visualChildren);
-
-            visualRenderElements = new RenderElementDictionary<IVisualRenderElement>(CreateRenderElement);
 
             VisualBackground = null;
             VisualBounds = Rect.Zero;
@@ -266,9 +265,9 @@ namespace System.Windows.Media
             visualChildren.Add(child);
 
             int renderChildIndex = visualChildren.Count - 1;
-            foreach (IRenderElementFactory factory in visualRenderElements.Factories)
+            if (visualRenderElement != null)
             {
-                visualRenderElements.GetRenderElement(factory).InsertChild(renderChildIndex, child.GetRenderElement(factory));
+                visualRenderElement.InsertChild(renderChildIndex, child.GetRenderElement(renderElementFactory));
             }
 
             InvalidateHitTestBounds();
@@ -284,9 +283,9 @@ namespace System.Windows.Media
             visualChildren.Remove(child);
             child.VisualParent = null;
 
-            foreach (IRenderElementFactory factory in visualRenderElements.Factories)
+            if (visualRenderElement != null)
             {
-                visualRenderElements.GetRenderElement(factory).RemoveChild(child.GetRenderElement(factory));
+                visualRenderElement.RemoveChild(child.GetRenderElement(renderElementFactory));
             }
 
             InvalidateHitTestBounds();
@@ -303,12 +302,12 @@ namespace System.Windows.Media
             visualChildren.Remove(child);
             visualChildren.Insert(newIndex, child);
 
-            foreach (IRenderElementFactory factory in visualRenderElements.Factories)
+            if (visualRenderElement != null)
             {
-                object childRenderElement = child.GetRenderElement(factory);
+                object childRenderElement = child.GetRenderElement(renderElementFactory);
 
-                visualRenderElements.GetRenderElement(factory).RemoveChild(childRenderElement);
-                visualRenderElements.GetRenderElement(factory).InsertChild(newIndex, childRenderElement);
+                visualRenderElement.RemoveChild(childRenderElement);
+                visualRenderElement.InsertChild(newIndex, childRenderElement);
             }
         }
 
@@ -338,42 +337,31 @@ namespace System.Windows.Media
 
         public IVisualRenderElement GetRenderElement(IRenderElementFactory factory)
         {
-            return visualRenderElements.GetRenderElement(factory);
-        }
-
-        private IVisualRenderElement CreateRenderElement(IRenderElementFactory factory)
-        {
-            IVisualRenderElement visualRenderElement = factory.CreateVisualRenderElement(this);
-
-            visualRenderElement.Background = VisualBackground;
-            visualRenderElement.Bounds = VisualBounds;
-            visualRenderElement.ClipToBounds = VisualClipToBounds;
-            visualRenderElement.IsHitTestVisible = VisualIsHitTestVisible;
-            visualRenderElement.IsVisible = VisualIsVisible;
-            visualRenderElement.Opacity = VisualOpacity;
-            visualRenderElement.Transform = VisualTransform;
-
-            visualRenderElement.Content = CreateRenderElementContentOverride(factory);
-
-            int index = 0;
-            foreach (Visual child in VisualChildren)
+            if (visualRenderElement == null)
             {
-                child.GetRenderElement(factory);
-                visualRenderElement.InsertChild(index, child.GetRenderElement(factory));
-                index++;
+                renderElementFactory = factory;
+                visualRenderElement = factory.CreateVisualRenderElement(this);
+
+                visualRenderElement.Background = VisualBackground;
+                visualRenderElement.Bounds = VisualBounds;
+                visualRenderElement.ClipToBounds = VisualClipToBounds;
+                visualRenderElement.IsHitTestVisible = VisualIsHitTestVisible;
+                visualRenderElement.IsVisible = VisualIsVisible;
+                visualRenderElement.Opacity = VisualOpacity;
+                visualRenderElement.Transform = VisualTransform;
+
+                visualRenderElement.Content = CreateRenderElementContentOverride(factory);
+
+                int index = 0;
+                foreach (Visual child in VisualChildren)
+                {
+                    child.GetRenderElement(factory);
+                    visualRenderElement.InsertChild(index, child.GetRenderElement(factory));
+                    index++;
+                }
             }
 
             return visualRenderElement;
-        }
-
-        public void RemoveRenderElement(IRenderElementFactory factory)
-        {
-            visualRenderElements.RemoveRenderElement(factory);
-
-            foreach (Visual child in VisualChildren)
-            {
-                child.RemoveRenderElement(factory);
-            }
         }
 
         protected virtual object CreateRenderElementContentOverride(IRenderElementFactory factory)

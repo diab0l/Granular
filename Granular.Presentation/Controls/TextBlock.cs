@@ -18,7 +18,7 @@ namespace System.Windows.Controls
             set { SetValue(TextProperty, value); }
         }
 
-        public static readonly DependencyProperty ForegroundProperty = TextElement.ForegroundProperty.AddOwner(typeof(TextBlock), new FrameworkPropertyMetadata(Brushes.Black, FrameworkPropertyMetadataOptions.Inherits, propertyChangedCallback: (sender, e) => ((TextBlock)sender).textBlockRenderElements.SetRenderElementsProperty(textBlockRenderElement => textBlockRenderElement.Foreground = (Brush)e.NewValue)));
+        public static readonly DependencyProperty ForegroundProperty = TextElement.ForegroundProperty.AddOwner(typeof(TextBlock), new FrameworkPropertyMetadata(Brushes.Black, FrameworkPropertyMetadataOptions.Inherits, propertyChangedCallback: (sender, e) => ((TextBlock)sender).OnForegroundChanged(e)));
         public Brush Foreground
         {
             get { return (Brush)GetValue(ForegroundProperty); }
@@ -60,38 +60,55 @@ namespace System.Windows.Controls
             set { SetValue(FontStretchProperty, value); }
         }
 
-        public static readonly DependencyProperty TextAlignmentProperty = Block.TextAlignmentProperty.AddOwner(typeof(TextBlock), new FrameworkPropertyMetadata(FrameworkPropertyMetadataOptions.Inherits, propertyChangedCallback: (sender, e) => ((TextBlock)sender).textBlockRenderElements.SetRenderElementsProperty(textBlockRenderElement => textBlockRenderElement.TextAlignment = (TextAlignment)e.NewValue)));
+        public static readonly DependencyProperty TextAlignmentProperty = Block.TextAlignmentProperty.AddOwner(typeof(TextBlock), new FrameworkPropertyMetadata(FrameworkPropertyMetadataOptions.Inherits, propertyChangedCallback: (sender, e) => ((TextBlock)sender).OnTextAlignmentChanged(e)));
         public TextAlignment TextAlignment
         {
             get { return (TextAlignment)GetValue(TextAlignmentProperty); }
             set { SetValue(TextAlignmentProperty, value); }
         }
 
-        public static readonly DependencyProperty TextTrimmingProperty = DependencyProperty.Register("TextTrimming", typeof(TextTrimming), typeof(TextBlock), new FrameworkPropertyMetadata(FrameworkPropertyMetadataOptions.AffectsMeasure | FrameworkPropertyMetadataOptions.Inherits, propertyChangedCallback: (sender, e) => ((TextBlock)sender).textBlockRenderElements.SetRenderElementsProperty(textBlockRenderElement => textBlockRenderElement.TextTrimming = (TextTrimming)e.NewValue)));
+        public static readonly DependencyProperty TextTrimmingProperty = DependencyProperty.Register("TextTrimming", typeof(TextTrimming), typeof(TextBlock), new FrameworkPropertyMetadata(FrameworkPropertyMetadataOptions.AffectsMeasure | FrameworkPropertyMetadataOptions.Inherits, propertyChangedCallback: (sender, e) => ((TextBlock)sender).OnTextTrimmingChanged(e)));
         public TextTrimming TextTrimming
         {
             get { return (TextTrimming)GetValue(TextTrimmingProperty); }
             set { SetValue(TextTrimmingProperty, value); }
         }
 
-        public static readonly DependencyProperty TextWrappingProperty = DependencyProperty.Register("TextWrapping", typeof(TextWrapping), typeof(TextBlock), new FrameworkPropertyMetadata(TextWrapping.NoWrap, FrameworkPropertyMetadataOptions.AffectsMeasure | FrameworkPropertyMetadataOptions.Inherits, propertyChangedCallback: (sender, e) => ((TextBlock)sender).textBlockRenderElements.SetRenderElementsProperty(textBlockRenderElement => textBlockRenderElement.TextWrapping = (TextWrapping)e.NewValue)));
+        public static readonly DependencyProperty TextWrappingProperty = DependencyProperty.Register("TextWrapping", typeof(TextWrapping), typeof(TextBlock), new FrameworkPropertyMetadata(TextWrapping.NoWrap, FrameworkPropertyMetadataOptions.AffectsMeasure | FrameworkPropertyMetadataOptions.Inherits, propertyChangedCallback: (sender, e) => ((TextBlock)sender).OnTextWrappingChanged(e)));
         public TextWrapping TextWrapping
         {
             get { return (TextWrapping)GetValue(TextWrappingProperty); }
             set { SetValue(TextWrappingProperty, value); }
         }
 
-        private RenderElementDictionary<ITextBlockRenderElement> textBlockRenderElements;
+        private ITextBlockRenderElement textBlockRenderElement;
         private Size noWrapSize;
 
         public TextBlock()
         {
-            textBlockRenderElements = new RenderElementDictionary<ITextBlockRenderElement>(CreateRenderElement);
+            //
         }
 
         protected override object CreateRenderElementContentOverride(IRenderElementFactory factory)
         {
-            return textBlockRenderElements.GetRenderElement(factory);
+            if (textBlockRenderElement == null)
+            {
+                textBlockRenderElement = factory.CreateTextBlockRenderElement(this);
+
+                textBlockRenderElement.Bounds = new Rect(VisualBounds.Size);
+                textBlockRenderElement.FontFamily = this.FontFamily;
+                textBlockRenderElement.Foreground = this.Foreground;
+                textBlockRenderElement.FontSize = this.FontSize;
+                textBlockRenderElement.FontStyle = this.FontStyle;
+                textBlockRenderElement.FontStretch = this.FontStretch;
+                textBlockRenderElement.FontWeight = this.FontWeight;
+                textBlockRenderElement.Text = this.Text;
+                textBlockRenderElement.TextAlignment = this.TextAlignment;
+                textBlockRenderElement.TextTrimming = this.TextTrimming;
+                textBlockRenderElement.TextWrapping = this.TextWrapping;
+            }
+
+            return textBlockRenderElement;
         }
 
         protected override Size MeasureOverride(Size availableSize)
@@ -111,7 +128,7 @@ namespace System.Windows.Controls
 
         protected override Size ArrangeOverride(Size finalSize)
         {
-            foreach (ITextBlockRenderElement textBlockRenderElement in textBlockRenderElements.Elements)
+            if (textBlockRenderElement != null)
             {
                 textBlockRenderElement.Bounds = new Rect(finalSize);
             }
@@ -121,57 +138,94 @@ namespace System.Windows.Controls
 
         private void OnTextChanged(DependencyPropertyChangedEventArgs e)
         {
-            textBlockRenderElements.SetRenderElementsProperty(textBlockRenderElement => textBlockRenderElement.Text = Text);
+            if (textBlockRenderElement != null)
+            {
+                textBlockRenderElement.Text = Text;
+            }
+
             noWrapSize = null;
         }
 
         private void OnFontFamilyChanged(DependencyPropertyChangedEventArgs e)
         {
-            textBlockRenderElements.SetRenderElementsProperty(textBlockRenderElement => textBlockRenderElement.FontFamily = FontFamily);
+            if (textBlockRenderElement != null)
+            {
+                textBlockRenderElement.FontFamily = FontFamily;
+            }
+
             noWrapSize = null;
         }
 
         private void OnFontSizeChanged(DependencyPropertyChangedEventArgs e)
         {
-            textBlockRenderElements.SetRenderElementsProperty(textBlockRenderElement => textBlockRenderElement.FontSize = FontSize);
+            if (textBlockRenderElement != null)
+            {
+                textBlockRenderElement.FontSize = FontSize;
+            }
+
             noWrapSize = null;
         }
 
         private void OnFontStyleChanged(DependencyPropertyChangedEventArgs e)
         {
-            textBlockRenderElements.SetRenderElementsProperty(textBlockRenderElement => textBlockRenderElement.FontStyle = FontStyle);
+            if (textBlockRenderElement != null)
+            {
+                textBlockRenderElement.FontStyle = FontStyle;
+            }
+
             noWrapSize = null;
         }
 
         private void OnFontWeightChanged(DependencyPropertyChangedEventArgs e)
         {
-            textBlockRenderElements.SetRenderElementsProperty(textBlockRenderElement => textBlockRenderElement.FontWeight = FontWeight);
+            if (textBlockRenderElement != null)
+            {
+                textBlockRenderElement.FontWeight = FontWeight;
+            }
+
             noWrapSize = null;
         }
 
         private void OnFontStretchChanged(DependencyPropertyChangedEventArgs e)
         {
-            textBlockRenderElements.SetRenderElementsProperty(textBlockRenderElement => textBlockRenderElement.FontStretch = FontStretch);
+            if (textBlockRenderElement != null)
+            {
+                textBlockRenderElement.FontStretch = FontStretch;
+            }
+
             noWrapSize = null;
         }
 
-        private ITextBlockRenderElement CreateRenderElement(IRenderElementFactory factory)
+        private void OnForegroundChanged(DependencyPropertyChangedEventArgs e)
         {
-            ITextBlockRenderElement textBlockRenderElement = factory.CreateTextBlockRenderElement(this);
+            if (textBlockRenderElement != null)
+            {
+                textBlockRenderElement.Foreground = (Brush)e.NewValue;
+            }
+        }
 
-            textBlockRenderElement.Bounds = new Rect(VisualBounds.Size);
-            textBlockRenderElement.FontFamily = this.FontFamily;
-            textBlockRenderElement.Foreground = this.Foreground;
-            textBlockRenderElement.FontSize = this.FontSize;
-            textBlockRenderElement.FontStyle = this.FontStyle;
-            textBlockRenderElement.FontStretch = this.FontStretch;
-            textBlockRenderElement.FontWeight = this.FontWeight;
-            textBlockRenderElement.Text = this.Text;
-            textBlockRenderElement.TextAlignment = this.TextAlignment;
-            textBlockRenderElement.TextTrimming = this.TextTrimming;
-            textBlockRenderElement.TextWrapping = this.TextWrapping;
+        private void OnTextAlignmentChanged(DependencyPropertyChangedEventArgs e)
+        {
+            if (textBlockRenderElement != null)
+            {
+                textBlockRenderElement.TextAlignment = (TextAlignment)e.NewValue;
+            }
+        }
 
-            return textBlockRenderElement;
+        private void OnTextTrimmingChanged(DependencyPropertyChangedEventArgs e)
+        {
+            if (textBlockRenderElement != null)
+            {
+                textBlockRenderElement.TextTrimming = (TextTrimming)e.NewValue;
+            }
+        }
+
+        private void OnTextWrappingChanged(DependencyPropertyChangedEventArgs e)
+        {
+            if (textBlockRenderElement != null)
+            {
+                textBlockRenderElement.TextWrapping = (TextWrapping)e.NewValue;
+            }
         }
     }
 }

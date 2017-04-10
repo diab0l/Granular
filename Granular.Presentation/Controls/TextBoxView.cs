@@ -23,7 +23,12 @@ namespace System.Windows.Controls
                 }
 
                 text = value;
-                textBoxRenderElements.SetRenderElementsProperty(renderElement => renderElement.Text = text);
+
+                if (textBoxRenderElement != null)
+                {
+                    textBoxRenderElement.Text = text;
+                }
+
                 TextChanged.Raise(this);
             }
         }
@@ -40,7 +45,11 @@ namespace System.Windows.Controls
                 }
 
                 maxLength = value;
-                textBoxRenderElements.SetRenderElementsProperty(renderElement => renderElement.MaxLength = maxLength);
+
+                if (textBoxRenderElement != null)
+                {
+                    textBoxRenderElement.MaxLength = maxLength;
+                }
             }
         }
 
@@ -57,7 +66,12 @@ namespace System.Windows.Controls
                 }
 
                 caretIndex = value;
-                textBoxRenderElements.SetRenderElementsProperty(renderElement => renderElement.CaretIndex = caretIndex);
+
+                if (textBoxRenderElement != null)
+                {
+                    textBoxRenderElement.CaretIndex = caretIndex;
+                }
+
                 CaretIndexChanged.Raise(this);
             }
         }
@@ -75,7 +89,12 @@ namespace System.Windows.Controls
                 }
 
                 selectionStart = value;
-                textBoxRenderElements.SetRenderElementsProperty(renderElement => renderElement.SelectionStart = selectionStart);
+
+                if (textBoxRenderElement != null)
+                {
+                    textBoxRenderElement.SelectionStart = selectionStart;
+                }
+
                 SelectionStartChanged.Raise(this);
             }
         }
@@ -93,7 +112,12 @@ namespace System.Windows.Controls
                 }
 
                 selectionLength = value;
-                textBoxRenderElements.SetRenderElementsProperty(renderElement => renderElement.SelectionLength = selectionLength);
+
+                if (textBoxRenderElement != null)
+                {
+                    textBoxRenderElement.SelectionLength = selectionLength;
+                }
+
                 SelectionLengthChanged.Raise(this);
             }
         }
@@ -110,7 +134,11 @@ namespace System.Windows.Controls
                 }
 
                 acceptsReturn = value;
-                textBoxRenderElements.SetRenderElementsProperty(renderElement => renderElement.AcceptsReturn = acceptsReturn);
+
+                if (textBoxRenderElement != null)
+                {
+                    textBoxRenderElement.AcceptsReturn = acceptsReturn;
+                }
             }
         }
 
@@ -126,7 +154,11 @@ namespace System.Windows.Controls
                 }
 
                 acceptsTab = value;
-                textBoxRenderElements.SetRenderElementsProperty(renderElement => renderElement.AcceptsTab = acceptsTab);
+
+                if (textBoxRenderElement != null)
+                {
+                    textBoxRenderElement.AcceptsTab = acceptsTab;
+                }
             }
         }
 
@@ -158,7 +190,11 @@ namespace System.Windows.Controls
                 }
 
                 horizontalScrollBarVisibility = value;
-                textBoxRenderElements.SetRenderElementsProperty(renderElement => renderElement.HorizontalScrollBarVisibility = horizontalScrollBarVisibility);
+
+                if (textBoxRenderElement != null)
+                {
+                    textBoxRenderElement.HorizontalScrollBarVisibility = horizontalScrollBarVisibility;
+                }
             }
         }
 
@@ -174,7 +210,11 @@ namespace System.Windows.Controls
                 }
 
                 verticalScrollBarVisibility = value;
-                textBoxRenderElements.SetRenderElementsProperty(renderElement => renderElement.VerticalScrollBarVisibility = verticalScrollBarVisibility);
+
+                if (textBoxRenderElement != null)
+                {
+                    textBoxRenderElement.VerticalScrollBarVisibility = verticalScrollBarVisibility;
+                }
             }
         }
 
@@ -190,7 +230,11 @@ namespace System.Windows.Controls
                 }
 
                 spellCheck = value;
-                textBoxRenderElements.SetRenderElementsProperty(renderElement => renderElement.SpellCheck = spellCheck);
+
+                if (textBoxRenderElement != null)
+                {
+                    textBoxRenderElement.SpellCheck = spellCheck;
+                }
             }
         }
 
@@ -205,7 +249,7 @@ namespace System.Windows.Controls
                     return;
                 }
 
-                if (textBoxRenderElements.Count > 0)
+                if (textBoxRenderElement != null)
                 {
                     throw new Granular.Exception("Can't set TextBoxView.IsPassword after render elements have been created");
                 }
@@ -214,34 +258,69 @@ namespace System.Windows.Controls
             }
         }
 
-        private RenderElementDictionary<ITextBoxRenderElement> textBoxRenderElements;
-        double measuredFontSize;
-        FontFamily measuredFontFamily;
-        double measuredLineHeight;
+        private ITextBoxRenderElement textBoxRenderElement;
+        private double measuredFontSize;
+        private FontFamily measuredFontFamily;
+        private double measuredLineHeight;
 
         static TextBoxView()
         {
             UIElement.IsHitTestVisibleProperty.OverrideMetadata(typeof(TextBoxView), new FrameworkPropertyMetadata(propertyChangedCallback: (sender, e) => ((TextBoxView)sender).SetRenderElementsIsHitTestVisible()));
             UIElement.IsEnabledProperty.OverrideMetadata(typeof(TextBoxView), new FrameworkPropertyMetadata(propertyChangedCallback: (sender, e) => ((TextBoxView)sender).OnIsEnabledChanged()));
-            Control.ForegroundProperty.OverrideMetadata(typeof(TextBoxView), new FrameworkPropertyMetadata(FrameworkPropertyMetadataOptions.Inherits, propertyChangedCallback: (sender, e) => ((TextBoxView)sender).textBoxRenderElements.SetRenderElementsProperty(renderElement => renderElement.Foreground = (Brush)e.NewValue)));
-            Control.FontFamilyProperty.OverrideMetadata(typeof(TextBoxView), new FrameworkPropertyMetadata(FrameworkPropertyMetadataOptions.Inherits, propertyChangedCallback: (sender, e) => ((TextBoxView)sender).textBoxRenderElements.SetRenderElementsProperty(renderElement => renderElement.FontFamily = (FontFamily)e.NewValue)));
-            Control.FontSizeProperty.OverrideMetadata(typeof(TextBoxView), new FrameworkPropertyMetadata(FrameworkPropertyMetadataOptions.Inherits, propertyChangedCallback: (sender, e) => ((TextBoxView)sender).textBoxRenderElements.SetRenderElementsProperty(renderElement => renderElement.FontSize = (double)e.NewValue)));
-            Control.FontStyleProperty.OverrideMetadata(typeof(TextBoxView), new FrameworkPropertyMetadata(FrameworkPropertyMetadataOptions.Inherits, propertyChangedCallback: (sender, e) => ((TextBoxView)sender).textBoxRenderElements.SetRenderElementsProperty(renderElement => renderElement.FontStyle = (FontStyle)e.NewValue)));
-            Control.FontStretchProperty.OverrideMetadata(typeof(TextBoxView), new FrameworkPropertyMetadata(FrameworkPropertyMetadataOptions.Inherits, propertyChangedCallback: (sender, e) => ((TextBoxView)sender).textBoxRenderElements.SetRenderElementsProperty(renderElement => renderElement.FontStretch = (FontStretch)e.NewValue)));
-            Control.FontWeightProperty.OverrideMetadata(typeof(TextBoxView), new FrameworkPropertyMetadata(FrameworkPropertyMetadataOptions.Inherits, propertyChangedCallback: (sender, e) => ((TextBoxView)sender).textBoxRenderElements.SetRenderElementsProperty(renderElement => renderElement.FontWeight = (FontWeight)e.NewValue)));
-            TextBox.TextAlignmentProperty.OverrideMetadata(typeof(TextBoxView), new FrameworkPropertyMetadata(FrameworkPropertyMetadataOptions.Inherits, propertyChangedCallback: (sender, e) => ((TextBoxView)sender).textBoxRenderElements.SetRenderElementsProperty(renderElement => renderElement.TextAlignment = (TextAlignment)e.NewValue)));
-            TextBox.TextWrappingProperty.OverrideMetadata(typeof(TextBoxView), new FrameworkPropertyMetadata(FrameworkPropertyMetadataOptions.Inherits, propertyChangedCallback: (sender, e) => ((TextBoxView)sender).textBoxRenderElements.SetRenderElementsProperty(renderElement => renderElement.TextWrapping = (TextWrapping)e.NewValue)));
+            Control.ForegroundProperty.OverrideMetadata(typeof(TextBoxView), new FrameworkPropertyMetadata(FrameworkPropertyMetadataOptions.Inherits, propertyChangedCallback: (sender, e) => ((TextBoxView)sender).OnForegroundChanged(e)));
+            Control.FontFamilyProperty.OverrideMetadata(typeof(TextBoxView), new FrameworkPropertyMetadata(FrameworkPropertyMetadataOptions.Inherits, propertyChangedCallback: (sender, e) => ((TextBoxView)sender).OnFontFamilyChanged(e)));
+            Control.FontSizeProperty.OverrideMetadata(typeof(TextBoxView), new FrameworkPropertyMetadata(FrameworkPropertyMetadataOptions.Inherits, propertyChangedCallback: (sender, e) => ((TextBoxView)sender).OnFontSizeChanged(e)));
+            Control.FontStyleProperty.OverrideMetadata(typeof(TextBoxView), new FrameworkPropertyMetadata(FrameworkPropertyMetadataOptions.Inherits, propertyChangedCallback: (sender, e) => ((TextBoxView)sender).OnFontStyleChanged(e)));
+            Control.FontStretchProperty.OverrideMetadata(typeof(TextBoxView), new FrameworkPropertyMetadata(FrameworkPropertyMetadataOptions.Inherits, propertyChangedCallback: (sender, e) => ((TextBoxView)sender).OnFontStretchChanged(e)));
+            Control.FontWeightProperty.OverrideMetadata(typeof(TextBoxView), new FrameworkPropertyMetadata(FrameworkPropertyMetadataOptions.Inherits, propertyChangedCallback: (sender, e) => ((TextBoxView)sender).OnFontWeightChanged(e)));
+            TextBox.TextAlignmentProperty.OverrideMetadata(typeof(TextBoxView), new FrameworkPropertyMetadata(FrameworkPropertyMetadataOptions.Inherits, propertyChangedCallback: (sender, e) => ((TextBoxView)sender).OnTextAlignmentChanged(e)));
+            TextBox.TextWrappingProperty.OverrideMetadata(typeof(TextBoxView), new FrameworkPropertyMetadata(FrameworkPropertyMetadataOptions.Inherits, propertyChangedCallback: (sender, e) => ((TextBoxView)sender).OnTextWrappingChanged(e)));
         }
 
         public TextBoxView()
         {
-            textBoxRenderElements = new RenderElementDictionary<ITextBoxRenderElement>(CreateRenderElement);
             measuredLineHeight = Double.NaN;
         }
 
         protected override object CreateRenderElementContentOverride(IRenderElementFactory factory)
         {
-            return textBoxRenderElements.GetRenderElement(factory);
+            if (textBoxRenderElement == null)
+            {
+                textBoxRenderElement = factory.CreateTextBoxRenderElement(this);
+
+                textBoxRenderElement.CaretIndex = this.CaretIndex;
+                textBoxRenderElement.SelectionLength = this.SelectionLength;
+                textBoxRenderElement.SelectionStart = this.SelectionStart;
+                textBoxRenderElement.Text = this.Text;
+                textBoxRenderElement.MaxLength = this.MaxLength;
+                textBoxRenderElement.Bounds = new Rect(this.VisualSize);
+                textBoxRenderElement.AcceptsReturn = this.AcceptsReturn;
+                textBoxRenderElement.AcceptsTab = this.AcceptsTab;
+                textBoxRenderElement.IsPassword = isPassword;
+                textBoxRenderElement.IsReadOnly = this.IsReadOnly || !this.IsEnabled;
+                textBoxRenderElement.IsHitTestVisible = this.IsHitTestVisible && this.IsEnabled;
+                textBoxRenderElement.SpellCheck = this.spellCheck;
+                textBoxRenderElement.HorizontalScrollBarVisibility = this.HorizontalScrollBarVisibility;
+                textBoxRenderElement.VerticalScrollBarVisibility = this.VerticalScrollBarVisibility;
+
+                textBoxRenderElement.Foreground = (Brush)GetValue(Control.ForegroundProperty);
+                textBoxRenderElement.FontSize = (double)GetValue(Control.FontSizeProperty);
+                textBoxRenderElement.FontFamily = (FontFamily)GetValue(Control.FontFamilyProperty);
+                textBoxRenderElement.FontStretch = (FontStretch)GetValue(Control.FontStretchProperty);
+                textBoxRenderElement.FontStyle = (FontStyle)GetValue(Control.FontStyleProperty);
+                textBoxRenderElement.FontWeight = (FontWeight)GetValue(Control.FontWeightProperty);
+                textBoxRenderElement.TextAlignment = (TextAlignment)GetValue(TextBox.TextAlignmentProperty);
+                textBoxRenderElement.TextWrapping = (TextWrapping)GetValue(TextBox.TextWrappingProperty);
+
+                textBoxRenderElement.TextChanged += (sender, e) => this.Text = textBoxRenderElement.Text;
+                textBoxRenderElement.CaretIndexChanged += (sender, e) => this.CaretIndex = ((ITextBoxRenderElement)sender).CaretIndex;
+                textBoxRenderElement.SelectionStartChanged += (sender, e) => this.SelectionStart = ((ITextBoxRenderElement)sender).SelectionStart;
+                textBoxRenderElement.SelectionLengthChanged += (sender, e) => this.SelectionLength = ((ITextBoxRenderElement)sender).SelectionLength;
+
+                InvalidateMeasure();
+            }
+
+            return textBoxRenderElement;
         }
 
         protected override Size MeasureOverride(Size availableSize)
@@ -252,13 +331,18 @@ namespace System.Windows.Controls
         protected override Size ArrangeOverride(Size finalSize)
         {
             Rect bounds = new Rect(finalSize);
-            textBoxRenderElements.SetRenderElementsProperty(renderElement => renderElement.Bounds = bounds);
+
+            if (textBoxRenderElement != null)
+            {
+                textBoxRenderElement.Bounds = bounds;
+            }
+
             return finalSize;
         }
 
         public void FocusRenderElement()
         {
-            foreach (ITextBoxRenderElement textBoxRenderElement in textBoxRenderElements.Elements)
+            if (textBoxRenderElement != null)
             {
                 textBoxRenderElement.Focus();
             }
@@ -266,7 +350,7 @@ namespace System.Windows.Controls
 
         public void ClearFocusRenderElement()
         {
-            foreach (ITextBoxRenderElement textBoxRenderElement in textBoxRenderElements.Elements)
+            if (textBoxRenderElement != null)
             {
                 textBoxRenderElement.ClearFocus();
             }
@@ -274,7 +358,7 @@ namespace System.Windows.Controls
 
         public void ProcessRenderElementKeyEvent(KeyEventArgs e)
         {
-            foreach (ITextBoxRenderElement textBoxRenderElement in textBoxRenderElements.Elements)
+            if (textBoxRenderElement != null)
             {
                 textBoxRenderElement.ProcessKeyEvent(e);
             }
@@ -286,14 +370,81 @@ namespace System.Windows.Controls
             SetRenderElementsIsReadOnly();
         }
 
+        private void OnForegroundChanged(DependencyPropertyChangedEventArgs e)
+        {
+            if (textBoxRenderElement != null)
+            {
+                textBoxRenderElement.Foreground = (Brush)e.NewValue;
+            }
+        }
+
+        private void OnFontFamilyChanged(DependencyPropertyChangedEventArgs e)
+        {
+            if (textBoxRenderElement != null)
+            {
+                textBoxRenderElement.FontFamily = (FontFamily)e.NewValue;
+            }
+        }
+
+        private void OnFontSizeChanged(DependencyPropertyChangedEventArgs e)
+        {
+            if (textBoxRenderElement != null)
+            {
+                textBoxRenderElement.FontSize = (double)e.NewValue;
+            }
+        }
+
+        private void OnFontStyleChanged(DependencyPropertyChangedEventArgs e)
+        {
+            if (textBoxRenderElement != null)
+            {
+                textBoxRenderElement.FontStyle = (FontStyle)e.NewValue;
+            }
+        }
+
+        private void OnFontStretchChanged(DependencyPropertyChangedEventArgs e)
+        {
+            if (textBoxRenderElement != null)
+            {
+                textBoxRenderElement.FontStretch = (FontStretch)e.NewValue;
+            }
+        }
+
+        private void OnFontWeightChanged(DependencyPropertyChangedEventArgs e)
+        {
+            if (textBoxRenderElement != null)
+            {
+                textBoxRenderElement.FontWeight = (FontWeight)e.NewValue;
+            }
+        }
+
+        private void OnTextAlignmentChanged(DependencyPropertyChangedEventArgs e)
+        {
+            if (textBoxRenderElement != null)
+            {
+                textBoxRenderElement.TextAlignment = (TextAlignment)e.NewValue;
+            }
+        }
+
+        private void OnTextWrappingChanged(DependencyPropertyChangedEventArgs e)
+        {
+            if (textBoxRenderElement != null)
+            {
+                textBoxRenderElement.TextWrapping = (TextWrapping)e.NewValue;
+            }
+        }
+
         private void SetRenderElementsIsHitTestVisible()
         {
-            textBoxRenderElements.SetRenderElementsProperty(renderElement => renderElement.IsHitTestVisible = IsHitTestVisible && IsEnabled);
+            textBoxRenderElement.IsHitTestVisible = IsHitTestVisible && IsEnabled;
         }
 
         private void SetRenderElementsIsReadOnly()
         {
-            textBoxRenderElements.SetRenderElementsProperty(renderElement => renderElement.IsReadOnly = IsReadOnly || !IsEnabled);
+            if (textBoxRenderElement != null)
+            {
+                textBoxRenderElement.IsReadOnly = IsReadOnly || !IsEnabled;
+            }
         }
 
         private double GetLineHeight()
@@ -311,44 +462,6 @@ namespace System.Windows.Controls
             measuredLineHeight = ApplicationHost.Current.TextMeasurementService.Measure(String.Empty, fontSize, new Typeface(fontFamily), Double.PositiveInfinity).Height;
 
             return measuredLineHeight;
-        }
-
-        private ITextBoxRenderElement CreateRenderElement(IRenderElementFactory factory)
-        {
-            ITextBoxRenderElement textBoxRenderElement = factory.CreateTextBoxRenderElement(this);
-
-            textBoxRenderElement.CaretIndex = this.CaretIndex;
-            textBoxRenderElement.SelectionLength = this.SelectionLength;
-            textBoxRenderElement.SelectionStart = this.SelectionStart;
-            textBoxRenderElement.Text = this.Text;
-            textBoxRenderElement.MaxLength = this.MaxLength;
-            textBoxRenderElement.Bounds = new Rect(this.VisualSize);
-            textBoxRenderElement.AcceptsReturn = this.AcceptsReturn;
-            textBoxRenderElement.AcceptsTab = this.AcceptsTab;
-            textBoxRenderElement.IsPassword = isPassword;
-            textBoxRenderElement.IsReadOnly = this.IsReadOnly || !this.IsEnabled;
-            textBoxRenderElement.IsHitTestVisible = this.IsHitTestVisible && this.IsEnabled;
-            textBoxRenderElement.SpellCheck = this.spellCheck;
-            textBoxRenderElement.HorizontalScrollBarVisibility = this.HorizontalScrollBarVisibility;
-            textBoxRenderElement.VerticalScrollBarVisibility = this.VerticalScrollBarVisibility;
-
-            textBoxRenderElement.Foreground = (Brush)GetValue(Control.ForegroundProperty);
-            textBoxRenderElement.FontSize = (double)GetValue(Control.FontSizeProperty);
-            textBoxRenderElement.FontFamily = (FontFamily)GetValue(Control.FontFamilyProperty);
-            textBoxRenderElement.FontStretch = (FontStretch)GetValue(Control.FontStretchProperty);
-            textBoxRenderElement.FontStyle = (FontStyle)GetValue(Control.FontStyleProperty);
-            textBoxRenderElement.FontWeight = (FontWeight)GetValue(Control.FontWeightProperty);
-            textBoxRenderElement.TextAlignment = (TextAlignment)GetValue(TextBox.TextAlignmentProperty);
-            textBoxRenderElement.TextWrapping = (TextWrapping)GetValue(TextBox.TextWrappingProperty);
-
-            textBoxRenderElement.TextChanged += (sender, e) => this.Text = textBoxRenderElement.Text;
-            textBoxRenderElement.CaretIndexChanged += (sender, e) => this.CaretIndex = ((ITextBoxRenderElement)sender).CaretIndex;
-            textBoxRenderElement.SelectionStartChanged += (sender, e) => this.SelectionStart = ((ITextBoxRenderElement)sender).SelectionStart;
-            textBoxRenderElement.SelectionLengthChanged += (sender, e) => this.SelectionLength = ((ITextBoxRenderElement)sender).SelectionLength;
-
-            InvalidateMeasure();
-
-            return textBoxRenderElement;
         }
     }
 }
