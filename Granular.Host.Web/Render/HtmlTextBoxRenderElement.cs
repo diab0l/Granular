@@ -417,7 +417,7 @@ namespace Granular.Host.Render
         private bool isFocused;
 
         public HtmlTextBoxRenderElement(IRenderQueue renderQueue, IHtmlValueConverter converter) :
-            base("div", renderQueue)
+            base(renderQueue)
         {
             this.renderQueue = renderQueue;
             this.converter = converter;
@@ -435,15 +435,19 @@ namespace Granular.Host.Render
 
         private void SetContentElement()
         {
+            Bridge.Html5.HTMLElement htmlElement;
+
             if (IsPassword || !AcceptsReturn)
             {
-                ContentElement = new HtmlRenderElement("input", renderQueue);
-                ContentElement.HtmlElement.SetAttribute("type", IsPassword ? "password" : "text");
+                htmlElement = Bridge.Html5.Document.CreateElement("input");
+                htmlElement.SetAttribute("type", IsPassword ? "password" : "text");
             }
             else
             {
-                ContentElement = new HtmlRenderElement("textarea", renderQueue);
+                htmlElement = Bridge.Html5.Document.CreateElement("textArea");
             }
+
+            ContentElement = new HtmlRenderElement(htmlElement, renderQueue);
 
             SetContentElementText();
             SetContentElementMaxLength();

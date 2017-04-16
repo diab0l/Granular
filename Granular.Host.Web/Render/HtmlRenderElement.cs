@@ -16,26 +16,15 @@ namespace Granular.Host.Render
         private IRenderQueue renderQueue;
 
         public HtmlRenderElement(IRenderQueue renderQueue) :
-            this("div", String.Empty, renderQueue)
+            this(Document.CreateElement("div"), renderQueue)
         {
             //
         }
 
-        public HtmlRenderElement(string htmlElementTagName, IRenderQueue renderQueue) :
-            this(htmlElementTagName, String.Empty, renderQueue)
+        public HtmlRenderElement(HTMLElement htmlElement, IRenderQueue renderQueue)
         {
-            //
-        }
-
-        public HtmlRenderElement(string htmlElementTagName, string htmlElementId, IRenderQueue renderQueue)
-        {
-            this.HtmlElement = Document.CreateElement(htmlElementTagName);
+            this.HtmlElement = htmlElement;
             this.renderQueue = renderQueue;
-
-            if (!htmlElementId.IsNullOrEmpty())
-            {
-                this.HtmlElement.Id = htmlElementId;
-            }
 
             Style = new HtmlStyleDictionary(HtmlElement);
             Style.Invalidated += (sender, e) => InvalidateRender();

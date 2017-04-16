@@ -7,6 +7,7 @@ using System.Windows;
 using System.Windows.Markup;
 using System.Windows.Media;
 using Bridge.Html5;
+using Granular.Extensions;
 
 namespace Granular.Host.Render
 {
@@ -180,7 +181,7 @@ namespace Granular.Host.Render
         private IHtmlValueConverter converter;
 
         public HtmlVisualRenderElement(object owner, IRenderQueue renderQueue, IHtmlValueConverter converter) :
-            base(GetElementTagName(owner), GetElementId(owner), renderQueue)
+            base(CreateHtmlElement(owner), renderQueue)
         {
             this.converter = converter;
 
@@ -279,6 +280,19 @@ namespace Granular.Host.Render
         {
             RuntimeNamePropertyAttribute nameAttribute = target.GetType().GetCustomAttributes(typeof(RuntimeNamePropertyAttribute), true).FirstOrDefault() as RuntimeNamePropertyAttribute;
             return nameAttribute != null ? (string)target.GetType().GetProperty(nameAttribute.Name).GetValue(target) : String.Empty;
+        }
+
+        private static HTMLElement CreateHtmlElement(object owner)
+        {
+            HTMLElement htmlElement = Document.CreateElement(GetElementTagName(owner));
+
+            string htmlElementId = GetElementId(owner);
+            if (!htmlElementId.IsNullOrEmpty())
+            {
+                htmlElement.Id = htmlElementId;
+            }
+
+            return htmlElement;
         }
     }
 }
