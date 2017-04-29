@@ -12,11 +12,9 @@ namespace Granular.Host.Wpf
 {
     public class WpfTextMeasurementService : ITextMeasurementService
     {
-        public static readonly WpfTextMeasurementService Default = new WpfTextMeasurementService(WpfValueConverter.Default);
-
         private WpfValueConverter converter;
 
-        private WpfTextMeasurementService(WpfValueConverter converter)
+        public WpfTextMeasurementService(WpfValueConverter converter)
         {
             this.converter = converter;
         }

@@ -14,13 +14,6 @@ namespace Granular.Host.Wpf.Render
 {
     public class WpfValueConverter
     {
-        public static readonly WpfValueConverter Default = new WpfValueConverter();
-
-        private WpfValueConverter()
-        {
-            //
-        }
-
         public wpf::System.Windows.Media.Brush Convert(Brush brush)
         {
             if (brush == null)

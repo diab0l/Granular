@@ -12,18 +12,20 @@ namespace Granular.Host.Wpf
 {
     public class WpfPresentationSourceFactory : IPresentationSourceFactory
     {
-        public static readonly IPresentationSourceFactory Default = new WpfPresentationSourceFactory();
-
         private List<WpfPresentationSource> presentationSources;
+        private WpfRenderElementFactory wpfRenderElementFactory;
+        private WpfValueConverter wpfValueConverter;
 
-        private WpfPresentationSourceFactory()
+        public WpfPresentationSourceFactory(WpfRenderElementFactory wpfRenderElementFactory, WpfValueConverter wpfValueConverter)
         {
             presentationSources = new List<WpfPresentationSource>();
+            this.wpfRenderElementFactory = wpfRenderElementFactory;
+            this.wpfValueConverter = wpfValueConverter;
         }
 
         public IPresentationSource CreatePresentationSource(UIElement rootElement)
         {
-            WpfPresentationSource presentationSource = new WpfPresentationSource(rootElement, WpfValueConverter.Default);
+            WpfPresentationSource presentationSource = new WpfPresentationSource(rootElement, wpfRenderElementFactory, wpfValueConverter);
             presentationSources.Add(presentationSource);
 
             return presentationSource;
@@ -60,7 +62,7 @@ namespace Granular.Host.Wpf
         private wpf::System.Windows.Controls.Canvas container;
         private wpf::System.Windows.Window window;
 
-        public WpfPresentationSource(UIElement rootElement, WpfValueConverter converter)
+        public WpfPresentationSource(UIElement rootElement, WpfRenderElementFactory wpfRenderElementFactory, WpfValueConverter converter)
         {
             this.RootElement = rootElement;
             this.converter = converter;
@@ -87,7 +89,7 @@ namespace Granular.Host.Wpf
             window.PreviewKeyUp += (sender, e) => e.Handled = ProcessKeyboardEvent(new RawKeyboardEventArgs(converter.ConvertBack(e.Key), converter.ConvertBack(e.KeyStates), e.IsRepeat, GetTimestamp()));
             window.Show();
 
-            container.Children.Add(((IWpfRenderElement)rootElement.GetRenderElement(WpfRenderElementFactory.Default)).WpfElement);
+            container.Children.Add(((IWpfRenderElement)rootElement.GetRenderElement(wpfRenderElementFactory)).WpfElement);
             SetRootElementSize();
             ((FrameworkElement)RootElement).Arrange(new Rect(container.ActualWidth, container.ActualHeight));
 
@@ -148,4 +150,3 @@ namespace Granular.Host.Wpf
         }
     }
 }
-

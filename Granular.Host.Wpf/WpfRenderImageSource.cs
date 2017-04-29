@@ -10,15 +10,8 @@ using System.Windows.Media;
 
 namespace Granular.Host.Wpf
 {
-    internal class WpfRenderImageSourceFactory : IRenderImageSourceFactory
+    public class WpfRenderImageSourceFactory : IRenderImageSourceFactory
     {
-        public static readonly IRenderImageSourceFactory Default = new WpfRenderImageSourceFactory();
-
-        private WpfRenderImageSourceFactory()
-        {
-            //
-        }
-
         public IRenderImageSource CreateRenderImageSource(RenderImageType imageType, byte[] data, Rect sourceRect)
         {
             wpf::System.Windows.Media.Imaging.BitmapImage bitmapImage = new wpf::System.Windows.Media.Imaging.BitmapImage();

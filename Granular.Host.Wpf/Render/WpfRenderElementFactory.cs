@@ -8,16 +8,16 @@ namespace Granular.Host.Wpf.Render
 {
     public class WpfRenderElementFactory : IRenderElementFactory
     {
-        public static readonly WpfRenderElementFactory Default = new WpfRenderElementFactory();
+        private WpfValueConverter wpfValueConverter;
 
-        private WpfRenderElementFactory()
+        public WpfRenderElementFactory(WpfValueConverter wpfValueConverter)
         {
-            //
+            this.wpfValueConverter = wpfValueConverter;
         }
 
         public IVisualRenderElement CreateVisualRenderElement(object owner)
         {
-            return new WpfVisualRenderElement(owner, WpfValueConverter.Default);
+            return new WpfVisualRenderElement(owner, wpfValueConverter);
         }
 
         public IDrawingRenderElement CreateDrawingRenderElement(object owner)
@@ -27,22 +27,22 @@ namespace Granular.Host.Wpf.Render
 
         public ITextBoxRenderElement CreateTextBoxRenderElement(object owner)
         {
-            return new WpfTextBoxRenderElement(WpfValueConverter.Default);
+            return new WpfTextBoxRenderElement(wpfValueConverter);
         }
 
         public ITextBlockRenderElement CreateTextBlockRenderElement(object owner)
         {
-            return new WpfTextBlockRenderElement(WpfValueConverter.Default);
+            return new WpfTextBlockRenderElement(wpfValueConverter);
         }
 
         public IBorderRenderElement CreateBorderRenderElement(object owner)
         {
-            return new WpfBorderRenderElement(WpfValueConverter.Default);
+            return new WpfBorderRenderElement(wpfValueConverter);
         }
 
         public IImageRenderElement CreateImageRenderElement(object owner)
         {
-            return new WpfImageRenderElement(WpfValueConverter.Default);
+            return new WpfImageRenderElement(wpfValueConverter);
         }
     }
 }

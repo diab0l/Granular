@@ -9,13 +9,6 @@ namespace Granular.Host.Wpf
 {
     public class WpfTaskScheduler : System.Windows.Threading.ITaskScheduler
     {
-        public static readonly WpfTaskScheduler Default = new WpfTaskScheduler();
-
-        private WpfTaskScheduler()
-        {
-            //
-        }
-
         public IDisposable ScheduleTask(TimeSpan timeSpan, Action action)
         {
             if (timeSpan == TimeSpan.Zero)
