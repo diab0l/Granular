@@ -67,7 +67,7 @@ namespace System.Windows
         {
             if (updateLayoutOperation == null || updateLayoutOperation.Status == DispatcherOperationStatus.Completed)
             {
-                updateLayoutOperation = Dispatcher.CurrentDispatcher.InvokeAsync(UpdateLayout);
+                updateLayoutOperation = Dispatcher.CurrentDispatcher.InvokeAsync(UpdateLayout, DispatcherPriority.Render);
             }
         }
 
