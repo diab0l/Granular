@@ -8,16 +8,18 @@ namespace Granular.Host.Render
 {
     public class HtmlRenderElementFactory : IRenderElementFactory
     {
-        public static readonly HtmlRenderElementFactory Default = new HtmlRenderElementFactory();
+        private RenderQueue renderQueue;
+        private HtmlValueConverter htmlValueConverter;
 
-        private HtmlRenderElementFactory()
+        public HtmlRenderElementFactory(RenderQueue renderQueue, HtmlValueConverter htmlValueConverter)
         {
-            //
+            this.renderQueue = renderQueue;
+            this.htmlValueConverter = htmlValueConverter;
         }
 
         public IVisualRenderElement CreateVisualRenderElement(object owner)
         {
-            return new HtmlVisualRenderElement(owner, RenderQueue.Default, HtmlValueConverter.Default);
+            return new HtmlVisualRenderElement(owner, renderQueue, htmlValueConverter);
         }
 
         public IDrawingRenderElement CreateDrawingRenderElement(object owner)
@@ -27,22 +29,22 @@ namespace Granular.Host.Render
 
         public ITextBoxRenderElement CreateTextBoxRenderElement(object owner)
         {
-            return new HtmlTextBoxRenderElement(RenderQueue.Default, HtmlValueConverter.Default);
+            return new HtmlTextBoxRenderElement(renderQueue, htmlValueConverter);
         }
 
         public ITextBlockRenderElement CreateTextBlockRenderElement(object owner)
         {
-            return new HtmlTextBlockRenderElement(RenderQueue.Default, HtmlValueConverter.Default);
+            return new HtmlTextBlockRenderElement(renderQueue, htmlValueConverter);
         }
 
         public IBorderRenderElement CreateBorderRenderElement(object owner)
         {
-            return new HtmlBorderRenderElement(RenderQueue.Default, HtmlValueConverter.Default);
+            return new HtmlBorderRenderElement(renderQueue, htmlValueConverter);
         }
 
         public IImageRenderElement CreateImageRenderElement(object owner)
         {
-            return new HtmlImageRenderElement(RenderQueue.Default, HtmlValueConverter.Default);
+            return new HtmlImageRenderElement(renderQueue, htmlValueConverter);
         }
     }
 }

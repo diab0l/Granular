@@ -7,23 +7,27 @@ using System.Windows;
 using System.Windows.Input;
 using System.Windows.Threading;
 using Granular.Host.Render;
+using System.Windows.Media;
 
 namespace Granular.Host
 {
     public class PresentationSourceFactory : IPresentationSourceFactory
     {
-        public static readonly IPresentationSourceFactory Default = new PresentationSourceFactory();
-
         private List<PresentationSource> presentationSources;
+        private HtmlRenderElementFactory htmlRenderElementFactory;
+        private HtmlValueConverter htmlValueConverter;
 
-        private PresentationSourceFactory()
+        public PresentationSourceFactory(HtmlRenderElementFactory htmlRenderElementFactory, HtmlValueConverter htmlValueConverter)
         {
+            this.htmlRenderElementFactory = htmlRenderElementFactory;
+            this.htmlValueConverter = htmlValueConverter;
+
             presentationSources = new List<PresentationSource>();
         }
 
         public IPresentationSource CreatePresentationSource(UIElement rootElement)
         {
-            PresentationSource presentationSource = new PresentationSource(rootElement, HtmlValueConverter.Default);
+            PresentationSource presentationSource = new PresentationSource(rootElement, htmlRenderElementFactory, htmlValueConverter);
             presentationSources.Add(presentationSource);
 
             return presentationSource;
@@ -66,7 +70,9 @@ namespace Granular.Host
         private bool keyDownHandled;
         private bool keyUpHandled;
 
-        public PresentationSource(UIElement rootElement, HtmlValueConverter converter)
+        private HtmlRenderElementFactory htmlRenderElementFactory;
+
+        public PresentationSource(UIElement rootElement, HtmlRenderElementFactory htmlRenderElementFactory, HtmlValueConverter converter)
         {
             this.RootElement = rootElement;
             this.converter = converter;
@@ -99,8 +105,11 @@ namespace Granular.Host
             SetRootElementSize();
             ((FrameworkElement)RootElement).Arrange(new Rect(window.InnerWidth, window.InnerHeight));
 
+            IHtmlRenderElement renderElement = ((IHtmlRenderElement)RootElement.GetRenderElement(htmlRenderElementFactory));
+            renderElement.Load();
+
             Bridge.Html5.Window.Document.Body.Style.Overflow = Overflow.Hidden;
-            Bridge.Html5.Window.Document.Body.AppendChild(((IHtmlRenderElement)RootElement.GetRenderElement(HtmlRenderElementFactory.Default)).HtmlElement);
+            Bridge.Html5.Window.Document.Body.AppendChild(renderElement.HtmlElement);
 
             MouseDevice.Activate();
             KeyboardDevice.Activate();

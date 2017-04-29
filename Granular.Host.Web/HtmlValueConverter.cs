@@ -12,13 +12,6 @@ namespace Granular.Host
 {
     public class HtmlValueConverter
     {
-        public static readonly HtmlValueConverter Default = new HtmlValueConverter();
-
-        private HtmlValueConverter()
-        {
-            //
-        }
-
         public string ToPixelString(double value)
         {
             if (value.IsNaN() || !Double.IsFinite(value))

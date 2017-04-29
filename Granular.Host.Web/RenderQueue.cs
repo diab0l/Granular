@@ -7,12 +7,10 @@ namespace Granular.Host
 {
     public class RenderQueue
     {
-        public static readonly RenderQueue Default = new RenderQueue();
-
         private List<Action> actions;
         private bool isRenderScheduled;
 
-        private RenderQueue()
+        public RenderQueue()
         {
             actions = new List<Action>();
         }

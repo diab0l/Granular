@@ -10,8 +10,6 @@ namespace Granular.Host
 {
     public class RenderImageSourceFactory : IRenderImageSourceFactory
     {
-        public static readonly IRenderImageSourceFactory Default = new RenderImageSourceFactory(HtmlValueConverter.Default);
-
         private Bridge.Html5.HTMLElement container;
         private Bridge.Html5.HTMLElement Container
         {
@@ -35,7 +33,7 @@ namespace Granular.Host
         private HtmlValueConverter converter;
         private CacheDictionary<string, string> objectUrlCache;
 
-        private RenderImageSourceFactory(HtmlValueConverter converter)
+        public RenderImageSourceFactory(HtmlValueConverter converter)
         {
             this.converter = converter;
             objectUrlCache = CacheDictionary<string, string>.CreateUsingStringKeys(ResolveObjectUrl);
