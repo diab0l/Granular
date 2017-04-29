@@ -583,6 +583,9 @@
     <Compile Include="..\Granular.Presentation\Media\FontFamily.cs">
       <Link>Markup\FontFamily.cs</Link>
     </Compile>
+    <Compile Include="..\Granular.Presentation\Media\DashStyle.cs">
+      <Link>Media\DashStyle.cs</Link>
+    </Compile>
     <Compile Include="..\Granular.Presentation\Media\GradientBrush.cs">
       <Link>Media\GradientBrush.cs</Link>
     </Compile>

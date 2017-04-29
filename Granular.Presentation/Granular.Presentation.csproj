@@ -79,6 +79,7 @@
     <Compile Include="Input\KeyboardNavigationTarget.cs" />
     <Compile Include="Markup\UriContext.cs" />
     <Compile Include="Media\FontFamily.cs" />
+    <Compile Include="Media\DashStyle.cs" />
     <Compile Include="Media\MatrixTransform.cs" />
     <Compile Include="Media\TransformGroup.cs" />
     <Compile Include="Media\TranslateTransform.cs" />
