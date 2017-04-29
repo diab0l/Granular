@@ -610,6 +610,9 @@
     <Compile Include="..\Granular.Presentation\Media\MatrixTransform.cs">
       <Link>Media\MatrixTransform.cs</Link>
     </Compile>
+    <Compile Include="..\Granular.Presentation\Media\Pen.cs">
+      <Link>Media\Pen.cs</Link>
+    </Compile>
     <Compile Include="..\Granular.Presentation\Media\RadialGradientBrush.cs">
       <Link>Media\RadialGradientBrush.cs</Link>
     </Compile>
