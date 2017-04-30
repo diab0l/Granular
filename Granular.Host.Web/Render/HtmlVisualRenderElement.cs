@@ -11,7 +11,7 @@ using Granular.Extensions;
 
 namespace Granular.Host.Render
 {
-    public class HtmlVisualRenderElement : HtmlRenderElement, IVisualRenderElement
+    public class HtmlVisualRenderElement : HtmlContainerRenderElement, IVisualRenderElement
     {
         private static readonly CacheDictionary<Type, string> ElementTagNameCache = CacheDictionary<Type, string>.CreateUsingStringKeys(ResolveElementTagName, type => type.FullName);
 
@@ -145,19 +145,14 @@ namespace Granular.Host.Render
             }
         }
 
-        private List<object> children;
-        public IEnumerable<object> Children { get { return children; } }
-
         private RenderQueue renderQueue;
         private IHtmlValueConverter converter;
 
         public HtmlVisualRenderElement(object owner, RenderQueue renderQueue, IHtmlValueConverter converter) :
-            base(CreateHtmlElement(owner))
+            base(CreateHtmlElement(owner), renderQueue)
         {
             this.renderQueue = renderQueue;
             this.converter = converter;
-
-            this.children = new List<object>();
 
             bounds = Rect.Zero;
             isVisible = true;
@@ -170,34 +165,6 @@ namespace Granular.Host.Render
             HtmlElement.SetHtmlIsVisible(IsVisible);
             HtmlElement.SetHtmlOpacity(Opacity, converter);
             HtmlElement.SetHtmlTransform(Transform, converter);
-        }
-
-        public void InsertChild(int index, object child)
-        {
-            if (!(child is HtmlRenderElement))
-            {
-                throw new Granular.Exception("Can't add child of type \"{0}\"", child.GetType().Name);
-            }
-
-            children.Insert(index, child);
-
-            renderQueue.InvokeAsync(() => HtmlElement.InsertChild(index, ((HtmlRenderElement)child).HtmlElement));
-        }
-
-        public void RemoveChild(object child)
-        {
-            if (!(child is HtmlRenderElement))
-            {
-                throw new Granular.Exception("Can't remove child of type \"{0}\"", child.GetType().Name);
-            }
-
-            int childIndex = children.IndexOf(child);
-
-            if (childIndex != -1)
-            {
-                children.RemoveAt(childIndex);
-                renderQueue.InvokeAsync(() => HtmlElement.RemoveChild(((HtmlRenderElement)child).HtmlElement));
-            }
         }
 
         private void OnBackgroundChanged(object sender, EventArgs e)

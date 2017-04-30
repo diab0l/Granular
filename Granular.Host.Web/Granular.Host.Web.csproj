@@ -48,6 +48,7 @@
     </Compile>
     <Compile Include="RenderImageSource.cs" />
     <Compile Include="RenderQueue.cs" />
+    <Compile Include="Render\HtmlContainerRenderElement.cs" />
     <Compile Include="Render\HtmlImageRenderElement.cs" />
     <Compile Include="Render\HtmlTextBoxRenderElement.cs" />
     <Compile Include="WebApplicationHost.cs" />
