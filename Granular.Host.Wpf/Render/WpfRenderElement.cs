@@ -10,4 +10,9 @@ namespace Granular.Host.Wpf.Render
     {
         wpf::System.Windows.FrameworkElement WpfElement { get; }
     }
+
+    public interface IWpfDeferredRenderElement : IWpfRenderElement
+    {
+        event EventHandler WpfElementCreated;
+    }
 }

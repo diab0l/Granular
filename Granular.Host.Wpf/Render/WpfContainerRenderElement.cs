@@ -15,25 +15,57 @@ namespace Granular.Host.Wpf.Render
         public wpf::System.Windows.FrameworkElement WpfElement { get { return container; } }
 
         private wpf::System.Windows.Controls.Panel container;
-        private List<object> children;
+        private List<IWpfRenderElement> children;
         public IEnumerable<object> Children { get { return children; } }
 
         public WpfContainerRenderElement(wpf::System.Windows.Controls.Panel container)
         {
             this.container = container;
-            children = new List<object>();
+            children = new List<IWpfRenderElement>();
         }
 
         public void InsertChild(int index, object child)
         {
-            children.Insert(index, child);
-            container.Children.Insert(index, ((IWpfRenderElement)child).WpfElement);
+            IWpfRenderElement childElement = (IWpfRenderElement)child;
+
+            if (child is IWpfDeferredRenderElement)
+            {
+                ((IWpfDeferredRenderElement)child).WpfElementCreated += OnChildWpfElementCreated;
+            }
+
+            children.Insert(index, childElement);
+
+            if (childElement.WpfElement != null)
+            {
+                index = children.Take(index).Count(c => c.WpfElement != null);
+                container.Children.Insert(index, childElement.WpfElement);
+            }
         }
 
         public void RemoveChild(object child)
         {
-            children.Remove(child);
-            container.Children.Remove(((IWpfRenderElement)child).WpfElement);
+            IWpfRenderElement childElement = (IWpfRenderElement)child;
+
+            if (child is IWpfDeferredRenderElement)
+            {
+                ((IWpfDeferredRenderElement)child).WpfElementCreated -= OnChildWpfElementCreated;
+            }
+
+            children.Remove(childElement);
+
+            if (childElement.WpfElement != null)
+            {
+                container.Children.Remove(childElement.WpfElement);
+            }
+        }
+
+        private void OnChildWpfElementCreated(object sender, EventArgs e)
+        {
+            IWpfRenderElement childElement = (IWpfRenderElement)sender;
+            int index = children.IndexOf(childElement);
+
+            index = children.Take(index).Count(c => c.WpfElement != null);
+            container.Children.Insert(index, childElement.WpfElement);
         }
     }
 }

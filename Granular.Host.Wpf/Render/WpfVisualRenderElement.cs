@@ -42,7 +42,13 @@ namespace Granular.Host.Wpf.Render
             get { return bounds; }
             set
             {
+                if (bounds == value)
+                {
+                    return;
+                }
+
                 bounds = value;
+
                 wpf::System.Windows.Controls.Canvas.SetLeft(container, bounds.Left);
                 wpf::System.Windows.Controls.Canvas.SetTop(container, bounds.Top);
                 container.Width = bounds.Width;
