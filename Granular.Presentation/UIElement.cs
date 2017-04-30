@@ -42,6 +42,8 @@ namespace System.Windows
             }
         }
 
+        public bool IsVisualValid { get; private set; }
+
         public bool IsMeasureValid { get; private set; }
 
         public bool IsArrangeValid { get; private set; }
@@ -189,6 +191,9 @@ namespace System.Windows
         private CacheDictionary<RoutedEvent, IEnumerable<RoutedEventHandlerItem>> routedEventHandlersCache;
         private Size previousDesiredSize;
         private IDisposable focus;
+        private IRenderElementFactory renderElementFactory;
+        private IContainerRenderElement drawingRenderElement;
+        private DispatcherOperation renderOperation;
 
         public UIElement()
         {
@@ -389,7 +394,12 @@ namespace System.Windows
                     ArrangeCore(finalRect);
 
                     PreviousFinalRect = finalRect;
+
                     IsArrangeValid = true;
+                    IsVisualValid = false;
+
+                    Render();
+
                     LayoutManager.Current.RemoveArrange(this);
                     LayoutManager.Current.AddUpdatedElement(this);
                 }
@@ -435,6 +445,62 @@ namespace System.Windows
         protected virtual void OnLayoutUpdated()
         {
             //
+        }
+
+        private void RenderAsync()
+        {
+            if (renderOperation != null && renderOperation.Status == DispatcherOperationStatus.Pending)
+            {
+                return;
+            }
+
+            renderOperation = Dispatcher.CurrentDispatcher.InvokeAsync(Render, DispatcherPriority.Render);
+        }
+
+        private void Render()
+        {
+            if (IsVisualValid || !IsArrangeValid || drawingRenderElement == null)
+            {
+                return;
+            }
+
+            RenderElementDrawingContext drawingContext = new RenderElementDrawingContext(drawingRenderElement, renderElementFactory);
+
+            OnRender(drawingContext);
+
+            drawingContext.Close();
+
+            IsVisualValid = true;
+        }
+
+        protected virtual void OnRender(DrawingContext drawingContext)
+        {
+            //
+        }
+
+        public void InvalidateVisual()
+        {
+            if (!IsVisualValid)
+            {
+                return;
+            }
+
+            IsVisualValid = false;
+
+            RenderAsync();
+        }
+
+        protected override object CreateRenderElementContentOverride(IRenderElementFactory factory)
+        {
+            if (drawingRenderElement == null)
+            {
+                renderElementFactory = factory;
+                drawingRenderElement = factory.CreateDrawingRenderElement(this);
+
+                RenderAsync();
+            }
+
+            return drawingRenderElement;
         }
 
         protected override void OnVisualParentChanged(Visual oldVisualParent, Visual newVisualParent)

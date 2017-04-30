@@ -319,6 +319,11 @@ namespace System.Windows
                     InvalidateArrange();
                 }
 
+                if (metadata.AffectsRender)
+                {
+                    InvalidateVisual();
+                }
+
                 if (metadata.AffectsParentMeasure && VisualParent != null)
                 {
                     ((UIElement)VisualParent).InvalidateMeasure();

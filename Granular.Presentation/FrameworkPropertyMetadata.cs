@@ -13,7 +13,7 @@ namespace System.Windows
         AffectsArrange = 0x2,
         AffectsParentMeasure = 0x4,
         AffectsParentArrange = 0x8,
-        //AffectsRender = 0x10,
+        AffectsRender = 0x10,
         Inherits = 0x20,
         //OverridesInheritanceBehavior = 0x40,
         //NotDataBindable = 0x80,
@@ -29,6 +29,7 @@ namespace System.Windows
         public bool AffectsMeasure { get; set; }
         public bool AffectsParentArrange { get; set; }
         public bool AffectsParentMeasure { get; set; }
+        public bool AffectsRender { get; set; }
         public bool AffectsVisualState { get; set; }
         public bool BindsTwoWayByDefault { get; set; }
         public UpdateSourceTrigger DefaultUpdateSourceTrigger { get; set; }
@@ -112,6 +113,7 @@ namespace System.Windows
             this.AffectsMeasure = (flags & FrameworkPropertyMetadataOptions.AffectsMeasure) != 0;
             this.AffectsParentArrange = (flags & FrameworkPropertyMetadataOptions.AffectsParentArrange) != 0;
             this.AffectsParentMeasure = (flags & FrameworkPropertyMetadataOptions.AffectsParentMeasure) != 0;
+            this.AffectsRender = (flags & FrameworkPropertyMetadataOptions.AffectsRender) != 0;
             this.AffectsVisualState = (flags & FrameworkPropertyMetadataOptions.AffectsVisualState) != 0;
             this.BindsTwoWayByDefault = (flags & FrameworkPropertyMetadataOptions.BindsTwoWayByDefault) != 0;
             this.Inherits = (flags & FrameworkPropertyMetadataOptions.Inherits) != 0;
