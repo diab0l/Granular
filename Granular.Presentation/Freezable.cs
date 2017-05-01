@@ -26,7 +26,7 @@ namespace System.Windows
         public IContextElement ContextParent
         {
             get { return contextParent; }
-            set
+            private set
             {
                 if (contextParent == value)
                 {
