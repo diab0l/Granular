@@ -15,6 +15,7 @@ namespace System.Windows.Media
         public abstract void Close();
         public abstract void DrawEllipse(Brush brush, Pen pen, Point center, double radiusX, double radiusY);
         public abstract void DrawGeometry(Brush brush, Pen pen, Geometry geometry);
+        public abstract void DrawLine(Pen pen, Point point0, Point point1);
         public abstract void DrawRectangle(Brush brush, Pen pen, Rect rectangle);
         public abstract void DrawRoundedRectangle(Brush brush, Pen pen, Rect rectangle, double radiusX, double radiusY);
         public abstract void Pop();
@@ -133,6 +134,33 @@ namespace System.Windows.Media
             child.Stroke = pen?.Brush;
             child.StrokeThickness = pen?.Thickness ?? 0;
             child.Geometry = geometry;
+        }
+
+
+        public override void DrawLine(Pen pen, Point point0, Point point1)
+        {
+            VerifyNotClosed();
+
+            if (innerContext != null)
+            {
+                innerContext.DrawLine(pen, point0, point1);
+                return;
+            }
+
+            IDrawingGeometryRenderElement child = GetChild(factory.CreateDrawingGeometryRenderElement);
+
+            LineGeometry geometry = child.Geometry as LineGeometry;
+            if (geometry == null)
+            {
+                geometry = new LineGeometry();
+                child.Geometry = geometry;
+            }
+
+            geometry.StartPoint = point0;
+            geometry.EndPoint = point1;
+
+            child.Stroke = pen?.Brush;
+            child.StrokeThickness = pen?.Thickness ?? 0;
         }
 
         public override void DrawRectangle(Brush brush, Pen pen, Rect rectangle)
