@@ -10,11 +10,45 @@ namespace System.Windows.Media
     [TypeConverter(typeof(BrushTypeConverter))]
     public abstract class Brush : Animatable
     {
-        public static readonly DependencyProperty OpacityProperty = DependencyProperty.Register("Opacity", typeof(double), typeof(Brush), new FrameworkPropertyMetadata(1.0));
+        public static readonly DependencyProperty OpacityProperty = DependencyProperty.Register("Opacity", typeof(double), typeof(Brush), new FrameworkPropertyMetadata(1.0, (sender, e) => ((Brush)sender).OnOpacityChanged(e)));
         public double Opacity
         {
             get { return (double)GetValue(OpacityProperty); }
             set { SetValue(OpacityProperty, value); }
+        }
+
+        private IBrushRenderResource renderResource;
+
+        public object GetRenderResource(IRenderElementFactory factory)
+        {
+            if (renderResource == null)
+            {
+                object resource = CreateRenderResource(factory);
+                OnRenderResourceCreated(resource);
+
+                if (renderResource == null)
+                {
+                    throw new Granular.Exception("base.OnRenderResourceCreated was not called for \"{0}\"", GetType().Name);
+                }
+            }
+
+            return renderResource;
+        }
+
+        protected abstract object CreateRenderResource(IRenderElementFactory factory);
+
+        protected virtual void OnRenderResourceCreated(object renderResource)
+        {
+            this.renderResource = (IBrushRenderResource)renderResource;
+            this.renderResource.Opacity = Opacity;
+        }
+
+        private void OnOpacityChanged(DependencyPropertyChangedEventArgs e)
+        {
+            if (renderResource != null)
+            {
+                renderResource.Opacity = Opacity;
+            }
         }
     }
 

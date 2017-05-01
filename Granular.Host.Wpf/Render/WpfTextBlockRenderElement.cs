@@ -38,18 +38,8 @@ namespace Granular.Host.Wpf.Render
                     return;
                 }
 
-                if (foreground != null)
-                {
-                    foreground.Changed -= OnForegroundChanged;
-                }
-
                 foreground = value;
-                textBlock.Foreground = converter.Convert(foreground);
-
-                if (foreground != null)
-                {
-                    foreground.Changed += OnForegroundChanged;
-                }
+                textBlock.Foreground = converter.Convert(foreground, factory);
             }
         }
 
@@ -148,18 +138,16 @@ namespace Granular.Host.Wpf.Render
         }
 
         private wpf::System.Windows.Controls.TextBlock textBlock;
+
+        private IRenderElementFactory factory;
         private WpfValueConverter converter;
 
-        public WpfTextBlockRenderElement(WpfValueConverter converter)
+        public WpfTextBlockRenderElement(IRenderElementFactory factory, WpfValueConverter converter)
         {
+            this.factory = factory;
             this.converter = converter;
             textBlock = new wpf::System.Windows.Controls.TextBlock();
             textBlock.Foreground = wpf::System.Windows.Media.Brushes.Red;
-        }
-
-        private void OnForegroundChanged(object sender, EventArgs e)
-        {
-            textBlock.Foreground = converter.Convert(Foreground);
         }
     }
 }

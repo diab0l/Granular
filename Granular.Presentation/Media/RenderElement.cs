@@ -101,6 +101,62 @@ namespace System.Windows.Media
         ImageSource Source { get; set; }
     }
 
+    public interface IBrushRenderResource
+    {
+        double Opacity { get; set; }
+    }
+
+    public interface ISolidColorBrushRenderResource : IBrushRenderResource
+    {
+        Color Color { get; set; }
+    }
+
+    public class RenderGradientStop
+    {
+        public Color Color { get; private set; }
+        public double Offset { get; private set; }
+
+        public RenderGradientStop(Color color, double offset)
+        {
+            this.Color = color;
+            this.Offset = offset;
+        }
+    }
+
+    public interface IGradientBrushRenderResource : IBrushRenderResource
+    {
+        IEnumerable<RenderGradientStop> GradientStops { get; set; }
+        GradientSpreadMethod SpreadMethod { get; set; }
+        BrushMappingMode MappingMode { get; set; }
+    }
+
+    public interface ILinearGradientBrushRenderResource : IGradientBrushRenderResource
+    {
+        Point StartPoint { get; set; }
+        Point EndPoint { get; set; }
+    }
+
+    public interface IRadialGradientBrushRenderResource : IGradientBrushRenderResource
+    {
+        Point Center { get; set; }
+        Point GradientOrigin { get; set; }
+        double RadiusX { get; set; }
+        double RadiusY { get; set; }
+    }
+
+    public interface ITileBrushRenderResource : IBrushRenderResource
+    {
+        TileMode TileMode { get; set; }
+        Stretch Stretch { get; set; }
+        Rect Viewport { get; set; }
+        BrushMappingMode ViewportUnits { get; set; }
+    }
+
+    public interface IImageBrushRenderResource : ITileBrushRenderResource
+    {
+        ImageSource ImageSource { get; set; }
+    }
+
     public interface IRenderElementFactory
     {
         IVisualRenderElement CreateVisualRenderElement(object owner);
@@ -109,6 +165,10 @@ namespace System.Windows.Media
         ITextBlockRenderElement CreateTextBlockRenderElement(object owner);
         IBorderRenderElement CreateBorderRenderElement(object owner);
         IImageRenderElement CreateImageRenderElement(object owner);
+        ISolidColorBrushRenderResource CreateSolidColorBrushRenderResource();
+        ILinearGradientBrushRenderResource CreateLinearGradientBrushRenderResource();
+        IRadialGradientBrushRenderResource CreateRadialGradientBrushRenderResource();
+        IImageBrushRenderResource CreateImageBrushRenderResource();
     }
 
     public static class ContainerRenderElementExtensions

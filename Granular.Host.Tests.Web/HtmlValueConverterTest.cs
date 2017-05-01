@@ -36,7 +36,6 @@ namespace Granular.Host.Tests.Web
             Assert.AreEqual("#ff0000", converter.ToColorString(new SolidColorBrush(Colors.Red)));
             Assert.AreEqual("linear-gradient(135deg, #ff0000 0%, #0000ff 100%)", converter.ToImageString(new LinearGradientBrush(45, Colors.Red, Colors.Blue), new Rect(100, 100)));
             Assert.AreEqual("radial-gradient(ellipse 50% 50% at 50% 50%, #ff0000 0%, #0000ff 100%)", converter.ToImageString(new RadialGradientBrush(Colors.Red, Colors.Blue)));
-            Assert.AreEqual("url(image-source)", converter.ToImageString(new ImageBrush() { ImageSource = "image-source" }));
         }
 
         [TestMethod]

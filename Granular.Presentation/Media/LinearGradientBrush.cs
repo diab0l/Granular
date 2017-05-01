@@ -8,19 +8,21 @@ namespace System.Windows.Media
     [Bridge.Reflectable(Bridge.MemberAccessibility.PublicInstanceProperty)]
     public class LinearGradientBrush : GradientBrush
     {
-        public static readonly DependencyProperty StartPointProperty = DependencyProperty.Register("StartPoint", typeof(Point), typeof(LinearGradientBrush), new FrameworkPropertyMetadata(Point.Zero));
+        public static readonly DependencyProperty StartPointProperty = DependencyProperty.Register("StartPoint", typeof(Point), typeof(LinearGradientBrush), new FrameworkPropertyMetadata(Point.Zero, (sender, e) => ((LinearGradientBrush)sender).OnStartPointChanged(e)));
         public Point StartPoint
         {
             get { return (Point)GetValue(StartPointProperty); }
             set { SetValue(StartPointProperty, value); }
         }
 
-        public static readonly DependencyProperty EndPointProperty = DependencyProperty.Register("EndPoint", typeof(Point), typeof(LinearGradientBrush), new FrameworkPropertyMetadata(new Point(1, 1)));
+        public static readonly DependencyProperty EndPointProperty = DependencyProperty.Register("EndPoint", typeof(Point), typeof(LinearGradientBrush), new FrameworkPropertyMetadata(new Point(1, 1), (sender, e) => ((LinearGradientBrush)sender).OnEndPointChanged(e)));
         public Point EndPoint
         {
             get { return (Point)GetValue(EndPointProperty); }
             set { SetValue(EndPointProperty, value); }
         }
+
+        private ILinearGradientBrushRenderResource renderResource;
 
         public LinearGradientBrush()
         {
@@ -86,6 +88,36 @@ namespace System.Windows.Media
 
             startPoint = -offset;
             endPoint = new Point(x, y) - offset;
+        }
+
+        protected override object CreateRenderResource(IRenderElementFactory factory)
+        {
+            return factory.CreateLinearGradientBrushRenderResource();
+        }
+
+        protected override void OnRenderResourceCreated(object renderResource)
+        {
+            base.OnRenderResourceCreated(renderResource);
+
+            this.renderResource = (ILinearGradientBrushRenderResource)renderResource;
+            this.renderResource.StartPoint = StartPoint;
+            this.renderResource.EndPoint = EndPoint;
+        }
+
+        private void OnStartPointChanged(DependencyPropertyChangedEventArgs e)
+        {
+            if (renderResource != null)
+            {
+                renderResource.StartPoint = StartPoint;
+            }
+        }
+
+        private void OnEndPointChanged(DependencyPropertyChangedEventArgs e)
+        {
+            if (renderResource != null)
+            {
+                renderResource.EndPoint = EndPoint;
+            }
         }
     }
 }

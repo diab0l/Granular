@@ -59,35 +59,88 @@ namespace System.Windows.Media
     [ContentProperty("GradientStops")]
     public abstract class GradientBrush : Brush
     {
-        public static readonly DependencyProperty SpreadMethodProperty = DependencyProperty.Register("SpreadMethod", typeof(GradientSpreadMethod), typeof(GradientBrush), new FrameworkPropertyMetadata());
+        public static readonly DependencyProperty SpreadMethodProperty = DependencyProperty.Register("SpreadMethod", typeof(GradientSpreadMethod), typeof(GradientBrush), new FrameworkPropertyMetadata(GradientSpreadMethod.Pad, (sender, e) => ((GradientBrush)sender).OnSpreadMethodChanged(e)));
         public GradientSpreadMethod SpreadMethod
         {
             get { return (GradientSpreadMethod)GetValue(SpreadMethodProperty); }
             set { SetValue(SpreadMethodProperty, value); }
         }
 
-        public static readonly DependencyProperty MappingModeProperty = DependencyProperty.Register("MappingMode", typeof(BrushMappingMode), typeof(GradientBrush), new FrameworkPropertyMetadata(BrushMappingMode.RelativeToBoundingBox));
+        public static readonly DependencyProperty MappingModeProperty = DependencyProperty.Register("MappingMode", typeof(BrushMappingMode), typeof(GradientBrush), new FrameworkPropertyMetadata(BrushMappingMode.RelativeToBoundingBox, (sender, e) => ((GradientBrush)sender).OnMappingModeChanged(e)));
         public BrushMappingMode MappingMode
         {
             get { return (BrushMappingMode)GetValue(MappingModeProperty); }
             set { SetValue(MappingModeProperty, value); }
         }
 
-        public static readonly DependencyProperty GradientStopsProperty = DependencyProperty.Register("GradientStops", typeof(GradientStopCollection), typeof(GradientBrush), new FrameworkPropertyMetadata());
+        public static readonly DependencyProperty GradientStopsProperty = DependencyProperty.Register("GradientStops", typeof(GradientStopCollection), typeof(GradientBrush), new FrameworkPropertyMetadata(null, (sender, e) => ((GradientBrush)sender).OnGradientStopsChanged(e)));
         public GradientStopCollection GradientStops
         {
             get { return (GradientStopCollection)GetValue(GradientStopsProperty); }
             set { SetValue(GradientStopsProperty, value); }
         }
 
-        public GradientBrush()
+        private IGradientBrushRenderResource renderResource;
+
+        public GradientBrush() :
+            this(new GradientStopCollection())
         {
             //
         }
 
-        public GradientBrush(IEnumerable<GradientStop> gradientStops)
+        public GradientBrush(IEnumerable<GradientStop> gradientStops) :
+            this(new GradientStopCollection(gradientStops))
         {
-            this.GradientStops = new GradientStopCollection(gradientStops);
+            //
+        }
+
+        private GradientBrush(GradientStopCollection gradientStops)
+        {
+            this.GradientStops = gradientStops;
+        }
+
+        protected override void OnRenderResourceCreated(object renderResource)
+        {
+            base.OnRenderResourceCreated(renderResource);
+
+            this.renderResource = (IGradientBrushRenderResource)renderResource;
+            this.renderResource.SpreadMethod = SpreadMethod;
+            this.renderResource.MappingMode = MappingMode;
+            this.renderResource.GradientStops = GradientStops.Select(gradientStop => new RenderGradientStop(gradientStop.Color, gradientStop.Offset)).ToArray();
+        }
+
+        private void OnSpreadMethodChanged(DependencyPropertyChangedEventArgs e)
+        {
+            if (renderResource != null)
+            {
+                renderResource.SpreadMethod = SpreadMethod;
+            }
+        }
+
+        private void OnMappingModeChanged(DependencyPropertyChangedEventArgs e)
+        {
+            if (renderResource != null)
+            {
+                renderResource.MappingMode = MappingMode;
+            }
+        }
+
+        private void OnGradientStopsChanged(DependencyPropertyChangedEventArgs e)
+        {
+            if (e.OldValue != null)
+            {
+                ((GradientStopCollection)e.OldValue).TrySetContextParent(null);
+            }
+
+            if (e.NewValue != null)
+            {
+                ((GradientStopCollection)e.NewValue).TrySetContextParent(this);
+            }
+
+            if (renderResource != null)
+            {
+                this.renderResource.GradientStops = e.NewValue != null ? ((GradientStopCollection)e.NewValue).Select(gradientStop => new RenderGradientStop(gradientStop.Color, gradientStop.Offset)).ToArray() : null;
+            }
         }
     }
 }

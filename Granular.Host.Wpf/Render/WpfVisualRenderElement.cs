@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Windows;
+using System.Windows.Media;
 using Granular.Extensions;
 
 namespace Granular.Host.Wpf.Render
@@ -21,18 +22,8 @@ namespace Granular.Host.Wpf.Render
                     return;
                 }
 
-                if (background != null)
-                {
-                    background.Changed -= OnBackgroundChanged;
-                }
-
                 background = value;
-                container.Background = converter.Convert(background);
-
-                if (background != null)
-                {
-                    background.Changed += OnBackgroundChanged;
-                }
+                container.Background = converter.Convert(background, factory);
             }
         }
 
@@ -102,24 +93,21 @@ namespace Granular.Host.Wpf.Render
         }
 
         private wpf::System.Windows.Controls.Canvas container;
+        private IRenderElementFactory factory;
         private WpfValueConverter converter;
 
-        public WpfVisualRenderElement(object owner, WpfValueConverter converter) :
-            this(CreateWpfElement(owner), converter)
+        public WpfVisualRenderElement(object owner, IRenderElementFactory factory, WpfValueConverter converter) :
+            this(CreateWpfElement(owner), factory, converter)
         {
             //
         }
 
-        private WpfVisualRenderElement(wpf::System.Windows.Controls.Canvas container, WpfValueConverter converter) :
+        private WpfVisualRenderElement(wpf::System.Windows.Controls.Canvas container, IRenderElementFactory factory, WpfValueConverter converter) :
             base(container)
         {
             this.container = container;
+            this.factory = factory;
             this.converter = converter;
-        }
-
-        private void OnBackgroundChanged(object sender, EventArgs e)
-        {
-            container.Background = converter.Convert(Background);
         }
 
         private static wpf::System.Windows.Controls.Canvas CreateWpfElement(object owner)

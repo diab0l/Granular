@@ -22,10 +22,12 @@ namespace Granular.Host
         {
             RenderQueue renderQueue = new RenderQueue();
             HtmlValueConverter htmlValueConverter = new HtmlValueConverter();
+            SvgValueConverter svgValueConverter = new SvgValueConverter();
+            SvgDefinitionContainer svgDefinitionContainer = new SvgDefinitionContainer(renderQueue);
 
-            HtmlRenderElementFactory htmlRenderElementFactory = new HtmlRenderElementFactory(renderQueue, htmlValueConverter);
+            HtmlRenderElementFactory htmlRenderElementFactory = new HtmlRenderElementFactory(renderQueue, htmlValueConverter, svgValueConverter, svgDefinitionContainer);
 
-            PresentationSourceFactory = new PresentationSourceFactory(htmlRenderElementFactory, htmlValueConverter);
+            PresentationSourceFactory = new PresentationSourceFactory(htmlRenderElementFactory, htmlValueConverter, svgDefinitionContainer);
             TaskScheduler = new TaskScheduler();
             TextMeasurementService = new TextMeasurementService(htmlValueConverter);
             RenderImageSourceFactory = new RenderImageSourceFactory(htmlValueConverter);

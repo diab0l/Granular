@@ -10,11 +10,15 @@ namespace Granular.Host.Render
     {
         private RenderQueue renderQueue;
         private HtmlValueConverter htmlValueConverter;
+        private SvgValueConverter svgValueConverter;
+        private SvgDefinitionContainer svgDefinitionContainer;
 
-        public HtmlRenderElementFactory(RenderQueue renderQueue, HtmlValueConverter htmlValueConverter)
+        public HtmlRenderElementFactory(RenderQueue renderQueue, HtmlValueConverter htmlValueConverter, SvgValueConverter svgValueConverter, SvgDefinitionContainer svgDefinitionContainer)
         {
             this.renderQueue = renderQueue;
             this.htmlValueConverter = htmlValueConverter;
+            this.svgValueConverter = svgValueConverter;
+            this.svgDefinitionContainer = svgDefinitionContainer;
         }
 
         public IVisualRenderElement CreateVisualRenderElement(object owner)
@@ -45,6 +49,26 @@ namespace Granular.Host.Render
         public IImageRenderElement CreateImageRenderElement(object owner)
         {
             return new HtmlImageRenderElement(renderQueue, htmlValueConverter);
+        }
+
+        public ISolidColorBrushRenderResource CreateSolidColorBrushRenderResource()
+        {
+            return new HtmlSolidColorBrushRenderResource(renderQueue, svgValueConverter, svgDefinitionContainer);
+        }
+
+        public ILinearGradientBrushRenderResource CreateLinearGradientBrushRenderResource()
+        {
+            return new HtmlLinearGradientBrushRenderResource(renderQueue, svgValueConverter, svgDefinitionContainer);
+        }
+
+        public IRadialGradientBrushRenderResource CreateRadialGradientBrushRenderResource()
+        {
+            return new HtmlRadialGradientBrushRenderResource(renderQueue, svgValueConverter, svgDefinitionContainer);
+        }
+
+        public IImageBrushRenderResource CreateImageBrushRenderResource()
+        {
+            throw new NotImplementedException();
         }
     }
 }

@@ -77,7 +77,12 @@
     </Compile>
     <Compile Include="Render\CommandQueue.cs" />
     <Compile Include="Render\WpfContainerRenderElement.cs" />
+    <Compile Include="Render\WpfBrushRenderResource.cs" />
+    <Compile Include="Render\WpfGradientBrushRenderResource.cs" />
     <Compile Include="Render\WpfImageRenderElement.cs" />
+    <Compile Include="Render\WpfLinearGradientBrushRenderResource.cs" />
+    <Compile Include="Render\WpfRadialGradientBrushRenderResource.cs" />
+    <Compile Include="Render\WpfSolidColorBrushRenderResource.cs" />
     <Compile Include="Render\WpfTextBoxRenderElement.cs" />
     <Compile Include="Render\WpfBorderRenderElement.cs" />
     <Compile Include="Render\WpfRenderElement.cs" />

@@ -154,7 +154,7 @@ namespace Granular.Host
 
         public string ToImageString(ImageBrush brush)
         {
-            return ToUrlString(brush.ImageSource);
+            return ToUrlString(((RenderImageSource)brush.ImageSource.RenderImageSource).Url);
         }
 
         private static IEnumerable<GradientStop> ScaleGradientStops(IEnumerable<GradientStop> gradientStops, Point startPoint, Point endPoint, Size targetSize)

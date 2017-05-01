@@ -17,7 +17,7 @@ namespace Granular.Host.Wpf.Render
 
         public IVisualRenderElement CreateVisualRenderElement(object owner)
         {
-            return new WpfVisualRenderElement(owner, wpfValueConverter);
+            return new WpfVisualRenderElement(owner, this, wpfValueConverter);
         }
 
         public IDrawingRenderElement CreateDrawingRenderElement(object owner)
@@ -27,22 +27,42 @@ namespace Granular.Host.Wpf.Render
 
         public ITextBoxRenderElement CreateTextBoxRenderElement(object owner)
         {
-            return new WpfTextBoxRenderElement(wpfValueConverter);
+            return new WpfTextBoxRenderElement(this, wpfValueConverter);
         }
 
         public ITextBlockRenderElement CreateTextBlockRenderElement(object owner)
         {
-            return new WpfTextBlockRenderElement(wpfValueConverter);
+            return new WpfTextBlockRenderElement(this, wpfValueConverter);
         }
 
         public IBorderRenderElement CreateBorderRenderElement(object owner)
         {
-            return new WpfBorderRenderElement(wpfValueConverter);
+            return new WpfBorderRenderElement(this, wpfValueConverter);
         }
 
         public IImageRenderElement CreateImageRenderElement(object owner)
         {
             return new WpfImageRenderElement(wpfValueConverter);
+        }
+
+        public ISolidColorBrushRenderResource CreateSolidColorBrushRenderResource()
+        {
+            return new WpfSolidColorBrushRenderResource(wpfValueConverter);
+        }
+
+        public ILinearGradientBrushRenderResource CreateLinearGradientBrushRenderResource()
+        {
+            return new WpfLinearGradientBrushRenderResource(wpfValueConverter);
+        }
+
+        public IRadialGradientBrushRenderResource CreateRadialGradientBrushRenderResource()
+        {
+            return new WpfRadialGradientBrushRenderResource(wpfValueConverter);
+        }
+
+        public IImageBrushRenderResource CreateImageBrushRenderResource()
+        {
+            throw new NotImplementedException();
         }
     }
 }

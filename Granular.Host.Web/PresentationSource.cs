@@ -16,18 +16,20 @@ namespace Granular.Host
         private List<PresentationSource> presentationSources;
         private HtmlRenderElementFactory htmlRenderElementFactory;
         private HtmlValueConverter htmlValueConverter;
+        private SvgDefinitionContainer svgDefinitionContainer;
 
-        public PresentationSourceFactory(HtmlRenderElementFactory htmlRenderElementFactory, HtmlValueConverter htmlValueConverter)
+        public PresentationSourceFactory(HtmlRenderElementFactory htmlRenderElementFactory, HtmlValueConverter htmlValueConverter, SvgDefinitionContainer svgDefinitionContainer)
         {
             this.htmlRenderElementFactory = htmlRenderElementFactory;
             this.htmlValueConverter = htmlValueConverter;
+            this.svgDefinitionContainer = svgDefinitionContainer;
 
             presentationSources = new List<PresentationSource>();
         }
 
         public IPresentationSource CreatePresentationSource(UIElement rootElement)
         {
-            PresentationSource presentationSource = new PresentationSource(rootElement, htmlRenderElementFactory, htmlValueConverter);
+            PresentationSource presentationSource = new PresentationSource(rootElement, htmlRenderElementFactory, htmlValueConverter, svgDefinitionContainer);
             presentationSources.Add(presentationSource);
 
             return presentationSource;
@@ -70,9 +72,7 @@ namespace Granular.Host
         private bool keyDownHandled;
         private bool keyUpHandled;
 
-        private HtmlRenderElementFactory htmlRenderElementFactory;
-
-        public PresentationSource(UIElement rootElement, HtmlRenderElementFactory htmlRenderElementFactory, HtmlValueConverter converter)
+        public PresentationSource(UIElement rootElement, HtmlRenderElementFactory htmlRenderElementFactory, HtmlValueConverter converter, SvgDefinitionContainer svgDefinitionContainer)
         {
             this.RootElement = rootElement;
             this.converter = converter;
@@ -109,6 +109,7 @@ namespace Granular.Host
             renderElement.Load();
 
             Bridge.Html5.Window.Document.Body.Style.Overflow = Overflow.Hidden;
+            Bridge.Html5.Window.Document.Body.AppendChild(svgDefinitionContainer.HtmlElement);
             Bridge.Html5.Window.Document.Body.AppendChild(renderElement.HtmlElement);
 
             MouseDevice.Activate();

@@ -172,5 +172,26 @@ namespace System.Windows.Media
         {
             return new TestImageRenderElement();
         }
+
+        public ISolidColorBrushRenderResource CreateSolidColorBrushRenderResource()
+        {
+            throw new NotImplementedException();
+        }
+
+        public ILinearGradientBrushRenderResource CreateLinearGradientBrushRenderResource()
+        {
+            throw new NotImplementedException();
+        }
+
+        public IRadialGradientBrushRenderResource CreateRadialGradientBrushRenderResource()
+        {
+            throw new NotImplementedException();
+        }
+
+        public IImageBrushRenderResource CreateImageBrushRenderResource()
+        {
+            throw new NotImplementedException();
+        }
+
     }
 }

@@ -387,7 +387,7 @@ namespace Granular.Host.Wpf.Render
             set
             {
                 foreground = value;
-                contentAdapter.Control.Foreground = converter.Convert(foreground);
+                contentAdapter.Control.Foreground = converter.Convert(foreground, factory);
             }
         }
 
@@ -491,10 +491,12 @@ namespace Granular.Host.Wpf.Render
         }
 
         private ITextContenttAdapter contentAdapter;
+        private IRenderElementFactory factory;
         private WpfValueConverter converter;
 
-        public WpfTextBoxRenderElement(WpfValueConverter converter)
+        public WpfTextBoxRenderElement(IRenderElementFactory factory, WpfValueConverter converter)
         {
+            this.factory = factory;
             this.converter = converter;
             bounds = Rect.Zero;
             fontFamily = FontFamily.Default;
@@ -528,7 +530,7 @@ namespace Granular.Host.Wpf.Render
             contentAdapter.IsReadOnly = IsReadOnly;
             contentAdapter.Control.SetValue(wpf::System.Windows.Controls.SpellCheck.IsEnabledProperty, SpellCheck);
             contentAdapter.Control.SetValue(wpf::System.Windows.Documents.Block.TextAlignmentProperty, converter.Convert(TextAlignment));
-            contentAdapter.Control.Foreground = converter.Convert(Foreground);
+            contentAdapter.Control.Foreground = converter.Convert(Foreground, factory);
             contentAdapter.Control.FontFamily = converter.Convert(FontFamily);
             contentAdapter.Control.FontSize = FontSize;
             contentAdapter.Control.FontStyle = converter.Convert(FontStyle);

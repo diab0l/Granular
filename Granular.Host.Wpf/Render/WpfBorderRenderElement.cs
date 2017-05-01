@@ -3,13 +3,15 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Windows;
+using System.Windows.Media;
 
 namespace Granular.Host.Wpf.Render
 {
-    public class WpfBorderRenderElement : System.Windows.Media.IBorderRenderElement, IWpfRenderElement
+    public class WpfBorderRenderElement : IBorderRenderElement, IWpfRenderElement
     {
-        private System.Windows.Media.Brush background;
-        public System.Windows.Media.Brush Background
+        private Brush background;
+        public Brush Background
         {
             get { return background; }
             set
@@ -19,23 +21,13 @@ namespace Granular.Host.Wpf.Render
                     return;
                 }
 
-                if (background != null)
-                {
-                    background.Changed -= OnBackgroundChanged;
-                }
-
                 background = value;
-                border.Background = converter.Convert(background);
-
-                if (background != null)
-                {
-                    background.Changed += OnBackgroundChanged;
-                }
+                border.Background = converter.Convert(background, factory);
             }
         }
 
-        private System.Windows.Thickness borderThickness;
-        public System.Windows.Thickness BorderThickness
+        private Thickness borderThickness;
+        public Thickness BorderThickness
         {
             get { return borderThickness; }
             set
@@ -45,8 +37,8 @@ namespace Granular.Host.Wpf.Render
             }
         }
 
-        private System.Windows.Media.Brush borderBrush;
-        public System.Windows.Media.Brush BorderBrush
+        private Brush borderBrush;
+        public Brush BorderBrush
         {
             get { return borderBrush; }
             set
@@ -56,23 +48,13 @@ namespace Granular.Host.Wpf.Render
                     return;
                 }
 
-                if (borderBrush != null)
-                {
-                    borderBrush.Changed -= OnBorderBrushChanged;
-                }
-
                 borderBrush = value;
-                border.BorderBrush = converter.Convert(borderBrush);
-
-                if (borderBrush != null)
-                {
-                    borderBrush.Changed += OnBorderBrushChanged;
-                }
+                border.BorderBrush = converter.Convert(borderBrush, factory);
             }
         }
 
-        private System.Windows.Rect bounds;
-        public System.Windows.Rect Bounds
+        private Rect bounds;
+        public Rect Bounds
         {
             get { return bounds; }
             set
@@ -85,8 +67,8 @@ namespace Granular.Host.Wpf.Render
             }
         }
 
-        private System.Windows.CornerRadius cornerRadius;
-        public System.Windows.CornerRadius CornerRadius
+        private CornerRadius cornerRadius;
+        public CornerRadius CornerRadius
         {
             get { return cornerRadius; }
             set
@@ -105,22 +87,14 @@ namespace Granular.Host.Wpf.Render
         private wpf::System.Windows.Controls.Border border;
         public wpf::System.Windows.FrameworkElement WpfElement { get { return border; } }
 
+        private IRenderElementFactory factory;
         private WpfValueConverter converter;
 
-        public WpfBorderRenderElement(WpfValueConverter converter)
+        public WpfBorderRenderElement(IRenderElementFactory factory, WpfValueConverter converter)
         {
+            this.factory = factory;
             this.converter = converter;
             border = new wpf::System.Windows.Controls.Border();
-        }
-
-        private void OnBackgroundChanged(object sender, EventArgs e)
-        {
-            border.Background = converter.Convert(Background);
-        }
-
-        private void OnBorderBrushChanged(object sender, EventArgs e)
-        {
-            border.BorderBrush = converter.Convert(BorderBrush);
         }
     }
 }

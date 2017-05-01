@@ -14,58 +14,19 @@ namespace Granular.Host.Wpf.Render
 {
     public class WpfValueConverter
     {
-        public wpf::System.Windows.Media.Brush Convert(Brush brush)
-        {
-            if (brush == null)
-            {
-                return null;
-            }
-
-            if (brush is SolidColorBrush)
-            {
-                return new wpf::System.Windows.Media.SolidColorBrush(Convert(((SolidColorBrush)brush).Color)) { Opacity = brush.Opacity };
-            }
-
-            if (brush is LinearGradientBrush)
-            {
-                return new wpf::System.Windows.Media.LinearGradientBrush(Convert(((LinearGradientBrush)brush).GradientStops))
-                {
-                    Opacity = brush.Opacity,
-                    SpreadMethod = Convert(((LinearGradientBrush)brush).SpreadMethod),
-                    StartPoint = Convert(((LinearGradientBrush)brush).StartPoint),
-                    EndPoint = Convert(((LinearGradientBrush)brush).EndPoint),
-                };
-            }
-
-            if (brush is RadialGradientBrush)
-            {
-                return new wpf::System.Windows.Media.RadialGradientBrush(Convert(((RadialGradientBrush)brush).GradientStops))
-                {
-                    Opacity = brush.Opacity,
-                    SpreadMethod = Convert(((RadialGradientBrush)brush).SpreadMethod),
-                    Center = Convert(((RadialGradientBrush)brush).Center),
-                    GradientOrigin = Convert(((RadialGradientBrush)brush).GradientOrigin),
-                    RadiusX = ((RadialGradientBrush)brush).RadiusX,
-                    RadiusY = ((RadialGradientBrush)brush).RadiusY,
-                };
-            }
-
-            throw new Granular.Exception("Conversion is not implemented");
-        }
-
-        private wpf::System.Windows.Media.GradientStopCollection Convert(GradientStopCollection gradientStopCollection)
-        {
-            return new wpf::System.Windows.Media.GradientStopCollection(gradientStopCollection.Select(gradientStop => Convert(gradientStop)));
-        }
-
-        private wpf::System.Windows.Media.GradientStop Convert(GradientStop gradientStop)
-        {
-            return new wpf::System.Windows.Media.GradientStop(Convert(gradientStop.Color), gradientStop.Offset);
-        }
-
-        private wpf::System.Windows.Media.GradientSpreadMethod Convert(GradientSpreadMethod gradientSpreadMethod)
+        public wpf::System.Windows.Media.GradientSpreadMethod Convert(GradientSpreadMethod gradientSpreadMethod)
         {
             return (wpf::System.Windows.Media.GradientSpreadMethod)((int)gradientSpreadMethod);
+        }
+
+        public wpf::System.Windows.Media.BrushMappingMode Convert(BrushMappingMode mappingMode)
+        {
+            return (wpf::System.Windows.Media.BrushMappingMode)((int)mappingMode);
+        }
+
+        public wpf::System.Windows.Media.Brush Convert(Brush brush, IRenderElementFactory factory)
+        {
+            return brush != null ? ((IWpfBrushRenderResource)brush.GetRenderResource(factory)).WpfResource : null;
         }
 
         public wpf::System.Windows.Media.Color Convert(Color color)
