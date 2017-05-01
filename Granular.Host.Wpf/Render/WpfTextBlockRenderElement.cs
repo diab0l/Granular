@@ -148,9 +148,9 @@ namespace Granular.Host.Wpf.Render
         }
 
         private wpf::System.Windows.Controls.TextBlock textBlock;
-        private IWpfValueConverter converter;
+        private WpfValueConverter converter;
 
-        public WpfTextBlockRenderElement(IWpfValueConverter converter)
+        public WpfTextBlockRenderElement(WpfValueConverter converter)
         {
             this.converter = converter;
             textBlock = new wpf::System.Windows.Controls.TextBlock();

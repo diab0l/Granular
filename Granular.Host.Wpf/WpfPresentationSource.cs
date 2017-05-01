@@ -55,12 +55,12 @@ namespace Granular.Host.Wpf
             set { window.Title = value; }
         }
 
-        private IWpfValueConverter converter;
+        private WpfValueConverter converter;
 
         private wpf::System.Windows.Controls.Canvas container;
         private wpf::System.Windows.Window window;
 
-        public WpfPresentationSource(UIElement rootElement, IWpfValueConverter converter)
+        public WpfPresentationSource(UIElement rootElement, WpfValueConverter converter)
         {
             this.RootElement = rootElement;
             this.converter = converter;

@@ -96,15 +96,15 @@ namespace Granular.Host.Wpf.Render
         }
 
         private wpf::System.Windows.Controls.Canvas container;
-        private IWpfValueConverter converter;
+        private WpfValueConverter converter;
 
-        public WpfVisualRenderElement(object owner, IWpfValueConverter converter) :
+        public WpfVisualRenderElement(object owner, WpfValueConverter converter) :
             this(CreateWpfElement(owner), converter)
         {
             //
         }
 
-        private WpfVisualRenderElement(wpf::System.Windows.Controls.Canvas container, IWpfValueConverter converter) :
+        private WpfVisualRenderElement(wpf::System.Windows.Controls.Canvas container, WpfValueConverter converter) :
             base(container)
         {
             this.container = container;

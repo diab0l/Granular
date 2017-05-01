@@ -105,9 +105,9 @@ namespace Granular.Host.Wpf.Render
         private wpf::System.Windows.Controls.Border border;
         public wpf::System.Windows.FrameworkElement WpfElement { get { return border; } }
 
-        private IWpfValueConverter converter;
+        private WpfValueConverter converter;
 
-        public WpfBorderRenderElement(IWpfValueConverter converter)
+        public WpfBorderRenderElement(WpfValueConverter converter)
         {
             this.converter = converter;
             border = new wpf::System.Windows.Controls.Border();

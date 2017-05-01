@@ -38,10 +38,10 @@ namespace Granular.Host.Wpf.Render
 
         public wpf::System.Windows.FrameworkElement WpfElement { get { return image; } }
 
-        private IWpfValueConverter converter;
+        private WpfValueConverter converter;
         private wpf::System.Windows.Controls.Image image;
 
-        public WpfImageRenderElement(IWpfValueConverter converter)
+        public WpfImageRenderElement(WpfValueConverter converter)
         {
             this.converter = converter;
             image = new wpf::System.Windows.Controls.Image();

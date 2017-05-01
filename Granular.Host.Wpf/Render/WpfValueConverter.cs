@@ -12,38 +12,7 @@ using System.Windows.Media.Imaging;
 
 namespace Granular.Host.Wpf.Render
 {
-    public interface IWpfValueConverter
-    {
-        wpf::System.Windows.Media.Brush Convert(Brush brush);
-        wpf::System.Windows.Media.Color Convert(Color color);
-        wpf::System.Windows.CornerRadius Convert(CornerRadius cornerRadius);
-        wpf::System.Windows.Point Convert(Point point);
-        wpf::System.Windows.Rect Convert(Rect rect);
-        wpf::System.Windows.Size Convert(Size size);
-        wpf::System.Windows.Thickness Convert(Thickness thickness);
-        wpf::System.Windows.Media.Typeface Convert(Typeface typeface);
-        wpf::System.Windows.FontStretch Convert(FontStretch fontStretch);
-        wpf::System.Windows.FontWeight Convert(FontWeight fontWeight);
-        wpf::System.Windows.FontStyle Convert(FontStyle fontStyle);
-        wpf::System.Windows.Media.FontFamily Convert(FontFamily fontFamily);
-        wpf::System.Windows.TextAlignment Convert(TextAlignment textAlignment);
-        wpf::System.Windows.TextTrimming Convert(TextTrimming textTrimming);
-        wpf::System.Windows.TextWrapping Convert(TextWrapping textWrapping);
-        wpf::System.Windows.Controls.ScrollBarVisibility Convert(ScrollBarVisibility scrollBarVisibility);
-        wpf::System.Windows.Media.ImageSource Convert(ImageSource source);
-        wpf::System.Windows.Input.Cursor Convert(Cursor cursor);
-        wpf::System.Windows.Input.Key Convert(Key key);
-        wpf::System.Windows.Input.KeyStates Convert(KeyStates keyStates);
-        wpf::System.Windows.Media.Matrix Convert(Matrix matrix);
-
-        MouseButton ConvertBack(wpf::System.Windows.Input.MouseButton mouseButton);
-        MouseButtonState ConvertBack(wpf::System.Windows.Input.MouseButtonState mouseButtonState);
-        Point ConvertBack(wpf::System.Windows.Point point);
-        Key ConvertBack(wpf::System.Windows.Input.Key key);
-        KeyStates ConvertBack(wpf::System.Windows.Input.KeyStates keyStates);
-    }
-
-    public class WpfValueConverter : IWpfValueConverter
+    public class WpfValueConverter
     {
         public static readonly WpfValueConverter Default = new WpfValueConverter();
 

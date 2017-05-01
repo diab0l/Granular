@@ -491,9 +491,9 @@ namespace Granular.Host.Wpf.Render
         }
 
         private ITextContenttAdapter contentAdapter;
-        private IWpfValueConverter converter;
+        private WpfValueConverter converter;
 
-        public WpfTextBoxRenderElement(IWpfValueConverter converter)
+        public WpfTextBoxRenderElement(WpfValueConverter converter)
         {
             this.converter = converter;
             bounds = Rect.Zero;
