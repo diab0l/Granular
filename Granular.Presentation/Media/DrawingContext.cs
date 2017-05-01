@@ -13,6 +13,7 @@ namespace System.Windows.Media
     public abstract class DrawingContext
     {
         public abstract void Close();
+        public abstract void DrawEllipse(Brush brush, Pen pen, Point center, double radiusX, double radiusY);
         public abstract void DrawGeometry(Brush brush, Pen pen, Geometry geometry);
         public abstract void DrawRectangle(Brush brush, Pen pen, Rect rectangle);
         public abstract void DrawRoundedRectangle(Brush brush, Pen pen, Rect rectangle, double radiusX, double radiusY);
@@ -104,6 +105,34 @@ namespace System.Windows.Media
             }
 
             Close();
+        }
+
+        public override void DrawEllipse(Brush brush, Pen pen, Point center, double radiusX, double radiusY)
+        {
+            VerifyNotClosed();
+
+            if (innerContext != null)
+            {
+                innerContext.DrawEllipse(brush, pen, center, radiusX, radiusY);
+                return;
+            }
+
+            IDrawingGeometryRenderElement child = GetChild(factory.CreateDrawingGeometryRenderElement);
+
+            EllipseGeometry geometry = child.Geometry as EllipseGeometry;
+            if (geometry == null)
+            {
+                geometry = new EllipseGeometry();
+            }
+
+            geometry.Center = center;
+            geometry.RadiusX = radiusX;
+            geometry.RadiusY = radiusY;
+
+            child.Fill = brush;
+            child.Stroke = pen?.Brush;
+            child.StrokeThickness = pen?.Thickness ?? 0;
+            child.Geometry = geometry;
         }
 
         public override void DrawRectangle(Brush brush, Pen pen, Rect rectangle)
