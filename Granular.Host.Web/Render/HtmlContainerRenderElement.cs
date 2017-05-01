@@ -1,33 +1,39 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Bridge.Html5;
 using System.Windows.Media;
+using Granular.Compatibility.Linq;
+using Granular.Extensions;
 
 namespace Granular.Host.Render
 {
     public class HtmlContainerRenderElement : HtmlRenderElement, IContainerRenderElement
     {
-        private List<object> children;
+        private List<IHtmlRenderElement> children;
         public IEnumerable<object> Children { get { return children; } }
 
         private RenderQueue renderQueue;
+
+        private int lastDeferredChildIndex;
+        private int deferredChildrenCount;
 
         public HtmlContainerRenderElement(HTMLElement htmlElement, RenderQueue renderQueue) :
             base(htmlElement)
         {
             this.renderQueue = renderQueue;
 
-            children = new List<object>();
+            children = new List<IHtmlRenderElement>();
+
+            lastDeferredChildIndex = -1;
         }
 
         protected override void OnLoad()
         {
             base.OnLoad();
 
-            foreach (HtmlRenderElement child in Children)
+            foreach (IHtmlRenderElement child in Children)
             {
                 child.Load();
             }
@@ -37,7 +43,7 @@ namespace Granular.Host.Render
         {
             base.OnUnload();
 
-            foreach (HtmlRenderElement child in Children)
+            foreach (IHtmlRenderElement child in Children)
             {
                 child.Unload();
             }
@@ -45,7 +51,12 @@ namespace Granular.Host.Render
 
         public void InsertChild(int index, object child)
         {
-            HtmlRenderElement childElement = (HtmlRenderElement)child;
+            IHtmlRenderElement childElement = (IHtmlRenderElement)child;
+
+            if (child is IHtmlDeferredRenderElement)
+            {
+                ((IHtmlDeferredRenderElement)child).HtmlElementCreated += OnChildHtmlElementCreated;
+            }
 
             if (IsLoaded)
             {
@@ -53,12 +64,35 @@ namespace Granular.Host.Render
             }
 
             children.Insert(index, childElement);
-            renderQueue.InvokeAsync(() => HtmlElement.InsertChild(index, childElement.HtmlElement));
+            if (childElement.HtmlElement != null)
+            {
+                if (index > lastDeferredChildIndex)
+                {
+                    index = index - deferredChildrenCount;
+                }
+                else
+                {
+                    lastDeferredChildIndex++;
+                    index = children.Take(index).Count(c => c.HtmlElement != null);
+                }
+
+                renderQueue.InvokeAsync(() => HtmlElement.InsertChild(index, childElement.HtmlElement));
+            }
+            else
+            {
+                lastDeferredChildIndex = lastDeferredChildIndex.Max(index);
+                deferredChildrenCount++;
+            }
         }
 
         public void RemoveChild(object child)
         {
-            HtmlRenderElement childElement = (HtmlRenderElement)child;
+            IHtmlRenderElement childElement = (IHtmlRenderElement)child;
+
+            if (child is IHtmlDeferredRenderElement)
+            {
+                ((IHtmlDeferredRenderElement)child).HtmlElementCreated -= OnChildHtmlElementCreated;
+            }
 
             if (IsLoaded)
             {
@@ -73,7 +107,26 @@ namespace Granular.Host.Render
             }
 
             children.RemoveAt(childIndex);
-            renderQueue.InvokeAsync(() => HtmlElement.RemoveChild(((HtmlRenderElement)child).HtmlElement));
+
+            if (childElement.HtmlElement != null)
+            {
+                renderQueue.InvokeAsync(() => HtmlElement.RemoveChild(((HtmlRenderElement)child).HtmlElement));
+            }
+            else
+            {
+                deferredChildrenCount--;
+            }
+        }
+
+        private void OnChildHtmlElementCreated(object sender, EventArgs e)
+        {
+            IHtmlRenderElement childElement = (IHtmlRenderElement)sender;
+            int index = children.IndexOf(childElement);
+
+            index = children.Take(index).Count(c => c.HtmlElement != null);
+            renderQueue.InvokeAsync(() => HtmlElement.InsertChild(index, childElement.HtmlElement));
+
+            deferredChildrenCount--;
         }
     }
 }

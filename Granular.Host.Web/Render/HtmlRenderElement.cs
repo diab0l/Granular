@@ -7,7 +7,19 @@ using Granular.Extensions;
 
 namespace Granular.Host.Render
 {
-    public class HtmlRenderElement
+    public interface IHtmlRenderElement
+    {
+        HTMLElement HtmlElement { get; }
+        void Load();
+        void Unload();
+    }
+
+    public interface IHtmlDeferredRenderElement : IHtmlRenderElement
+    {
+        event EventHandler HtmlElementCreated;
+    }
+
+    public class HtmlRenderElement : IHtmlRenderElement
     {
         public HTMLElement HtmlElement { get; private set; }
         public bool IsLoaded { get; private set; }

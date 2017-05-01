@@ -100,7 +100,7 @@ namespace Granular.Host
             ((FrameworkElement)RootElement).Arrange(new Rect(window.InnerWidth, window.InnerHeight));
 
             Bridge.Html5.Window.Document.Body.Style.Overflow = Overflow.Hidden;
-            Bridge.Html5.Window.Document.Body.AppendChild(((HtmlRenderElement)RootElement.GetRenderElement(HtmlRenderElementFactory.Default)).HtmlElement);
+            Bridge.Html5.Window.Document.Body.AppendChild(((IHtmlRenderElement)RootElement.GetRenderElement(HtmlRenderElementFactory.Default)).HtmlElement);
 
             MouseDevice.Activate();
             KeyboardDevice.Activate();
