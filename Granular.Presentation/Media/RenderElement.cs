@@ -6,7 +6,15 @@ using System.Windows.Input;
 
 namespace System.Windows.Media
 {
-    public interface IVisualRenderElement
+    public interface IContainerRenderElement
+    {
+        IEnumerable<object> Children { get; }
+
+        void InsertChild(int index, object child);
+        void RemoveChild(object child);
+    }
+
+    public interface IVisualRenderElement : IContainerRenderElement
     {
         Brush Background { get; set; }
         Rect Bounds { get; set; }
@@ -15,10 +23,6 @@ namespace System.Windows.Media
         bool IsVisible { get; set; }
         double Opacity { get; set; }
         Matrix Transform { get; set; }
-
-        IEnumerable<object> Children { get; }
-        void InsertChild(int index, object child);
-        void RemoveChild(object child);
     }
 
     public interface IDrawingRenderElement
@@ -105,5 +109,28 @@ namespace System.Windows.Media
         ITextBlockRenderElement CreateTextBlockRenderElement(object owner);
         IBorderRenderElement CreateBorderRenderElement(object owner);
         IImageRenderElement CreateImageRenderElement(object owner);
+    }
+
+    public static class ContainerRenderElementExtensions
+    {
+        public static void SetChildren(this IContainerRenderElement container, IEnumerable<object> children)
+        {
+            if (container.Children.SequenceEqual(children))
+            {
+                return;
+            }
+
+            foreach (object child in container.Children.ToArray())
+            {
+                container.RemoveChild(child);
+            }
+
+            int index = 0;
+            foreach (object child in children)
+            {
+                container.InsertChild(index, child);
+                index++;
+            }
+        }
     }
 }
