@@ -78,6 +78,7 @@
     <Compile Include="Input\KeyboardNavigation.cs" />
     <Compile Include="Input\KeyboardNavigationTarget.cs" />
     <Compile Include="Markup\UriContext.cs" />
+    <Compile Include="Media\DrawingContext.cs" />
     <Compile Include="Media\EllipseGeometry.cs" />
     <Compile Include="Media\FontFamily.cs" />
     <Compile Include="Media\DashStyle.cs" />

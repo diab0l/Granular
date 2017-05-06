@@ -592,6 +592,9 @@
     <Compile Include="..\Granular.Presentation\Media\Geometry.cs">
       <Link>Media\Geometry.cs</Link>
     </Compile>
+    <Compile Include="..\Granular.Presentation\Media\DrawingContext.cs">
+      <Link>Media\DrawingContext.cs</Link>
+    </Compile>
     <Compile Include="..\Granular.Presentation\Media\GradientBrush.cs">
       <Link>Media\GradientBrush.cs</Link>
     </Compile>
