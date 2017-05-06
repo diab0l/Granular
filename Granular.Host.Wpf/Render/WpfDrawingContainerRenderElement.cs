@@ -16,10 +16,30 @@ namespace Granular.Host.Wpf.Render
             set { WpfElement.Opacity = value; }
         }
 
-        public WpfDrawingContainerRenderElement(WpfValueConverter converter) :
+        private Transform transform;
+        public Transform Transform
+        {
+            get { return transform; }
+            set
+            {
+                if (transform == value)
+                {
+                    return;
+                }
+
+                transform = value;
+                WpfElement.RenderTransform = converter.Convert(transform, factory);
+            }
+        }
+
+        private IRenderElementFactory factory;
+        private WpfValueConverter converter;
+
+        public WpfDrawingContainerRenderElement(IRenderElementFactory factory, WpfValueConverter converter) :
             base(new wpf::System.Windows.Controls.Canvas())
         {
-            //
+            this.factory = factory;
+            this.converter = converter;
         }
     }
 }

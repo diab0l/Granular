@@ -21,6 +21,7 @@ namespace System.Windows.Media
         public abstract void DrawRoundedRectangle(Brush brush, Pen pen, Rect rectangle, double radiusX, double radiusY);
         public abstract void Pop();
         public abstract void PushOpacity(double opacity);
+        public abstract void PushTransform(Transform transform);
     }
 
     public class RenderElementDrawingContext : DrawingContext
@@ -228,6 +229,23 @@ namespace System.Windows.Media
             SetInnerContext(child);
 
             child.Opacity = opacity;
+        }
+
+        public override void PushTransform(Transform transform)
+        {
+            VerifyNotClosed();
+
+            if (innerContext != null)
+            {
+                innerContext.PushTransform(transform);
+                return;
+            }
+
+            IDrawingContainerRenderElement child = GetChild(factory.CreateDrawingContainerRenderElement);
+
+            SetInnerContext(child);
+
+            child.Transform = transform;
         }
 
         private T GetChild<T>(Func<T> factory)

@@ -47,7 +47,7 @@ namespace Granular.Host.Wpf.Render
 
         public IDrawingContainerRenderElement CreateDrawingContainerRenderElement()
         {
-            return new WpfDrawingContainerRenderElement(wpfValueConverter);
+            return new WpfDrawingContainerRenderElement(this, wpfValueConverter);
         }
 
         public IDrawingGeometryRenderElement CreateDrawingGeometryRenderElement()

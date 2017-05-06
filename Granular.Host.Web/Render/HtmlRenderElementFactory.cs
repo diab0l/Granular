@@ -62,7 +62,7 @@ namespace Granular.Host.Render
 
         public IDrawingContainerRenderElement CreateDrawingContainerRenderElement()
         {
-            return new HtmlDrawingContainerRenderElement(renderQueue, svgValueConverter);
+            return new HtmlDrawingContainerRenderElement(this, renderQueue, svgValueConverter);
         }
 
         public IDrawingImageRenderElement CreateDrawingImageRenderElement()

@@ -26,14 +26,72 @@ namespace Granular.Host.Render
             }
         }
 
+        private HtmlTransformRenderResource transformRenderResource;
+        private Transform transform;
+        public Transform Transform
+        {
+            get { return transform; }
+            set
+            {
+                if (transform == value)
+                {
+                    return;
+                }
+
+                if (transformRenderResource != null && IsLoaded)
+                {
+                    transformRenderResource.MatrixChanged -= OnTransformRenderResourceMatrixChanged;
+                }
+
+                transform = value;
+                transformRenderResource = (HtmlTransformRenderResource)(transform?.GetRenderResource(factory));
+
+                if (transformRenderResource != null && IsLoaded)
+                {
+                    transformRenderResource.MatrixChanged += OnTransformRenderResourceMatrixChanged;
+                }
+
+                renderQueue.InvokeAsync(() => HtmlElement.SetSvgTransform(transformRenderResource?.Matrix, converter));
+            }
+        }
+
+        private IRenderElementFactory factory;
         private RenderQueue renderQueue;
         private SvgValueConverter converter;
 
-        public HtmlDrawingContainerRenderElement(RenderQueue renderQueue, SvgValueConverter converter) :
+        public HtmlDrawingContainerRenderElement(IRenderElementFactory factory, RenderQueue renderQueue, SvgValueConverter converter) :
             base(SvgDocument.CreateElement("g"), renderQueue)
         {
+            this.factory = factory;
             this.renderQueue = renderQueue;
             this.converter = converter;
+        }
+
+        protected override void OnLoad()
+        {
+            base.OnLoad();
+
+            if (transformRenderResource != null)
+            {
+                transformRenderResource.MatrixChanged += OnTransformRenderResourceMatrixChanged;
+            }
+
+            renderQueue.InvokeAsync(() => HtmlElement.SetSvgTransform(transformRenderResource?.Matrix, converter));
+        }
+
+        protected override void OnUnload()
+        {
+            base.OnUnload();
+
+            if (transformRenderResource != null)
+            {
+                transformRenderResource.MatrixChanged -= OnTransformRenderResourceMatrixChanged;
+            }
+        }
+
+        private void OnTransformRenderResourceMatrixChanged(object sender, EventArgs e)
+        {
+            renderQueue.InvokeAsync(() => HtmlElement.SetSvgTransform(transformRenderResource.Matrix, converter));
         }
     }
 }

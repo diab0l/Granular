@@ -99,6 +99,7 @@ namespace System.Windows.Media
     public interface IDrawingContainerRenderElement : IContainerRenderElement
     {
         double Opacity { get; set; }
+        Transform Transform { get; set; }
     }
 
     public interface IDrawingShapeRenderElement
