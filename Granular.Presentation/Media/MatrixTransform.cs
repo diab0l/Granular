@@ -15,5 +15,22 @@ namespace System.Windows.Media
             get { return (Matrix)GetValue(MatrixProperty); }
             set { SetValue(MatrixProperty, value); }
         }
+
+        public MatrixTransform() :
+            this(Matrix.Identity)
+        {
+            //
+        }
+
+        public MatrixTransform(double m11, double m12, double m21, double m22, double offsetX, double offsetY) :
+            this(new Matrix(m11, m12, m21, m22, offsetX, offsetY))
+        {
+                //
+        }
+
+        public MatrixTransform(Matrix matrix)
+        {
+            this.Matrix = matrix;
+        }
     }
 }
