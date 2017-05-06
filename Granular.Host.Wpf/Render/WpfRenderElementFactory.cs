@@ -20,9 +20,9 @@ namespace Granular.Host.Wpf.Render
             return new WpfVisualRenderElement(owner, this, wpfValueConverter);
         }
 
-        public IDrawingRenderElement CreateDrawingRenderElement(object owner)
+        public IContainerRenderElement CreateDrawingRenderElement(object owner)
         {
-            return null;
+            return new WpfDrawingRenderElement();
         }
 
         public ITextBoxRenderElement CreateTextBoxRenderElement(object owner)

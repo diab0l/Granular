@@ -36,14 +36,6 @@ namespace System.Windows.Media
         }
     }
 
-    public class TestDrawingRenderElement : IDrawingRenderElement
-    {
-        public void DrawLine(Point from, Point to)
-        {
-            //
-        }
-    }
-
     public class TestTextBoxRenderElement : ITextBoxRenderElement
     {
         public event EventHandler TextChanged { add { } remove { } }
@@ -134,6 +126,27 @@ namespace System.Windows.Media
         public ImageSource Source { get; set; }
     }
 
+    public class TestContainerRenderElement : IContainerRenderElement
+    {
+        private List<object> children;
+        public IEnumerable<object> Children { get { return children; } }
+
+        public TestContainerRenderElement()
+        {
+            children = new List<object>();
+        }
+
+        public void InsertChild(int index, object child)
+        {
+            children.Insert(index, child);
+        }
+
+        public void RemoveChild(object child)
+        {
+            children.Remove(child);
+        }
+    }
+
     public class TestImageSourceRenderResource : IImageSourceRenderResource
     {
         public event EventHandler StateChanged { add { } remove { } }
@@ -162,11 +175,6 @@ namespace System.Windows.Media
             return new TestVisualRenderElement();
         }
 
-        public IDrawingRenderElement CreateDrawingRenderElement(object owner)
-        {
-            return new TestDrawingRenderElement();
-        }
-
         public ITextBoxRenderElement CreateTextBoxRenderElement(object owner)
         {
             return new TestTextBoxRenderElement();
@@ -185,6 +193,11 @@ namespace System.Windows.Media
         public IImageRenderElement CreateImageRenderElement(object owner)
         {
             return new TestImageRenderElement();
+        }
+
+        public IContainerRenderElement CreateDrawingRenderElement(object owner)
+        {
+            return new TestContainerRenderElement();
         }
 
         public ISolidColorBrushRenderResource CreateSolidColorBrushRenderResource()

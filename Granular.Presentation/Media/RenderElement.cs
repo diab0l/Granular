@@ -25,11 +25,6 @@ namespace System.Windows.Media
         Matrix Transform { get; set; }
     }
 
-    public interface IDrawingRenderElement
-    {
-        void DrawLine(Point from, Point to);
-    }
-
     public interface ITextBoxRenderElement
     {
         event EventHandler TextChanged;
@@ -187,11 +182,11 @@ namespace System.Windows.Media
     public interface IRenderElementFactory
     {
         IVisualRenderElement CreateVisualRenderElement(object owner);
-        IDrawingRenderElement CreateDrawingRenderElement(object owner);
         ITextBoxRenderElement CreateTextBoxRenderElement(object owner);
         ITextBlockRenderElement CreateTextBlockRenderElement(object owner);
         IBorderRenderElement CreateBorderRenderElement(object owner);
         IImageRenderElement CreateImageRenderElement(object owner);
+        IContainerRenderElement CreateDrawingRenderElement(object owner);
         ISolidColorBrushRenderResource CreateSolidColorBrushRenderResource();
         ILinearGradientBrushRenderResource CreateLinearGradientBrushRenderResource();
         IRadialGradientBrushRenderResource CreateRadialGradientBrushRenderResource();

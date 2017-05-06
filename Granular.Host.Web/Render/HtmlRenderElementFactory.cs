@@ -30,9 +30,9 @@ namespace Granular.Host.Render
             return new HtmlVisualRenderElement(owner, this, renderQueue, htmlValueConverter);
         }
 
-        public IDrawingRenderElement CreateDrawingRenderElement(object owner)
+        public IContainerRenderElement CreateDrawingRenderElement(object owner)
         {
-            throw new NotImplementedException();
+            return new HtmlDrawingRenderElement(renderQueue, svgValueConverter);
         }
 
         public ITextBoxRenderElement CreateTextBoxRenderElement(object owner)
