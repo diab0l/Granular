@@ -38,6 +38,18 @@ namespace Granular.Host
             element.SetAttribute("gradientUnits", converter.ToGradientUnitsString(mappingMode));
         }
 
+        public static void SetSvgTransform(this HTMLElement element, Matrix transform, SvgValueConverter converter)
+        {
+            if (transform.IsNullOrIdentity())
+            {
+                element.RemoveAttribute("transform");
+            }
+            else
+            {
+                element.SetAttribute("transform", converter.ToMatrixString(transform));
+            }
+        }
+
         private static void SetSvgPointAttributes(this HTMLElement element, string xAttributeName, string yAttributeName, Point point, SvgValueConverter converter)
         {
             if (point.IsNullOrEmpty())

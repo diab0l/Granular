@@ -580,11 +580,17 @@
     <Compile Include="..\Granular.Presentation\Media\Colors.cs">
       <Link>Media\Colors.cs</Link>
     </Compile>
+    <Compile Include="..\Granular.Presentation\Media\EllipseGeometry.cs">
+      <Link>Media\EllipseGeometry.cs</Link>
+    </Compile>
     <Compile Include="..\Granular.Presentation\Media\FontFamily.cs">
       <Link>Markup\FontFamily.cs</Link>
     </Compile>
     <Compile Include="..\Granular.Presentation\Media\DashStyle.cs">
       <Link>Media\DashStyle.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\Media\Geometry.cs">
+      <Link>Media\Geometry.cs</Link>
     </Compile>
     <Compile Include="..\Granular.Presentation\Media\GradientBrush.cs">
       <Link>Media\GradientBrush.cs</Link>
@@ -604,6 +610,9 @@
     <Compile Include="..\Granular.Presentation\Media\LinearGradientBrush.cs">
       <Link>Media\LinearGradientBrush.cs</Link>
     </Compile>
+    <Compile Include="..\Granular.Presentation\Media\LineGeometry.cs">
+      <Link>Media\LineGeometry.cs</Link>
+    </Compile>
     <Compile Include="..\Granular.Presentation\Media\Matrix.cs">
       <Link>Media\Matrix.cs</Link>
     </Compile>
@@ -615,6 +624,9 @@
     </Compile>
     <Compile Include="..\Granular.Presentation\Media\RadialGradientBrush.cs">
       <Link>Media\RadialGradientBrush.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\Media\RectangleGeometry.cs">
+      <Link>Media\RectangleGeometry.cs</Link>
     </Compile>
     <Compile Include="..\Granular.Presentation\Media\RenderElement.cs">
       <Link>Media\RenderElement.cs</Link>
@@ -630,6 +642,9 @@
     </Compile>
     <Compile Include="..\Granular.Presentation\Media\SolidColorBrush.cs">
       <Link>Media\SolidColorBrush.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\Media\StreamGeometry.cs">
+      <Link>Media\StreamGeometry.cs</Link>
     </Compile>
     <Compile Include="..\Granular.Presentation\Media\Stretch.cs">
       <Link>Media\Stretch.cs</Link>

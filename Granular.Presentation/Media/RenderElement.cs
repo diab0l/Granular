@@ -178,6 +178,12 @@ namespace System.Windows.Media
         Matrix Matrix { get; set; }
     }
 
+    public interface IGeometryRenderResource
+    {
+        Transform Transform { get; set; }
+        string Data { get; set; }
+    }
+
     public interface IRenderElementFactory
     {
         IVisualRenderElement CreateVisualRenderElement(object owner);
@@ -192,6 +198,7 @@ namespace System.Windows.Media
         IImageBrushRenderResource CreateImageBrushRenderResource();
         IImageSourceRenderResource CreateImageSourceRenderResource();
         ITransformRenderResource CreateTransformRenderResource();
+        IGeometryRenderResource CreateGeometryRenderResource();
     }
 
     public static class ContainerRenderElementExtensions

@@ -31,6 +31,11 @@ namespace Granular.Host
             throw new Granular.Exception("Unexpected GradientSpreadMethod \"{0}\"", spreadMethod);
         }
 
+        public string ToMatrixString(Matrix matrix)
+        {
+            return String.Format("matrix({0}, {1}, {2}, {3}, {4}, {5})", ToImplicitValueString(matrix.M11), ToImplicitValueString(matrix.M12), ToImplicitValueString(matrix.M21), ToImplicitValueString(matrix.M22), ToImplicitValueString(matrix.OffsetX), ToImplicitValueString(matrix.OffsetY));
+        }
+
         public string ToGradientUnitsString(BrushMappingMode mappingMode)
         {
             switch (mappingMode)

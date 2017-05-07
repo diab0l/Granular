@@ -84,5 +84,10 @@ namespace Granular.Host.Render
         {
             return new HtmlTransformRenderResource();
         }
+
+        public IGeometryRenderResource CreateGeometryRenderResource()
+        {
+            return new HtmlGeometryRenderResource(this, renderQueue, svgDefinitionContainer, svgValueConverter);
+        }
     }
 }

@@ -51,6 +51,7 @@
     <Compile Include="RenderQueue.cs" />
     <Compile Include="Render\HtmlContainerRenderElement.cs" />
     <Compile Include="Render\HtmlBrushRenderResource.cs" />
+    <Compile Include="Render\HtmlGeometryRenderResource.cs" />
     <Compile Include="Render\HtmlGradientBrushRenderResource.cs" />
     <Compile Include="Render\HtmlImageRenderElement.cs" />
     <Compile Include="Render\HtmlImageSourceRenderResource.cs" />

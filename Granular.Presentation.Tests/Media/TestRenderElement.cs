@@ -216,5 +216,10 @@ namespace System.Windows.Media
         {
             throw new NotImplementedException();
         }
+
+        public IGeometryRenderResource CreateGeometryRenderResource()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

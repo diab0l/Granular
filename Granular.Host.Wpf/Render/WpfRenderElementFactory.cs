@@ -74,5 +74,10 @@ namespace Granular.Host.Wpf.Render
         {
             return new WpfTransformRenderResource(wpfValueConverter);
         }
+
+        public IGeometryRenderResource CreateGeometryRenderResource()
+        {
+            return new WpfGeometryRenderResource(this, wpfValueConverter);
+        }
     }
 }
