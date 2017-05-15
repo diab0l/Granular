@@ -13,6 +13,11 @@ namespace System
         {
             using (Stream resourceStream = assembly.GetManifestResourceStream(resourceName))
             {
+                if (resourceStream == null)
+                {
+                    return null;
+                }
+
                 using (MemoryStream memoryStream = new MemoryStream())
                 {
                     resourceStream.CopyTo(memoryStream);

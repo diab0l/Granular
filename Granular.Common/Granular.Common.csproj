@@ -78,6 +78,7 @@
     <Compile Include="Diagnostics\Profiler.cs" />
     <Compile Include="Disposable.cs" />
     <Compile Include="Extensions\AssemblyExtensions.cs" />
+    <Compile Include="Extensions\BinaryReaderExtensions.cs" />
     <Compile Include="Extensions\CollectionExtensions.cs" />
     <Compile Include="Extensions\DoubleExtensions.cs" />
     <Compile Include="Extensions\EnumerableExtensions.cs" />

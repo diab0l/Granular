@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Reflection;
 using System.Text;
 
@@ -20,6 +21,11 @@ namespace System
         public static AssemblyName GetName(this Assembly assembly)
         {
             return new AssemblyName(assembly.FullName);
+        }
+
+        public static MemoryStream GetManifestResourceStream(this Assembly assembly, string name)
+        {
+            return new MemoryStream(assembly.GetManifestResourceData(name));
         }
     }
 }

@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using System.Windows.Markup;
+using System.Resources;
 using Granular.Extensions;
 using Granular.Collections;
-using System.Windows.Markup;
+using System.IO;
 
 namespace System.Windows
 {
@@ -35,6 +37,7 @@ namespace System.Windows
         private const int ResourceUriAssemblyNameGroupIndex = 1;
         private const int ResourceUriPathGroupIndex = 2;
 
+        private static readonly CacheDictionary<Assembly, ResourceSet> resourceSetCache = CacheDictionary<Assembly, ResourceSet>.CreateUsingStringKeys(TryResolveResourceSet, assembly => assembly.FullName);
         private static readonly CacheDictionary<Uri, byte[]> resourceDataCache = CacheDictionary<Uri, byte[]>.CreateUsingStringKeys(ResolveResourceData, uri => uri.GetAbsoluteUri());
         private static readonly CacheDictionary<Uri, object> resourceElementCache = CacheDictionary<Uri, object>.CreateUsingStringKeys(ResolveResourceElement, uri => uri.GetAbsoluteUri());
 
@@ -61,16 +64,49 @@ namespace System.Windows
                 assembly = Assembly.Load(assemblyName);
             }
 
-            string resourceName = String.Format("{0}.{1}", assemblyName, resourcePath.TrimStart('/').Replace('/', '.'));
-
-            byte[] resourceData = assembly != null ? assembly.GetManifestResourceData(resourceName) : null;
-
-            if (resourceData == null)
+            byte[] resourceData;
+            if (!TryResolveEmbeddedResourceData(assembly, assemblyName, resourcePath, out resourceData) &&
+                !TryResolveResourceData(assembly, resourcePath, out resourceData))
             {
                 throw new Granular.Exception("Resource \"{0}\" was not found", resourceUri.GetAbsoluteUri());
             }
 
             return resourceData;
+        }
+
+        private static bool TryResolveEmbeddedResourceData(Assembly assembly, string assemblyName, string resourcePath, out byte[] resourceData)
+        {
+            string embeddedResourceName = String.Format("{0}.{1}", assemblyName, resourcePath.TrimStart('/').Replace('/', '.'));
+
+            resourceData = assembly?.GetManifestResourceData(embeddedResourceName);
+            return resourceData != null;
+        }
+
+        private static bool TryResolveResourceData(Assembly assembly, string resourcePath, out byte[] resourceData)
+        {
+            resourceData = null;
+
+            ResourceSet resourceSet;
+            if (!resourceSetCache.TryGetValue(assembly, out resourceSet))
+            {
+                return false;
+            }
+
+            string resourceName = resourcePath.TrimStart('/').ToLower();
+            using (Stream stream = (Stream)resourceSet.GetObject(resourceName))
+            {
+                if (stream == null)
+                {
+                    return false;
+                }
+
+                using (MemoryStream memoryStream = new MemoryStream())
+                {
+                    stream.CopyTo(memoryStream);
+                    resourceData = memoryStream.ToArray();
+                    return true;
+                }
+            }
         }
 
         public static object LoadResourceElement(Uri resourceUri)
@@ -84,6 +120,20 @@ namespace System.Windows
         {
             string resourceString = Granular.Compatibility.String.FromByteArray(resourceDataCache.GetValue(resourceUri));
             return XamlLoader.Load(XamlParser.Parse(resourceString, resourceUri));
+        }
+
+        private static bool TryResolveResourceSet(Assembly assembly, out ResourceSet resourceSet)
+        {
+            Stream resourceStream = assembly.GetManifestResourceStream($"{assembly.GetName().Name}.g.resources");
+
+            if (resourceStream == null)
+            {
+                resourceSet = null;
+                return false;
+            }
+
+            resourceSet = new ResourceSet(resourceStream);
+            return true;
         }
 
         private static bool TryParseAbsolutePath(string absolutePath, out string assemblyName, out string resourcePath)
