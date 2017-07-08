@@ -5,53 +5,43 @@ using System.Windows.Threading;
 
 namespace Granular.Host
 {
-    public interface IRenderItem
-    {
-        void Render();
-    }
-
-    public interface IRenderQueue
-    {
-        void Add(IRenderItem item);
-    }
-
-    public class RenderQueue : IRenderQueue
+    public class RenderQueue
     {
         public static readonly RenderQueue Default = new RenderQueue();
 
-        private List<IRenderItem> items;
+        private List<Action> actions;
         private bool isRenderScheduled;
 
         private RenderQueue()
         {
-            items = new List<IRenderItem>();
+            actions = new List<Action>();
         }
 
-        public void Add(IRenderItem item)
+        public void InvokeAsync(Action action)
         {
-            items.Add(item);
+            actions.Add(action);
+            RequestAnimationFrame();
+        }
 
-            if (!isRenderScheduled)
+        private void RequestAnimationFrame()
+        {
+            if (isRenderScheduled)
             {
-                isRenderScheduled = true;
-                Dispatcher.CurrentDispatcher.InvokeAsync(() =>
+                return;
+            }
+
+            isRenderScheduled = true;
+            Dispatcher.CurrentDispatcher.InvokeAsync(() =>
+            {
+                isRenderScheduled = false;
+                List<Action> currentActions = actions;
+                actions = new List<Action>();
+
+                foreach (Action action in currentActions)
                 {
-                    isRenderScheduled = false;
-
-                    IEnumerable<IRenderItem> currentItems = items.ToArray();
-                    items.Clear();
-
-                    Bridge.Html5.Window.RequestAnimationFrame(time => Render(currentItems));
-                }, DispatcherPriority.Render);
-            }
-        }
-
-        private static void Render(IEnumerable<IRenderItem> items)
-        {
-            foreach (IRenderItem item in items)
-            {
-                item.Render();
-            }
+                    action();
+                }
+            }, DispatcherPriority.Background);
         }
     }
 }

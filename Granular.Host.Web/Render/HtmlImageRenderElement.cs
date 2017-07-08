@@ -46,7 +46,7 @@ namespace Granular.Host.Render
 
         private IHtmlValueConverter converter;
 
-        public HtmlImageRenderElement(IRenderQueue renderQueue, IHtmlValueConverter converter) :
+        public HtmlImageRenderElement(RenderQueue renderQueue, IHtmlValueConverter converter) :
             base(renderQueue)
         {
             this.converter = converter;

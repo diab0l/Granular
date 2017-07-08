@@ -84,7 +84,7 @@ namespace System.Windows.Media.Animation
                 scheduledTick.Dispose();
             }
 
-            scheduledTick = ApplicationHost.Current.TaskScheduler.ScheduleTask((tickTime - Time).Max(TimeSpan.Zero), () => Dispatcher.CurrentDispatcher.InvokeAsync(Tick, DispatcherPriority.Render));
+            scheduledTick = ApplicationHost.Current.TaskScheduler.ScheduleTask((tickTime - Time).Max(TimeSpan.Zero), () => Dispatcher.CurrentDispatcher.InvokeAsync(Tick, DispatcherPriority.Background));
             scheduledTickTime = tickTime;
         }
 

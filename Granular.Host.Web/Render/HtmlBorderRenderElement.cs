@@ -133,7 +133,7 @@ namespace Granular.Host.Render
 
         private IHtmlValueConverter converter;
 
-        public HtmlBorderRenderElement(IRenderQueue renderQueue, IHtmlValueConverter converter) :
+        public HtmlBorderRenderElement(RenderQueue renderQueue, IHtmlValueConverter converter) :
             base(renderQueue)
         {
             this.converter = converter;

@@ -22,8 +22,7 @@ namespace Granular.Host.Render
                 }
 
                 text = value;
-                isTextDirty = true;
-                InvalidateRender();
+                renderQueue.InvokeAsync(() => HtmlElement.TextContent = text);
             }
         }
 
@@ -197,12 +196,13 @@ namespace Granular.Host.Render
             }
         }
 
+        private RenderQueue renderQueue;
         private IHtmlValueConverter converter;
-        private bool isTextDirty;
 
-        public HtmlTextBlockRenderElement(IRenderQueue renderQueue, IHtmlValueConverter converter) :
+        public HtmlTextBlockRenderElement(RenderQueue renderQueue, IHtmlValueConverter converter) :
             base(renderQueue)
         {
+            this.renderQueue = renderQueue;
             this.converter = converter;
 
             bounds = Rect.Zero;
@@ -220,15 +220,6 @@ namespace Granular.Host.Render
             Style.SetTextAlignment(TextAlignment, converter);
             Style.SetTextTrimming(TextTrimming);
             Style.SetTextWrapping(TextWrapping, converter);
-        }
-
-        protected override void OnRender()
-        {
-            if (isTextDirty)
-            {
-                HtmlElement.TextContent = text;
-                isTextDirty = false;
-            }
         }
 
         private void OnForegroundChanged(object sender, EventArgs e)
