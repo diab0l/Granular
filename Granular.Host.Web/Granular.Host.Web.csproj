@@ -60,7 +60,7 @@
     <Compile Include="Render\HtmlVisualRenderElement.cs" />
     <Compile Include="TaskScheduler.cs" />
     <Compile Include="TextMeasurementService.cs" />
-    <Compile Include="HtmlStyleDictionary.cs" />
+    <Compile Include="HtmlElementExtensions.cs" />
     <Compile Include="HtmlValueConverter.cs" />
   </ItemGroup>
   <ItemGroup>

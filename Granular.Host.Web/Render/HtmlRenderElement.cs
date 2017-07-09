@@ -10,22 +10,16 @@ namespace Granular.Host.Render
     public class HtmlRenderElement
     {
         public HTMLElement HtmlElement { get; private set; }
-        public HtmlStyleDictionary Style { get; private set; }
 
-        private RenderQueue renderQueue;
-
-        public HtmlRenderElement(RenderQueue renderQueue) :
-            this(Document.CreateElement("div"), renderQueue)
+        public HtmlRenderElement() :
+            this(Document.CreateElement("div"))
         {
             //
         }
 
-        public HtmlRenderElement(HTMLElement htmlElement, RenderQueue renderQueue)
+        public HtmlRenderElement(HTMLElement htmlElement)
         {
             this.HtmlElement = htmlElement;
-
-            Style = new HtmlStyleDictionary(HtmlElement);
-            Style.Invalidated += (sender, e) => renderQueue.InvokeAsync(() => Style.Apply());
         }
     }
 }

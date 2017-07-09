@@ -22,8 +22,11 @@ namespace Granular.Host.Render
                 }
 
                 bounds = value;
-                Style.SetBounds(bounds, converter);
-                SetSourceRect();
+                renderQueue.InvokeAsync(() =>
+                {
+                    HtmlElement.SetHtmlBounds(bounds, converter);
+                    SetSourceRect();
+                });
             }
         }
 
@@ -39,21 +42,25 @@ namespace Granular.Host.Render
                 }
 
                 source = value;
-                Style.SetBackgroundImage(source, converter);
-                SetSourceRect();
+                renderQueue.InvokeAsync(() =>
+                {
+                    HtmlElement.SetHtmlBackgroundImage(source, converter);
+                    SetSourceRect();
+                });
             }
         }
 
+        private RenderQueue renderQueue;
         private IHtmlValueConverter converter;
 
-        public HtmlImageRenderElement(RenderQueue renderQueue, IHtmlValueConverter converter) :
-            base(renderQueue)
+        public HtmlImageRenderElement(RenderQueue renderQueue, IHtmlValueConverter converter)
         {
+            this.renderQueue = renderQueue;
             this.converter = converter;
 
             bounds = Rect.Zero;
 
-            Style.SetBounds(Bounds, converter);
+            HtmlElement.SetHtmlBounds(Bounds, converter);
         }
 
         private void SetSourceRect()
@@ -74,11 +81,11 @@ namespace Granular.Host.Render
                 Point location = new Point(-sourceRect.Left * widthFactor, -sourceRect.Top * heightFactor);
                 Size size = new Size(imageSize.Width * widthFactor, imageSize.Height * heightFactor);
 
-                Style.SetBackgroundBounds(new Rect(location, size), converter);
+                HtmlElement.SetHtmlBackgroundBounds(new Rect(location, size), converter);
             }
             else
             {
-                Style.SetBackgroundBounds(new Rect(Bounds.Size), converter);
+                HtmlElement.SetHtmlBackgroundBounds(new Rect(Bounds.Size), converter);
             }
         }
     }

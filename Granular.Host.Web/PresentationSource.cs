@@ -78,8 +78,8 @@ namespace Granular.Host
 
             window = Bridge.Html5.Window.Instance;
 
-            MouseDevice.CursorChanged += (sender, e) => Bridge.Html5.Window.Document.Body.Style.SetProperty("cursor", converter.ToCursorString(MouseDevice.Cursor));
-            Bridge.Html5.Window.Document.Body.Style.SetProperty("cursor", converter.ToCursorString(MouseDevice.Cursor));
+            MouseDevice.CursorChanged += (sender, e) => Bridge.Html5.Window.Document.Body.SetHtmlStyleProperty("cursor", converter.ToCursorString(MouseDevice.Cursor));
+            Bridge.Html5.Window.Document.Body.SetHtmlStyleProperty("cursor", converter.ToCursorString(MouseDevice.Cursor));
 
             Bridge.Html5.Window.OnKeyDown = OnKeyDown;
             Bridge.Html5.Window.OnKeyUp = OnKeyUp;

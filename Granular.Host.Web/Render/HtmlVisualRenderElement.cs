@@ -32,8 +32,11 @@ namespace Granular.Host.Render
                 }
 
                 background = value;
-                Style.SetBackground(background, new Rect(Bounds.Size), converter);
-                Style.SetIsHitTestVisible(IsHitTestVisible && background != null);
+                renderQueue.InvokeAsync(() =>
+                {
+                    HtmlElement.SetHtmlBackground(background, new Rect(Bounds.Size), converter);
+                    HtmlElement.SetHtmlIsHitTestVisible(IsHitTestVisible && background != null);
+                });
 
                 if (background != null)
                 {
@@ -54,8 +57,11 @@ namespace Granular.Host.Render
                 }
 
                 bounds = value;
-                Style.SetBounds(bounds, converter);
-                Style.SetBackground(background, new Rect(Bounds.Size), converter);
+                renderQueue.InvokeAsync(() =>
+                {
+                    HtmlElement.SetHtmlBounds(bounds, converter);
+                    HtmlElement.SetHtmlBackground(background, new Rect(Bounds.Size), converter);
+                });
             }
         }
 
@@ -71,7 +77,7 @@ namespace Granular.Host.Render
                 }
 
                 clipToBounds = value;
-                Style.SetClipToBounds(clipToBounds);
+                renderQueue.InvokeAsync(() => HtmlElement.SetHtmlClipToBounds(clipToBounds));
             }
         }
 
@@ -87,7 +93,7 @@ namespace Granular.Host.Render
                 }
 
                 isHitTestVisible = value;
-                Style.SetIsHitTestVisible(isHitTestVisible && Background != null);
+                renderQueue.InvokeAsync(() => HtmlElement.SetHtmlIsHitTestVisible(isHitTestVisible && Background != null));
             }
         }
 
@@ -103,7 +109,7 @@ namespace Granular.Host.Render
                 }
 
                 isVisible = value;
-                Style.SetIsVisible(isVisible);
+                renderQueue.InvokeAsync(() => HtmlElement.SetHtmlIsVisible(isVisible));
             }
         }
 
@@ -119,7 +125,7 @@ namespace Granular.Host.Render
                 }
 
                 opacity = value;
-                Style.SetOpacity(opacity, converter);
+                renderQueue.InvokeAsync(() => HtmlElement.SetHtmlOpacity(opacity, converter));
             }
         }
 
@@ -135,7 +141,7 @@ namespace Granular.Host.Render
                 }
 
                 transform = value;
-                Style.SetTransform(transform, converter);
+                renderQueue.InvokeAsync(() => HtmlElement.SetHtmlTransform(transform, converter));
             }
         }
 
@@ -154,7 +160,7 @@ namespace Granular.Host.Render
                 {
                     renderQueue.InvokeAsync(() =>
                     {
-                        RemoveChildElement(((HtmlRenderElement)content).HtmlElement);
+                        HtmlElement.RemoveChild(((HtmlRenderElement)content).HtmlElement);
                         childrenStartIndex--;
                     });
                 }
@@ -165,7 +171,7 @@ namespace Granular.Host.Render
                 {
                     renderQueue.InvokeAsync(() =>
                     {
-                        InsertChildElement(0, ((HtmlRenderElement)content).HtmlElement);
+                        HtmlElement.InsertChild(0, ((HtmlRenderElement)content).HtmlElement);
                         childrenStartIndex++;
                     });
                 }
@@ -180,7 +186,7 @@ namespace Granular.Host.Render
         private IHtmlValueConverter converter;
 
         public HtmlVisualRenderElement(object owner, RenderQueue renderQueue, IHtmlValueConverter converter) :
-            base(CreateHtmlElement(owner), renderQueue)
+            base(CreateHtmlElement(owner))
         {
             this.renderQueue = renderQueue;
             this.converter = converter;
@@ -192,12 +198,12 @@ namespace Granular.Host.Render
             opacity = 1;
             transform = Matrix.Identity;
 
-            Style.SetBounds(Bounds, converter);
-            Style.SetClipToBounds(ClipToBounds);
-            Style.SetIsHitTestVisible(IsHitTestVisible && Background != null);
-            Style.SetIsVisible(IsVisible);
-            Style.SetOpacity(Opacity, converter);
-            Style.SetTransform(Transform, converter);
+            HtmlElement.SetHtmlBounds(Bounds, converter);
+            HtmlElement.SetHtmlClipToBounds(ClipToBounds);
+            HtmlElement.SetHtmlIsHitTestVisible(IsHitTestVisible && Background != null);
+            HtmlElement.SetHtmlIsVisible(IsVisible);
+            HtmlElement.SetHtmlOpacity(Opacity, converter);
+            HtmlElement.SetHtmlTransform(Transform, converter);
         }
 
         public void InsertChild(int index, object child)
@@ -209,7 +215,7 @@ namespace Granular.Host.Render
 
             children.Insert(index, child);
 
-            renderQueue.InvokeAsync(() => InsertChildElement(index + childrenStartIndex, ((HtmlRenderElement)child).HtmlElement));
+            renderQueue.InvokeAsync(() => HtmlElement.InsertChild(index + childrenStartIndex, ((HtmlRenderElement)child).HtmlElement));
         }
 
         public void RemoveChild(object child)
@@ -228,26 +234,9 @@ namespace Granular.Host.Render
             }
         }
 
-        private void InsertChildElement(int index, HTMLElement child)
-        {
-            if (index < HtmlElement.ChildElementCount)
-            {
-                HtmlElement.InsertBefore(child, HtmlElement.Children[index]);
-            }
-            else
-            {
-                HtmlElement.AppendChild(child);
-            }
-        }
-
-        private void RemoveChildElement(HTMLElement child)
-        {
-            HtmlElement.RemoveChild(child);
-        }
-
         private void OnBackgroundChanged(object sender, EventArgs e)
         {
-            Style.SetBackground(background, new Rect(Bounds.Size), converter);
+            renderQueue.InvokeAsync(() => HtmlElement.SetHtmlBackground(background, new Rect(Bounds.Size), converter));
         }
 
         private static string GetElementTagName(object target)

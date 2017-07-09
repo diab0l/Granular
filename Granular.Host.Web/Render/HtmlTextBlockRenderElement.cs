@@ -38,7 +38,7 @@ namespace Granular.Host.Render
                 }
 
                 bounds = value;
-                Style.SetBounds(bounds, converter);
+                renderQueue.InvokeAsync(() => HtmlElement.SetHtmlBounds(bounds, converter));
             }
         }
 
@@ -59,7 +59,7 @@ namespace Granular.Host.Render
                 }
 
                 foreground = value;
-                Style.SetForeground(Foreground, converter);
+                renderQueue.InvokeAsync(() => HtmlElement.SetHtmlForeground(Foreground, converter));
 
                 if (foreground != null)
                 {
@@ -80,7 +80,7 @@ namespace Granular.Host.Render
                 }
 
                 fontFamily = value;
-                Style.SetFontFamily(fontFamily, converter);
+                renderQueue.InvokeAsync(() => HtmlElement.SetHtmlFontFamily(fontFamily, converter));
             }
         }
 
@@ -96,7 +96,7 @@ namespace Granular.Host.Render
                 }
 
                 fontSize = value;
-                Style.SetFontSize(fontSize, converter);
+                renderQueue.InvokeAsync(() => HtmlElement.SetHtmlFontSize(fontSize, converter));
             }
         }
 
@@ -112,7 +112,7 @@ namespace Granular.Host.Render
                 }
 
                 fontStyle = value;
-                Style.SetFontStyle(fontStyle, converter);
+                renderQueue.InvokeAsync(() => HtmlElement.SetHtmlFontStyle(fontStyle, converter));
             }
         }
 
@@ -128,7 +128,7 @@ namespace Granular.Host.Render
                 }
 
                 fontWeight = value;
-                Style.SetFontWeight(fontWeight, converter);
+                renderQueue.InvokeAsync(() => HtmlElement.SetHtmlFontWeight(fontWeight, converter));
             }
         }
 
@@ -144,7 +144,7 @@ namespace Granular.Host.Render
                 }
 
                 fontStretch = value;
-                Style.SetFontStretch(fontStretch, converter);
+                renderQueue.InvokeAsync(() => HtmlElement.SetHtmlFontStretch(fontStretch, converter));
             }
         }
 
@@ -160,7 +160,7 @@ namespace Granular.Host.Render
                 }
 
                 textAlignment = value;
-                Style.SetTextAlignment(textAlignment, converter);
+                renderQueue.InvokeAsync(() => HtmlElement.SetHtmlTextAlignment(textAlignment, converter));
             }
         }
 
@@ -176,7 +176,7 @@ namespace Granular.Host.Render
                 }
 
                 textTrimming = value;
-                Style.SetTextTrimming(textTrimming);
+                renderQueue.InvokeAsync(() => HtmlElement.SetHtmlTextTrimming(textTrimming));
             }
         }
 
@@ -192,15 +192,14 @@ namespace Granular.Host.Render
                 }
 
                 textWrapping = value;
-                Style.SetTextWrapping(textWrapping, converter);
+                renderQueue.InvokeAsync(() => HtmlElement.SetHtmlTextWrapping(textWrapping, converter));
             }
         }
 
         private RenderQueue renderQueue;
         private IHtmlValueConverter converter;
 
-        public HtmlTextBlockRenderElement(RenderQueue renderQueue, IHtmlValueConverter converter) :
-            base(renderQueue)
+        public HtmlTextBlockRenderElement(RenderQueue renderQueue, IHtmlValueConverter converter)
         {
             this.renderQueue = renderQueue;
             this.converter = converter;
@@ -209,22 +208,22 @@ namespace Granular.Host.Render
             fontFamily = FontFamily.Default;
             fontSize = Double.NaN;
 
-            Style.SetBounds(Bounds, converter);
-            Style.SetForeground(Foreground, converter);
-            Style.SetFontFamily(FontFamily, converter);
-            Style.SetFontSize(FontSize, converter);
-            Style.SetFontStyle(FontStyle, converter);
-            Style.SetFontWeight(FontWeight, converter);
-            Style.SetFontStretch(FontStretch, converter);
-            Style.SetIsHitTestVisible(false);
-            Style.SetTextAlignment(TextAlignment, converter);
-            Style.SetTextTrimming(TextTrimming);
-            Style.SetTextWrapping(TextWrapping, converter);
+            HtmlElement.SetHtmlBounds(Bounds, converter);
+            HtmlElement.SetHtmlForeground(Foreground, converter);
+            HtmlElement.SetHtmlFontFamily(FontFamily, converter);
+            HtmlElement.SetHtmlFontSize(FontSize, converter);
+            HtmlElement.SetHtmlFontStyle(FontStyle, converter);
+            HtmlElement.SetHtmlFontWeight(FontWeight, converter);
+            HtmlElement.SetHtmlFontStretch(FontStretch, converter);
+            HtmlElement.SetHtmlIsHitTestVisible(false);
+            HtmlElement.SetHtmlTextAlignment(TextAlignment, converter);
+            HtmlElement.SetHtmlTextTrimming(TextTrimming);
+            HtmlElement.SetHtmlTextWrapping(TextWrapping, converter);
         }
 
         private void OnForegroundChanged(object sender, EventArgs e)
         {
-            Style.SetForeground(Foreground, converter);
+            renderQueue.InvokeAsync(() => HtmlElement.SetHtmlForeground(Foreground, converter));
         }
     }
 }

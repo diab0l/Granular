@@ -51,8 +51,12 @@ namespace Granular.Host.Render
 
                 text = value;
 
-                SetContentElementText();
-                GetContentElementSelection();
+                renderQueue.InvokeAsync(() =>
+                {
+                    SetContentElementText();
+                    GetContentElementSelection();
+                });
+
                 TextChanged.Raise(this);
             }
         }
@@ -69,7 +73,7 @@ namespace Granular.Host.Render
                 }
 
                 maxLength = value;
-                SetContentElementMaxLength();
+                renderQueue.InvokeAsync(SetContentElementMaxLength);
             }
         }
 
@@ -86,7 +90,7 @@ namespace Granular.Host.Render
                 }
 
                 caretIndex = value;
-                SetContentElementCaretIndex();
+                renderQueue.InvokeAsync(SetContentElementCaretIndex);
                 CaretIndexChanged.Raise(this);
             }
         }
@@ -104,7 +108,7 @@ namespace Granular.Host.Render
                 }
 
                 selectionStart = value;
-                SetContentElementSelectionStart();
+                renderQueue.InvokeAsync(SetContentElementSelectionStart);
                 SelectionStartChanged.Raise(this);
             }
         }
@@ -122,7 +126,7 @@ namespace Granular.Host.Render
                 }
 
                 selectionLength = value;
-                SetContentElementSelectionLength();
+                renderQueue.InvokeAsync(SetContentElementSelectionLength);
                 SelectionLengthChanged.Raise(this);
             }
         }
@@ -139,7 +143,7 @@ namespace Granular.Host.Render
                 }
 
                 isPassword = value;
-                SetContentElement();
+                renderQueue.InvokeAsync(SetContentElement);
             }
         }
 
@@ -155,7 +159,7 @@ namespace Granular.Host.Render
                 }
 
                 isReadOnly = value;
-                SetContentElementIsReadOnly();
+                renderQueue.InvokeAsync(SetContentElementIsReadOnly);
             }
         }
 
@@ -171,7 +175,7 @@ namespace Granular.Host.Render
                 }
 
                 spellCheck = value;
-                SetContentElementSpellCheck();
+                renderQueue.InvokeAsync(SetContentElementSpellCheck);
             }
         }
 
@@ -187,8 +191,11 @@ namespace Granular.Host.Render
                 }
 
                 bounds = value;
-                Style.SetBounds(bounds, converter);
-                ContentElement.Style.SetSize(bounds.Size, converter);
+                renderQueue.InvokeAsync(() =>
+                {
+                    HtmlElement.SetHtmlBounds(bounds, converter);
+                    ContentElement.HtmlElement.SetHtmlSize(bounds.Size, converter);
+                });
             }
         }
 
@@ -209,7 +216,7 @@ namespace Granular.Host.Render
                 }
 
                 foreground = value;
-                ContentElement.Style.SetForeground(Foreground, converter);
+                renderQueue.InvokeAsync(() => ContentElement.HtmlElement.SetHtmlForeground(Foreground, converter));
 
                 if (foreground != null)
                 {
@@ -230,7 +237,7 @@ namespace Granular.Host.Render
                 }
 
                 fontFamily = value;
-                ContentElement.Style.SetFontFamily(fontFamily, converter);
+                renderQueue.InvokeAsync(() => ContentElement.HtmlElement.SetHtmlFontFamily(fontFamily, converter));
             }
         }
 
@@ -246,7 +253,7 @@ namespace Granular.Host.Render
                 }
 
                 fontSize = value;
-                ContentElement.Style.SetFontSize(fontSize, converter);
+                renderQueue.InvokeAsync(() => ContentElement.HtmlElement.SetHtmlFontSize(fontSize, converter));
             }
         }
 
@@ -262,7 +269,7 @@ namespace Granular.Host.Render
                 }
 
                 fontStyle = value;
-                ContentElement.Style.SetFontStyle(fontStyle, converter);
+                renderQueue.InvokeAsync(() => ContentElement.HtmlElement.SetHtmlFontStyle(fontStyle, converter));
             }
         }
 
@@ -278,7 +285,7 @@ namespace Granular.Host.Render
                 }
 
                 fontWeight = value;
-                ContentElement.Style.SetFontWeight(fontWeight, converter);
+                renderQueue.InvokeAsync(() => ContentElement.HtmlElement.SetHtmlFontWeight(fontWeight, converter));
             }
         }
 
@@ -294,7 +301,7 @@ namespace Granular.Host.Render
                 }
 
                 fontStretch = value;
-                ContentElement.Style.SetFontStretch(fontStretch, converter);
+                renderQueue.InvokeAsync(() => ContentElement.HtmlElement.SetHtmlFontStretch(fontStretch, converter));
             }
         }
 
@@ -310,7 +317,7 @@ namespace Granular.Host.Render
                 }
 
                 textAlignment = value;
-                ContentElement.Style.SetTextAlignment(textAlignment, converter);
+                renderQueue.InvokeAsync(() => ContentElement.HtmlElement.SetHtmlTextAlignment(textAlignment, converter));
             }
         }
 
@@ -326,7 +333,7 @@ namespace Granular.Host.Render
                 }
 
                 textTrimming = value;
-                ContentElement.Style.SetTextTrimming(textTrimming);
+                renderQueue.InvokeAsync(() => ContentElement.HtmlElement.SetHtmlTextTrimming(textTrimming));
             }
         }
 
@@ -342,7 +349,7 @@ namespace Granular.Host.Render
                 }
 
                 textWrapping = value;
-                SetContentElementTextWrapping();
+                renderQueue.InvokeAsync(SetContentElementTextWrapping);
             }
         }
 
@@ -358,7 +365,7 @@ namespace Granular.Host.Render
                 }
 
                 acceptsReturn = value;
-                SetContentElement();
+                renderQueue.InvokeAsync(SetContentElement);
             }
         }
 
@@ -374,7 +381,7 @@ namespace Granular.Host.Render
                 }
 
                 horizontalScrollBarVisibility = value;
-                ContentElement.Style.SetHorizontalScrollBarVisibility(horizontalScrollBarVisibility, converter);
+                renderQueue.InvokeAsync(() => ContentElement.HtmlElement.SetHtmlHorizontalScrollBarVisibility(horizontalScrollBarVisibility, converter));
             }
         }
 
@@ -390,7 +397,7 @@ namespace Granular.Host.Render
                 }
 
                 verticalScrollBarVisibility = value;
-                ContentElement.Style.SetVerticalScrollBarVisibility(verticalScrollBarVisibility, converter);
+                renderQueue.InvokeAsync(() => ContentElement.HtmlElement.SetHtmlVerticalScrollBarVisibility(verticalScrollBarVisibility, converter));
             }
         }
 
@@ -406,7 +413,7 @@ namespace Granular.Host.Render
                 }
 
                 isHitTestVisible = value;
-                ContentElement.Style.SetIsHitTestVisible(IsHitTestVisible);
+                renderQueue.InvokeAsync(() => ContentElement.HtmlElement.SetHtmlIsHitTestVisible(IsHitTestVisible));
             }
         }
 
@@ -416,8 +423,7 @@ namespace Granular.Host.Render
         private IHtmlValueConverter converter;
         private bool isFocused;
 
-        public HtmlTextBoxRenderElement(RenderQueue renderQueue, IHtmlValueConverter converter) :
-            base(renderQueue)
+        public HtmlTextBoxRenderElement(RenderQueue renderQueue, IHtmlValueConverter converter)
         {
             this.renderQueue = renderQueue;
             this.converter = converter;
@@ -447,7 +453,7 @@ namespace Granular.Host.Render
                 htmlElement = Bridge.Html5.Document.CreateElement("textArea");
             }
 
-            ContentElement = new HtmlRenderElement(htmlElement, renderQueue);
+            ContentElement = new HtmlRenderElement(htmlElement);
 
             SetContentElementText();
             SetContentElementMaxLength();
@@ -457,27 +463,27 @@ namespace Granular.Host.Render
             SetContentElementSpellCheck();
             SetContentElementTextWrapping();
 
-            ContentElement.Style.SetValue("resize", "none");
-            ContentElement.Style.SetValue("margin", "0px");
-            ContentElement.Style.SetValue("padding", "0px");
-            ContentElement.Style.SetValue("border", "0px solid transparent");
-            ContentElement.Style.SetValue("outline", "1px solid transparent");
-            ContentElement.Style.SetValue("cursor", "inherit");
-            ContentElement.Style.SetBackground(Brushes.Transparent, System.Windows.Rect.Zero, converter);
-            ContentElement.Style.SetLocation(Point.Zero, converter);
+            ContentElement.HtmlElement.SetHtmlStyleProperty("resize", "none");
+            ContentElement.HtmlElement.SetHtmlStyleProperty("margin", "0px");
+            ContentElement.HtmlElement.SetHtmlStyleProperty("padding", "0px");
+            ContentElement.HtmlElement.SetHtmlStyleProperty("border", "0px solid transparent");
+            ContentElement.HtmlElement.SetHtmlStyleProperty("outline", "1px solid transparent");
+            ContentElement.HtmlElement.SetHtmlStyleProperty("cursor", "inherit");
+            ContentElement.HtmlElement.SetHtmlBackground(Brushes.Transparent, System.Windows.Rect.Zero, converter);
+            ContentElement.HtmlElement.SetHtmlLocation(Point.Zero, converter);
 
-            ContentElement.Style.SetSize(Bounds.Size, converter);
-            ContentElement.Style.SetForeground(Foreground, converter);
-            ContentElement.Style.SetFontFamily(FontFamily, converter);
-            ContentElement.Style.SetFontSize(FontSize, converter);
-            ContentElement.Style.SetFontStyle(FontStyle, converter);
-            ContentElement.Style.SetFontWeight(FontWeight, converter);
-            ContentElement.Style.SetFontStretch(FontStretch, converter);
-            ContentElement.Style.SetIsHitTestVisible(IsHitTestVisible);
-            ContentElement.Style.SetTextAlignment(TextAlignment, converter);
-            ContentElement.Style.SetTextTrimming(TextTrimming);
-            ContentElement.Style.SetHorizontalScrollBarVisibility(HorizontalScrollBarVisibility, converter);
-            ContentElement.Style.SetVerticalScrollBarVisibility(VerticalScrollBarVisibility, converter);
+            ContentElement.HtmlElement.SetHtmlSize(Bounds.Size, converter);
+            ContentElement.HtmlElement.SetHtmlForeground(Foreground, converter);
+            ContentElement.HtmlElement.SetHtmlFontFamily(FontFamily, converter);
+            ContentElement.HtmlElement.SetHtmlFontSize(FontSize, converter);
+            ContentElement.HtmlElement.SetHtmlFontStyle(FontStyle, converter);
+            ContentElement.HtmlElement.SetHtmlFontWeight(FontWeight, converter);
+            ContentElement.HtmlElement.SetHtmlFontStretch(FontStretch, converter);
+            ContentElement.HtmlElement.SetHtmlIsHitTestVisible(IsHitTestVisible);
+            ContentElement.HtmlElement.SetHtmlTextAlignment(TextAlignment, converter);
+            ContentElement.HtmlElement.SetHtmlTextTrimming(TextTrimming);
+            ContentElement.HtmlElement.SetHtmlHorizontalScrollBarVisibility(HorizontalScrollBarVisibility, converter);
+            ContentElement.HtmlElement.SetHtmlVerticalScrollBarVisibility(VerticalScrollBarVisibility, converter);
 
             ContentElement.HtmlElement.OnInput += e => this.Text = ContentElement.HtmlElement.GetValue();
             ContentElement.HtmlElement.OnKeyDown += OnContentElementKeyDown;
@@ -500,7 +506,7 @@ namespace Granular.Host.Render
 
         private void OnForegroundChanged(object sender, EventArgs e)
         {
-            ContentElement.Style.SetForeground(Foreground, converter);
+            renderQueue.InvokeAsync(() => ContentElement.HtmlElement.SetHtmlForeground(Foreground, converter));
         }
 
         private void OnContentElementKeyDown(Bridge.Html5.Event e)

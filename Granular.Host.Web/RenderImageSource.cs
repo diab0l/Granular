@@ -20,8 +20,8 @@ namespace Granular.Host
                 if (container == null)
                 {
                     container = Bridge.Html5.Document.CreateElement("div");
-                    container.Style.SetProperty("visibility", "hidden");
-                    container.Style.SetProperty("overflow", "hidden");
+                    container.SetHtmlStyleProperty("visibility", "hidden");
+                    container.SetHtmlStyleProperty("overflow", "hidden");
                     container.Style.Width = "0px";
                     container.Style.Height = "0px";
 

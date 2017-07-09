@@ -15,7 +15,6 @@ namespace Granular.Host
 
         private IHtmlValueConverter converter;
         private HTMLElement htmlElement;
-        private HtmlStyleDictionary style;
 
         private TextMeasurementService(IHtmlValueConverter converter)
         {
@@ -27,31 +26,27 @@ namespace Granular.Host
             if (htmlElement == null)
             {
                 htmlElement = Document.CreateElement("div");
-                style = new HtmlStyleDictionary(htmlElement);
-
                 Document.Body.AppendChild(htmlElement);
             }
 
-            style.SetValue("position", "absolute");
-            style.SetValue("visibility", "hidden");
-            style.SetFontSize(fontSize, converter);
-            style.SetFontFamily(typeface.FontFamily, converter);
-            style.SetFontStretch(typeface.Stretch, converter);
-            style.SetFontStyle(typeface.Style, converter);
-            style.SetFontWeight(typeface.Weight, converter);
+            htmlElement.SetHtmlStyleProperty("position", "absolute");
+            htmlElement.SetHtmlStyleProperty("visibility", "hidden");
+            htmlElement.SetHtmlFontSize(fontSize, converter);
+            htmlElement.SetHtmlFontFamily(typeface.FontFamily, converter);
+            htmlElement.SetHtmlFontStretch(typeface.Stretch, converter);
+            htmlElement.SetHtmlFontStyle(typeface.Style, converter);
+            htmlElement.SetHtmlFontWeight(typeface.Weight, converter);
 
             if (maxWidth.IsNaN() || !Double.IsFinite(maxWidth))
             {
-                style.SetTextWrapping(TextWrapping.NoWrap, converter);
-                style.ClearValue("max-width");
+                htmlElement.SetHtmlTextWrapping(TextWrapping.NoWrap, converter);
+                htmlElement.ClearHtmlStyleProperty("max-width");
             }
             else
             {
-                style.SetTextWrapping(TextWrapping.Wrap, converter);
-                style.SetValue("max-width", converter.ToPixelString(maxWidth));
+                htmlElement.SetHtmlTextWrapping(TextWrapping.Wrap, converter);
+                htmlElement.SetHtmlStyleProperty("max-width", converter.ToPixelString(maxWidth));
             }
-
-            style.Apply();
 
             htmlElement.InnerHTML = converter.ToHtmlContentString(text.DefaultIfNullOrEmpty("A"));
 

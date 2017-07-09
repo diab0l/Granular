@@ -26,8 +26,11 @@ namespace Granular.Host.Render
                 }
 
                 background = value;
-                SetBackground();
-                SetIsHitTestVisible();
+                renderQueue.InvokeAsync(() =>
+                {
+                    SetBackground();
+                    SetIsHitTestVisible();
+                });
 
                 if (background != null)
                 {
@@ -48,10 +51,13 @@ namespace Granular.Host.Render
                 }
 
                 borderThickness = value;
-                Style.SetBorderThickness(borderThickness, converter);
-                SetBounds();
-                SetBackground();
-                SetCornerRadius();
+                renderQueue.InvokeAsync(() =>
+                {
+                    HtmlElement.SetHtmlBorderThickness(borderThickness, converter);
+                    SetBounds();
+                    SetBackground();
+                    SetCornerRadius();
+                });
             }
         }
 
@@ -72,7 +78,7 @@ namespace Granular.Host.Render
                 }
 
                 borderBrush = value;
-                SetBorderBrush();
+                renderQueue.InvokeAsync(SetBorderBrush);
 
                 if (borderBrush != null)
                 {
@@ -93,9 +99,12 @@ namespace Granular.Host.Render
                 }
 
                 bounds = value;
-                SetBounds();
-                SetBackground();
-                SetBorderBrush();
+                renderQueue.InvokeAsync(() =>
+                {
+                    SetBounds();
+                    SetBackground();
+                    SetBorderBrush();
+                });
             }
         }
 
@@ -111,7 +120,7 @@ namespace Granular.Host.Render
                 }
 
                 cornerRadius = value;
-                SetCornerRadius();
+                renderQueue.InvokeAsync(SetCornerRadius);
             }
         }
 
@@ -127,22 +136,23 @@ namespace Granular.Host.Render
                 }
 
                 isHitTestVisible = value;
-                SetIsHitTestVisible();
+                renderQueue.InvokeAsync(SetIsHitTestVisible);
             }
         }
 
+        private RenderQueue renderQueue;
         private IHtmlValueConverter converter;
 
-        public HtmlBorderRenderElement(RenderQueue renderQueue, IHtmlValueConverter converter) :
-            base(renderQueue)
+        public HtmlBorderRenderElement(RenderQueue renderQueue, IHtmlValueConverter converter)
         {
+            this.renderQueue = renderQueue;
             this.converter = converter;
 
             bounds = Rect.Zero;
             borderThickness = Thickness.Zero;
             cornerRadius = CornerRadius.Zero;
 
-            Style.SetValue("background-clip", "content-box");
+            HtmlElement.SetHtmlStyleProperty("background-clip", "content-box");
 
             SetBackground();
             SetBorderBrush();
@@ -153,27 +163,27 @@ namespace Granular.Host.Render
 
         private void OnBackgroundChanged(object sender, EventArgs e)
         {
-            SetBackground();
+            renderQueue.InvokeAsync(SetBackground);
         }
 
         private void OnBorderBrushChanged(object sender, EventArgs e)
         {
-            SetBorderBrush();
+            renderQueue.InvokeAsync(SetBorderBrush);
         }
 
         private void SetBackground()
         {
-            Style.SetBackground(background, new Rect(BorderThickness.Location, (Bounds.Size - BorderThickness.Size).Max(Size.Zero)), converter);
+            HtmlElement.SetHtmlBackground(background, new Rect(BorderThickness.Location, (Bounds.Size - BorderThickness.Size).Max(Size.Zero)), converter);
         }
 
         private void SetBorderBrush()
         {
-            Style.SetBorderBrush(BorderBrush, Bounds.Size, converter);
+            HtmlElement.SetHtmlBorderBrush(BorderBrush, Bounds.Size, converter);
         }
 
         private void SetBounds()
         {
-            Style.SetBounds(new Rect(Bounds.Location, (Bounds.Size - BorderThickness.Size).Max(Size.Zero)), converter);
+            HtmlElement.SetHtmlBounds(new Rect(Bounds.Location, (Bounds.Size - BorderThickness.Size).Max(Size.Zero)), converter);
         }
 
         private void SetCornerRadius()
@@ -185,12 +195,12 @@ namespace Granular.Host.Render
                 CornerRadius.BottomRight + (BorderThickness.Bottom + BorderThickness.Right) / 4,
                 CornerRadius.BottomLeft + (BorderThickness.Bottom + BorderThickness.Left) / 4);
 
-            Style.SetCornerRadius(borderOutlineCornerRadius, converter);
+            HtmlElement.SetHtmlCornerRadius(borderOutlineCornerRadius, converter);
         }
 
         private void SetIsHitTestVisible()
         {
-            Style.SetIsHitTestVisible(IsHitTestVisible && Background != null);
+            HtmlElement.SetHtmlIsHitTestVisible(IsHitTestVisible && Background != null);
         }
     }
 }
