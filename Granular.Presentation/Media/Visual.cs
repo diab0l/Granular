@@ -229,6 +229,7 @@ namespace System.Windows.Media
 
         private IVisualRenderElement visualRenderElement;
         private IRenderElementFactory renderElementFactory;
+        private int renderChildrenOffset;
 
         private Rect hitTestBounds;
         private bool isHitTestBoundsValid;
@@ -267,7 +268,7 @@ namespace System.Windows.Media
             int renderChildIndex = visualChildren.Count - 1;
             if (visualRenderElement != null)
             {
-                visualRenderElement.InsertChild(renderChildIndex, child.GetRenderElement(renderElementFactory));
+                visualRenderElement.InsertChild(renderChildrenOffset + renderChildIndex, child.GetRenderElement(renderElementFactory));
             }
 
             InvalidateHitTestBounds();
@@ -307,7 +308,7 @@ namespace System.Windows.Media
                 object childRenderElement = child.GetRenderElement(renderElementFactory);
 
                 visualRenderElement.RemoveChild(childRenderElement);
-                visualRenderElement.InsertChild(newIndex, childRenderElement);
+                visualRenderElement.InsertChild(renderChildrenOffset + newIndex, childRenderElement);
             }
         }
 
@@ -350,13 +351,19 @@ namespace System.Windows.Media
                 visualRenderElement.Opacity = VisualOpacity;
                 visualRenderElement.Transform = VisualTransform;
 
-                visualRenderElement.Content = CreateRenderElementContentOverride(factory);
+                object content = CreateRenderElementContentOverride(factory);
+
+                if (content != null)
+                {
+                    renderChildrenOffset = 1;
+                    visualRenderElement.InsertChild(0, content);
+                }
 
                 int index = 0;
                 foreach (Visual child in VisualChildren)
                 {
                     child.GetRenderElement(factory);
-                    visualRenderElement.InsertChild(index, child.GetRenderElement(factory));
+                    visualRenderElement.InsertChild(renderChildrenOffset + index, child.GetRenderElement(factory));
                     index++;
                 }
             }

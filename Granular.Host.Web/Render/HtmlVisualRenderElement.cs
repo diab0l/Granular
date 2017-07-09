@@ -145,40 +145,6 @@ namespace Granular.Host.Render
             }
         }
 
-        private object content;
-        public object Content
-        {
-            get { return content; }
-            set
-            {
-                if (content == value)
-                {
-                    return;
-                }
-
-                if (content != null)
-                {
-                    renderQueue.InvokeAsync(() =>
-                    {
-                        HtmlElement.RemoveChild(((HtmlRenderElement)content).HtmlElement);
-                        childrenStartIndex--;
-                    });
-                }
-
-                content = value;
-
-                if (content != null)
-                {
-                    renderQueue.InvokeAsync(() =>
-                    {
-                        HtmlElement.InsertChild(0, ((HtmlRenderElement)content).HtmlElement);
-                        childrenStartIndex++;
-                    });
-                }
-            }
-        }
-
-        private int childrenStartIndex;
         private List<object> children;
         public IEnumerable<object> Children { get { return children; } }
 
@@ -215,7 +181,7 @@ namespace Granular.Host.Render
 
             children.Insert(index, child);
 
-            renderQueue.InvokeAsync(() => HtmlElement.InsertChild(index + childrenStartIndex, ((HtmlRenderElement)child).HtmlElement));
+            renderQueue.InvokeAsync(() => HtmlElement.InsertChild(index, ((HtmlRenderElement)child).HtmlElement));
         }
 
         public void RemoveChild(object child)

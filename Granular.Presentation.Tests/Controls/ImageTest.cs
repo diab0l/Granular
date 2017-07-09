@@ -147,7 +147,7 @@ namespace Granular.Presentation.Tests.Controls
 
         private static TestImageRenderElement GetImageRenderElement(Image image)
         {
-            return (TestImageRenderElement)((TestVisualRenderElement)image.GetRenderElement(TestRenderElementFactory.Default)).Content;
+            return (TestImageRenderElement)((TestVisualRenderElement)image.GetRenderElement(TestRenderElementFactory.Default)).Children.First();
         }
     }
 }
