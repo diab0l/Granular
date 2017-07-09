@@ -23,16 +23,49 @@ namespace Granular.Host.Render
             children = new List<object>();
         }
 
+        protected override void OnLoad()
+        {
+            base.OnLoad();
+
+            foreach (HtmlRenderElement child in Children)
+            {
+                child.Load();
+            }
+        }
+
+        protected override void OnUnload()
+        {
+            base.OnUnload();
+
+            foreach (HtmlRenderElement child in Children)
+            {
+                child.Unload();
+            }
+        }
+
         public void InsertChild(int index, object child)
         {
-            children.Insert(index, child);
+            HtmlRenderElement childElement = (HtmlRenderElement)child;
 
-            renderQueue.InvokeAsync(() => HtmlElement.InsertChild(index, ((HtmlRenderElement)child).HtmlElement));
+            if (IsLoaded)
+            {
+                childElement.Load();
+            }
+
+            children.Insert(index, childElement);
+            renderQueue.InvokeAsync(() => HtmlElement.InsertChild(index, childElement.HtmlElement));
         }
 
         public void RemoveChild(object child)
         {
-            int childIndex = children.IndexOf(child);
+            HtmlRenderElement childElement = (HtmlRenderElement)child;
+
+            if (IsLoaded)
+            {
+                childElement.Unload();
+            }
+
+            int childIndex = children.IndexOf(childElement);
 
             if (childIndex == -1)
             {

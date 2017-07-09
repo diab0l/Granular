@@ -10,6 +10,7 @@ namespace Granular.Host.Render
     public class HtmlRenderElement
     {
         public HTMLElement HtmlElement { get; private set; }
+        public bool IsLoaded { get; private set; }
 
         public HtmlRenderElement() :
             this(Document.CreateElement("div"))
@@ -20,6 +21,38 @@ namespace Granular.Host.Render
         public HtmlRenderElement(HTMLElement htmlElement)
         {
             this.HtmlElement = htmlElement;
+        }
+
+        public void Load()
+        {
+            if (IsLoaded)
+            {
+                return;
+            }
+
+            IsLoaded = true;
+            OnLoad();
+        }
+
+        public void Unload()
+        {
+            if (!IsLoaded)
+            {
+                return;
+            }
+
+            IsLoaded = false;
+            OnUnload();
+        }
+
+        protected virtual void OnLoad()
+        {
+            //
+        }
+
+        protected virtual void OnUnload()
+        {
+            //
         }
     }
 }

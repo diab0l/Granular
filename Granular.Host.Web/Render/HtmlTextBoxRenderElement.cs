@@ -210,7 +210,7 @@ namespace Granular.Host.Render
                     return;
                 }
 
-                if (foreground != null)
+                if (IsLoaded && foreground != null)
                 {
                     foreground.Changed -= OnForegroundChanged;
                 }
@@ -218,7 +218,7 @@ namespace Granular.Host.Render
                 foreground = value;
                 renderQueue.InvokeAsync(() => ContentElement.HtmlElement.SetHtmlForeground(Foreground, converter));
 
-                if (foreground != null)
+                if (IsLoaded && foreground != null)
                 {
                     foreground.Changed += OnForegroundChanged;
                 }
@@ -612,6 +612,24 @@ namespace Granular.Host.Render
         {
             e.ForceHostHandling = true;
             e.Handled = true;
+        }
+
+        protected override void OnLoad()
+        {
+            if (Foreground != null)
+            {
+                Foreground.Changed += OnForegroundChanged;
+            }
+
+            renderQueue.InvokeAsync(() => ContentElement.HtmlElement.SetHtmlForeground(Foreground, converter));
+        }
+
+        protected override void OnUnload()
+        {
+            if (Foreground != null)
+            {
+                Foreground.Changed -= OnForegroundChanged;
+            }
         }
     }
 }

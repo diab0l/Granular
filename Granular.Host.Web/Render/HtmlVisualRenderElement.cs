@@ -26,7 +26,7 @@ namespace Granular.Host.Render
                     return;
                 }
 
-                if (background != null)
+                if (IsLoaded && background != null)
                 {
                     background.Changed -= OnBackgroundChanged;
                 }
@@ -38,7 +38,7 @@ namespace Granular.Host.Render
                     HtmlElement.SetHtmlIsHitTestVisible(IsHitTestVisible && background != null);
                 });
 
-                if (background != null)
+                if (IsLoaded && background != null)
                 {
                     background.Changed += OnBackgroundChanged;
                 }
@@ -170,6 +170,32 @@ namespace Granular.Host.Render
         private void OnBackgroundChanged(object sender, EventArgs e)
         {
             renderQueue.InvokeAsync(() => HtmlElement.SetHtmlBackground(background, new Rect(Bounds.Size), converter));
+        }
+
+        protected override void OnLoad()
+        {
+            base.OnLoad();
+
+            if (Background != null)
+            {
+                Background.Changed += OnBackgroundChanged;
+            }
+
+            renderQueue.InvokeAsync(() =>
+            {
+                HtmlElement.SetHtmlBackground(Background, new Rect(Bounds.Size), converter);
+                HtmlElement.SetHtmlIsHitTestVisible(IsHitTestVisible && Background != null);
+            });
+        }
+
+        protected override void OnUnload()
+        {
+            base.OnUnload();
+
+            if (Background != null)
+            {
+                Background.Changed -= OnBackgroundChanged;
+            }
         }
 
         private static string GetElementTagName(object target)

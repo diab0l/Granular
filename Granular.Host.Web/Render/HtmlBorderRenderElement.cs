@@ -20,7 +20,7 @@ namespace Granular.Host.Render
                     return;
                 }
 
-                if (background != null)
+                if (IsLoaded && background != null)
                 {
                     background.Changed -= OnBackgroundChanged;
                 }
@@ -32,7 +32,7 @@ namespace Granular.Host.Render
                     SetIsHitTestVisible();
                 });
 
-                if (background != null)
+                if (IsLoaded && background != null)
                 {
                     background.Changed += OnBackgroundChanged;
                 }
@@ -72,7 +72,7 @@ namespace Granular.Host.Render
                     return;
                 }
 
-                if (borderBrush != null)
+                if (IsLoaded && borderBrush != null)
                 {
                     borderBrush.Changed -= OnBorderBrushChanged;
                 }
@@ -80,7 +80,7 @@ namespace Granular.Host.Render
                 borderBrush = value;
                 renderQueue.InvokeAsync(SetBorderBrush);
 
-                if (borderBrush != null)
+                if (IsLoaded && borderBrush != null)
                 {
                     borderBrush.Changed += OnBorderBrushChanged;
                 }
@@ -201,6 +201,39 @@ namespace Granular.Host.Render
         private void SetIsHitTestVisible()
         {
             HtmlElement.SetHtmlIsHitTestVisible(IsHitTestVisible && Background != null);
+        }
+
+        protected override void OnLoad()
+        {
+            if (Background != null)
+            {
+                Background.Changed += OnBackgroundChanged;
+            }
+
+            if (BorderBrush != null)
+            {
+                BorderBrush.Changed += OnBorderBrushChanged;
+            }
+
+            renderQueue.InvokeAsync(() =>
+            {
+                SetBackground();
+                SetBorderBrush();
+                SetIsHitTestVisible();
+            });
+        }
+
+        protected override void OnUnload()
+        {
+            if (BorderBrush != null)
+            {
+                BorderBrush.Changed -= OnBorderBrushChanged;
+            }
+
+            if (Background != null)
+            {
+                Background.Changed -= OnBackgroundChanged;
+            }
         }
     }
 }
