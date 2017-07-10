@@ -13,10 +13,10 @@ namespace Granular.Host
     {
         public static readonly TextMeasurementService Default = new TextMeasurementService(HtmlValueConverter.Default);
 
-        private IHtmlValueConverter converter;
+        private HtmlValueConverter converter;
         private HTMLElement htmlElement;
 
-        private TextMeasurementService(IHtmlValueConverter converter)
+        private TextMeasurementService(HtmlValueConverter converter)
         {
             this.converter = converter;
         }

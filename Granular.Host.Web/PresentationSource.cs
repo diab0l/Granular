@@ -55,7 +55,7 @@ namespace Granular.Host
             set { Bridge.Html5.Window.Document.Title = value; }
         }
 
-        private IHtmlValueConverter converter;
+        private HtmlValueConverter converter;
 
         private Bridge.Html5.WindowInstance window;
 
@@ -66,7 +66,7 @@ namespace Granular.Host
         private bool keyDownHandled;
         private bool keyUpHandled;
 
-        public PresentationSource(UIElement rootElement, IHtmlValueConverter converter)
+        public PresentationSource(UIElement rootElement, HtmlValueConverter converter)
         {
             this.RootElement = rootElement;
             this.converter = converter;

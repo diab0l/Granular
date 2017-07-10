@@ -14,7 +14,7 @@ namespace Granular.Host.Tests.Web
         [TestMethod]
         public void HtmlValueConverterBasicTest()
         {
-            IHtmlValueConverter converter = HtmlValueConverter.Default;
+            HtmlValueConverter converter = new HtmlValueConverter();
 
             Assert.AreEqual("1.23px", converter.ToPixelString(1.234));
             Assert.AreEqual("123.46%", converter.ToPercentString(1.23456));
@@ -42,7 +42,7 @@ namespace Granular.Host.Tests.Web
         [TestMethod]
         public void HtmlValueConverterLinearGradientTest()
         {
-            IHtmlValueConverter converter = HtmlValueConverter.Default;
+            HtmlValueConverter converter = new HtmlValueConverter();
 
             LinearGradientBrush brush = new LinearGradientBrush(new Point(0.1, 0.8), new Point(0.8, 0.1), Colors.Red, Colors.Blue);
 

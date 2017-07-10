@@ -35,7 +35,7 @@ namespace Granular.Host
             element.Style.RemoveProperty(key);
         }
 
-        public static void SetHtmlBackground(this HTMLElement element, Brush background, Rect targetRect, IHtmlValueConverter converter)
+        public static void SetHtmlBackground(this HTMLElement element, Brush background, Rect targetRect, HtmlValueConverter converter)
         {
             element.ClearHtmlStyleProperty("background-color");
             element.ClearHtmlStyleProperty("background-image");
@@ -50,7 +50,7 @@ namespace Granular.Host
             }
         }
 
-        public static void SetHtmlBackgroundLocation(this HTMLElement element, Point location, IHtmlValueConverter converter)
+        public static void SetHtmlBackgroundLocation(this HTMLElement element, Point location, HtmlValueConverter converter)
         {
             if (Point.IsNullOrEmpty(location))
             {
@@ -62,7 +62,7 @@ namespace Granular.Host
             }
         }
 
-        public static void SetHtmlBackgroundSize(this HTMLElement element, Size size, IHtmlValueConverter converter)
+        public static void SetHtmlBackgroundSize(this HTMLElement element, Size size, HtmlValueConverter converter)
         {
             if (Size.IsNullOrEmpty(size))
             {
@@ -74,13 +74,13 @@ namespace Granular.Host
             }
         }
 
-        public static void SetHtmlBackgroundBounds(this HTMLElement element, Rect bounds, IHtmlValueConverter converter)
+        public static void SetHtmlBackgroundBounds(this HTMLElement element, Rect bounds, HtmlValueConverter converter)
         {
             element.SetHtmlBackgroundLocation(bounds.Location, converter);
             element.SetHtmlBackgroundSize(bounds.Size, converter);
         }
 
-        public static void SetHtmlBorderThickness(this HTMLElement element, Thickness borderThickness, IHtmlValueConverter converter)
+        public static void SetHtmlBorderThickness(this HTMLElement element, Thickness borderThickness, HtmlValueConverter converter)
         {
             if (borderThickness == Thickness.Zero)
             {
@@ -96,7 +96,7 @@ namespace Granular.Host
             }
         }
 
-        public static void SetHtmlBorderBrush(this HTMLElement element, Brush borderBrush, Size targetSize, IHtmlValueConverter converter)
+        public static void SetHtmlBorderBrush(this HTMLElement element, Brush borderBrush, Size targetSize, HtmlValueConverter converter)
         {
             element.ClearHtmlStyleProperty("border-color");
             element.ClearHtmlStyleProperty("border-image-source");
@@ -111,20 +111,20 @@ namespace Granular.Host
             }
         }
 
-        public static void SetHtmlBounds(this HTMLElement element, Rect bounds, IHtmlValueConverter converter)
+        public static void SetHtmlBounds(this HTMLElement element, Rect bounds, HtmlValueConverter converter)
         {
             element.SetHtmlLocation(bounds.Location, converter);
             element.SetHtmlSize(bounds.Size, converter);
         }
 
-        public static void SetHtmlLocation(this HTMLElement element, Point location, IHtmlValueConverter converter)
+        public static void SetHtmlLocation(this HTMLElement element, Point location, HtmlValueConverter converter)
         {
             element.SetHtmlStyleProperty("position", "absolute");
             element.SetHtmlStyleProperty("left", converter.ToPixelString(location.X));
             element.SetHtmlStyleProperty("top", converter.ToPixelString(location.Y));
         }
 
-        public static void SetHtmlSize(this HTMLElement element, Size size, IHtmlValueConverter converter)
+        public static void SetHtmlSize(this HTMLElement element, Size size, HtmlValueConverter converter)
         {
             if (size.Width.IsNaN())
             {
@@ -167,7 +167,7 @@ namespace Granular.Host
             }
         }
 
-        public static void SetHtmlCornerRadius(this HTMLElement element, CornerRadius cornerRadius, IHtmlValueConverter converter)
+        public static void SetHtmlCornerRadius(this HTMLElement element, CornerRadius cornerRadius, HtmlValueConverter converter)
         {
             element.ClearHtmlStyleProperty("border-radius");
             element.ClearHtmlStyleProperty("border-top-left-radius");
@@ -191,7 +191,7 @@ namespace Granular.Host
             }
         }
 
-        public static void SetHtmlForeground(this HTMLElement element, Brush foreground, IHtmlValueConverter converter)
+        public static void SetHtmlForeground(this HTMLElement element, Brush foreground, HtmlValueConverter converter)
         {
             if (foreground == null)
             {
@@ -207,7 +207,7 @@ namespace Granular.Host
             }
         }
 
-        public static void SetHtmlOpacity(this HTMLElement element, double opacity, IHtmlValueConverter converter)
+        public static void SetHtmlOpacity(this HTMLElement element, double opacity, HtmlValueConverter converter)
         {
             if (opacity == 1.0)
             {
@@ -219,7 +219,7 @@ namespace Granular.Host
             }
         }
 
-        public static void SetHtmlTransform(this HTMLElement element, Matrix transform, IHtmlValueConverter converter)
+        public static void SetHtmlTransform(this HTMLElement element, Matrix transform, HtmlValueConverter converter)
         {
             if (transform == Matrix.Identity)
             {
@@ -233,7 +233,7 @@ namespace Granular.Host
             }
         }
 
-        public static void SetHtmlFontFamily(this HTMLElement element, FontFamily fontFamily, IHtmlValueConverter converter)
+        public static void SetHtmlFontFamily(this HTMLElement element, FontFamily fontFamily, HtmlValueConverter converter)
         {
             if (!fontFamily.FamilyNames.Any())
             {
@@ -245,7 +245,7 @@ namespace Granular.Host
             }
         }
 
-        public static void SetHtmlFontSize(this HTMLElement element, double fontSize, IHtmlValueConverter converter)
+        public static void SetHtmlFontSize(this HTMLElement element, double fontSize, HtmlValueConverter converter)
         {
             if (fontSize.IsNaN())
             {
@@ -257,7 +257,7 @@ namespace Granular.Host
             }
         }
 
-        public static void SetHtmlFontStyle(this HTMLElement element, System.Windows.FontStyle fontStyle, IHtmlValueConverter converter)
+        public static void SetHtmlFontStyle(this HTMLElement element, System.Windows.FontStyle fontStyle, HtmlValueConverter converter)
         {
             if (fontStyle == System.Windows.FontStyle.Normal)
             {
@@ -269,7 +269,7 @@ namespace Granular.Host
             }
         }
 
-        public static void SetHtmlFontWeight(this HTMLElement element, FontWeight fontWeight, IHtmlValueConverter converter)
+        public static void SetHtmlFontWeight(this HTMLElement element, FontWeight fontWeight, HtmlValueConverter converter)
         {
             if (fontWeight == FontWeight.Normal)
             {
@@ -281,7 +281,7 @@ namespace Granular.Host
             }
         }
 
-        public static void SetHtmlFontStretch(this HTMLElement element, System.Windows.FontStretch fontStretch, IHtmlValueConverter converter)
+        public static void SetHtmlFontStretch(this HTMLElement element, System.Windows.FontStretch fontStretch, HtmlValueConverter converter)
         {
             if (fontStretch == System.Windows.FontStretch.Normal)
             {
@@ -293,7 +293,7 @@ namespace Granular.Host
             }
         }
 
-        public static void SetHtmlTextAlignment(this HTMLElement element, TextAlignment textAlignment, IHtmlValueConverter converter)
+        public static void SetHtmlTextAlignment(this HTMLElement element, TextAlignment textAlignment, HtmlValueConverter converter)
         {
             element.SetHtmlStyleProperty("text-align", converter.ToTextAlignmentString(textAlignment));
         }
@@ -310,22 +310,22 @@ namespace Granular.Host
             }
         }
 
-        public static void SetHtmlTextWrapping(this HTMLElement element, TextWrapping textWrapping, IHtmlValueConverter converter)
+        public static void SetHtmlTextWrapping(this HTMLElement element, TextWrapping textWrapping, HtmlValueConverter converter)
         {
             element.SetHtmlStyleProperty("white-space", converter.ToWhiteSpaceString(textWrapping));
         }
 
-        public static void SetHtmlHorizontalScrollBarVisibility(this HTMLElement element, ScrollBarVisibility scrollBarVisibility, IHtmlValueConverter converter)
+        public static void SetHtmlHorizontalScrollBarVisibility(this HTMLElement element, ScrollBarVisibility scrollBarVisibility, HtmlValueConverter converter)
         {
             element.SetHtmlStyleProperty("overflow-x", converter.ToOverflowString(scrollBarVisibility));
         }
 
-        public static void SetHtmlVerticalScrollBarVisibility(this HTMLElement element, ScrollBarVisibility scrollBarVisibility, IHtmlValueConverter converter)
+        public static void SetHtmlVerticalScrollBarVisibility(this HTMLElement element, ScrollBarVisibility scrollBarVisibility, HtmlValueConverter converter)
         {
             element.SetHtmlStyleProperty("overflow-y", converter.ToOverflowString(scrollBarVisibility));
         }
 
-        public static void SetHtmlBackgroundImage(this HTMLElement element, ImageSource imageSource, IHtmlValueConverter converter)
+        public static void SetHtmlBackgroundImage(this HTMLElement element, ImageSource imageSource, HtmlValueConverter converter)
         {
             if (imageSource == null)
             {

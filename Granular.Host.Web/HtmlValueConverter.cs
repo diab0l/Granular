@@ -10,69 +10,7 @@ using Granular.Extensions;
 
 namespace Granular.Host
 {
-    public interface IHtmlValueConverter
-    {
-        string ToPixelString(double value);
-        string ToPercentString(double value);
-        string ToDegreesString(double value);
-        string ToImplicitValueString(double value);
-        string ToPixelString(Point point);
-        string ToPercentString(Point point);
-        string ToImplicitValueString(Point point);
-        string ToPixelString(Size size);
-        string ToColorString(Color color);
-        string ToPixelString(Thickness thickness);
-        string ToImplicitValueString(Thickness thickness);
-        string ToUrlString(string url);
-        string ToLinearGradientString(LinearGradientBrush brush, Rect targetRect);
-        string ToRadialGradientString(RadialGradientBrush brush);
-        string ToColorStopsString(IEnumerable<GradientStop> gradientStops);
-        string ToColorString(SolidColorBrush brush);
-        string ToImageString(LinearGradientBrush brush, Rect targetRect);
-        string ToImageString(RadialGradientBrush brush);
-        string ToImageString(ImageBrush brush);
-        string ToFontStyleString(FontStyle fontStyle);
-        string ToFontStretchString(FontStretch fontStretch);
-        string ToFontWeightString(FontWeight fontWeight);
-        string ToTextAlignmentString(TextAlignment textAlignment);
-        string ToOverflowString(ScrollBarVisibility scrollBarVisibility);
-        string ToHtmlContentString(string value);
-        string ToWrapString(TextWrapping textWrapping);
-        string ToWhiteSpaceString(TextWrapping textWrapping);
-        string ToFontFamilyNamesString(FontFamily fontFamily);
-        string ToBooleanString(bool value);
-        string ToMimeTypeString(RenderImageType renderImageType);
-        string ToCursorString(Cursor cursor);
-        string ToTransformString(Matrix matrix);
-
-        MouseButton ConvertBackMouseButton(int buttonIndex);
-        Key ConvertBackKey(int keyCode, int location);
-    }
-
-    public static class HtmlValueConverterExtensions
-    {
-        public static string ToImageString(this IHtmlValueConverter converter, Brush brush, Rect targetRect)
-        {
-            if (brush is LinearGradientBrush)
-            {
-                return converter.ToImageString((LinearGradientBrush)brush, targetRect);
-            }
-
-            if (brush is RadialGradientBrush)
-            {
-                return converter.ToImageString((RadialGradientBrush)brush);
-            }
-
-            if (brush is ImageBrush)
-            {
-                return converter.ToImageString((ImageBrush)brush);
-            }
-
-            throw new Granular.Exception("Unexpected brush type \"{0}\"", brush.GetType());
-        }
-    }
-
-    public class HtmlValueConverter : IHtmlValueConverter
+    public class HtmlValueConverter
     {
         public static readonly HtmlValueConverter Default = new HtmlValueConverter();
 
@@ -589,6 +527,29 @@ namespace Granular.Host
             }
 
             return Key.None;
+        }
+    }
+
+    public static class HtmlValueConverterExtensions
+    {
+        public static string ToImageString(this HtmlValueConverter converter, Brush brush, Rect targetRect)
+        {
+            if (brush is LinearGradientBrush)
+            {
+                return converter.ToImageString((LinearGradientBrush)brush, targetRect);
+            }
+
+            if (brush is RadialGradientBrush)
+            {
+                return converter.ToImageString((RadialGradientBrush)brush);
+            }
+
+            if (brush is ImageBrush)
+            {
+                return converter.ToImageString((ImageBrush)brush);
+            }
+
+            throw new Granular.Exception("Unexpected brush type \"{0}\"", brush.GetType());
         }
     }
 }

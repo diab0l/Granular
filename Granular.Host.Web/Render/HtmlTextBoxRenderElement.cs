@@ -420,10 +420,10 @@ namespace Granular.Host.Render
         public bool AcceptsTab { get; set; }
 
         private RenderQueue renderQueue;
-        private IHtmlValueConverter converter;
+        private HtmlValueConverter converter;
         private bool isFocused;
 
-        public HtmlTextBoxRenderElement(RenderQueue renderQueue, IHtmlValueConverter converter)
+        public HtmlTextBoxRenderElement(RenderQueue renderQueue, HtmlValueConverter converter)
         {
             this.renderQueue = renderQueue;
             this.converter = converter;

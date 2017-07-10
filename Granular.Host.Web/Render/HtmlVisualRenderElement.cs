@@ -146,9 +146,9 @@ namespace Granular.Host.Render
         }
 
         private RenderQueue renderQueue;
-        private IHtmlValueConverter converter;
+        private HtmlValueConverter converter;
 
-        public HtmlVisualRenderElement(object owner, RenderQueue renderQueue, IHtmlValueConverter converter) :
+        public HtmlVisualRenderElement(object owner, RenderQueue renderQueue, HtmlValueConverter converter) :
             base(CreateHtmlElement(owner), renderQueue)
         {
             this.renderQueue = renderQueue;

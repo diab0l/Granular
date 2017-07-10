@@ -32,10 +32,10 @@ namespace Granular.Host
             }
         }
 
-        private IHtmlValueConverter converter;
+        private HtmlValueConverter converter;
         private CacheDictionary<string, string> objectUrlCache;
 
-        private RenderImageSourceFactory(IHtmlValueConverter converter)
+        private RenderImageSourceFactory(HtmlValueConverter converter)
         {
             this.converter = converter;
             objectUrlCache = CacheDictionary<string, string>.CreateUsingStringKeys(ResolveObjectUrl);
