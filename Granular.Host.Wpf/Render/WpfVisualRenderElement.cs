@@ -3,10 +3,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Windows;
+using Granular.Extensions;
 
 namespace Granular.Host.Wpf.Render
 {
-    public class WpfVisualRenderElement : System.Windows.Media.IVisualRenderElement, IWpfRenderElement
+    public class WpfVisualRenderElement : WpfContainerRenderElement, System.Windows.Media.IVisualRenderElement
     {
         private System.Windows.Media.Brush background;
         public System.Windows.Media.Brush Background
@@ -93,36 +95,34 @@ namespace Granular.Host.Wpf.Render
             }
         }
 
-        private List<object> children;
-        public IEnumerable<object> Children { get { return children; } }
-
-        public wpf::System.Windows.FrameworkElement WpfElement { get { return container; } }
-
         private wpf::System.Windows.Controls.Canvas container;
         private IWpfValueConverter converter;
 
-        public WpfVisualRenderElement(object owner, IWpfValueConverter converter)
+        public WpfVisualRenderElement(object owner, IWpfValueConverter converter) :
+            this(CreateWpfElement(owner), converter)
         {
+            //
+        }
+
+        private WpfVisualRenderElement(wpf::System.Windows.Controls.Canvas container, IWpfValueConverter converter) :
+            base(container)
+        {
+            this.container = container;
             this.converter = converter;
-            children = new List<object>();
-            container = new wpf::System.Windows.Controls.Canvas { Name = owner.GetType().Name, DataContext = owner };
-        }
-
-        public void InsertChild(int index, object child)
-        {
-            children.Insert(index, child);
-            container.Children.Insert(index, ((IWpfRenderElement)child).WpfElement);
-        }
-
-        public void RemoveChild(object child)
-        {
-            children.Remove(child);
-            container.Children.Remove(((IWpfRenderElement)child).WpfElement);
         }
 
         private void OnBackgroundChanged(object sender, EventArgs e)
         {
             container.Background = converter.Convert(Background);
+        }
+
+        private static wpf::System.Windows.Controls.Canvas CreateWpfElement(object owner)
+        {
+            return new wpf::System.Windows.Controls.Canvas
+            {
+                Name = owner.GetType().Name,
+                DataContext = owner
+            };
         }
     }
 }

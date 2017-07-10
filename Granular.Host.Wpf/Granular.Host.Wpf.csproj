@@ -76,6 +76,7 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <Compile Include="Render\CommandQueue.cs" />
+    <Compile Include="Render\WpfContainerRenderElement.cs" />
     <Compile Include="Render\WpfImageRenderElement.cs" />
     <Compile Include="Render\WpfTextBoxRenderElement.cs" />
     <Compile Include="Render\WpfBorderRenderElement.cs" />
