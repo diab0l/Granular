@@ -42,16 +42,18 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="ElementExtensions.cs" />
+    <Compile Include="ImageElementContainer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="..\SharedAssemblyInfo.cs">
       <Link>Properties\SharedAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="RenderImageSource.cs" />
+    <Compile Include="EmbeddedResourceObjectFactory.cs" />
     <Compile Include="RenderQueue.cs" />
     <Compile Include="Render\HtmlContainerRenderElement.cs" />
     <Compile Include="Render\HtmlBrushRenderResource.cs" />
     <Compile Include="Render\HtmlGradientBrushRenderResource.cs" />
     <Compile Include="Render\HtmlImageRenderElement.cs" />
+    <Compile Include="Render\HtmlImageSourceRenderResource.cs" />
     <Compile Include="Render\HtmlLinearGradientBrushRenderResource.cs" />
     <Compile Include="Render\HtmlRadialGradientBrushRenderResource.cs" />
     <Compile Include="Render\HtmlRenderResource.cs" />

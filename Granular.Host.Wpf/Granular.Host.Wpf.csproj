@@ -92,7 +92,7 @@
     <Compile Include="Render\WpfVisualRenderElement.cs" />
     <Compile Include="WpfApplicationHost.cs" />
     <Compile Include="WpfPresentationSource.cs" />
-    <Compile Include="WpfRenderImageSource.cs" />
+    <Compile Include="Render\WpfImageSourceRenderResource.cs" />
     <Compile Include="WpfTaskScheduler.cs" />
     <Compile Include="WpfTextMeasurementService.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">

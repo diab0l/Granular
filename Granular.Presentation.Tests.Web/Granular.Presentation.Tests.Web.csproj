@@ -241,9 +241,6 @@
     <Compile Include="..\Granular.Presentation.Tests\Media\TestRenderElement.cs">
       <Link>Media\TestRenderElement.cs</Link>
     </Compile>
-    <Compile Include="..\Granular.Presentation.Tests\Media\TestRenderImageSource.cs">
-      <Link>Media\TestRenderImageSource.cs</Link>
-    </Compile>
     <Compile Include="..\Granular.Presentation.Tests\Media\VisualTest.cs">
       <Link>Media\VisualTest.cs</Link>
     </Compile>

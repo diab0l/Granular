@@ -134,6 +134,20 @@ namespace System.Windows.Media
         public ImageSource Source { get; set; }
     }
 
+    public class TestImageSourceRenderResource : IImageSourceRenderResource
+    {
+        public event EventHandler StateChanged { add { } remove { } }
+
+        public RenderImageState State { get; set; }
+
+        public Size Size { get; set; }
+
+        public void Initialize(Uri uri, Rect sourceRect)
+        {
+            //
+        }
+    }
+
     public class TestRenderElementFactory : IRenderElementFactory
     {
         public static readonly TestRenderElementFactory Default = new TestRenderElementFactory();
@@ -193,5 +207,9 @@ namespace System.Windows.Media
             throw new NotImplementedException();
         }
 
+        public IImageSourceRenderResource CreateImageSourceRenderResource()
+        {
+            return new TestImageSourceRenderResource();
+        }
     }
 }

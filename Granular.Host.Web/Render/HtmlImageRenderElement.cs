@@ -30,6 +30,7 @@ namespace Granular.Host.Render
             }
         }
 
+        private HtmlImageSourceRenderResource renderResource;
         private ImageSource source;
         public ImageSource Source
         {
@@ -42,19 +43,23 @@ namespace Granular.Host.Render
                 }
 
                 source = value;
+                renderResource = source != null ? (HtmlImageSourceRenderResource)source.GetRenderResource(factory) : null;
+
                 renderQueue.InvokeAsync(() =>
                 {
-                    HtmlElement.SetHtmlBackgroundImage(source, converter);
+                    HtmlElement.SetHtmlBackgroundImage(renderResource?.Url, converter, factory);
                     SetSourceRect();
                 });
             }
         }
 
+        private IRenderElementFactory factory;
         private RenderQueue renderQueue;
         private HtmlValueConverter converter;
 
-        public HtmlImageRenderElement(RenderQueue renderQueue, HtmlValueConverter converter)
+        public HtmlImageRenderElement(IRenderElementFactory factory, RenderQueue renderQueue, HtmlValueConverter converter)
         {
+            this.factory = factory;
             this.renderQueue = renderQueue;
             this.converter = converter;
 
@@ -65,21 +70,18 @@ namespace Granular.Host.Render
 
         private void SetSourceRect()
         {
-            if (Source == null || Bounds.IsNullOrEmpty() || Bounds.Size.Width == 0 || Bounds.Size.Height == 0)
+            if (renderResource == null || Bounds.IsNullOrEmpty() || Bounds.Size.Width == 0 || Bounds.Size.Height == 0)
             {
                 return;
             }
 
-            Rect sourceRect = ((RenderImageSource)Source.RenderImageSource).SourceRect;
-            Size imageSize = ((RenderImageSource)Source.RenderImageSource).ImageSize;
-
-            if (!sourceRect.IsNullOrEmpty())
+            if (!renderResource.SourceRect.IsNullOrEmpty())
             {
-                double widthFactor = Bounds.Size.Width / sourceRect.Width;
-                double heightFactor = Bounds.Size.Height / sourceRect.Height;
+                double widthFactor = Bounds.Size.Width / renderResource.SourceRect.Width;
+                double heightFactor = Bounds.Size.Height / renderResource.SourceRect.Height;
 
-                Point location = new Point(-sourceRect.Left * widthFactor, -sourceRect.Top * heightFactor);
-                Size size = new Size(imageSize.Width * widthFactor, imageSize.Height * heightFactor);
+                Point location = new Point(-renderResource.SourceRect.Left * widthFactor, -renderResource.SourceRect.Top * heightFactor);
+                Size size = new Size(renderResource.ImageSize.Width * widthFactor, renderResource.ImageSize.Height * heightFactor);
 
                 HtmlElement.SetHtmlBackgroundBounds(new Rect(location, size), converter);
             }

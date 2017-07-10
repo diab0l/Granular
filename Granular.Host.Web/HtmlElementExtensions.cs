@@ -35,7 +35,7 @@ namespace Granular.Host
             element.Style.RemoveProperty(key);
         }
 
-        public static void SetHtmlBackground(this HTMLElement element, Brush background, Rect targetRect, HtmlValueConverter converter)
+        public static void SetHtmlBackground(this HTMLElement element, Brush background, Rect targetRect, IRenderElementFactory factory, HtmlValueConverter converter)
         {
             element.ClearHtmlStyleProperty("background-color");
             element.ClearHtmlStyleProperty("background-image");
@@ -46,7 +46,7 @@ namespace Granular.Host
             }
             else if (background != null)
             {
-                element.SetHtmlStyleProperty("background-image", converter.ToImageString(background, targetRect));
+                element.SetHtmlStyleProperty("background-image", converter.ToImageString(background, targetRect, factory));
             }
         }
 
@@ -96,7 +96,7 @@ namespace Granular.Host
             }
         }
 
-        public static void SetHtmlBorderBrush(this HTMLElement element, Brush borderBrush, Size targetSize, HtmlValueConverter converter)
+        public static void SetHtmlBorderBrush(this HTMLElement element, Brush borderBrush, Size targetSize, IRenderElementFactory factory, HtmlValueConverter converter)
         {
             element.ClearHtmlStyleProperty("border-color");
             element.ClearHtmlStyleProperty("border-image-source");
@@ -107,7 +107,7 @@ namespace Granular.Host
             }
             else if (borderBrush != null)
             {
-                element.SetHtmlStyleProperty("border-image-source", converter.ToImageString(borderBrush, new Rect(targetSize)));
+                element.SetHtmlStyleProperty("border-image-source", converter.ToImageString(borderBrush, new Rect(targetSize), factory));
             }
         }
 
@@ -325,15 +325,15 @@ namespace Granular.Host
             element.SetHtmlStyleProperty("overflow-y", converter.ToOverflowString(scrollBarVisibility));
         }
 
-        public static void SetHtmlBackgroundImage(this HTMLElement element, ImageSource imageSource, HtmlValueConverter converter)
+        public static void SetHtmlBackgroundImage(this HTMLElement element, string url, HtmlValueConverter converter, IRenderElementFactory factory)
         {
-            if (imageSource == null)
+            if (url.IsNullOrEmpty())
             {
                 element.ClearHtmlStyleProperty("background-image");
             }
             else
             {
-                element.SetHtmlStyleProperty("background-image", converter.ToUrlString(((RenderImageSource)imageSource.RenderImageSource).Url));
+                element.SetHtmlStyleProperty("background-image", converter.ToUrlString(url));
             }
         }
     }

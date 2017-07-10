@@ -140,11 +140,13 @@ namespace Granular.Host.Render
             }
         }
 
+        private IRenderElementFactory factory;
         private RenderQueue renderQueue;
         private HtmlValueConverter converter;
 
-        public HtmlBorderRenderElement(RenderQueue renderQueue, HtmlValueConverter converter)
+        public HtmlBorderRenderElement(IRenderElementFactory factory, RenderQueue renderQueue, HtmlValueConverter converter)
         {
+            this.factory = factory;
             this.renderQueue = renderQueue;
             this.converter = converter;
 
@@ -173,12 +175,12 @@ namespace Granular.Host.Render
 
         private void SetBackground()
         {
-            HtmlElement.SetHtmlBackground(background, new Rect(BorderThickness.Location, (Bounds.Size - BorderThickness.Size).Max(Size.Zero)), converter);
+            HtmlElement.SetHtmlBackground(background, new Rect(BorderThickness.Location, (Bounds.Size - BorderThickness.Size).Max(Size.Zero)), factory, converter);
         }
 
         private void SetBorderBrush()
         {
-            HtmlElement.SetHtmlBorderBrush(BorderBrush, Bounds.Size, converter);
+            HtmlElement.SetHtmlBorderBrush(BorderBrush, Bounds.Size, factory, converter);
         }
 
         private void SetBounds()

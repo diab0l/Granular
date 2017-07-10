@@ -32,9 +32,10 @@ namespace Granular.Host.Render
                 }
 
                 background = value;
+
                 renderQueue.InvokeAsync(() =>
                 {
-                    HtmlElement.SetHtmlBackground(background, new Rect(Bounds.Size), converter);
+                    HtmlElement.SetHtmlBackground(background, new Rect(Bounds.Size), factory, converter);
                     HtmlElement.SetHtmlIsHitTestVisible(IsHitTestVisible && background != null);
                 });
 
@@ -60,7 +61,7 @@ namespace Granular.Host.Render
                 renderQueue.InvokeAsync(() =>
                 {
                     HtmlElement.SetHtmlBounds(bounds, converter);
-                    HtmlElement.SetHtmlBackground(background, new Rect(Bounds.Size), converter);
+                    HtmlElement.SetHtmlBackground(background, new Rect(Bounds.Size), factory, converter);
                 });
             }
         }
@@ -145,12 +146,14 @@ namespace Granular.Host.Render
             }
         }
 
+        private IRenderElementFactory factory;
         private RenderQueue renderQueue;
         private HtmlValueConverter converter;
 
-        public HtmlVisualRenderElement(object owner, RenderQueue renderQueue, HtmlValueConverter converter) :
+        public HtmlVisualRenderElement(object owner, IRenderElementFactory factory, RenderQueue renderQueue, HtmlValueConverter converter) :
             base(CreateHtmlElement(owner), renderQueue)
         {
+            this.factory = factory;
             this.renderQueue = renderQueue;
             this.converter = converter;
 
@@ -169,7 +172,7 @@ namespace Granular.Host.Render
 
         private void OnBackgroundChanged(object sender, EventArgs e)
         {
-            renderQueue.InvokeAsync(() => HtmlElement.SetHtmlBackground(background, new Rect(Bounds.Size), converter));
+            renderQueue.InvokeAsync(() => HtmlElement.SetHtmlBackground(background, new Rect(Bounds.Size), factory, converter));
         }
 
         protected override void OnLoad()
@@ -183,7 +186,7 @@ namespace Granular.Host.Render
 
             renderQueue.InvokeAsync(() =>
             {
-                HtmlElement.SetHtmlBackground(Background, new Rect(Bounds.Size), converter);
+                HtmlElement.SetHtmlBackground(Background, new Rect(Bounds.Size), factory, converter);
                 HtmlElement.SetHtmlIsHitTestVisible(IsHitTestVisible && Background != null);
             });
         }

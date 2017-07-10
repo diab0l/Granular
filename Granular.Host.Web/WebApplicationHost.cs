@@ -16,21 +16,20 @@ namespace Granular.Host
 
         public ITextMeasurementService TextMeasurementService { get; private set; }
 
-        public IRenderImageSourceFactory RenderImageSourceFactory { get; private set; }
-
         public WebApplicationHost()
         {
             RenderQueue renderQueue = new RenderQueue();
             HtmlValueConverter htmlValueConverter = new HtmlValueConverter();
             SvgValueConverter svgValueConverter = new SvgValueConverter();
             SvgDefinitionContainer svgDefinitionContainer = new SvgDefinitionContainer(renderQueue);
+            ImageElementContainer imageElementContainer = new ImageElementContainer();
+            EmbeddedResourceObjectFactory embeddedResourceObjectFactory = new EmbeddedResourceObjectFactory(htmlValueConverter);
 
-            HtmlRenderElementFactory htmlRenderElementFactory = new HtmlRenderElementFactory(renderQueue, htmlValueConverter, svgValueConverter, svgDefinitionContainer);
+            HtmlRenderElementFactory htmlRenderElementFactory = new HtmlRenderElementFactory(renderQueue, htmlValueConverter, imageElementContainer, embeddedResourceObjectFactory, svgValueConverter, svgDefinitionContainer);
 
-            PresentationSourceFactory = new PresentationSourceFactory(htmlRenderElementFactory, htmlValueConverter, svgDefinitionContainer);
+            PresentationSourceFactory = new PresentationSourceFactory(htmlRenderElementFactory, htmlValueConverter, imageElementContainer, svgDefinitionContainer);
             TaskScheduler = new TaskScheduler();
             TextMeasurementService = new TextMeasurementService(htmlValueConverter);
-            RenderImageSourceFactory = new RenderImageSourceFactory(htmlValueConverter);
         }
 
         public void Run(Action applicationEntryPoint)

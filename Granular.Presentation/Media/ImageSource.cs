@@ -11,22 +11,45 @@ namespace System.Windows.Media
     [TypeConverter(typeof(ImageSourceTypeConverter))]
     public abstract class ImageSource : Animatable
     {
-        public abstract IRenderImageSource RenderImageSource { get; }
+        public Size Size { get { return renderResource != null ? renderResource.Size : Size.Empty; } }
+        public double Width { get { return Size.Width; } }
+        public double Height { get { return Size.Width; } }
 
-        public Size Size { get { return RenderImageSource != null ? RenderImageSource.Size : Size.Empty; } }
+        private IImageSourceRenderResource renderResource;
+
+        public object GetRenderResource(IRenderElementFactory factory)
+        {
+            if (renderResource == null)
+            {
+                object resource = CreateRenderResource(factory);
+                OnRenderResourceCreated(resource);
+
+                if (renderResource == null)
+                {
+                    throw new Granular.Exception("base.OnRenderResourceCreated was not called for \"{0}\"", GetType().Name);
+                }
+            }
+
+            return renderResource;
+        }
+
+        protected abstract object CreateRenderResource(IRenderElementFactory factory);
+
+        protected virtual void OnRenderResourceCreated(object renderResource)
+        {
+            this.renderResource = (IImageSourceRenderResource)renderResource;
+        }
     }
 
     public class ImageSourceTypeConverter : ITypeConverter
     {
         public object ConvertFrom(XamlNamespaces namespaces, Uri sourceUri, object value)
         {
-            BitmapImage bitmapImage = new BitmapImage();
-            bitmapImage.BeginInit();
-            bitmapImage.BaseUri = sourceUri;
-            bitmapImage.UriSource = Granular.Compatibility.Uri.CreateRelativeOrAbsoluteUri((string)value);
-            bitmapImage.EndInit();
-
-            return bitmapImage;
+            return new BitmapImage
+            {
+                BaseUri = sourceUri,
+                UriSource = Granular.Compatibility.Uri.CreateRelativeOrAbsoluteUri((string)value),
+            };
         }
     }
 }

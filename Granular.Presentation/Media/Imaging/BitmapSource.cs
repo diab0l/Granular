@@ -7,7 +7,7 @@ using Granular.Extensions;
 namespace System.Windows.Media.Imaging
 {
     [Bridge.Reflectable(Bridge.MemberAccessibility.PublicInstanceProperty)]
-    public class BitmapSource : ImageSource
+    public abstract class BitmapSource : ImageSource
     {
         public event EventHandler DownloadProgress;
         public event EventHandler DownloadCompleted;
@@ -15,30 +15,28 @@ namespace System.Windows.Media.Imaging
 
         public bool IsDownloading { get; private set; }
 
-        private IRenderImageSource renderImageSource;
-        public override IRenderImageSource RenderImageSource { get { return renderImageSource; } }
-
         private RenderImageState renderImageState;
+        private IImageSourceRenderResource renderResource;
 
-        protected BitmapSource()
+        protected override void OnRenderResourceCreated(object renderResource)
         {
-            //
+            base.OnRenderResourceCreated(renderResource);
+
+            this.renderResource = (IImageSourceRenderResource)renderResource;
+            this.renderResource.StateChanged += (sender, e) => SetRenderImageState();
+
+            SetRenderImageState();
         }
 
-        private BitmapSource(IRenderImageSource renderImageSource)
+        private void SetRenderImageState()
         {
-            this.renderImageSource = renderImageSource;
-        }
-
-        protected void SetRenderImageState(RenderImageState renderImageState)
-        {
-            if (this.renderImageState == renderImageState)
+            if (this.renderImageState == renderResource.State)
             {
                 return;
             }
 
             RenderImageState oldRenderImageState = this.renderImageState;
-            this.renderImageState = renderImageState;
+            this.renderImageState = renderResource.State;
 
             if (oldRenderImageState != RenderImageState.Idle && oldRenderImageState != RenderImageState.DownloadProgress || renderImageState == RenderImageState.Idle)
             {
@@ -64,16 +62,6 @@ namespace System.Windows.Media.Imaging
 
                 default: throw new Granular.Exception("Unexpected DownloadState \"{0}\"", renderImageState);
             }
-        }
-
-        public static BitmapSource Create(byte[] data, Rect sourceRect = null)
-        {
-            return Create(RenderImageType.Unknown, data, sourceRect);
-        }
-
-        public static BitmapSource Create(RenderImageType imageType, byte[] data, Rect sourceRect = null)
-        {
-            return new BitmapSource(ApplicationHost.Current.RenderImageSourceFactory.CreateRenderImageSource(imageType, data, sourceRect));
         }
     }
 }

@@ -197,7 +197,6 @@
     <Compile Include="Media\ImageSource.cs" />
     <Compile Include="Media\Imaging\BitmapImage.cs" />
     <Compile Include="Media\Imaging\BitmapSource.cs" />
-    <Compile Include="Media\RenderImageSource.cs" />
     <Compile Include="Media\Stretch.cs" />
     <Compile Include="Media\Typeface.cs" />
     <Compile Include="MultiTrigger.cs" />

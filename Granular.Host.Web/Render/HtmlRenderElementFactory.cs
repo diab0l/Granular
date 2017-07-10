@@ -10,20 +10,24 @@ namespace Granular.Host.Render
     {
         private RenderQueue renderQueue;
         private HtmlValueConverter htmlValueConverter;
+        private ImageElementContainer imageElementContainer;
+        private EmbeddedResourceObjectFactory embeddedResourceObjectFactory;
         private SvgValueConverter svgValueConverter;
         private SvgDefinitionContainer svgDefinitionContainer;
 
-        public HtmlRenderElementFactory(RenderQueue renderQueue, HtmlValueConverter htmlValueConverter, SvgValueConverter svgValueConverter, SvgDefinitionContainer svgDefinitionContainer)
+        public HtmlRenderElementFactory(RenderQueue renderQueue, HtmlValueConverter htmlValueConverter, ImageElementContainer imageElementContainer, EmbeddedResourceObjectFactory embeddedResourceObjectFactory, SvgValueConverter svgValueConverter, SvgDefinitionContainer svgDefinitionContainer)
         {
             this.renderQueue = renderQueue;
             this.htmlValueConverter = htmlValueConverter;
+            this.imageElementContainer = imageElementContainer;
+            this.embeddedResourceObjectFactory = embeddedResourceObjectFactory;
             this.svgValueConverter = svgValueConverter;
             this.svgDefinitionContainer = svgDefinitionContainer;
         }
 
         public IVisualRenderElement CreateVisualRenderElement(object owner)
         {
-            return new HtmlVisualRenderElement(owner, renderQueue, htmlValueConverter);
+            return new HtmlVisualRenderElement(owner, this, renderQueue, htmlValueConverter);
         }
 
         public IDrawingRenderElement CreateDrawingRenderElement(object owner)
@@ -33,7 +37,7 @@ namespace Granular.Host.Render
 
         public ITextBoxRenderElement CreateTextBoxRenderElement(object owner)
         {
-            return new HtmlTextBoxRenderElement(renderQueue, htmlValueConverter);
+            return new HtmlTextBoxRenderElement(this, renderQueue, htmlValueConverter);
         }
 
         public ITextBlockRenderElement CreateTextBlockRenderElement(object owner)
@@ -43,12 +47,12 @@ namespace Granular.Host.Render
 
         public IBorderRenderElement CreateBorderRenderElement(object owner)
         {
-            return new HtmlBorderRenderElement(renderQueue, htmlValueConverter);
+            return new HtmlBorderRenderElement(this, renderQueue, htmlValueConverter);
         }
 
         public IImageRenderElement CreateImageRenderElement(object owner)
         {
-            return new HtmlImageRenderElement(renderQueue, htmlValueConverter);
+            return new HtmlImageRenderElement(this, renderQueue, htmlValueConverter);
         }
 
         public ISolidColorBrushRenderResource CreateSolidColorBrushRenderResource()
@@ -69,6 +73,11 @@ namespace Granular.Host.Render
         public IImageBrushRenderResource CreateImageBrushRenderResource()
         {
             throw new NotImplementedException();
+        }
+
+        public IImageSourceRenderResource CreateImageSourceRenderResource()
+        {
+            return new HtmlImageSourceRenderResource(embeddedResourceObjectFactory, imageElementContainer);
         }
     }
 }

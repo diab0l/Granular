@@ -16,13 +16,11 @@ namespace Granular.Presentation.Tests
         public IPresentationSourceFactory PresentationSourceFactory { get; set; }
         public ITaskScheduler TaskScheduler { get; set; }
         public ITextMeasurementService TextMeasurementService { get; set; }
-        public IRenderImageSourceFactory RenderImageSourceFactory { get; set; }
 
         public TestApplicationHost()
         {
             TaskScheduler = new TestTaskScheduler();
             TextMeasurementService = new TestTextMeasurementService();
-            RenderImageSourceFactory = new TestRenderImageSourceFactory();
         }
 
         public void Run(Action applicationEntryPoint)
@@ -36,19 +34,6 @@ namespace Granular.Presentation.Tests
         public Size Measure(string text, double fontSize, Typeface typeface, double maxWidth)
         {
             return text.IsNullOrEmpty() ? Size.Zero : new Size(text.Length * 5, 20);
-        }
-    }
-
-    public class TestRenderImageSourceFactory : IRenderImageSourceFactory
-    {
-        public IRenderImageSource CreateRenderImageSource(RenderImageType imageType, byte[] data, Rect sourceRect)
-        {
-            return new TestRenderImageSource();
-        }
-
-        public IRenderImageSource CreateRenderImageSource(Uri uri, Rect sourceRect)
-        {
-            return new TestRenderImageSource() { State = RenderImageState.DownloadProgress };
         }
     }
 

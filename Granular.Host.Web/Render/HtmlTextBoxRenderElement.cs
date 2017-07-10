@@ -419,12 +419,14 @@ namespace Granular.Host.Render
 
         public bool AcceptsTab { get; set; }
 
+        private IRenderElementFactory factory;
         private RenderQueue renderQueue;
         private HtmlValueConverter converter;
         private bool isFocused;
 
-        public HtmlTextBoxRenderElement(RenderQueue renderQueue, HtmlValueConverter converter)
+        public HtmlTextBoxRenderElement(IRenderElementFactory factory, RenderQueue renderQueue, HtmlValueConverter converter)
         {
+            this.factory = factory;
             this.renderQueue = renderQueue;
             this.converter = converter;
 
@@ -469,7 +471,7 @@ namespace Granular.Host.Render
             ContentElement.HtmlElement.SetHtmlStyleProperty("border", "0px solid transparent");
             ContentElement.HtmlElement.SetHtmlStyleProperty("outline", "1px solid transparent");
             ContentElement.HtmlElement.SetHtmlStyleProperty("cursor", "inherit");
-            ContentElement.HtmlElement.SetHtmlBackground(Brushes.Transparent, System.Windows.Rect.Zero, converter);
+            ContentElement.HtmlElement.SetHtmlBackground(Brushes.Transparent, System.Windows.Rect.Zero, factory, converter);
             ContentElement.HtmlElement.SetHtmlLocation(Point.Zero, converter);
 
             ContentElement.HtmlElement.SetHtmlSize(Bounds.Size, converter);

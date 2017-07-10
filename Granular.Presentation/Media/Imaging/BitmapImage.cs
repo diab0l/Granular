@@ -7,14 +7,6 @@ using Granular.Extensions;
 
 namespace System.Windows.Media.Imaging
 {
-    public enum BitmapCacheOption
-    {
-        OnDemand = 0,
-        Default = 0,
-        OnLoad = 1,
-        //None = 2,
-    }
-
     public class BitmapImage : BitmapSource, IUriContext, ISupportInitialize
     {
         public static readonly DependencyProperty UriSourceProperty = DependencyProperty.Register("UriSource", typeof(Uri), typeof(BitmapImage), new FrameworkPropertyMetadata(propertyChangedCallback: (sender, e) => ((BitmapImage)sender).OnUriSourceChanged(e)));
@@ -24,13 +16,6 @@ namespace System.Windows.Media.Imaging
             set { SetValue(UriSourceProperty, value); }
         }
 
-        public static readonly DependencyProperty CacheOptionProperty = DependencyProperty.Register("CacheOption", typeof(BitmapCacheOption), typeof(BitmapImage), new FrameworkPropertyMetadata());
-        public BitmapCacheOption CacheOption
-        {
-            get { return (BitmapCacheOption)GetValue(CacheOptionProperty); }
-            set { SetValue(CacheOptionProperty, value); }
-        }
-
         public static readonly DependencyProperty SourceRectProperty = DependencyProperty.Register("SourceRect", typeof(Rect), typeof(BitmapImage), new FrameworkPropertyMetadata(propertyChangedCallback: (sender, e) => ((BitmapImage)sender).OnSourceRectChanged(e)));
         public Rect SourceRect
         {
@@ -38,93 +23,63 @@ namespace System.Windows.Media.Imaging
             set { SetValue(SourceRectProperty, value); }
         }
 
-        private IRenderImageSource renderImageSource;
-        public override IRenderImageSource RenderImageSource
-        {
-            get
-            {
-                if (renderImageSource == null)
-                {
-                    CreateRenderImageSource();
-                }
-
-                return renderImageSource;
-            }
-        }
-
         public Uri BaseUri { get; set; }
 
-        private bool isInitializing;
+        private IImageSourceRenderResource renderResource;
+        private bool isInitialized;
 
-        public BitmapImage()
+        public void BeginInit()
         {
             //
         }
 
-        public BitmapImage(Uri uriSource, BitmapCacheOption cacheOption = BitmapCacheOption.Default)
-        {
-            BeginInit();
-            this.UriSource = uriSource;
-            this.CacheOption = cacheOption;
-            EndInit();
-        }
-
-        public void BeginInit()
-        {
-            if (isInitializing)
-            {
-                throw new Granular.Exception("BitmapImage is already initializing");
-            }
-
-            isInitializing = true;
-        }
-
         public void EndInit()
         {
-            if (!isInitializing)
+            //
+        }
+
+        protected override object CreateRenderResource(IRenderElementFactory factory)
+        {
+            return factory.CreateImageSourceRenderResource();
+        }
+
+        protected override void OnRenderResourceCreated(object renderResource)
+        {
+            base.OnRenderResourceCreated(renderResource);
+
+            this.renderResource = (IImageSourceRenderResource)renderResource;
+            InitializeRenderResource();
+        }
+
+        private void InitializeRenderResource()
+        {
+            if (isInitialized || renderResource == null || UriSource == null)
             {
                 return;
             }
 
-            if (CacheOption == BitmapCacheOption.OnLoad)
-            {
-                CreateRenderImageSource();
-            }
-
-            isInitializing = false;
+            renderResource.Initialize(UriSource.ResolveAbsoluteUri(BaseUri), SourceRect);
+            isInitialized = true;
         }
 
         private void OnUriSourceChanged(DependencyPropertyChangedEventArgs e)
         {
-            if (renderImageSource != null)
+            if (isInitialized)
             {
                 throw new Granular.Exception("UriSource cannot be changed after BitmapImage was initialized");
             }
 
-            if (!isInitializing && CacheOption == BitmapCacheOption.OnLoad)
-            {
-                CreateRenderImageSource();
-            }
+            InitializeRenderResource();
         }
 
         private void OnSourceRectChanged(DependencyPropertyChangedEventArgs e)
         {
-            if (renderImageSource != null)
+            if (isInitialized)
             {
-                throw new Granular.Exception("UriSource cannot be changed after BitmapImage was initialized");
-            }
-        }
-
-        private void CreateRenderImageSource()
-        {
-            if (renderImageSource != null || UriSource == null)
-            {
-                return;
+                throw new Granular.Exception("SourceRect cannot be changed after BitmapImage was initialized");
             }
 
-            renderImageSource = ApplicationHost.Current.RenderImageSourceFactory.CreateRenderImageSource(UriSource.ResolveAbsoluteUri(BaseUri), SourceRect);
-            renderImageSource.StateChanged += (sender, e) => SetRenderImageState(renderImageSource.State);
-            SetRenderImageState(renderImageSource.State);
+            InitializeRenderResource();
         }
     }
 }

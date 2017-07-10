@@ -174,9 +174,9 @@ namespace Granular.Host.Wpf.Render
             throw new Granular.Exception("Unexpected ScrollBarVisibility value \"{0}\"", scrollBarVisibility);
         }
 
-        public wpf::System.Windows.Media.ImageSource Convert(ImageSource source)
+        public wpf::System.Windows.Media.ImageSource Convert(ImageSource source, IRenderElementFactory factory)
         {
-            return ((WpfRenderImageSource)source.RenderImageSource).BitmapImage;
+            return ((WpfImageSourceRenderResource)source.GetRenderResource(factory)).BitmapImage;
         }
 
         public wpf::System.Windows.Input.Cursor Convert(Cursor cursor)

@@ -17,8 +17,6 @@ namespace Granular.Host.Wpf
 
         public ITextMeasurementService TextMeasurementService { get; private set; }
 
-        public IRenderImageSourceFactory RenderImageSourceFactory { get; private set; }
-
         public WpfApplicationHost()
         {
             WpfValueConverter wpfValueConverter = new WpfValueConverter();
@@ -26,7 +24,6 @@ namespace Granular.Host.Wpf
 
             PresentationSourceFactory = new WpfPresentationSourceFactory(wpfRenderElementFactory, wpfValueConverter);
             TaskScheduler = new WpfTaskScheduler();
-            RenderImageSourceFactory = new WpfRenderImageSourceFactory();
             TextMeasurementService = new WpfTextMeasurementService(wpfValueConverter);
 
             wpf::System.Windows.Application application = new wpf::System.Windows.Application();

@@ -16,12 +16,14 @@ namespace Granular.Host
         private List<PresentationSource> presentationSources;
         private HtmlRenderElementFactory htmlRenderElementFactory;
         private HtmlValueConverter htmlValueConverter;
+        private ImageElementContainer imageElementContainer;
         private SvgDefinitionContainer svgDefinitionContainer;
 
-        public PresentationSourceFactory(HtmlRenderElementFactory htmlRenderElementFactory, HtmlValueConverter htmlValueConverter, SvgDefinitionContainer svgDefinitionContainer)
+        public PresentationSourceFactory(HtmlRenderElementFactory htmlRenderElementFactory, HtmlValueConverter htmlValueConverter, ImageElementContainer imageElementContainer, SvgDefinitionContainer svgDefinitionContainer)
         {
             this.htmlRenderElementFactory = htmlRenderElementFactory;
             this.htmlValueConverter = htmlValueConverter;
+            this.imageElementContainer = imageElementContainer;
             this.svgDefinitionContainer = svgDefinitionContainer;
 
             presentationSources = new List<PresentationSource>();
@@ -29,7 +31,7 @@ namespace Granular.Host
 
         public IPresentationSource CreatePresentationSource(UIElement rootElement)
         {
-            PresentationSource presentationSource = new PresentationSource(rootElement, htmlRenderElementFactory, htmlValueConverter, svgDefinitionContainer);
+            PresentationSource presentationSource = new PresentationSource(rootElement, htmlRenderElementFactory, htmlValueConverter, imageElementContainer, svgDefinitionContainer);
             presentationSources.Add(presentationSource);
 
             return presentationSource;
@@ -72,7 +74,7 @@ namespace Granular.Host
         private bool keyDownHandled;
         private bool keyUpHandled;
 
-        public PresentationSource(UIElement rootElement, HtmlRenderElementFactory htmlRenderElementFactory, HtmlValueConverter converter, SvgDefinitionContainer svgDefinitionContainer)
+        public PresentationSource(UIElement rootElement, HtmlRenderElementFactory htmlRenderElementFactory, HtmlValueConverter converter, ImageElementContainer imageElementContainer, SvgDefinitionContainer svgDefinitionContainer)
         {
             this.RootElement = rootElement;
             this.converter = converter;
@@ -84,8 +86,8 @@ namespace Granular.Host
 
             window = Bridge.Html5.Window.Instance;
 
-            MouseDevice.CursorChanged += (sender, e) => Bridge.Html5.Window.Document.Body.SetHtmlStyleProperty("cursor", converter.ToCursorString(MouseDevice.Cursor));
-            Bridge.Html5.Window.Document.Body.SetHtmlStyleProperty("cursor", converter.ToCursorString(MouseDevice.Cursor));
+            MouseDevice.CursorChanged += (sender, e) => Bridge.Html5.Window.Document.Body.SetHtmlStyleProperty("cursor", converter.ToCursorString(MouseDevice.Cursor, htmlRenderElementFactory));
+            Bridge.Html5.Window.Document.Body.SetHtmlStyleProperty("cursor", converter.ToCursorString(MouseDevice.Cursor, htmlRenderElementFactory));
 
             Bridge.Html5.Window.OnKeyDown = OnKeyDown;
             Bridge.Html5.Window.OnKeyUp = OnKeyUp;
@@ -109,6 +111,7 @@ namespace Granular.Host
             renderElement.Load();
 
             Bridge.Html5.Window.Document.Body.Style.Overflow = Overflow.Hidden;
+            Bridge.Html5.Window.Document.Body.AppendChild(imageElementContainer.HtmlElement);
             Bridge.Html5.Window.Document.Body.AppendChild(svgDefinitionContainer.HtmlElement);
             Bridge.Html5.Window.Document.Body.AppendChild(renderElement.HtmlElement);
 

@@ -32,7 +32,7 @@ namespace Granular.Host.Wpf.Render
             set
             {
                 source = value;
-                image.Source = converter.Convert(source);
+                image.Source = converter.Convert(source, factory);
             }
         }
 
@@ -40,9 +40,11 @@ namespace Granular.Host.Wpf.Render
 
         private WpfValueConverter converter;
         private wpf::System.Windows.Controls.Image image;
+        private IRenderElementFactory factory;
 
-        public WpfImageRenderElement(WpfValueConverter converter)
+        public WpfImageRenderElement(IRenderElementFactory factory,  WpfValueConverter converter)
         {
+            this.factory = factory;
             this.converter = converter;
             image = new wpf::System.Windows.Controls.Image();
             image.Stretch = wpf::System.Windows.Media.Stretch.Fill;

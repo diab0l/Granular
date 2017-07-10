@@ -26,7 +26,6 @@ namespace System.Windows
         IPresentationSourceFactory PresentationSourceFactory { get; }
         ITaskScheduler TaskScheduler { get; }
         ITextMeasurementService TextMeasurementService { get; }
-        IRenderImageSourceFactory RenderImageSourceFactory { get; }
         void Run(Action applicationEntryPoint);
     }
 
@@ -48,12 +47,6 @@ namespace System.Windows
     public interface ITextMeasurementService
     {
         Size Measure(string text, double fontSize, Typeface typeface, double maxWidth);
-    }
-
-    public interface IRenderImageSourceFactory
-    {
-        IRenderImageSource CreateRenderImageSource(RenderImageType imageType, byte[] imageData, Rect sourceRect);
-        IRenderImageSource CreateRenderImageSource(Uri uri, Rect sourceRect);
     }
 
     public static class ApplicationHost

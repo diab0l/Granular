@@ -42,7 +42,7 @@ namespace Granular.Host.Wpf.Render
 
         public IImageRenderElement CreateImageRenderElement(object owner)
         {
-            return new WpfImageRenderElement(wpfValueConverter);
+            return new WpfImageRenderElement(this, wpfValueConverter);
         }
 
         public ISolidColorBrushRenderResource CreateSolidColorBrushRenderResource()
@@ -63,6 +63,11 @@ namespace Granular.Host.Wpf.Render
         public IImageBrushRenderResource CreateImageBrushRenderResource()
         {
             throw new NotImplementedException();
+        }
+
+        public IImageSourceRenderResource CreateImageSourceRenderResource()
+        {
+            return new WpfImageSourceRenderResource();
         }
     }
 }

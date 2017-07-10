@@ -157,6 +157,22 @@ namespace System.Windows.Media
         ImageSource ImageSource { get; set; }
     }
 
+    public enum RenderImageState
+    {
+        Idle,
+        DownloadProgress,
+        DownloadCompleted,
+        DownloadFailed
+    }
+
+    public interface IImageSourceRenderResource
+    {
+        event EventHandler StateChanged;
+        RenderImageState State { get; }
+        Size Size { get; }
+        void Initialize(Uri uri, Rect sourceRect);
+    }
+
     public interface IRenderElementFactory
     {
         IVisualRenderElement CreateVisualRenderElement(object owner);
@@ -169,6 +185,7 @@ namespace System.Windows.Media
         ILinearGradientBrushRenderResource CreateLinearGradientBrushRenderResource();
         IRadialGradientBrushRenderResource CreateRadialGradientBrushRenderResource();
         IImageBrushRenderResource CreateImageBrushRenderResource();
+        IImageSourceRenderResource CreateImageSourceRenderResource();
     }
 
     public static class ContainerRenderElementExtensions

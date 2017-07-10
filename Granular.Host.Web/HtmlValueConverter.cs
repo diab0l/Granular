@@ -7,6 +7,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using Granular.Extensions;
+using Granular.Host.Render;
 
 namespace Granular.Host
 {
@@ -152,9 +153,9 @@ namespace Granular.Host
             return ToRadialGradientString(brush);
         }
 
-        public string ToImageString(ImageBrush brush)
+        public string ToImageString(ImageBrush brush, IRenderElementFactory factory)
         {
-            return ToUrlString(((RenderImageSource)brush.ImageSource.RenderImageSource).Url);
+            return ((HtmlImageSourceRenderResource)brush.ImageSource.GetRenderResource(factory)).Url;
         }
 
         private static IEnumerable<GradientStop> ScaleGradientStops(IEnumerable<GradientStop> gradientStops, Point startPoint, Point endPoint, Size targetSize)
@@ -326,21 +327,20 @@ namespace Granular.Host
             return value ? "true" : "false";
         }
 
-        public string ToMimeTypeString(RenderImageType renderImageType)
+        public string ToMimeTypeString(string extension)
         {
-            switch (renderImageType)
+            switch (extension)
             {
-                case RenderImageType.Unknown: return String.Empty;
-                case RenderImageType.Gif: return "image/gif";
-                case RenderImageType.Jpeg: return "image/jpeg";
-                case RenderImageType.Png: return "image/png";
-                case RenderImageType.Svg: return "image/svg+xml";
+                case "gif": return "image/gif";
+                case "jpg": return "image/jpeg";
+                case "png": return "image/png";
+                case "svg": return "image/svg+xml";
             }
 
-            throw new Granular.Exception("Unexpected RenderImageType \"{0}\"", renderImageType);
+            return String.Empty;
         }
 
-        public string ToCursorString(Cursor cursor)
+        public string ToCursorString(System.Windows.Input.Cursor cursor, IRenderElementFactory factory)
         {
             if (cursor == null)
             {
@@ -349,7 +349,7 @@ namespace Granular.Host
 
             if (cursor.ImageSource != null)
             {
-                string urlString = ToUrlString(((RenderImageSource)cursor.ImageSource.RenderImageSource).Url);
+                string urlString = ToUrlString(((HtmlImageSourceRenderResource)cursor.ImageSource.GetRenderResource(factory)).Url);
 
                 return !Point.IsNullOrEmpty(cursor.Hotspot) ?
                     String.Format("{0} {1}, default", urlString, ToImplicitValueString(cursor.Hotspot)) :
@@ -525,7 +525,7 @@ namespace Granular.Host
 
     public static class HtmlValueConverterExtensions
     {
-        public static string ToImageString(this HtmlValueConverter converter, Brush brush, Rect targetRect)
+        public static string ToImageString(this HtmlValueConverter converter, Brush brush, Rect targetRect, IRenderElementFactory factory)
         {
             if (brush is LinearGradientBrush)
             {
@@ -539,7 +539,7 @@ namespace Granular.Host
 
             if (brush is ImageBrush)
             {
-                return converter.ToImageString((ImageBrush)brush);
+                return converter.ToImageString((ImageBrush)brush, factory);
             }
 
             throw new Granular.Exception("Unexpected brush type \"{0}\"", brush.GetType());

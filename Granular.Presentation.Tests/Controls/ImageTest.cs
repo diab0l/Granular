@@ -14,6 +14,21 @@ namespace Granular.Presentation.Tests.Controls
     [TestClass]
     public class ImageTest
     {
+        private class TestImageSource : ImageSource
+        {
+            private IImageSourceRenderResource renderResource;
+
+            public TestImageSource()
+            {
+                //
+            }
+
+            protected override object CreateRenderResource(IRenderElementFactory factory)
+            {
+                return factory.CreateImageSourceRenderResource();
+            }
+        }
+
         [TestMethod]
         public void ImageStretchNoneTest()
         {
@@ -139,10 +154,10 @@ namespace Granular.Presentation.Tests.Controls
 
         private static Image CreateImage()
         {
-            BitmapSource bitmapSource = BitmapSource.Create(null);
-            ((TestRenderImageSource)bitmapSource.RenderImageSource).Size = new Size(200, 100);
+            TestImageSource testImageSource = new TestImageSource();
+            ((TestImageSourceRenderResource)testImageSource.GetRenderResource(TestRenderElementFactory.Default)).Size = new Size(200, 100);
 
-            return new Image { Source = bitmapSource, IsRootElement = true };
+            return new Image { Source = testImageSource, IsRootElement = true };
         }
 
         private static TestImageRenderElement GetImageRenderElement(Image image)
