@@ -82,6 +82,7 @@
     <Compile Include="Media\EllipseGeometry.cs" />
     <Compile Include="Media\FontFamily.cs" />
     <Compile Include="Media\DashStyle.cs" />
+    <Compile Include="Media\FormattedText.cs" />
     <Compile Include="Media\Geometry.cs" />
     <Compile Include="Media\LineGeometry.cs" />
     <Compile Include="Media\MatrixTransform.cs" />
