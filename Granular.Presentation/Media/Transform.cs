@@ -18,6 +18,27 @@ namespace System.Windows.Media
 
         public abstract Matrix Value { get; }
 
+        private ITransformRenderResource renderResource;
+
+        public object GetRenderResource(IRenderElementFactory factory)
+        {
+            if (renderResource == null)
+            {
+                renderResource = factory.CreateTransformRenderResource();
+                renderResource.Matrix = Value;
+            }
+
+            return renderResource;
+        }
+
+        protected void InvalidateRenderResource()
+        {
+            if (renderResource != null)
+            {
+                renderResource.Matrix = Value;
+            }
+        }
+
         private static Transform CreateIdentityTransform()
         {
             Transform identityTransform = new IdentityTransform();

@@ -59,6 +59,7 @@
     <Compile Include="Render\HtmlRenderResource.cs" />
     <Compile Include="Render\HtmlSolidColorBrushRenderResource.cs" />
     <Compile Include="Render\HtmlTextBoxRenderElement.cs" />
+    <Compile Include="Render\HtmlTransformRenderResource.cs" />
     <Compile Include="SvgDefinitionContainer.cs" />
     <Compile Include="SvgDocument.cs" />
     <Compile Include="SvgElementExtensions.cs" />

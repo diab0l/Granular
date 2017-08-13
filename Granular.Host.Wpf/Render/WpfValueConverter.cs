@@ -29,6 +29,11 @@ namespace Granular.Host.Wpf.Render
             return brush != null ? ((IWpfBrushRenderResource)brush.GetRenderResource(factory)).WpfResource : null;
         }
 
+        public wpf::System.Windows.Media.Transform Convert(Transform transform, IRenderElementFactory factory)
+        {
+            return transform != null ? ((WpfTransformRenderResource)transform.GetRenderResource(factory)).Transform : null;
+        }
+
         public wpf::System.Windows.Media.Color Convert(Color color)
         {
             return wpf::System.Windows.Media.Color.FromArgb(color.A, color.R, color.G, color.B);

@@ -88,6 +88,7 @@
     <Compile Include="Render\WpfRenderElement.cs" />
     <Compile Include="Render\WpfRenderElementFactory.cs" />
     <Compile Include="Render\WpfTextBlockRenderElement.cs" />
+    <Compile Include="Render\WpfTransformRenderResource.cs" />
     <Compile Include="Render\WpfValueConverter.cs" />
     <Compile Include="Render\WpfVisualRenderElement.cs" />
     <Compile Include="WpfApplicationHost.cs" />

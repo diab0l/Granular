@@ -79,5 +79,10 @@ namespace Granular.Host.Render
         {
             return new HtmlImageSourceRenderResource(embeddedResourceObjectFactory, imageElementContainer);
         }
+
+        public ITransformRenderResource CreateTransformRenderResource()
+        {
+            return new HtmlTransformRenderResource();
+        }
     }
 }

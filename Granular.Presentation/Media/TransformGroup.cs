@@ -29,7 +29,7 @@ namespace System.Windows.Media
         private void OnChildChanged(object sender, EventArgs e)
         {
             this.matrix = Children.Select(child => child.Value).DefaultIfEmpty(Matrix.Identity).Aggregate((matrix1, matrix2) => matrix1 * matrix2);
-
+            InvalidateRenderResource();
             RaiseChanged();
         }
     }

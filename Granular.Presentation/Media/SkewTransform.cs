@@ -45,6 +45,7 @@ namespace System.Windows.Media
         private void SetMatrix()
         {
             matrix = Matrix.SkewMatrix(Math.PI * AngleX / 180, Math.PI * AngleY / 180, CenterX, CenterY);
+            InvalidateRenderResource();
         }
 
         private static void SetMatrix(DependencyObject dependencyObject, DependencyPropertyChangedEventArgs e)

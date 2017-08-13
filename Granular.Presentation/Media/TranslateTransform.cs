@@ -45,6 +45,7 @@ namespace System.Windows.Media
         private void SetMatrix()
         {
             matrix = Matrix.TranslationMatrix(X, Y);
+            InvalidateRenderResource();
         }
 
         private static void SetMatrix(DependencyObject dependencyObject, DependencyPropertyChangedEventArgs e)

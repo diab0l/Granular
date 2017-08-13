@@ -173,6 +173,11 @@ namespace System.Windows.Media
         void Initialize(Uri uri, Rect sourceRect);
     }
 
+    public interface ITransformRenderResource
+    {
+        Matrix Matrix { get; set; }
+    }
+
     public interface IRenderElementFactory
     {
         IVisualRenderElement CreateVisualRenderElement(object owner);
@@ -186,6 +191,7 @@ namespace System.Windows.Media
         IRadialGradientBrushRenderResource CreateRadialGradientBrushRenderResource();
         IImageBrushRenderResource CreateImageBrushRenderResource();
         IImageSourceRenderResource CreateImageSourceRenderResource();
+        ITransformRenderResource CreateTransformRenderResource();
     }
 
     public static class ContainerRenderElementExtensions

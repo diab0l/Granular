@@ -9,7 +9,7 @@ namespace System.Windows.Media
     {
         public override Matrix Value { get { return Matrix; } }
 
-        public static readonly DependencyProperty MatrixProperty = DependencyProperty.Register("Matrix", typeof(Matrix), typeof(MatrixTransform), new FrameworkPropertyMetadata(Matrix.Identity));
+        public static readonly DependencyProperty MatrixProperty = DependencyProperty.Register("Matrix", typeof(Matrix), typeof(MatrixTransform), new FrameworkPropertyMetadata(Matrix.Identity, (sender, e) => ((MatrixTransform)sender).OnMatrixChanged(e)));
         public Matrix Matrix
         {
             get { return (Matrix)GetValue(MatrixProperty); }
@@ -31,6 +31,11 @@ namespace System.Windows.Media
         public MatrixTransform(Matrix matrix)
         {
             this.Matrix = matrix;
+        }
+
+        private void OnMatrixChanged(DependencyPropertyChangedEventArgs e)
+        {
+            InvalidateRenderResource();
         }
     }
 }

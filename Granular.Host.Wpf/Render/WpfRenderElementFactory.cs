@@ -69,5 +69,10 @@ namespace Granular.Host.Wpf.Render
         {
             return new WpfImageSourceRenderResource();
         }
+
+        public ITransformRenderResource CreateTransformRenderResource()
+        {
+            return new WpfTransformRenderResource(wpfValueConverter);
+        }
     }
 }

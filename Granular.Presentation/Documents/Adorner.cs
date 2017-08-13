@@ -51,11 +51,14 @@ namespace System.Windows.Documents
             {
                 Matrix newValue = visual.TransformToAncestor(ancestor);
 
-                if (value != newValue)
+                if (value == newValue)
                 {
-                    value = newValue;
-                    RaiseChanged();
+                    return;
                 }
+
+                value = newValue;
+                InvalidateRenderResource();
+                RaiseChanged();
             }
         }
 

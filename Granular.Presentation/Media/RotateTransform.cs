@@ -38,6 +38,7 @@ namespace System.Windows.Media
         private void SetMatrix()
         {
             matrix = Matrix.RotationMatrix(Math.PI * Angle / 180, CenterX, CenterY);
+            InvalidateRenderResource();
         }
 
         private static void SetMatrix(DependencyObject dependencyObject, DependencyPropertyChangedEventArgs e)

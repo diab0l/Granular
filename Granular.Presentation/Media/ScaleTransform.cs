@@ -45,6 +45,7 @@ namespace System.Windows.Media
         private void SetMatrix()
         {
             matrix = Matrix.ScalingMatrix(ScaleX, ScaleY, CenterX, CenterY);
+            InvalidateRenderResource();
         }
 
         private static void SetMatrix(DependencyObject dependencyObject, DependencyPropertyChangedEventArgs e)

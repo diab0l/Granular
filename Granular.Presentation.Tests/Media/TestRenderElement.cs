@@ -211,5 +211,10 @@ namespace System.Windows.Media
         {
             return new TestImageSourceRenderResource();
         }
+
+        public ITransformRenderResource CreateTransformRenderResource()
+        {
+            throw new NotImplementedException();
+        }
     }
 }
