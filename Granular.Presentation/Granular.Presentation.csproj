@@ -192,7 +192,11 @@
     <Compile Include="Data\Binding.cs" />
     <Compile Include="Data\PropertyObserver.cs" />
     <Compile Include="Navigation.cs" />
-    <Compile Include="Shapes.cs" />
+    <Compile Include="Shapes\Ellipse.cs" />
+    <Compile Include="Shapes\Line.cs" />
+    <Compile Include="Shapes\Path.cs" />
+    <Compile Include="Shapes\Rectangle.cs" />
+    <Compile Include="Shapes\Shape.cs" />
     <Compile Include="TemplateBindingExtension.cs" />
     <Compile Include="Data\ValueConverter.cs" />
     <Compile Include="Data\RelativeSource.cs" />

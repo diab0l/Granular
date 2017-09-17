@@ -727,8 +727,20 @@
     <Compile Include="..\Granular.Presentation\Setter.cs">
       <Link>Setter.cs</Link>
     </Compile>
-    <Compile Include="..\Granular.Presentation\Shapes.cs">
-      <Link>Shapes.cs</Link>
+    <Compile Include="..\Granular.Presentation\Shapes\Ellipse.cs">
+      <Link>Shapes\Ellipse.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\Shapes\Line.cs">
+      <Link>Shapes\Line.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\Shapes\Path.cs">
+      <Link>Shapes\Path.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\Shapes\Rectangle.cs">
+      <Link>Shapes\Rectangle.cs</Link>
+    </Compile>
+    <Compile Include="..\Granular.Presentation\Shapes\Shape.cs">
+      <Link>Shapes\Shape.cs</Link>
     </Compile>
     <Compile Include="..\Granular.Presentation\Size.cs">
       <Link>Size.cs</Link>
