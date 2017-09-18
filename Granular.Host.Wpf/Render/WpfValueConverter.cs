@@ -59,6 +59,11 @@ namespace Granular.Host.Wpf.Render
             return new wpf::System.Windows.Size(size.Width, size.Height);
         }
 
+        public wpf::System.Windows.Media.Geometry Convert(Geometry geometry, IRenderElementFactory factory)
+        {
+            return geometry != null ? ((WpfGeometryRenderResource)geometry.GetRenderResource(factory)).Geometry : null;
+        }
+
         public wpf::System.Windows.Thickness Convert(Thickness thickness)
         {
             return new wpf::System.Windows.Thickness(thickness.Left, thickness.Top, thickness.Right, thickness.Bottom);

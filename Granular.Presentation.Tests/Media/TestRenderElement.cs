@@ -220,6 +220,11 @@ namespace System.Windows.Media
             throw new NotImplementedException();
         }
 
+        public IDrawingGeometryRenderElement CreateDrawingGeometryRenderElement()
+        {
+            throw new NotImplementedException();
+        }
+
         public IImageBrushRenderResource CreateImageBrushRenderResource()
         {
             throw new NotImplementedException();

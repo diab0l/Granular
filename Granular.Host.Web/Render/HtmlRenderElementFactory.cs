@@ -35,6 +35,11 @@ namespace Granular.Host.Render
             return new HtmlDrawingRenderElement(renderQueue, svgValueConverter);
         }
 
+        public IDrawingGeometryRenderElement CreateDrawingGeometryRenderElement()
+        {
+            return new HtmlDrawingGeometryRenderElement(this, renderQueue, svgValueConverter);
+        }
+
         public ITextBoxRenderElement CreateTextBoxRenderElement(object owner)
         {
             return new HtmlTextBoxRenderElement(this, renderQueue, htmlValueConverter);

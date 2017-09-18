@@ -101,6 +101,18 @@ namespace System.Windows.Media
         double Opacity { get; set; }
     }
 
+    public interface IDrawingShapeRenderElement
+    {
+        Brush Fill { get; set; }
+        Brush Stroke { get; set; }
+        double StrokeThickness { get; set; }
+    }
+
+    public interface IDrawingGeometryRenderElement : IDrawingShapeRenderElement
+    {
+        Geometry Geometry { get; set; }
+    }
+
     public interface IBrushRenderResource
     {
         double Opacity { get; set; }
@@ -192,6 +204,7 @@ namespace System.Windows.Media
         IBorderRenderElement CreateBorderRenderElement(object owner);
         IImageRenderElement CreateImageRenderElement(object owner);
         IContainerRenderElement CreateDrawingRenderElement(object owner);
+        IDrawingGeometryRenderElement CreateDrawingGeometryRenderElement();
         IDrawingContainerRenderElement CreateDrawingContainerRenderElement();
         ISolidColorBrushRenderResource CreateSolidColorBrushRenderResource();
         ILinearGradientBrushRenderResource CreateLinearGradientBrushRenderResource();

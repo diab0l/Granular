@@ -79,6 +79,7 @@
     <Compile Include="Render\WpfContainerRenderElement.cs" />
     <Compile Include="Render\WpfBrushRenderResource.cs" />
     <Compile Include="Render\WpfDrawingContainerRenderElement.cs" />
+    <Compile Include="Render\WpfDrawingGeometryRenderElement.cs" />
     <Compile Include="Render\WpfDrawingRenderElement.cs" />
     <Compile Include="Render\WpfGeometryRenderResource.cs" />
     <Compile Include="Render\WpfGradientBrushRenderResource.cs" />

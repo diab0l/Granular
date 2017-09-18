@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Media;
+using Granular.Host.Render;
 
 namespace Granular.Host
 {
@@ -29,6 +30,11 @@ namespace Granular.Host
             }
 
             throw new Granular.Exception("Unexpected GradientSpreadMethod \"{0}\"", spreadMethod);
+        }
+
+        public string ToPathDataString(Geometry geometry, IRenderElementFactory factory)
+        {
+            return ((HtmlGeometryRenderResource)geometry.GetRenderResource(factory)).Data;
         }
 
         public string ToMatrixString(Matrix matrix)

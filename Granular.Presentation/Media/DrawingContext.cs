@@ -13,6 +13,7 @@ namespace System.Windows.Media
     public abstract class DrawingContext
     {
         public abstract void Close();
+        public abstract void DrawGeometry(Brush brush, Pen pen, Geometry geometry);
         public abstract void Pop();
         public abstract void PushOpacity(double opacity);
     }
@@ -70,6 +71,24 @@ namespace System.Windows.Media
             isClosed = true;
 
             Closed.Raise(this);
+        }
+
+        public override void DrawGeometry(Brush brush, Pen pen, Geometry geometry)
+        {
+            VerifyNotClosed();
+
+            if (innerContext != null)
+            {
+                innerContext.DrawGeometry(brush, pen, geometry);
+                return;
+            }
+
+            IDrawingGeometryRenderElement child = GetChild(factory.CreateDrawingGeometryRenderElement);
+
+            child.Fill = brush;
+            child.Stroke = pen?.Brush;
+            child.StrokeThickness = pen?.Thickness ?? 0;
+            child.Geometry = geometry;
         }
 
         public override void Pop()
