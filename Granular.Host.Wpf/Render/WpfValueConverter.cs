@@ -171,6 +171,11 @@ namespace Granular.Host.Wpf.Render
             throw new Granular.Exception("Unexpected TextWrapping value \"{0}\"", textWrapping);
         }
 
+        public wpf::System.Windows.Media.FormattedText Convert(FormattedText formattedText, IRenderElementFactory factory)
+        {
+            return new wpf::System.Windows.Media.FormattedText(formattedText.Text, System.Globalization.CultureInfo.InvariantCulture, wpf::System.Windows.FlowDirection.LeftToRight, Convert(formattedText.Typeface), formattedText.Size, Convert(formattedText.Foreground, factory));
+        }
+
         public wpf::System.Windows.Controls.ScrollBarVisibility Convert(ScrollBarVisibility scrollBarVisibility)
         {
             switch (scrollBarVisibility)
@@ -249,6 +254,24 @@ namespace Granular.Host.Wpf.Render
         public wpf::System.Windows.Media.Matrix Convert(Matrix matrix)
         {
             return new wpf::System.Windows.Media.Matrix(matrix.M11, matrix.M12, matrix.M21, matrix.M22, matrix.OffsetX, matrix.OffsetY);
+        }
+
+        public wpf::System.Windows.Media.Pen Convert(Pen pen, IRenderElementFactory factory)
+        {
+            if (pen == null)
+            {
+                return null;
+            }
+
+            return new wpf::System.Windows.Media.Pen(Convert(pen.Brush, factory), pen.Thickness)
+            {
+                //PenLineCap DashCap
+                //DashStyle DashStyle
+                //PenLineCap StartLineCap
+                //PenLineCap EndLineCap
+                //PenLineJoin LineJoin
+                MiterLimit = pen.MiterLimit,
+            };
         }
 
         public MouseButton ConvertBack(wpf::System.Windows.Input.MouseButton mouseButton)

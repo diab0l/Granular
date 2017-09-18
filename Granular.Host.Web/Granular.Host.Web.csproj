@@ -57,6 +57,7 @@
     <Compile Include="Render\HtmlDrawingImageRenderElement.cs" />
     <Compile Include="Render\HtmlDrawingRenderElement.cs" />
     <Compile Include="Render\HtmlDrawingShapeRenderElement.cs" />
+    <Compile Include="Render\HtmlDrawingTextRenderElement.cs" />
     <Compile Include="Render\HtmlGradientBrushRenderResource.cs" />
     <Compile Include="Render\HtmlImageRenderElement.cs" />
     <Compile Include="Render\HtmlImageSourceRenderResource.cs" />

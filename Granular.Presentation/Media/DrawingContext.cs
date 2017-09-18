@@ -19,6 +19,7 @@ namespace System.Windows.Media
         public abstract void DrawLine(Pen pen, Point point0, Point point1);
         public abstract void DrawRectangle(Brush brush, Pen pen, Rect rectangle);
         public abstract void DrawRoundedRectangle(Brush brush, Pen pen, Rect rectangle, double radiusX, double radiusY);
+        public abstract void DrawText(FormattedText formattedText, Point origin);
         public abstract void Pop();
         public abstract void PushOpacity(double opacity);
         public abstract void PushTransform(Transform transform);
@@ -171,7 +172,6 @@ namespace System.Windows.Media
             if (geometry == null)
             {
                 geometry = new LineGeometry();
-                child.Geometry = geometry;
             }
 
             geometry.StartPoint = point0;
@@ -179,6 +179,7 @@ namespace System.Windows.Media
 
             child.Stroke = pen?.Brush;
             child.StrokeThickness = pen?.Thickness ?? 0;
+            child.Geometry = geometry;
         }
 
         public override void DrawRectangle(Brush brush, Pen pen, Rect rectangle)
@@ -212,6 +213,22 @@ namespace System.Windows.Media
             child.Stroke = pen?.Brush;
             child.StrokeThickness = pen?.Thickness ?? 0;
             child.Geometry = geometry;
+        }
+
+        public override void DrawText(FormattedText formattedText, Point origin)
+        {
+            VerifyNotClosed();
+
+            if (innerContext != null)
+            {
+                innerContext.DrawText(formattedText, origin);
+                return;
+            }
+
+            IDrawingTextRenderElement child = GetChild(factory.CreateDrawingTextRenderElement);
+
+            child.FormattedText = formattedText;
+            child.Origin = origin;
         }
 
         public override void PushOpacity(double opacity)

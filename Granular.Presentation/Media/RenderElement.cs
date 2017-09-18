@@ -120,6 +120,12 @@ namespace System.Windows.Media
         Rect Rectangle { get; set; }
     }
 
+    public interface IDrawingTextRenderElement
+    {
+        FormattedText FormattedText { get; set; }
+        Point Origin { get; set; }
+    }
+
     public interface IBrushRenderResource
     {
         double Opacity { get; set; }
@@ -214,6 +220,7 @@ namespace System.Windows.Media
         IDrawingGeometryRenderElement CreateDrawingGeometryRenderElement();
         IDrawingContainerRenderElement CreateDrawingContainerRenderElement();
         IDrawingImageRenderElement CreateDrawingImageRenderElement();
+        IDrawingTextRenderElement CreateDrawingTextRenderElement();
         ISolidColorBrushRenderResource CreateSolidColorBrushRenderResource();
         ILinearGradientBrushRenderResource CreateLinearGradientBrushRenderResource();
         IRadialGradientBrushRenderResource CreateRadialGradientBrushRenderResource();

@@ -4,6 +4,7 @@ using System.Windows.Media;
 using Bridge.Html5;
 using Granular.Host.Render;
 using Granular.Extensions;
+using Granular.Compatibility.Linq;
 
 namespace Granular.Host
 {
@@ -110,6 +111,66 @@ namespace Granular.Host
             else
             {
                 element.SetSvgAttribute("d", geometry.Data);
+            }
+        }
+
+        public static void SetSvgFontFamily(this HTMLElement element, FontFamily fontFamily, SvgValueConverter converter)
+        {
+            if (!fontFamily.FamilyNames.Any())
+            {
+                element.ClearHtmlStyleProperty("font-family");
+            }
+            else
+            {
+                element.SetSvgAttribute("font-family", converter.ToFontFamilyNamesString(fontFamily));
+            }
+        }
+
+        public static void SetSvgFontSize(this HTMLElement element, double fontSize, SvgValueConverter converter)
+        {
+            if (fontSize.IsNaN())
+            {
+                element.ClearHtmlStyleProperty("font-size");
+            }
+            else
+            {
+                element.SetSvgAttribute("font-size", converter.ToPixelString(fontSize));
+            }
+        }
+
+        public static void SetSvgFontStyle(this HTMLElement element, System.Windows.FontStyle fontStyle, SvgValueConverter converter)
+        {
+            if (fontStyle == System.Windows.FontStyle.Normal)
+            {
+                element.ClearHtmlStyleProperty("font-style");
+            }
+            else
+            {
+                element.SetSvgAttribute("font-style", converter.ToFontStyleString(fontStyle));
+            }
+        }
+
+        public static void SetSvgFontWeight(this HTMLElement element, FontWeight fontWeight, SvgValueConverter converter)
+        {
+            if (fontWeight == FontWeight.Normal)
+            {
+                element.ClearHtmlStyleProperty("font-weight");
+            }
+            else
+            {
+                element.SetSvgAttribute("font-weight", converter.ToFontWeightString(fontWeight));
+            }
+        }
+
+        public static void SetSvgFontStretch(this HTMLElement element, System.Windows.FontStretch fontStretch, SvgValueConverter converter)
+        {
+            if (fontStretch == System.Windows.FontStretch.Normal)
+            {
+                element.ClearHtmlStyleProperty("font-stretch");
+            }
+            else
+            {
+                element.SetSvgAttribute("font-stretch", converter.ToFontStretchString(fontStretch));
             }
         }
 

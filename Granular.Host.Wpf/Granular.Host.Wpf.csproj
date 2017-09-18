@@ -82,6 +82,7 @@
     <Compile Include="Render\WpfDrawingGeometryRenderElement.cs" />
     <Compile Include="Render\WpfDrawingImageElement.cs" />
     <Compile Include="Render\WpfDrawingRenderElement.cs" />
+    <Compile Include="Render\WpfDrawingTextRenderElement.cs" />
     <Compile Include="Render\WpfGeometryRenderResource.cs" />
     <Compile Include="Render\WpfGradientBrushRenderResource.cs" />
     <Compile Include="Render\WpfImageRenderElement.cs" />

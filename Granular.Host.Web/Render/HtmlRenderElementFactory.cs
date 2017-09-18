@@ -70,6 +70,11 @@ namespace Granular.Host.Render
             return new HtmlDrawingImageRenderElement(this, renderQueue, svgValueConverter);
         }
 
+        public IDrawingTextRenderElement CreateDrawingTextRenderElement()
+        {
+            return new HtmlDrawingTextRenderElement(this, renderQueue, svgValueConverter);
+        }
+
         public ISolidColorBrushRenderResource CreateSolidColorBrushRenderResource()
         {
             return new HtmlSolidColorBrushRenderResource(renderQueue, svgValueConverter, svgDefinitionContainer);
