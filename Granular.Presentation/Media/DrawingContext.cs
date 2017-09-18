@@ -14,6 +14,8 @@ namespace System.Windows.Media
     {
         public abstract void Close();
         public abstract void DrawGeometry(Brush brush, Pen pen, Geometry geometry);
+        public abstract void DrawRectangle(Brush brush, Pen pen, Rect rectangle);
+        public abstract void DrawRoundedRectangle(Brush brush, Pen pen, Rect rectangle, double radiusX, double radiusY);
         public abstract void Pop();
         public abstract void PushOpacity(double opacity);
     }
@@ -102,6 +104,39 @@ namespace System.Windows.Media
             }
 
             Close();
+        }
+
+        public override void DrawRectangle(Brush brush, Pen pen, Rect rectangle)
+        {
+            DrawRoundedRectangle(brush, pen, rectangle, 0, 0);
+        }
+
+        public override void DrawRoundedRectangle(Brush brush, Pen pen, Rect rectangle, double radiusX, double radiusY)
+        {
+            VerifyNotClosed();
+
+            if (innerContext != null)
+            {
+                innerContext.DrawRoundedRectangle(brush, pen, rectangle, radiusX, radiusY);
+                return;
+            }
+
+            IDrawingGeometryRenderElement child = GetChild(factory.CreateDrawingGeometryRenderElement);
+
+            RectangleGeometry geometry = child.Geometry as RectangleGeometry;
+            if (geometry == null)
+            {
+                geometry = new RectangleGeometry();
+            }
+
+            geometry.Rect = rectangle;
+            geometry.RadiusX = radiusX;
+            geometry.RadiusY = radiusY;
+
+            child.Fill = brush;
+            child.Stroke = pen?.Brush;
+            child.StrokeThickness = pen?.Thickness ?? 0;
+            child.Geometry = geometry;
         }
 
         public override void PushOpacity(double opacity)
