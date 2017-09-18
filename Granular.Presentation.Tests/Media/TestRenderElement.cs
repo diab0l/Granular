@@ -200,6 +200,11 @@ namespace System.Windows.Media
             return new TestContainerRenderElement();
         }
 
+        public IDrawingContainerRenderElement CreateDrawingContainerRenderElement()
+        {
+            throw new NotImplementedException();
+        }
+
         public ISolidColorBrushRenderResource CreateSolidColorBrushRenderResource()
         {
             throw new NotImplementedException();

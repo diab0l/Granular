@@ -13,6 +13,8 @@ namespace System.Windows.Media
     public abstract class DrawingContext
     {
         public abstract void Close();
+        public abstract void Pop();
+        public abstract void PushOpacity(double opacity);
     }
 
     public class RenderElementDrawingContext : DrawingContext
@@ -68,6 +70,36 @@ namespace System.Windows.Media
             isClosed = true;
 
             Closed.Raise(this);
+        }
+
+        public override void Pop()
+        {
+            VerifyNotClosed();
+
+            if (innerContext != null)
+            {
+                innerContext.Pop();
+                return;
+            }
+
+            Close();
+        }
+
+        public override void PushOpacity(double opacity)
+        {
+            VerifyNotClosed();
+
+            if (innerContext != null)
+            {
+                innerContext.PushOpacity(opacity);
+                return;
+            }
+
+            IDrawingContainerRenderElement child = GetChild(factory.CreateDrawingContainerRenderElement);
+
+            SetInnerContext(child);
+
+            child.Opacity = opacity;
         }
 
         private T GetChild<T>(Func<T> factory)

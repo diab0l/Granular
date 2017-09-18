@@ -45,6 +45,11 @@ namespace Granular.Host.Wpf.Render
             return new WpfImageRenderElement(this, wpfValueConverter);
         }
 
+        public IDrawingContainerRenderElement CreateDrawingContainerRenderElement()
+        {
+            return new WpfDrawingContainerRenderElement(wpfValueConverter);
+        }
+
         public ISolidColorBrushRenderResource CreateSolidColorBrushRenderResource()
         {
             return new WpfSolidColorBrushRenderResource(wpfValueConverter);

@@ -50,6 +50,35 @@ namespace Granular.Host
             }
         }
 
+        public static void SetSvgOpacity(this HTMLElement element, double opacity, SvgValueConverter converter)
+        {
+            element.SetSvgAttribute("opacity", opacity, converter);
+        }
+
+        private static void SetSvgAttribute(this HTMLElement element, string attributeName, double value, SvgValueConverter converter)
+        {
+            if (value.IsNaN())
+            {
+                element.RemoveAttribute(attributeName);
+            }
+            else
+            {
+                element.SetAttribute(attributeName, converter.ToImplicitValueString(value));
+            }
+        }
+
+        private static void SetSvgAttribute(this HTMLElement element, string attributeName, string value)
+        {
+            if (value.IsNullOrEmpty())
+            {
+                element.RemoveAttribute(attributeName);
+            }
+            else
+            {
+                element.SetAttribute(attributeName, value);
+            }
+        }
+
         private static void SetSvgPointAttributes(this HTMLElement element, string xAttributeName, string yAttributeName, Point point, SvgValueConverter converter)
         {
             if (point.IsNullOrEmpty())

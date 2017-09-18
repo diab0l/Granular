@@ -96,6 +96,11 @@ namespace System.Windows.Media
         ImageSource Source { get; set; }
     }
 
+    public interface IDrawingContainerRenderElement : IContainerRenderElement
+    {
+        double Opacity { get; set; }
+    }
+
     public interface IBrushRenderResource
     {
         double Opacity { get; set; }
@@ -187,6 +192,7 @@ namespace System.Windows.Media
         IBorderRenderElement CreateBorderRenderElement(object owner);
         IImageRenderElement CreateImageRenderElement(object owner);
         IContainerRenderElement CreateDrawingRenderElement(object owner);
+        IDrawingContainerRenderElement CreateDrawingContainerRenderElement();
         ISolidColorBrushRenderResource CreateSolidColorBrushRenderResource();
         ILinearGradientBrushRenderResource CreateLinearGradientBrushRenderResource();
         IRadialGradientBrushRenderResource CreateRadialGradientBrushRenderResource();
