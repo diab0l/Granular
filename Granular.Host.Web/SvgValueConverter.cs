@@ -37,6 +37,11 @@ namespace Granular.Host
             return ((HtmlGeometryRenderResource)geometry.GetRenderResource(factory)).Data;
         }
 
+        public string ToImageUrl(ImageSource imageSource, IRenderElementFactory factory)
+        {
+            return ((HtmlImageSourceRenderResource)imageSource.GetRenderResource(factory)).Url;
+        }
+
         public string ToMatrixString(Matrix matrix)
         {
             return String.Format("matrix({0}, {1}, {2}, {3}, {4}, {5})", ToImplicitValueString(matrix.M11), ToImplicitValueString(matrix.M12), ToImplicitValueString(matrix.M21), ToImplicitValueString(matrix.M22), ToImplicitValueString(matrix.OffsetX), ToImplicitValueString(matrix.OffsetY));

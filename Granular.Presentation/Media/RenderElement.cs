@@ -113,6 +113,12 @@ namespace System.Windows.Media
         Geometry Geometry { get; set; }
     }
 
+    public interface IDrawingImageRenderElement
+    {
+        ImageSource ImageSource { get; set; }
+        Rect Rectangle { get; set; }
+    }
+
     public interface IBrushRenderResource
     {
         double Opacity { get; set; }
@@ -206,6 +212,7 @@ namespace System.Windows.Media
         IContainerRenderElement CreateDrawingRenderElement(object owner);
         IDrawingGeometryRenderElement CreateDrawingGeometryRenderElement();
         IDrawingContainerRenderElement CreateDrawingContainerRenderElement();
+        IDrawingImageRenderElement CreateDrawingImageRenderElement();
         ISolidColorBrushRenderResource CreateSolidColorBrushRenderResource();
         ILinearGradientBrushRenderResource CreateLinearGradientBrushRenderResource();
         IRadialGradientBrushRenderResource CreateRadialGradientBrushRenderResource();

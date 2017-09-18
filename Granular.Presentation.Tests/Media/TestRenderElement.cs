@@ -225,6 +225,11 @@ namespace System.Windows.Media
             throw new NotImplementedException();
         }
 
+        public IDrawingImageRenderElement CreateDrawingImageRenderElement()
+        {
+            throw new NotImplementedException();
+        }
+
         public IImageBrushRenderResource CreateImageBrushRenderResource()
         {
             throw new NotImplementedException();

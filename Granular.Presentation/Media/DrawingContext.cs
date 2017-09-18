@@ -15,6 +15,7 @@ namespace System.Windows.Media
         public abstract void Close();
         public abstract void DrawEllipse(Brush brush, Pen pen, Point center, double radiusX, double radiusY);
         public abstract void DrawGeometry(Brush brush, Pen pen, Geometry geometry);
+        public abstract void DrawImage(ImageSource imageSource, Rect rectangle);
         public abstract void DrawLine(Pen pen, Point point0, Point point1);
         public abstract void DrawRectangle(Brush brush, Pen pen, Rect rectangle);
         public abstract void DrawRoundedRectangle(Brush brush, Pen pen, Rect rectangle, double radiusX, double radiusY);
@@ -106,6 +107,22 @@ namespace System.Windows.Media
             }
 
             Close();
+        }
+
+        public override void DrawImage(ImageSource imageSource, Rect rectangle)
+        {
+            VerifyNotClosed();
+
+            if (innerContext != null)
+            {
+                innerContext.DrawImage(imageSource, rectangle);
+                return;
+            }
+
+            IDrawingImageRenderElement child = GetChild(factory.CreateDrawingImageRenderElement);
+
+            child.ImageSource = imageSource;
+            child.Rectangle = rectangle;
         }
 
         public override void DrawEllipse(Brush brush, Pen pen, Point center, double radiusX, double radiusY)

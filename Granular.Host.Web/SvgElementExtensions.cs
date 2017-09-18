@@ -51,6 +51,36 @@ namespace Granular.Host
             }
         }
 
+        public static void SetSvgLocation(this HTMLElement element, Point location, SvgValueConverter converter)
+        {
+            element.SetSvgPointAttributes("x", "y", location, converter);
+        }
+
+        public static void SetSvgSize(this HTMLElement element, Size size, SvgValueConverter converter)
+        {
+            if (size.IsNullOrEmpty())
+            {
+                element.RemoveAttribute("width");
+                element.RemoveAttribute("height");
+            }
+            else
+            {
+                element.SetAttribute("width", converter.ToImplicitValueString(size.Width));
+                element.SetAttribute("height", converter.ToImplicitValueString(size.Height));
+            }
+        }
+
+        public static void SetSvgBounds(this HTMLElement element, Rect bounds, SvgValueConverter converter)
+        {
+            element.SetSvgLocation(bounds.Location, converter);
+            element.SetSvgSize(bounds.Size, converter);
+        }
+
+        public static void SetSvgImageSource(this HTMLElement element, ImageSource imageSource, IRenderElementFactory factory, SvgValueConverter converter)
+        {
+            element.SetAttributeNS(SvgDocument.XlinkNamespaceUri, "href", converter.ToImageUrl(imageSource, factory));
+        }
+
         public static void SetSvgFill(this HTMLElement element, HtmlBrushRenderResource brush)
         {
             element.SetSvgBrush("fill", brush);

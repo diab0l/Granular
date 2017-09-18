@@ -54,6 +54,7 @@
     <Compile Include="Render\HtmlGeometryRenderResource.cs" />
     <Compile Include="Render\HtmlDrawingContainerRenderElement.cs" />
     <Compile Include="Render\HtmlDrawingGeometryRenderElement.cs" />
+    <Compile Include="Render\HtmlDrawingImageRenderElement.cs" />
     <Compile Include="Render\HtmlDrawingRenderElement.cs" />
     <Compile Include="Render\HtmlDrawingShapeRenderElement.cs" />
     <Compile Include="Render\HtmlGradientBrushRenderResource.cs" />
