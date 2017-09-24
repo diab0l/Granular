@@ -10,6 +10,22 @@ namespace Granular.Host.Wpf.Render
 {
     public class WpfDrawingContainerRenderElement : WpfContainerRenderElement, IDrawingContainerRenderElement
     {
+        private Geometry clip;
+        public Geometry Clip
+        {
+            get { return clip; }
+            set
+            {
+                if (clip == value)
+                {
+                    return;
+                }
+
+                clip = value;
+                WpfElement.Clip = converter.Convert(clip, factory);
+            }
+        }
+
         public double Opacity
         {
             get { return WpfElement.Opacity; }

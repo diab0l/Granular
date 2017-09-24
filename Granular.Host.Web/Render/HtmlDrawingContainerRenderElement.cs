@@ -10,6 +10,35 @@ namespace Granular.Host.Render
 {
     public class HtmlDrawingContainerRenderElement : HtmlContainerRenderElement, IDrawingContainerRenderElement
     {
+        private HtmlGeometryRenderResource clipRenderResource;
+        private Geometry clip;
+        public Geometry Clip
+        {
+            get { return clip; }
+            set
+            {
+                if (clip == value)
+                {
+                    return;
+                }
+
+                if (clipRenderResource != null && IsLoaded)
+                {
+                    clipRenderResource.Unload();
+                }
+
+                clip = value;
+                clipRenderResource = (HtmlGeometryRenderResource)(clip?.GetRenderResource(factory));
+
+                if (clipRenderResource != null && IsLoaded)
+                {
+                    clipRenderResource.Load();
+                }
+
+                renderQueue.InvokeAsync(() => HtmlElement.SetSvgClip(clipRenderResource));
+            }
+        }
+
         private double opacity;
         public double Opacity
         {
@@ -71,6 +100,11 @@ namespace Granular.Host.Render
         {
             base.OnLoad();
 
+            if (clipRenderResource != null)
+            {
+                clipRenderResource.Load();
+            }
+
             if (transformRenderResource != null)
             {
                 transformRenderResource.MatrixChanged += OnTransformRenderResourceMatrixChanged;
@@ -82,6 +116,11 @@ namespace Granular.Host.Render
         protected override void OnUnload()
         {
             base.OnUnload();
+
+            if (clipRenderResource != null)
+            {
+                clipRenderResource.Unload();
+            }
 
             if (transformRenderResource != null)
             {

@@ -98,6 +98,7 @@ namespace System.Windows.Media
 
     public interface IDrawingContainerRenderElement : IContainerRenderElement
     {
+        Geometry Clip { get; set; }
         double Opacity { get; set; }
         Transform Transform { get; set; }
     }

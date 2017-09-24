@@ -21,6 +21,7 @@ namespace System.Windows.Media
         public abstract void DrawRoundedRectangle(Brush brush, Pen pen, Rect rectangle, double radiusX, double radiusY);
         public abstract void DrawText(FormattedText formattedText, Point origin);
         public abstract void Pop();
+        public abstract void PushClip(Geometry clipGeometry);
         public abstract void PushOpacity(double opacity);
         public abstract void PushTransform(Transform transform);
     }
@@ -229,6 +230,23 @@ namespace System.Windows.Media
 
             child.FormattedText = formattedText;
             child.Origin = origin;
+        }
+
+        public override void PushClip(Geometry clipGeometry)
+        {
+            VerifyNotClosed();
+
+            if (innerContext != null)
+            {
+                innerContext.PushClip(clipGeometry);
+                return;
+            }
+
+            IDrawingContainerRenderElement child = GetChild(factory.CreateDrawingContainerRenderElement);
+
+            SetInnerContext(child);
+
+            child.Clip = clipGeometry;
         }
 
         public override void PushOpacity(double opacity)

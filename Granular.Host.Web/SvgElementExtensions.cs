@@ -114,6 +114,18 @@ namespace Granular.Host
             }
         }
 
+        public static void SetSvgClip(this HTMLElement element, HtmlGeometryRenderResource geometry)
+        {
+            if (geometry == null)
+            {
+                element.RemoveAttribute("clip-path");
+            }
+            else
+            {
+                element.SetAttribute("clip-path", geometry.Uri);
+            }
+        }
+
         public static void SetSvgFontFamily(this HTMLElement element, FontFamily fontFamily, SvgValueConverter converter)
         {
             if (!fontFamily.FamilyNames.Any())
