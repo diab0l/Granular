@@ -105,6 +105,26 @@ namespace System.Windows.Media
             }
         }
 
+        private Geometry visualClip;
+        protected Geometry VisualClip
+        {
+            get { return visualClip; }
+            set
+            {
+                if (visualClip == value)
+                {
+                    return;
+                }
+
+                visualClip = value;
+
+                if (visualRenderElement != null)
+                {
+                    visualRenderElement.Clip = visualClip;
+                }
+            }
+        }
+
         private bool visualClipToBounds;
         protected bool VisualClipToBounds
         {
@@ -241,6 +261,7 @@ namespace System.Windows.Media
 
             VisualBackground = null;
             VisualBounds = Rect.Zero;
+            VisualClip = null;
             VisualClipToBounds = true;
             VisualIsHitTestVisible = true;
             VisualIsVisible = true;
@@ -345,6 +366,7 @@ namespace System.Windows.Media
 
                 visualRenderElement.Background = VisualBackground;
                 visualRenderElement.Bounds = VisualBounds;
+                visualRenderElement.Clip = VisualClip;
                 visualRenderElement.ClipToBounds = VisualClipToBounds;
                 visualRenderElement.IsHitTestVisible = VisualIsHitTestVisible;
                 visualRenderElement.IsVisible = VisualIsVisible;

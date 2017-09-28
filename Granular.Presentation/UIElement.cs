@@ -151,6 +151,13 @@ namespace System.Windows
             set { SetValue(RenderTransformOriginProperty, value); }
         }
 
+        public static readonly DependencyProperty ClipProperty = DependencyProperty.Register("Clip", typeof(Geometry), typeof(UIElement), new FrameworkPropertyMetadata(null, (sender, e) => ((UIElement)sender).OnClipChanged(e)));
+        public Geometry Clip
+        {
+            get { return (Geometry)GetValue(ClipProperty); }
+            set { SetValue(ClipProperty, value); }
+        }
+
         private bool isRootElement;
         public bool IsRootElement
         {
@@ -700,6 +707,11 @@ namespace System.Windows
             }
 
             InvalidateVisualTransform();
+        }
+
+        private void OnClipChanged(DependencyPropertyChangedEventArgs e)
+        {
+            VisualClip = (Geometry)e.NewValue;
         }
 
         protected override void OnVisualBoundsChanged()

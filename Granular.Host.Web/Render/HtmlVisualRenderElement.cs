@@ -66,6 +66,35 @@ namespace Granular.Host.Render
             }
         }
 
+        private HtmlGeometryRenderResource clipRenderResource;
+        private Geometry clip;
+        public Geometry Clip
+        {
+            get { return clip; }
+            set
+            {
+                if (clip == value)
+                {
+                    return;
+                }
+
+                if (clipRenderResource != null && IsLoaded)
+                {
+                    clipRenderResource.Unload();
+                }
+
+                clip = value;
+                clipRenderResource = (HtmlGeometryRenderResource)(clip?.GetRenderResource(factory));
+
+                if (clipRenderResource != null && IsLoaded)
+                {
+                    clipRenderResource.Load();
+                }
+
+                renderQueue.InvokeAsync(() => HtmlElement.SetSvgClip(clipRenderResource));
+            }
+        }
+
         private bool clipToBounds;
         public bool ClipToBounds
         {
@@ -184,11 +213,12 @@ namespace Granular.Host.Render
                 Background.Changed += OnBackgroundChanged;
             }
 
-            renderQueue.InvokeAsync(() =>
+            if (clipRenderResource != null)
             {
-                HtmlElement.SetHtmlBackground(Background, new Rect(Bounds.Size), factory, converter);
-                HtmlElement.SetHtmlIsHitTestVisible(IsHitTestVisible && Background != null);
-            });
+                clipRenderResource.Load();
+            }
+
+            renderQueue.InvokeAsync(() => HtmlElement.SetHtmlBackground(Background, new Rect(Bounds.Size), factory, converter));
         }
 
         protected override void OnUnload()
@@ -198,6 +228,11 @@ namespace Granular.Host.Render
             if (Background != null)
             {
                 Background.Changed -= OnBackgroundChanged;
+            }
+
+            if (clipRenderResource != null)
+            {
+                clipRenderResource.Unload();
             }
         }
 

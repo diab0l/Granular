@@ -7,6 +7,7 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using Granular.Collections;
 using Granular.Extensions;
+using Granular.Host.Render;
 using Bridge.Html5;
 
 namespace Granular.Host
@@ -230,6 +231,18 @@ namespace Granular.Host
             {
                 element.SetHtmlStyleProperty("transform", converter.ToTransformString(transform));
                 element.SetHtmlStyleProperty("transform-origin", "0 0");
+            }
+        }
+
+        public static void SetHtmlClip(this HTMLElement element, HtmlGeometryRenderResource clip)
+        {
+            if (clip == null)
+            {
+                element.ClearHtmlStyleProperty("clip-path");
+            }
+            else
+            {
+                element.SetHtmlStyleProperty("clip-path", clip.Uri);
             }
         }
 

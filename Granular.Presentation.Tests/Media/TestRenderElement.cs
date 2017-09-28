@@ -11,6 +11,7 @@ namespace System.Windows.Media
     {
         public Brush Background { get; set; }
         public Rect Bounds { get; set; }
+        public Geometry Clip { get; set; }
         public bool ClipToBounds { get; set; }
         public bool IsHitTestVisible { get; set; }
         public bool IsVisible { get; set; }

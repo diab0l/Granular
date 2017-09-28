@@ -47,6 +47,22 @@ namespace Granular.Host.Wpf.Render
             }
         }
 
+        private System.Windows.Media.Geometry clip;
+        public System.Windows.Media.Geometry Clip
+        {
+            get { return clip; }
+            set
+            {
+                if (clip == value)
+                {
+                    return;
+                }
+
+                clip = value;
+                container.Clip = converter.Convert(clip, factory);
+            }
+        }
+
         public bool ClipToBounds
         {
             get { return container.ClipToBounds; }
