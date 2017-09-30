@@ -89,7 +89,7 @@ InsertAssemblyAttribute -AssemblyInfoPath $assemblyInfoPath -ExistingSubstring "
 $loadedProject = [Microsoft.Build.Evaluation.ProjectCollection]::GlobalProjectCollection.GetLoadedProjects($project.FullName) | Select-Object -First 1
 
 # Get old targets import elements
-$oldTargets = $loadedProject.Xml.Imports | ? { $_.Project.EndsWith("\Granular.targets") -or $_.Project.EndsWith("\ProjectLink.targets") -or $_.Project.EndsWith("\GeneratedItems.targets") }
+$oldTargets = $loadedProject.Xml.Imports | ? { $_.Project.EndsWith("\Granular.targets") -or $_.Project.EndsWith("\ProjectLink.targets") }
 $targetsLocation = $oldTargets | Select-Object -Last 1
 if (-not $targetsLocation)
 {
@@ -105,12 +105,6 @@ InsertImport -LoadedProject $loadedProject -AfterChild $targetsLocation -Path "P
 
 # Insert build\ProjectLink.targets
 InsertImport -LoadedProject $loadedProject -AfterChild $targetsLocation -Path "`$(SolutionDir)$(MakeRelativePath -Origin $project.DTE.Solution.FullName -Target ([System.IO.Path]::Combine($installPath, ""build\ProjectLink.targets"")))"
-
-# Insert project's GeneratedItems.targets
-InsertImport -LoadedProject $loadedProject -AfterChild $targetsLocation -Path "GeneratedItems.targets"
-
-# Insert build\GeneratedItems.targets
-InsertImport -LoadedProject $loadedProject -AfterChild $targetsLocation -Path "`$(SolutionDir)$(MakeRelativePath -Origin $project.DTE.Solution.FullName -Target ([System.IO.Path]::Combine($installPath, ""build\GeneratedItems.targets"")))"
 
 # Insert build\Granular.targets
 InsertImport -LoadedProject $loadedProject -AfterChild $targetsLocation -Path "`$(SolutionDir)$(MakeRelativePath -Origin $project.DTE.Solution.FullName -Target ([System.IO.Path]::Combine($installPath, ""build\Granular.targets"")))"

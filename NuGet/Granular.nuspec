@@ -19,7 +19,6 @@
         <file src="$SolutionDir$Granular.BuildTasks\bin\$Configuration$\Mono.Cecil.dll" target="build\Mono.Cecil.dll" />
         <file src="$SolutionDir$Granular.BuildTasks\bin\$Configuration$\Granular.targets" target="build\Granular.targets" />
         <file src="$SolutionDir$Granular.BuildTasks\bin\$Configuration$\ProjectLink.targets" target="build\ProjectLink.targets" />
-        <file src="$SolutionDir$Granular.BuildTasks\bin\$Configuration$\GeneratedItems.targets" target="build\GeneratedItems.targets" />
         <file src="$SolutionDir$Granular.Common\bin\$Configuration$\Granular.Common.dll" target="build\Granular.Common.dll" />
 
         <file src="$SolutionDir$Granular.Common.Web\bin\$Configuration$\Granular.Common.dll" target="lib\net45\Granular.Common.dll" />
