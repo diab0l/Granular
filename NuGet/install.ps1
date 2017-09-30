@@ -60,17 +60,6 @@ if (-not (Test-Path $bridgeJsonPath))
     $project.ProjectItems.AddFromFile($bridgeJsonPath) | Out-Null
 }
 
-# Create <AssemblyName>.html
-$applicationHtmlPath = [System.IO.Path]::Combine([System.IO.Path]::GetDirectoryName($project.FullName), "$assemblyName.html")
-if (-not (Test-Path $applicationHtmlPath))
-{
-    $applicationHtmlTemplatePath = [System.IO.Path]::Combine($toolsPath, "Application.html.template")
-    Get-Content $applicationHtmlTemplatePath | % {$_ -replace "Application", $assemblyName }  | Out-File $applicationHtmlPath
-    $applicationHtmlItem = $project.ProjectItems.AddFromFile($applicationHtmlPath)
-    $applicationHtmlItem.Properties.Item("BuildAction").Value = 0
-    $applicationHtmlItem.Properties.Item("CopyToOutputDirectory").Value = 1
-}
-
 
 # Update AssemblyInfo.cs
 $assemblyInfoPath = [System.IO.Path]::Combine([System.IO.Path]::GetDirectoryName($project.FullName), "Properties\AssemblyInfo.cs")

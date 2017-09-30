@@ -27,7 +27,6 @@
         <file src="$SolutionDir$Granular.Presentation.Generic.Web\bin\$Configuration$\Granular.Presentation.Generic.dll" target="lib\net45\Granular.Presentation.Generic.dll" />
         
         <file src="ProjectLink.targets.template" target="tools\ProjectLink.targets.template" />
-        <file src="Application.html.template" target="tools\Application.html.template" />
         <file src="install.ps1" target="tools\install.ps1" />
     </files>
 </package>
