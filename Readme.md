@@ -7,7 +7,7 @@ Granular is a re-implementation of WPF, compiled to JavaScript, allowing WPF app
 3. Install **Granular** NuGet package into **WpfApplication1.Web**  
    (from **Package Manager Console**: `Install-Package Granular -ProjectName WpfApplication1.Web`)
 4. Build
-5. Open **WpfApplication1.Web\bin\Debug\WpfApplication1.html**
+5. Open **WpfApplication1.Web\bin\Debug\bridge\index.html**
 
 [A list of common issues can be found here](https://github.com/yuvaltz/Granular/wiki/Common-issues)
 
