@@ -9,6 +9,6 @@ using Granular.Presentation.Tests;
 [assembly: AssemblyTitle("Granular.Presentation.Tests.Web")]
 [assembly: AssemblyDescription("")]
 
-[assembly: Bridge.Reflectable]
+[assembly: Bridge.Reflectable(Bridge.MemberAccessibility.All)]
 
 [assembly: ApplicationHost(typeof(TestApplicationHost))]

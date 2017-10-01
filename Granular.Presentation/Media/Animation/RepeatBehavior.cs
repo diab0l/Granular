@@ -48,7 +48,7 @@ namespace System.Windows.Media.Animation
             if (value.EndsWith("x"))
             {
                 double count;
-                if (Granular.Compatibility.Double.TryParse(value.Substring(0, value.Length - 1), out count))
+                if (Double.TryParse(value.Substring(0, value.Length - 1), out count))
                 {
                     return RepeatBehavior.FromRepeatCount(count);
                 }

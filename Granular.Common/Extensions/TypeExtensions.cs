@@ -21,7 +21,7 @@ namespace Granular.Extensions
         public static Type GetInterfaceType(this Type type, Type interfaceGenericType)
         {
             return type.GetInterfaces().FirstOrDefault(interfaceType => interfaceType == interfaceGenericType ||
-                interfaceType.GetIsGenericType() && interfaceGenericType == interfaceType.GetGenericTypeDefinition());
+                interfaceType.IsGenericType && interfaceGenericType == interfaceType.GetGenericTypeDefinition());
         }
     }
 }

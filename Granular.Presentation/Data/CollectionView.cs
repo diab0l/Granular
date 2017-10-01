@@ -134,7 +134,7 @@ namespace System.Windows.Data
 
         private void SetCurrent(object item)
         {
-            int itemIndex = Granular.Compatibility.Array.IndexOf(innerCollection, item);
+            int itemIndex = Array.IndexOf(innerCollection, item);
 
             if (itemIndex != -1)
             {
@@ -218,10 +218,10 @@ namespace System.Windows.Data
             }
 
             object oldItem = e.OldItems.FirstOrDefault();
-            int oldIndex = Granular.Compatibility.Array.FindIndex(oldInnerCollection, item => Granular.Compatibility.EqualityComparer.Default.Equals(item, oldItem));
+            int oldIndex = Array.FindIndex(oldInnerCollection, item => Granular.Compatibility.EqualityComparer.Default.Equals(item, oldItem));
 
             object newItem = e.NewItems.FirstOrDefault();
-            int newIndex = Granular.Compatibility.Array.FindIndex(innerCollection, item => Granular.Compatibility.EqualityComparer.Default.Equals(item, newItem));
+            int newIndex = Array.FindIndex(innerCollection, item => Granular.Compatibility.EqualityComparer.Default.Equals(item, newItem));
 
             if (oldIndex == -1 && newIndex == -1 || oldItem == newItem && oldIndex == newIndex)
             {

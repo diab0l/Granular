@@ -307,7 +307,7 @@ namespace System.Windows.Controls
                     return smallerBound;
                 }
 
-                if (Granular.Compatibility.Double.IsInfinity(largerBound))
+                if (Double.IsInfinity(largerBound))
                 {
                     double totalSmallerStarsLength = starredAxis.Where(axis => axis.MaxLength <= axis.Length.Value * smallerBound).Sum(axis => GetStarredAxisLength(axis, smallerBound));
                     double totalLargerStars = starredAxis.Where(axis => axis.MaxLength > axis.Length.Value * smallerBound).Sum(axis => axis.Length.Value);

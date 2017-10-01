@@ -52,15 +52,11 @@
     <Compile Include="Collections\ReadOnlyStack.cs" />
     <Compile Include="Collections\ConvertedStringSet.cs" />
     <Compile Include="Collections\ConvertedStringDictionary.cs" />
-    <Compile Include="Compatibility\AppDomain.cs" />
-    <Compile Include="Compatibility\Array.cs" />
     <Compile Include="Compatibility\AssemblyExtensions.cs" />
-    <Compile Include="Compatibility\BindingFlags.cs" />
     <Compile Include="Compatibility\Collection.cs" />
     <Compile Include="Compatibility\Comparer.cs" />
     <Compile Include="Compatibility\Convert.cs" />
     <Compile Include="Compatibility\Dictionary.cs" />
-    <Compile Include="Compatibility\Double.cs" />
     <Compile Include="Compatibility\EqualityComparer.cs" />
     <Compile Include="Compatibility\EventInfoExtensions.cs" />
     <Compile Include="Compatibility\Regex.cs" />
@@ -70,7 +66,6 @@
     <Compile Include="Compatibility\ReflectableAttribute.cs" />
     <Compile Include="Compatibility\String.cs" />
     <Compile Include="Compatibility\TimeSpan.cs" />
-    <Compile Include="Compatibility\Type.cs" />
     <Compile Include="Compatibility\TypeExtensions.cs" />
     <Compile Include="Compatibility\Uri.cs" />
     <Compile Include="Compatibility\UriExtensions.cs" />

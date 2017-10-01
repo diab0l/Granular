@@ -84,7 +84,7 @@ namespace System.Windows
 
         private static Type GetApplicationHostTypeByAttribute()
         {
-            ApplicationHostAttribute[] applicationHostAttributes = Granular.Compatibility.AppDomain.GetAssemblies().SelectMany(assembly => assembly.GetCustomAttributesCached<ApplicationHostAttribute>()).ToArray();
+            ApplicationHostAttribute[] applicationHostAttributes = AppDomain.CurrentDomain.GetAssemblies().SelectMany(assembly => assembly.GetCustomAttributesCached<ApplicationHostAttribute>()).ToArray();
 
             if (applicationHostAttributes.Length > 1)
             {
@@ -96,7 +96,7 @@ namespace System.Windows
 
         private static Type GetApplicationHostTypeByReference()
         {
-            IEnumerable<Type> types = Granular.Compatibility.AppDomain.GetAssemblies().SelectMany(assembly => assembly.GetTypes()).Where(type => type.IsClass && typeof(IApplicationHost).IsAssignableFrom(type)).ToArray();
+            IEnumerable<Type> types = AppDomain.CurrentDomain.GetAssemblies().SelectMany(assembly => assembly.GetTypes()).Where(type => type.IsClass && typeof(IApplicationHost).IsAssignableFrom(type)).ToArray();
 
             if (types.Count() > 1)
             {

@@ -168,7 +168,7 @@ namespace System.Windows.Controls
 
         public int IndexOf(object value)
         {
-            return Granular.Compatibility.Array.IndexOf(delegateView.ToArray(), value);
+            return Array.IndexOf(delegateView.ToArray(), value);
         }
 
         public void Insert(int index, object value)

@@ -22,7 +22,7 @@ namespace System.Windows.Media.Animation
             this.clock = clock;
             this.iterationDuration = clock.Duration;
             this.iterationsCount = iterationsCount;
-            this.Duration = Granular.Compatibility.Double.IsInfinity(iterationsCount) ? Granular.Compatibility.TimeSpan.MaxValue : iterationDuration.Scale(iterationsCount);
+            this.Duration = Double.IsInfinity(iterationsCount) ? Granular.Compatibility.TimeSpan.MaxValue : iterationDuration.Scale(iterationsCount);
 
             if (iterationsCount <= 0)
             {
@@ -39,7 +39,7 @@ namespace System.Windows.Media.Animation
 
         private void SetTickBounds()
         {
-            if (Granular.Compatibility.Double.IsInfinity(iterationsCount))
+            if (Double.IsInfinity(iterationsCount))
             {
                 this.FirstTick = TimeSpan.Zero;
                 this.LastTick = Granular.Compatibility.TimeSpan.MaxValue;

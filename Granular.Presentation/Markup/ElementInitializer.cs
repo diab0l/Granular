@@ -179,7 +179,7 @@ namespace System.Windows.Markup
 
         private static void SetFieldValue(object target, string fieldName, object fieldValue)
         {
-            FieldInfo fieldInfo = target.GetType().GetField(fieldName, Granular.Compatibility.BindingFlags.InstanceNonPublic);
+            FieldInfo fieldInfo = target.GetType().GetField(fieldName, BindingFlags.Instance | BindingFlags.NonPublic);
 
             if (fieldInfo == null)
             {
@@ -253,7 +253,7 @@ namespace System.Windows.Markup
 
         private static Delegate CreateEventHandler(Type eventHandlerType, object source, string eventHandlerName)
         {
-            MethodInfo methodInfo = source.GetType().GetMethod(eventHandlerName, Granular.Compatibility.BindingFlags.InstancePublicNonPublicFlattenHierarchy);
+            MethodInfo methodInfo = source.GetType().GetMethod(eventHandlerName, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.FlattenHierarchy);
 
             if (methodInfo == null)
             {
@@ -390,7 +390,7 @@ namespace System.Windows.Markup
 
             if (interfaceType != null)
             {
-                Type[] arguments = Granular.Compatibility.Type.GetTypeInterfaceGenericArguments(type, interfaceType).ToArray();
+                Type[] arguments = interfaceType.GetGenericArguments().ToArray();
                 keyType = arguments[0];
                 valueType = arguments[1];
                 return true;
@@ -407,7 +407,7 @@ namespace System.Windows.Markup
 
             if (interfaceType != null)
             {
-                valueType = Granular.Compatibility.Type.GetTypeInterfaceGenericArguments(type, interfaceType).First();
+                valueType = interfaceType.GetGenericArguments().First();
                 return true;
             }
 

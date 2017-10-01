@@ -193,6 +193,7 @@ namespace System.Xml.Linq
     [Name("DOMParser")]
     public class DOMParser
     {
+        [Name("parseFromString")]
         public virtual extern DocumentInstance ParseFromString(string str, SupportedType type);
     }
 }

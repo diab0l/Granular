@@ -99,7 +99,7 @@ namespace System.Resources
 
                 memoryStream.Seek(entry.Offset, SeekOrigin.Begin);
 
-                int resourceTypeCode = binaryReader.Read7BitEncodedInt();
+                int resourceTypeCode = Read7BitEncodedInt(binaryReader);
                 if (resourceTypeCode != 0x21) // ResourceTypeCode.Stream
                 {
                     throw new Granular.Exception($"Unsupported ResourceTypeCode ({resourceTypeCode})");
@@ -113,6 +113,29 @@ namespace System.Resources
             }
 
             return null;
+        }
+
+        private static int Read7BitEncodedInt(BinaryReader binaryReader)
+        {
+            int value = 0;
+
+            for (int i = 0; i < 5; i++)
+            {
+                byte b = binaryReader.ReadByte();
+
+                value = value | ((b & 0x7f) << (i * 7));
+
+                if ((b & 0x80) == 0)
+                {
+                    break;
+                }
+                else if (i == 4)
+                {
+                    throw new Exception("Can't read int at current position");
+                }
+            }
+
+            return value;
         }
     }
 }

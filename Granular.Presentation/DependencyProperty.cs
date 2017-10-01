@@ -303,7 +303,7 @@ namespace System.Windows
 
         private static bool IsValidType(object value, Type propertyType)
         {
-            return value == null ? !propertyType.GetIsValueType() || propertyType.GetIsGenericType() && propertyType.GetGenericTypeDefinition() == typeof(Nullable<>) :
+            return value == null ? !propertyType.GetIsValueType() || propertyType.IsGenericType && propertyType.GetGenericTypeDefinition() == typeof(Nullable<>) :
                 propertyType.IsInstanceOfType(value);
         }
 

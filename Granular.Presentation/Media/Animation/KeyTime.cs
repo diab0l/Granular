@@ -77,7 +77,7 @@ namespace System.Windows.Media.Animation
             if (value.EndsWith("%"))
             {
                 double percent;
-                if (Granular.Compatibility.Double.TryParse(value.Substring(0, value.Length - 1), out percent))
+                if (Double.TryParse(value.Substring(0, value.Length - 1), out percent))
                 {
                     return FromPercent(percent / 100);
                 }

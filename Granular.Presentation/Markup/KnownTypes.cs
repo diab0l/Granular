@@ -219,7 +219,7 @@ namespace System.Windows.Markup
                 return UriTypeConverter.Default;
             }
 
-            if (type.GetIsGenericType() && type.GetGenericTypeDefinition() == typeof(Nullable<>))
+            if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Nullable<>))
             {
                 return GetTypeConverter(type.GetGenericArguments().First());
             }

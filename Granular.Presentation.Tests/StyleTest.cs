@@ -10,10 +10,12 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Granular.Presentation.Tests
 {
+    [Bridge.Reflectable(true)]
     public class TestStyle : Style
     {
         public int InitializedHandlerCallsCount { get; private set; }
 
+        [Bridge.Reflectable(true)]
         private void InitializedHandler(object sender, RoutedEventArgs e)
         {
             InitializedHandlerCallsCount++;

@@ -96,7 +96,7 @@ namespace System.Windows.Markup
                 return true;
             }
 
-            foreach (Assembly assembly in Granular.Compatibility.AppDomain.GetAssemblies())
+            foreach (Assembly assembly in AppDomain.CurrentDomain.GetAssemblies())
             {
                 if (TryGetType(String.Format("{0}.{1}, {2}", clrNamespace, localName, assembly.GetName().Name), out type))
                 {
@@ -110,7 +110,7 @@ namespace System.Windows.Markup
 
         private static bool TryGetType(string qualifiedTypeName, out Type type)
         {
-            type = Granular.Compatibility.Type.GetType(qualifiedTypeName);
+            type = System.Type.GetType(qualifiedTypeName);
             return type != null;
         }
 
@@ -130,7 +130,7 @@ namespace System.Windows.Markup
         {
             if (xmlnsDefinitionAttributesCache == null)
             {
-                xmlnsDefinitionAttributesCache = Granular.Compatibility.AppDomain.GetAssemblies().SelectMany(assembly => assembly.GetCustomAttributesCached<XmlnsDefinitionAttribute>()).ToArray();
+                xmlnsDefinitionAttributesCache = AppDomain.CurrentDomain.GetAssemblies().SelectMany(assembly => assembly.GetCustomAttributesCached<XmlnsDefinitionAttribute>()).ToArray();
             }
 
             return xmlnsDefinitionAttributesCache;

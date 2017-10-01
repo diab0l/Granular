@@ -85,6 +85,7 @@ namespace Granular.Compatibility
         [Bridge.Template("({value} === undefined)")]
         private static extern bool IsUndefined(object value);
 
+        [Bridge.Reflectable(false)]
         [Bridge.Template("delete {value}")]
         private static extern object DeleteProperty(object value);
 

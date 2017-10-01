@@ -57,7 +57,7 @@ namespace System.Windows
                 throw new Granular.Exception("Resource \"{0}\" absolute path is invalid", resourceUri.GetAbsoluteUri());
             }
 
-            Assembly assembly = Granular.Compatibility.AppDomain.GetAssemblies().Where(a => a.GetName().Name == assemblyName).FirstOrDefault();
+            Assembly assembly = AppDomain.CurrentDomain.GetAssemblies().Where(a => a.GetName().Name == assemblyName).FirstOrDefault();
 
             if (assembly == null)
             {

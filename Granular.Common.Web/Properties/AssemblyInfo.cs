@@ -5,3 +5,5 @@
 // associated with an assembly.
 [assembly: AssemblyTitle("Granular.Common.Web")]
 [assembly: AssemblyDescription("")]
+
+[assembly: Bridge.Reflectable(Bridge.MemberAccessibility.None)]

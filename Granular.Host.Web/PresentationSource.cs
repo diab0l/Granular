@@ -129,7 +129,7 @@ namespace Granular.Host
         {
             KeyboardEvent keyboardEvent = (KeyboardEvent)e;
 
-            Key key = converter.ConvertBackKey(keyboardEvent.KeyCode, (int)keyboardEvent.Location);
+            Key key = converter.ConvertBackKey(keyboardEvent.KeyCode, (KeyLocation)keyboardEvent.Location);
 
             keyDownHandled = ProcessKeyboardEvent(new RawKeyboardEventArgs(key, KeyStates.Down, keyboardEvent.Repeat, GetTimestamp()));
 
@@ -143,7 +143,7 @@ namespace Granular.Host
         {
             KeyboardEvent keyboardEvent = (KeyboardEvent)e;
 
-            Key key = converter.ConvertBackKey(keyboardEvent.KeyCode, (int)keyboardEvent.Location);
+            Key key = converter.ConvertBackKey(keyboardEvent.KeyCode, (KeyLocation)keyboardEvent.Location);
 
             keyUpHandled = ProcessKeyboardEvent(new RawKeyboardEventArgs(key, KeyStates.None, keyboardEvent.Repeat, GetTimestamp()));
 

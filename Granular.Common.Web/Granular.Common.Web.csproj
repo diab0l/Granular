@@ -153,32 +153,22 @@
     <Compile Include="..\Granular.Common\Xaml\XamlParser.cs">
       <Link>Xaml\XamlParser.cs</Link>
     </Compile>
-    <Compile Include="Compatibility\AppDomain.cs" />
-    <Compile Include="Compatibility\Array.cs" />
     <Compile Include="Compatibility\AssemblyExtensions.cs" />
-    <Compile Include="Compatibility\BinaryReader.cs" />
-    <Compile Include="Compatibility\BindingFlags.cs" />
     <Compile Include="Compatibility\Collection.cs" />
     <Compile Include="Compatibility\Comparer.cs" />
     <Compile Include="Compatibility\Configuration.cs" />
     <Compile Include="Compatibility\Convert.cs" />
     <Compile Include="Compatibility\Data.cs" />
-    <Compile Include="Compatibility\DebuggerNonUserCodeAttribute.cs" />
     <Compile Include="Compatibility\Dictionary.cs" />
     <Compile Include="Compatibility\DictionaryExtensions.cs" />
-    <Compile Include="Compatibility\Double.cs" />
-    <Compile Include="Compatibility\Encoding.cs" />
     <Compile Include="Compatibility\Enumerable.cs" />
     <Compile Include="Compatibility\EnumerableExtensions.cs" />
     <Compile Include="Compatibility\EqualityComparer.cs" />
     <Compile Include="Compatibility\EventInfoExtensions.cs" />
     <Compile Include="Compatibility\ExplicitReferenceAttribute.cs" />
-    <Compile Include="Compatibility\HashSet.cs" />
     <Compile Include="Compatibility\ICommand.cs" />
     <Compile Include="Compatibility\Initialize.cs" />
-    <Compile Include="Compatibility\MemoryStream.cs" />
     <Compile Include="Compatibility\PropertyInfoExtensions.cs" />
-    <Compile Include="Compatibility\Queue.cs" />
     <Compile Include="Compatibility\Regex.cs" />
     <Compile Include="Compatibility\ResourceSet.cs" />
     <Compile Include="Compatibility\SortedList.cs" />
@@ -186,7 +176,6 @@
     <Compile Include="Compatibility\String.cs" />
     <Compile Include="Compatibility\StringDictionary.cs" />
     <Compile Include="Compatibility\TimeSpan.cs" />
-    <Compile Include="Compatibility\Type.cs" />
     <Compile Include="Compatibility\TypeExtensions.cs" />
     <Compile Include="Compatibility\Uri.cs" />
     <Compile Include="Compatibility\UriComponents.cs" />

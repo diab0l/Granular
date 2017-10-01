@@ -81,14 +81,14 @@ namespace System.Windows
             if (text.EndsWith("*"))
             {
                 double stars;
-                if (Granular.Compatibility.Double.TryParse(text.Substring(0, text.Length - 1), out stars))
+                if (Double.TryParse(text.Substring(0, text.Length - 1), out stars))
                 {
                     return GridLength.FromStars(stars);
                 }
             }
 
             double pixels;
-            if (Granular.Compatibility.Double.TryParse(text, out pixels))
+            if (Double.TryParse(text, out pixels))
             {
                 return GridLength.FromPixles(pixels);
             }

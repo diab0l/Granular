@@ -135,17 +135,17 @@ namespace System.Windows.Media
 
                 if (stringValue.Length == 9 && stringValue[0] == '#')
                 {
-                    return Color.FromUInt32(Granular.Compatibility.Convert.ToUInt32(stringValue.Substring(1), 16));
+                    return Color.FromUInt32(Convert.ToUInt32(stringValue.Substring(1), 16));
                 }
 
                 if (stringValue.Length == 7 && stringValue[0] == '#')
                 {
-                    return Color.FromUInt32(0xff000000 | Granular.Compatibility.Convert.ToUInt32(stringValue.Substring(1), 16));
+                    return Color.FromUInt32(0xff000000 | Convert.ToUInt32(stringValue.Substring(1), 16));
                 }
 
                 if (stringValue.Length == 4 && stringValue[0] == '#')
                 {
-                    return Color.FromUInt32(0xff000000 | Granular.Compatibility.Convert.ToUInt32(String.Format("{0}{0}{1}{1}{2}{2}", stringValue[1].ToString(), stringValue[2].ToString(), stringValue[3].ToString()), 16));
+                    return Color.FromUInt32(0xff000000 | Convert.ToUInt32(String.Format("{0}{0}{1}{1}{2}{2}", stringValue[1].ToString(), stringValue[2].ToString(), stringValue[3].ToString()), 16));
                 }
 
                 PropertyInfo propertyInfo = typeof(Colors).GetProperty(stringValue, BindingFlags.Static | BindingFlags.Public);
