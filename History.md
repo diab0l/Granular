@@ -1,6 +1,12 @@
 What's new
 ==========
 
+**0.3.0**
+- DrawingContext
+- Geometry
+- Shapes
+- UIElement - Clip
+
 **0.2.1**
 - Performance optimizations - Optimized layout calls, Deferred resources, Styles default key, and others
 
